@@ -1,3 +1,6 @@
 spring:
   application:
     name: Plantory
+
+server:
+  port: 5454

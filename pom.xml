@@ -8,7 +8,7 @@
         <version>3.5.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.plantory</groupId>
+    <groupId>com.zero</groupId>
     <artifactId>Plantory</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Plantory</name>
