@@ -1,21 +1,14 @@
 package com.zero.plantory.domain.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +24,8 @@ public class Image {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private String targetType;
+    @Enumerated(EnumType.STRING)
+    private ImageTargetType targetType;
     private Long targetId;
 
     private String fileUrl;
