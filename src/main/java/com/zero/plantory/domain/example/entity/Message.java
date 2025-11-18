@@ -28,10 +28,6 @@ public class Message {
     @JoinColumn(name = "receiver_id")
     private Member receiver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_message_id")
-    private Message parentMessage;
-
     private String title;
     private String content;
 

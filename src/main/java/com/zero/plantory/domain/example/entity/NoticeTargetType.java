@@ -2,7 +2,7 @@ package com.zero.plantory.domain.example.entity;
 
 public enum NoticeTargetType {
     SHARING,
-    COMMENT,
+    QUESTION,
     MESSAGE,
     REPORT,
     WATERING
