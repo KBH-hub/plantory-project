@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>나눔 커뮤니티</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+</head>
+<body class="bg-light">
+<main class="py-4">
+    <div class="container-fluid px-4">
+
+        <div class="col-md-3 col-12">
+            <h5 class="mb-0 fw-bold">나눔 커뮤니티</h5>
+        </div>
+
+        <div class="row align-items-center g-2 mt-1">
+
+            <div class="col-md-10 col-14">
+                <div class="input-group">
+                    <input
+                            type="text"
+                            class="form-control border-end-0"
+                            placeholder="키우고 싶은 식물 검색"
+                    />
+                    <button class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-12 d-grid d-md-block text-md-end mt-2 mt-md-0">
+                <button class="btn btn-success fw-semibold px-3">
+                    글쓰기
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container-fluid px-4">
+        <div class="row align-items-center g-2 mt-1 mb-3">
+            <div class="col-lg-6 d-flex flex-wrap gap-2">
+                <div class="d-inline-block">
+                    <select class="form-select form-select-sm fw-semibold w-auto">
+                        <option selected>서울특별시</option>
+                        <option>부산광역시</option>
+                        <option>대구광역시</option>
+                    </select>
+                </div>
+
+                <div class="d-inline-block ms-2">
+                    <select class="form-select form-select-sm fw-semibold w-auto">
+                        <option selected>관악구</option>
+                        <option>강남구</option>
+                        <option>해운대구</option>
+                    </select>
+                </div>
+
+                <span class="ms-2 align-self-center fw-semibold small">
+                    추천 나눔 식물
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid px-4">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row g-3">
+                    <div class="col-sm-6 col-md-4 col-xl-3">
+                        <div class="card border-0 rounded-0">
+                            <img
+                                    src="https://images.pexels.com/photos/4505162/pexels-photo-4505162.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                    class="card-img-top object-fit-cover"
+                                    style="height: 220px;"
+                                    alt="이사하면서 나눠요"
+                            />
+                            <div class="card-body px-2 py-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="badge bg-secondary text-light small">나눔완료</span>
+                                </div>
+                                <p class="mt-1 mb-1 text-truncate small">
+                                    이사 가면서 나눔해요
+                                </p>
+                                <div class="d-flex justify-content-between small text-muted">
+                                    <span>3시간 전</span>
+                                    <span>
+                                        <i class="bi bi-chat"></i> 2
+                                        <span class="ms-1"><i class="bi bi-heart"></i> 5</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-xl-3">
+                        <div class="card border-0 rounded-0">
+                            <img
+                                    src="https://images.pexels.com/photos/3076899/pexels-photo-3076899.jpeg?auto=compress&cs=tinysrgb&w=600"
+                                    class="card-img-top object-fit-cover"
+                                    style="height: 220px;"
+                                    alt="이른 생들 가져가세요"
+                            />
+                            <div class="card-body px-2 py-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="badge bg-success small">나눔 중</span>
+                                </div>
+                                <p class="mb-1 text-truncate small">
+                                    이쁜 식물 가져가세요
+                                </p>
+                                <div class="d-flex justify-content-between small text-muted">
+                                    <span>5시간 전</span>
+                                    <span>
+                                        <i class="bi bi-chat"></i> 1
+                                        <span class="ms-1"><i class="bi bi-heart"></i> 3</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 mt-4 mt-lg-0">
+                <div class="bg-white border p-3 mb-3 small">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="fw-semibold">나의 관심 나눔 식물</div>
+                    </div>
+                    <p class="text-muted mb-0 mt-2 text-center">
+                        <i class="bi bi-heart"></i> 5
+                    </p>
+                </div>
+
+                <div class="bg-white border p-3 small">
+                    <div class="fw-semibold mb-2">
+                        인기 관심 나눔 식물
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                        <span class="text-truncate" style="max-width: 160px;">
+                            귀여운 다육이 모종 나눔
+                        </span>
+                        <span class="text-muted">
+                            <i class="bi bi-heart"></i> 120
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
+                        <span class="text-truncate" style="max-width: 160px;">
+                            대형 몬스테라 키우실 분
+                        </span>
+                        <span class="text-muted">
+                            <i class="bi bi-heart"></i> 98
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"
+></script>
+</body>
+</html>
