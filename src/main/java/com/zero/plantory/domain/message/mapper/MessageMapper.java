@@ -12,5 +12,5 @@ public interface MessageMapper {
     int deleteMessages(List<Long> messageIds);
     MessageVO selectMessageWriteInfo(Long senderId, String targetType, Long targetId);
     int insertMessage(MessageVO message);
-    MessageVO selectMessageDetail(Long senderId, String targetType, Long targetId);
+    MessageVO selectMessageDetail(Long messageId, Long senderId, String targetType, Long targetId);
 }

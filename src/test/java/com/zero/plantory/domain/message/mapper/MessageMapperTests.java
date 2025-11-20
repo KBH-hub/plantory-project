@@ -105,11 +105,12 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 상세 모달 화면")
     void selectMessageDetailTest() {
+        Long messageId = 1L;
         Long senderId = 7L;
         String targetType = "QUESTION";
         Long targetId = 1L;
 
-        MessageVO result = messageMapper.selectMessageDetail(senderId, targetType, targetId);
+        MessageVO result = messageMapper.selectMessageDetail(messageId, senderId, targetType, targetId);
 
         System.out.println(result);
     }

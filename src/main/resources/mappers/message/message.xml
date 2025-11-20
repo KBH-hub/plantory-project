@@ -148,7 +148,8 @@
                 END AS target_title
         FROM message m
                  JOIN member mem ON m.sender_id = mem.member_id
-        WHERE m.sender_id = #{senderId}
+        WHERE m.message_id = #{messageId}
+          AND m.sender_id = #{senderId}
           AND m.del_flag IS NULL
           AND m.target_type = #{targetType}
           AND m.target_id = #{targetId}
