@@ -1,0 +1,117 @@
+package com.zero.plantory.domain.message.mapper;
+
+import com.zero.plantory.domain.message.vo.MessageVO;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+public class MessageMapperTests {
+    @Autowired
+    MessageMapper messageMapper;
+
+    @Test
+    @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
+    void selectMessagesTest() {
+        Long memberId = 3L; // 받은 사람 아이디
+        String boxType = "RECEIVED"; // 받은 쪽지함
+        String targetType = null; // 전체 (나눔, 질문 모두)
+        String title = null; // 검색어 X (전체)
+
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("쪽지 리스트 화면 - 보낸 쪽지함 - 나눔 유형 필터")
+    void getMessagesSharingTest() {
+        Long memberId = 2L;
+        String boxType = "SENT";
+        String targetType = "SHARING";
+        String title = null;
+
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("보낸 쪽지함 - 제목 키워드 검색")
+    void selectMessagesSearchTest() {
+        Long memberId = 2L;
+        String boxType = "SENT";
+        String targetType = null;
+        String title = "위치";
+
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("쪽지 클릭(조회)시 읽음 처리")
+    void updateReadFlagTest() {
+        Long memberId = 1L;
+
+        int result = messageMapper.updateReadFlag(memberId);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("쪽지 삭제 처리")
+    void deleteMessagesTest() {
+        List<Long> messageIds = List.of(1L, 2L);
+
+        int result = messageMapper.deleteMessages(messageIds);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("쪽지 등록 - 쪽지 등록 화면 정보 조회")
+    void selectMessageWriteInfoTest() {
+        Long senderId = 11L; // 쪽지 보내는 사람
+        String targetType = "QUESTION"; // 나눔 글 기준
+        Long targetId = 3L; // 나눔 글 id
+
+        MessageVO result = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
+
+        System.out.println(result);
+    }
+
+    @Test
+    @DisplayName("쪽지 등록 - 쪽지 등록 처리")
+    void insertMessageTest() {
+        MessageVO vo = new MessageVO();
+        vo.setSenderId(3L);
+        vo.setReceiverId(8L);
+        vo.setTitle("안녕하세요. 테스트 쪽지 제목입니다.");
+        vo.setContent("테스트 쪽지 내용입니다.");
+        vo.setTargetType("SHARING");
+        vo.setTargetId(13L);
+
+        int result = messageMapper.insertMessage(vo);
+
+        System.out.println("inserted rows = " + result);
+    }
+
+    @Test
+    @DisplayName("쪽지 상세 모달 화면")
+    void selectMessageDetailTest() {
+        Long senderId = 7L;
+        String targetType = "QUESTION";
+        Long targetId = 1L;
+
+        MessageVO result = messageMapper.selectMessageDetail(senderId, targetType, targetId);
+
+        System.out.println(result);
+    }
+
+}
