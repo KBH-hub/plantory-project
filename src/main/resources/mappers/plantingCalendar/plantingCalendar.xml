@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper">
+    <insert id="insertWatering" parameterType="Long">
+        INSERT INTO watering (myplant_id, date_at)
+        VALUES (#{myplantId}, NOW())
+    </insert>
+
+    <update id="updatePlantWateringCheck" parameterType="Long">
+        UPDATE watering
+        SET check_flag =  NOW()
+        WHERE watering_id = #{wateringId}
+    </update>
+
+    <update id="updateMyPlantWatering" parameterType="Long">
+        UPDATE myplant
+        SET start_at = NULL, end_date = NULL, `interval` = NULL
+        WHERE myplant_id = #{myplantId}
+    </update>
+
+    <delete id="deletePlantWatering" parameterType="Long">
+        DELETE FROM watering
+        WHERE myplant_id = #{myplantId};
+    </delete>
+
+</mapper>

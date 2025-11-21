@@ -8,7 +8,7 @@
         WHERE nickname LIKE CONCAT('%', #{nickname}, '%')
     </select>
 
-    <insert id="insertReport" parameterType="com.zero.plantory.domain.report.vo.ReportVO">
+    <insert id="insertReport" parameterType="com.zero.plantory.domain.global.vo.ReportVO">
         INSERT INTO report (reporter_id, target_member_id, content, status, created_at)
         VALUES (#{reporterId}, #{targetMemberId}, #{content}, #{status}, SYSDATE());
     </insert>

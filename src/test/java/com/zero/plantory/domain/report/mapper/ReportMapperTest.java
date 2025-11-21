@@ -1,7 +1,6 @@
 package com.zero.plantory.domain.report.mapper;
 
-import com.zero.plantory.domain.member.vo.MemberVO;
-import com.zero.plantory.domain.report.vo.ReportVO;
+import com.zero.plantory.domain.global.vo.ReportVO;
 import com.zero.plantory.domain.report.vo.SelectNameListVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
