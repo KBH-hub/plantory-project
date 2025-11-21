@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.plantingCalendar.mapper;
 
 import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
+import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
+import com.zero.plantory.global.vo.DiaryVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +17,8 @@ public interface PlantingCalendarMapper {
     int deletePlantWatering(@Param("myplantId") Long myplantId);
     List<PlantingCalendarVO> selectWateringCalendar(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
     List<PlantingCalendarVO> selectDiaryCalendar(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    DiaryVO selectDiaryUpdateInfo(@Param("diaryId") Long diaryId);
+    int updateDiary(DiaryVO vo);
+    List<selectMyPlantDiaryVO> selectMyPlant(@Param("memberId") Long memberId);
+    int insertDiary(DiaryVO vo);
 }

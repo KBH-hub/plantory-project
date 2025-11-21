@@ -47,15 +47,39 @@
         SELECT
             d.diary_id,
             d.myplant_id,
-            p.name myplant_name,
+            p.name,
             d.memo,
-            d.created_at date_at,
+            d.created_at,
             'DIARY' type
         FROM diary d
                  JOIN myplant p ON d.myplant_id = p.myplant_id
         WHERE d.created_at >= #{startDate, jdbcType=TIMESTAMP}
           AND d.created_at &lt;  #{endDate,   jdbcType=TIMESTAMP}
-        ORDER BY date_at ASC
+        ORDER BY d.created_at ASC
     </select>
 
+    <select id="selectDiaryUpdateInfo" resultType="com.zero.plantory.global.vo.DiaryVO">
+        SELECT diary_id, myplant_id,activity,state,memo,created_at
+        FROM diary
+        WHERE diary_id = #{diaryId};
+    </select>
+
+    <update id="updateDiary">
+        UPDATE diary
+        SET activity = #{activity},
+            state = #{state},
+            memo = #{memo}
+        WHERE diary_id = #{diaryId};
+    </update>
+
+    <select id="selectMyPlant" resultType="com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO">
+        SELECT myplant_id,NAME
+        FROM myplant
+        WHERE member_id = #{memberId};
+    </select>
+
+    <insert id="insertDiary">
+        INSERT INTO diary (myplant_id,activity, state, memo, created_at)
+        VALUES (#{myplantId},#{activity}, #{state}, #{memo},NOW());
+    </insert>
 </mapper>
