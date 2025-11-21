@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface MessageMapper {
-    List<MessageVO> selectMessages(Long memberId, String boxType, String targetType, String title);
+    List<MessageVO> selectMessages(Long memberId, String boxType, String targetType, String title, int offset, int limit);
     int updateReadFlag(Long messageId);
     int deleteMessages(List<Long> messageIds);
     MessageVO selectMessageWriteInfo(Long senderId, String targetType, Long targetId);

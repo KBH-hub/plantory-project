@@ -51,6 +51,7 @@
             </if>
         </where>
         ORDER BY m.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <update id="updateReadFlag">

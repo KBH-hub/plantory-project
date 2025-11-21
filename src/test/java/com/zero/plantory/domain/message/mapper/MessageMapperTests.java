@@ -24,8 +24,10 @@ public class MessageMapperTests {
         String boxType = "RECEIVED"; // 받은 쪽지함
         String targetType = null; // 전체 (나눔, 질문 모두)
         String title = null; // 검색어 X (전체)
+        int limit = 10; // 한 화면에 보여줄 개수
+        int offset = 0; // 조회 시작 번호
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title, limit, offset);
 
         log.info(String.valueOf(result));
     }
@@ -37,8 +39,10 @@ public class MessageMapperTests {
         String boxType = "SENT";
         String targetType = "SHARING";
         String title = null;
+        int limit = 10;
+        int offset = 0;
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title, limit, offset);
 
         log.info(String.valueOf(result));
     }
@@ -50,8 +54,10 @@ public class MessageMapperTests {
         String boxType = "SENT";
         String targetType = null;
         String title = "위치";
+        int limit = 10;
+        int offset = 0;
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title, limit, offset);
 
         log.info(String.valueOf(result));
     }
