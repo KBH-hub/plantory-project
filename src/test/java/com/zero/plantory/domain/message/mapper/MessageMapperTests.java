@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.message.mapper;
 
 import com.zero.plantory.domain.message.vo.MessageVO;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Slf4j
 public class MessageMapperTests {
     @Autowired
     MessageMapper messageMapper;
@@ -25,7 +27,7 @@ public class MessageMapperTests {
 
         List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -38,7 +40,7 @@ public class MessageMapperTests {
 
         List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -51,7 +53,7 @@ public class MessageMapperTests {
 
         List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -61,7 +63,7 @@ public class MessageMapperTests {
 
         int result = messageMapper.updateReadFlag(memberId);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class MessageMapperTests {
 
         int result = messageMapper.deleteMessages(messageIds);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -83,23 +85,24 @@ public class MessageMapperTests {
 
         MessageVO result = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
     @Test
     @DisplayName("쪽지 등록 - 쪽지 등록 처리")
     void insertMessageTest() {
-        MessageVO vo = new MessageVO();
-        vo.setSenderId(3L);
-        vo.setReceiverId(8L);
-        vo.setTitle("안녕하세요. 테스트 쪽지 제목입니다.");
-        vo.setContent("테스트 쪽지 내용입니다.");
-        vo.setTargetType("SHARING");
-        vo.setTargetId(13L);
+        MessageVO vo = new MessageVO().builder()
+                .senderId(3L)
+                .receiverId(8L)
+                .title("안녕하세요. 테스트 쪽지 제목입니다.")
+                .content("테스트 쪽지 내용입니다.")
+                .targetType("SHARING")
+                .targetId(13L)
+                .build();
 
         int result = messageMapper.insertMessage(vo);
 
-        System.out.println("inserted rows = " + result);
+        log.info("inserted rows = " + result);
     }
 
     @Test
@@ -112,7 +115,7 @@ public class MessageMapperTests {
 
         MessageVO result = messageMapper.selectMessageDetail(messageId, senderId, targetType, targetId);
 
-        System.out.println(result);
+        log.info(String.valueOf(result));
     }
 
 }
