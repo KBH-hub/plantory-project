@@ -17,6 +17,5 @@ public interface MemberMapper {
     MemberVO selectByMemberInfo(@Param("memberId") Long memberId);
     int countByInterestCount(@Param("memberId") Long memberId);
     int countByCompletedSharingCount(@Param("memberId") Long memberId);
-    List<MyWrittenListVO> selectMyWrittenList(SelectMyWrittenListRequestVO selectMyWrittenListRequestVO);
 
 }
