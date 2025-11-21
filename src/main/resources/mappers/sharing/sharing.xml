@@ -68,6 +68,30 @@
 
     </select>
 
+    <insert id="insertSharing"
+            parameterType="com.zero.plantory.domain.sharing.vo.SharingVO"
+            useGeneratedKeys="true"
+            keyProperty="sharingId">
+
+        INSERT INTO sharing
+        (member_id, target_member_id, title, content, plant_type,
+         management_level, management_needs,
+         interest_num, status, created_at)
+        VALUES
+            (#{memberId},
+             #{targetMemberId},
+             #{title},
+             #{content},
+             #{plantType},
+             #{managementLevel},
+             #{managementNeeds},
+             0,
+             'false',
+             NOW());
+
+    </insert>
+
+
 
 
 

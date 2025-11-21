@@ -2,6 +2,7 @@ package com.zero.plantory.domain.sharing.mapper;
 
 import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
+import com.zero.plantory.domain.sharing.vo.SharingVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -19,6 +20,22 @@ public class SharingMapperTests {
 
     @Autowired
     SharingMapper mapper;
+
+    @Test
+    void insertSharingTest() {
+        SharingVO vo = SharingVO.builder()
+                .memberId(1L)
+                .title("테스트 제목")
+                .content("테스트 내용")
+                .plantType("금전수")
+                .managementLevel("쉬움")
+                .managementNeeds("약간 돌봄")
+                .status("false")
+                .build();
+
+        mapper.insertSharing(vo);
+        log.info("생성된 sharing_id = {}", vo.getSharingId());
+    }
 
     @Test
     @DisplayName("인기 나눔글 TOP3 조회")
