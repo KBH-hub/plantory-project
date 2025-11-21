@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.domain.member.vo.MemberVO;
-import com.zero.plantory.domain.member.vo.Role;
+import com.zero.plantory.global.vo.MemberVO;
+import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.vo.MemberVO;
+import com.zero.plantory.global.vo.MemberVO;
 
 public interface MemberService {
     boolean isDuplicateMembername(String membername);

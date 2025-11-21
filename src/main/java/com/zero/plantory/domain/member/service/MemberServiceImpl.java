@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.domain.member.vo.MemberVO;
+import com.zero.plantory.global.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
             if (stopDay.isAfter(now)) {
                 long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
-                throw new IllegalStateException(String.format("정지 해제까지 %d일 %d시간 남았습니다.", days));
+                throw new IllegalStateException(String.format("정지 해제까지 %d일 남았습니다.", days));
             }
         }
 

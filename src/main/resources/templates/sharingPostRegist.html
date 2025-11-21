@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -14,7 +14,10 @@
             rel="stylesheet"
     />
 </head>
+
 <body class="bg-light">
+
+<div th:replace="fragments/header :: headerBar"></div>
 
 <main class="container-fluid px-4 py-4">
     <h5 class="fw-bold mb-3">나눔 게시글 등록</h5>
