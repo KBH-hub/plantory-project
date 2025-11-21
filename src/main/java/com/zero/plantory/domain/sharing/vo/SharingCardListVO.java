@@ -1,21 +1,23 @@
-package com.zero.plantory.domain.dashboard.vo;
+package com.zero.plantory.domain.sharing.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-public class RecommendedSharingVO {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class SharingCardListVO {
     private Long sharingId;
     private String title;
+    private Integer interestNum;
     private String status;
     private LocalDateTime createdAt;
-    private Integer interestNum;
-    private Integer commentCount;
-    private String fileUrl;
-}
 
+    private Integer commentCount;
+    private String imageUrl;
+}
