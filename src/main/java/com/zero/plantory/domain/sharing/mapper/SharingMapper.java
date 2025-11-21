@@ -1,9 +1,7 @@
 package com.zero.plantory.domain.sharing.mapper;
 
-import com.zero.plantory.domain.sharing.vo.SharingCardListVO;
-import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
-import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
-import com.zero.plantory.domain.sharing.vo.SharingVO;
+import com.zero.plantory.domain.sharing.vo.*;
+import com.zero.plantory.global.vo.CommentVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,7 +13,8 @@ public interface SharingMapper {
     int countInterestByMemberId(Long memberId);
     List<SharingPopularVO> selectPopularSharingList();
     int insertSharing(SharingVO vo);
-//    int insertSharingImage(ImageVO vo);
+    SelectSharingDetailVO selectSharingDetail(Long sharingId);
+    List<SelectSharingCommentVO> selectSharingComments(Long sharingId);
 
 
 }

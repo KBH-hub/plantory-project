@@ -91,6 +91,49 @@
 
     </insert>
 
+    <select id="selectSharingDetail" resultType="com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO">
+        SELECT
+            s.sharing_id,
+            s.member_id,
+            mb.nickname,
+            mb.sharing_rate,
+            s.title,
+            s.content,
+            s.plant_type,
+            s.management_level,
+            s.management_needs,
+            s.interest_num,
+            s.status,
+            s.created_at,
+            s.updated_at
+        FROM sharing s
+                 JOIN member mb ON s.member_id = mb.member_id
+        WHERE s.sharing_id = #{sharingId}
+          AND s.del_flag IS NULL
+          AND mb.del_flag IS NULL
+    </select>
+
+    <select id="selectSharingComments"
+            parameterType="long"
+            resultType="com.zero.plantory.domain.sharing.vo.SelectSharingCommentVO">
+
+        SELECT
+            c.comment_id,
+            c.writer_id,
+            mb.nickname,
+            c.content,
+            c.created_at,
+            c.updated_at
+        FROM comment c
+                 JOIN member mb ON c.writer_id = mb.member_id
+        WHERE c.sharing_id = #{sharingId}
+          AND c.del_flag IS NULL
+          AND mb.del_flag IS NULL
+        ORDER BY c.created_at ASC
+
+    </select>
+
+
 
 
 

@@ -22,6 +22,19 @@ public class SharingMapperTests {
     SharingMapper mapper;
 
     @Test
+    @DisplayName("나눔 게시글 상세 댓글 조회")
+    void selectSharingCommentsTest(){
+        log.info("selectSharingComments = {}", mapper.selectSharingComments(2L));
+    }
+
+    @Test
+    @DisplayName("나눔 게시글 상세조회")
+    void selectSharingDetailTest() {
+        log.info("sharingDetail = {}", mapper.selectSharingDetail(2L));
+
+    }
+
+    @Test
     @DisplayName("나눔 게시글 등록 처리")
     void insertSharingTest() {
         SharingVO vo = SharingVO.builder()
