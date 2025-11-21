@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RecommendedSharingVo {
+public class RecommendedSharingVO {
     private Long sharingId;
     private String title;
     private String status;

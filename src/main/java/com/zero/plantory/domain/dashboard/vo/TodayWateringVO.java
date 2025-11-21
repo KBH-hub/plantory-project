@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class TodayWateringVo {
+public class TodayWateringVO {
     private String name;
     private Integer interval;
 }
