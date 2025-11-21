@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class MyWrittenListVO {
-
     private Long id;
     private Long memberId;
     private String nickname;
