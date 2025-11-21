@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.plantingCalendar.mapper;
 
 import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
+import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
+import com.zero.plantory.global.vo.DiaryVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,7 @@ class PlantingCalendarMapperTest {
     @Test
     @DisplayName("물주기 체크박스 수정 처리")
     void updatePlantWateringCheckTest() {
-        Long wateringId = 25L;
+        Long wateringId = 1L;
 
         int result = plantingCalendarMapper.updatePlantWateringCheck(wateringId);
 
@@ -104,5 +106,54 @@ class PlantingCalendarMapperTest {
         log.info(String.valueOf(result));
     }
 
+    @Test
+    @DisplayName("캘린더 관찰일지 수정모달 정보 조회")
+    void selectDiaryUpdateInfoTest() {
+        Long diary_id = 1L;
+
+        DiaryVO result = plantingCalendarMapper.selectDiaryUpdateInfo(diary_id);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("관찰일지 수정 처리")
+    void updateDiaryTest() {
+        DiaryVO vo =  DiaryVO.builder()
+                .diaryId(1L)
+                .activity("열매 따먹기")
+                .state("싫음")
+                .memo("테스트 메모 내용")
+                .build();
+
+        int result = plantingCalendarMapper.updateDiary(vo);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("관찰일지 등록 - 나의 식물 선택 조회")
+    void selectMyPlantTest() {
+        Long memberId = 1L;
+
+        List<selectMyPlantDiaryVO> result = plantingCalendarMapper.selectMyPlant(memberId);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("관찰일지 등록 처리")
+    void insertDiaryTest() {
+        DiaryVO vo = DiaryVO.builder()
+                .myplantId(21L)
+                .activity("열매 등록하기")
+                .state("좋음")
+                .memo("메모 내용")
+                .build();
+
+        int result = plantingCalendarMapper.insertDiary(vo);
+
+        log.info(String.valueOf(result));
+    }
 
 }
