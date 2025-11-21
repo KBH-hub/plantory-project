@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Plantory Header</title>
@@ -10,7 +10,8 @@
 </head>
 <body>
 
-<nav class="th:fragment="headerBar" navbar navbar-expand-lg bg-white px-4 shadow-sm" style="height:70px;">
+<nav th:fragment="headerBar" class="navbar navbar-expand-lg bg-white px-4 shadow-sm" style="height:70px;">
+
     <div class="container-fluid">
 
         <a class="navbar-brand fw-bold fs-3 text-success" href="#">Plantory</a>

@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.vo;
+package com.zero.plantory.global.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +26,5 @@ public class MemberVO {
     private LocalDateTime delFlag;
     private LocalDateTime createdAt;
     private Integer noticeEnabled;
+
 }
