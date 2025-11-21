@@ -24,4 +24,38 @@
         WHERE myplant_id = #{myplantId};
     </delete>
 
+    <select id="selectWateringCalendar"
+            parameterType="map"
+            resultType="com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO">
+        SELECT
+            w.watering_id,
+            w.myplant_id,
+            p.name myplant_name,
+            NULL memo,
+            w.date_at,
+            'WATERING' type
+        FROM watering w
+                 JOIN myplant p ON w.myplant_id = p.myplant_id
+        WHERE w.date_at >= #{startDate, jdbcType=TIMESTAMP}
+          AND w.date_at &lt;  #{endDate,   jdbcType=TIMESTAMP}
+        ORDER BY w.date_at ASC
+    </select>
+
+    <select id="selectDiaryCalendar"
+            parameterType="map"
+            resultType="com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO">
+        SELECT
+            d.diary_id,
+            d.myplant_id,
+            p.name myplant_name,
+            d.memo,
+            d.created_at date_at,
+            'DIARY' type
+        FROM diary d
+                 JOIN myplant p ON d.myplant_id = p.myplant_id
+        WHERE d.created_at >= #{startDate, jdbcType=TIMESTAMP}
+          AND d.created_at &lt;  #{endDate,   jdbcType=TIMESTAMP}
+        ORDER BY date_at ASC
+    </select>
+
 </mapper>
