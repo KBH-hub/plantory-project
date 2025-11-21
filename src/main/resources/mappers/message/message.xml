@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.message.mapper.MessageMapper">
+    <select id="selectMessages"
+            parameterType="map"
+            resultType="com.zero.plantory.domain.message.vo.MessageVO">
+        SELECT
+        m.message_id,
+        m.sender_id,
+        sender.nickname   AS sender_nickname,
+        m.receiver_id,
+        receiver.nickname AS receiver_nickname,
+        m.title,
+        m.target_type,
+        m.target_id,
+        m.created_at,
+        m.read_flag,
+        m.del_flag,
+        CASE
+        WHEN m.target_type = 'SHARING' THEN (
+        SELECT s.title
+        FROM sharing s
+        WHERE s.sharing_id = m.target_id
+        AND s.del_flag IS NULL
+        )
+        WHEN m.target_type = 'QUESTION' THEN (
+        SELECT q.title
+        FROM question q
+        WHERE q.question_id = m.target_id
+        AND q.del_flag IS NULL
+        )
+        ELSE NULL
+        END AS target_title
+        FROM message m
+        JOIN member sender   ON m.sender_id   = sender.member_id
+        JOIN member receiver ON m.receiver_id = receiver.member_id
+        <where>
+            m.del_flag IS NULL
+            <if test="boxType == 'RECEIVED'">
+                AND m.receiver_id = #{memberId}
+            </if>
+            <if test="boxType == 'SENT'">
+                AND m.sender_id = #{memberId}
+            </if>
+            <if test="targetType != null and targetType != ''">
+                AND m.target_type = #{targetType}
+            </if>
+            <if test="title != null and title != ''">
+                AND m.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+        </where>
+        ORDER BY m.created_at DESC
+    </select>
+
+    <update id="updateReadFlag">
+        UPDATE message
+        SET read_flag = sysdate()
+        WHERE message_id = #{messageId};
+    </update>
+
+    <update id="deleteMessages">
+        UPDATE message
+        SET del_flag = sysdate()
+        WHERE message_id IN
+        <foreach collection="messageIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectMessageWriteInfo"
+            resultType="com.zero.plantory.domain.message.vo.MessageVO">
+        SELECT
+            m.message_id,
+            m.sender_id,
+            sender.nickname   AS sender_nickname,
+            m.receiver_id,
+            receiver.nickname AS receiver_nickname,
+            m.title,
+            m.content,
+            m.target_type,
+            m.target_id,
+            m.created_at,
+            m.read_flag,
+            m.del_flag,
+            CASE
+                WHEN m.target_type = 'SHARING' THEN (
+                    SELECT s.title
+                    FROM sharing s
+                    WHERE s.sharing_id = m.target_id
+                      AND s.del_flag IS NULL
+                )
+                WHEN m.target_type = 'QUESTION' THEN (
+                    SELECT q.title
+                    FROM question q
+                    WHERE q.question_id = m.target_id
+                      AND q.del_flag IS NULL
+                )
+                ELSE NULL
+                END AS target_title
+        FROM message m
+                 JOIN member sender   ON m.sender_id   = sender.member_id
+                 JOIN member receiver ON m.receiver_id = receiver.member_id
+        WHERE m.sender_id  = #{senderId}
+          AND m.del_flag   IS NULL
+          AND m.target_type = #{targetType}
+          AND m.target_id   = #{targetId}
+    </select>
+
+    <insert id="insertMessage"
+            parameterType="com.zero.plantory.domain.message.vo.MessageVO">
+        INSERT INTO message
+        (sender_id, receiver_id, title, content, target_type, target_id, created_at)
+        VALUES
+            (#{senderId}, #{receiverId}, #{title}, #{content},
+             #{targetType}, #{targetId}, NOW())
+    </insert>
+
+    <select id="selectMessageDetail"
+            parameterType="map"
+            resultType="com.zero.plantory.domain.message.vo.MessageVO">
+        SELECT
+            m.message_id,
+            m.sender_id,
+            mem.nickname AS sender_nickname,
+            m.receiver_id,
+            m.title,
+            m.content,
+            m.target_type,
+            m.target_id,
+            m.created_at,
+            m.read_flag,
+            m.del_flag,
+            CASE
+                WHEN m.target_type = 'SHARING' THEN (
+                    SELECT s.title
+                    FROM sharing s
+                    WHERE s.sharing_id = m.target_id
+                      AND s.del_flag IS NULL
+                )
+                WHEN m.target_type = 'QUESTION' THEN (
+                    SELECT q.title
+                    FROM question q
+                    WHERE q.question_id = m.target_id
+                      AND q.del_flag IS NULL
+                )
+                ELSE NULL
+                END AS target_title
+        FROM message m
+                 JOIN member mem ON m.sender_id = mem.member_id
+        WHERE m.message_id = #{messageId}
+          AND m.sender_id = #{senderId}
+          AND m.del_flag IS NULL
+          AND m.target_type = #{targetType}
+          AND m.target_id = #{targetId}
+    </select>
+
+</mapper>
