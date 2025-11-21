@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.report.vo;
+package com.zero.plantory.domain.global.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

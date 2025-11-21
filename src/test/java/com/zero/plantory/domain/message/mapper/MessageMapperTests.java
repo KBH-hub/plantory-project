@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.message.mapper;
 
 import com.zero.plantory.domain.message.vo.SelectMessageListVO;
-import com.zero.plantory.domain.message.vo.MessageVO;
+import com.zero.plantory.domain.global.vo.MessageVO;
 import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
