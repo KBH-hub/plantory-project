@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.message.mapper.MessageMapper">
     <select id="selectMessages"
-            parameterType="map"
-            resultType="com.zero.plantory.domain.message.vo.MessageVO">
+            parameterType="com.zero.plantory.domain.message.vo.SelectMessageSearchVO"
+            resultType="com.zero.plantory.domain.message.vo.SelectMessageListVO">
         SELECT
         m.message_id,
         m.sender_id,
@@ -51,6 +51,7 @@
             </if>
         </where>
         ORDER BY m.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <update id="updateReadFlag">
@@ -117,7 +118,6 @@
     </insert>
 
     <select id="selectMessageDetail"
-            parameterType="map"
             resultType="com.zero.plantory.domain.message.vo.MessageVO">
         SELECT
             m.message_id,
@@ -149,10 +149,7 @@
         FROM message m
                  JOIN member mem ON m.sender_id = mem.member_id
         WHERE m.message_id = #{messageId}
-          AND m.sender_id = #{senderId}
           AND m.del_flag IS NULL
-          AND m.target_type = #{targetType}
-          AND m.target_id = #{targetId}
     </select>
 
 </mapper>

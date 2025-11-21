@@ -1,16 +1,20 @@
 package com.zero.plantory.domain.message.mapper;
 
+import com.zero.plantory.domain.message.vo.SelectMessageListVO;
 import com.zero.plantory.domain.message.vo.MessageVO;
+import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface MessageMapper {
-    List<MessageVO> selectMessages(Long memberId, String boxType, String targetType, String title);
-    int updateReadFlag(Long messageId);
+    List<SelectMessageListVO> selectMessages(SelectMessageSearchVO vo);
+    int updateReadFlag(@Param("messageId") Long messageId);
     int deleteMessages(List<Long> messageIds);
-    MessageVO selectMessageWriteInfo(Long senderId, String targetType, Long targetId);
+    MessageVO selectMessageWriteInfo(@Param("senderId") Long senderId, @Param("targetType") String targetType, @Param("targetId") Long targetId);
     int insertMessage(MessageVO message);
-    MessageVO selectMessageDetail(Long messageId, Long senderId, String targetType, Long targetId);
+    MessageVO selectMessageDetail(@Param("messageId") Long messageId);
 }
+

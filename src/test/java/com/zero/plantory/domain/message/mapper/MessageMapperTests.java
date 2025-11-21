@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.message.mapper;
 
+import com.zero.plantory.domain.message.vo.SelectMessageListVO;
 import com.zero.plantory.domain.message.vo.MessageVO;
+import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,12 +22,16 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
     void selectMessagesTest() {
-        Long memberId = 3L; // 받은 사람 아이디
-        String boxType = "RECEIVED"; // 받은 쪽지함
-        String targetType = null; // 전체 (나눔, 질문 모두)
-        String title = null; // 검색어 X (전체)
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+                .memberId(1L) // 받은 사람 아이디
+                .boxType("RECEIVED") // 받은 쪽지함
+                .targetType(null) // 나눔 or 질문 or 모두
+                .title(null) // 검색어
+                .limit(10) // 한 화면에 보여줄 개수
+                .offset(0) // 조회 시작 번호
+                .build();
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
@@ -33,12 +39,16 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 보낸 쪽지함 - 나눔 유형 필터")
     void getMessagesSharingTest() {
-        Long memberId = 2L;
-        String boxType = "SENT";
-        String targetType = "SHARING";
-        String title = null;
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+                .memberId(2L)
+                .boxType("SENT")
+                .targetType("SHARING")
+                .title(null)
+                .limit(10)
+                .offset(0)
+                .build();
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
@@ -46,12 +56,16 @@ public class MessageMapperTests {
     @Test
     @DisplayName("보낸 쪽지함 - 제목 키워드 검색")
     void selectMessagesSearchTest() {
-        Long memberId = 2L;
-        String boxType = "SENT";
-        String targetType = null;
-        String title = "위치";
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+                .memberId(2L)
+                .boxType("SENT")
+                .targetType(null)
+                .title("위치")
+                .limit(10)
+                .offset(0)
+                .build();
 
-        List<MessageVO> result = messageMapper.selectMessages(memberId, boxType, targetType, title);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
@@ -108,12 +122,9 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 상세 모달 화면")
     void selectMessageDetailTest() {
-        Long messageId = 1L;
-        Long senderId = 7L;
-        String targetType = "QUESTION";
-        Long targetId = 1L;
+        Long messageId = 3L;
 
-        MessageVO result = messageMapper.selectMessageDetail(messageId, senderId, targetType, targetId);
+        MessageVO result = messageMapper.selectMessageDetail(messageId);
 
         log.info(String.valueOf(result));
     }

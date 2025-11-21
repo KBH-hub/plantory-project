@@ -11,10 +11,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MessageVO {
+public class SelectMessageListVO {
     private Long messageId;
     private Long senderId;
+    private String senderNickname;
     private Long receiverId;
+    private String receiverNickname;
     private String title;
     private String content;
     private String targetType;
