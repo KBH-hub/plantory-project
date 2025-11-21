@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.sharing.mapper.SharingMapper">
+<select id="selectSharingListByAddressAndKeyword"
+        parameterType="com.zero.plantory.domain.sharing.vo.SharingSearchVO"
+        resultType="com.zero.plantory.domain.sharing.vo.SharingCardListVO">
+
+    SELECT
+        s.sharing_id,
+        s.title,
+        s.interest_num,
+        s.status,
+        s.created_at,
+
+        (
+            SELECT COUNT(*)
+            FROM comment c
+            WHERE c.sharing_id = s.sharing_id
+              AND c.del_flag IS NULL
+        ) AS comment_count,
+
+        (
+            SELECT i.file_url
+            FROM image i
+            WHERE i.target_type = 'SHARING'
+              AND i.target_id = s.sharing_id
+              AND i.del_flag IS NULL
+            ORDER BY i.image_id ASC, i.created_at ASC
+             LIMIT 1
+        ) AS image_url
+
+    FROM sharing s
+        JOIN member m ON s.member_id = m.member_id
+
+    WHERE m.address LIKE CONCAT(#{userAddress}, '%')
+      AND s.del_flag IS NULL
+      AND m.del_flag IS NULL
+      AND (#{keyword} IS NULL OR #{keyword} = '' OR s.title LIKE CONCAT('%', #{keyword}, '%'))
+
+    ORDER BY s.created_at DESC
+
+    LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+
+    <select id="countInterestByMemberId" resultType="int">
+        SELECT COUNT(*)
+        FROM interest i
+                 JOIN sharing s ON i.sharing_id = s.sharing_id
+        WHERE i.member_id = #{memberId}
+          AND s.del_flag IS NULL
+    </select>
+
+
+
+</mapper>
