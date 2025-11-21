@@ -25,4 +25,9 @@ public interface SharingMapper {
     int deleteInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
     int decreaseInterestNum(Long sharingId);
 
+    int insertComment(@Param("sharingId") Long sharingId, @Param("writerId") Long writerId, @Param("content") String content);
+    int countMyComment(@Param("commentId") Long commentId, @Param("sharingId") Long sharingId, @Param("writerId") Long writerId);
+    int updateCommentById(CommentVO vo);
+    int deleteComment(CommentVO vo);
+
 }

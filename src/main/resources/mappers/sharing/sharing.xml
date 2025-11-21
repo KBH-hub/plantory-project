@@ -167,6 +167,41 @@
         WHERE sharing_id = #{sharingId}
     </update>
 
+    <insert id="insertComment">
+        INSERT INTO comment
+            (sharing_id, writer_id, content, created_at, updated_at, del_flag)
+        VALUES
+            (#{sharingId}, #{writerId}, #{content}, NOW(), NULL, NULL)
+    </insert>
+
+    <select id="countMyComment" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE comment_id = #{commentId}
+          AND sharing_id = #{sharingId}
+          AND writer_id  = #{writerId}
+          AND del_flag IS NULL
+    </select>
+
+    <update id="updateCommentById">
+        UPDATE comment
+        SET content    = #{content},
+            updated_at = NOW()
+        WHERE comment_id = #{commentId}
+          AND sharing_id = #{sharingId}
+          AND writer_id  = #{writerId}
+          AND del_flag IS NULL
+    </update>
+
+    <update id="deleteComment" parameterType="com.zero.plantory.global.vo.CommentVO">
+        UPDATE comment
+        SET del_flag = NOW()
+        WHERE comment_id = #{commentId}
+          AND sharing_id = #{sharingId}
+          AND writer_id  = #{writerId}
+          AND del_flag IS NULL
+    </update>
+
 
 
 

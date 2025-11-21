@@ -3,6 +3,7 @@ package com.zero.plantory.domain.sharing.mapper;
 import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
 import com.zero.plantory.domain.sharing.vo.SharingVO;
+import com.zero.plantory.global.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -23,6 +24,56 @@ public class SharingMapperTests {
 
     private final Long memberId = 1L;
     private final Long sharingId = 20L;
+    private final Long writerId = 1L;
+
+    @Test
+    @DisplayName("댓글 삭제")
+    void deleteCommentTest() {
+
+        CommentVO vo = CommentVO.builder()
+                .commentId(21L)
+                .sharingId(20L)
+                .writerId(1L)
+                .build();
+
+        int count = mapper.countMyComment(vo.getCommentId(), vo.getSharingId(), vo.getWriterId());
+        log.info("삭제 권한 여부 = {}", count);
+
+        if (count == 1) {
+            int result = mapper.deleteComment(vo);
+            log.info("삭제 결과 = {}", result);
+        }
+    }
+
+    @Test
+    @DisplayName("댓글 등록")
+    void insertCommentTest() {
+
+        int result = mapper.insertComment(sharingId, writerId, "테스트 댓글입니다!");
+        log.info("댓글 등록 결과 = {}", result);
+    }
+
+    @Test
+    @DisplayName("댓글 수정")
+    void updateCommentTest() {
+
+        Long commentId = 21L;
+
+        int count = mapper.countMyComment(commentId, sharingId, writerId);
+        log.info("수정 권한 여부 = {}", count);
+
+        if (count == 1) {
+            CommentVO vo = CommentVO.builder()
+                    .commentId(21L)
+                    .sharingId(20L)
+                    .writerId(1L)
+                    .content("수정된 댓글입니다.")
+                    .build();
+
+            log.info("댓글 수정 결과 = {}", mapper.updateCommentById(vo));
+        }
+
+    }
 
     @Test
     @DisplayName("관심 등록")
