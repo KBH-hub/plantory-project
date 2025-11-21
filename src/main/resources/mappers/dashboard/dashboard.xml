@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.dashboard.mapper.DashboardMapper">
+
+    <select id="countMyplantsByMemberId" resultType="int">
+        SELECT COUNT(m.myplant_id)
+        FROM myplant m
+                 JOIN member mb ON m.member_id = mb.member_id
+        WHERE mb.member_id = #{memberId}
+          AND m.del_flag IS NULL
+          AND mb.del_flag IS NULL
+    </select>
+
+    <select id="countTodayWatering" resultType="int">
+        SELECT COUNT(m.myplant_id) AS today_watering_count
+        FROM watering w
+                 JOIN myplant m  ON w.myplant_id = m.myplant_id
+                 JOIN member mb  ON m.member_id = mb.member_id
+        WHERE mb.member_id = #{memberId}
+          AND m.del_flag IS NULL
+          AND mb.del_flag IS NULL
+          AND DATE(w.date_at) = CURDATE()
+          AND w.check_flag IS NULL
+    </select>
+
+    <select id="countCareNeededPlants" resultType="int">
+    <![CDATA[
+        SELECT COUNT(DISTINCT m.myplant_id) AS care_count
+        FROM watering w
+                 JOIN myplant m ON w.myplant_id = m.myplant_id
+                 JOIN member mb ON m.member_id = mb.member_id
+        WHERE mb.member_id = #{memberId}
+          AND m.del_flag IS NULL
+          AND mb.del_flag IS NULL
+          AND DATE(w.date_at) < CURDATE()
+          AND DATE(w.date_at) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+          AND w.check_flag IS NULL
+        ]]>
+    </select>
+
+    <select id="selectRecommendedSharing" resultType="com.zero.plantory.domain.dashboard.vo.RecommendedSharingVO">
+
+    <![CDATA[
+        SELECT
+            s.sharing_id,
+            s.title,
+            s.status,
+            s.created_at,
+            s.interest_num,
+            (
+                SELECT COUNT(*)
+                FROM comment c
+                WHERE c.sharing_id = s.sharing_id
+                  AND c.del_flag IS NULL
+            ) AS comment_count,
+            (
+                SELECT i.file_url
+                FROM image i
+                WHERE i.target_type = 'SHARING'
+                  AND i.target_id   = s.sharing_id
+                  AND i.del_flag IS NULL
+                ORDER BY i.image_id ASC, i.created_at ASC
+                 LIMIT 1
+            ) AS image_url
+        FROM sharing s
+        WHERE s.del_flag IS NULL
+          AND s.interest_num IS NOT NULL
+          AND s.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        ORDER BY s.interest_num DESC, s.created_at DESC
+            LIMIT 3
+        ]]>
+
+    </select>
+
+    <select id="selectTodayWateringByMemberId" resultType="com.zero.plantory.domain.dashboard.vo.TodayWateringVO">
+
+        SELECT DISTINCT
+            m.name,
+            m.`interval`
+        FROM watering w
+                 JOIN myplant m  ON w.myplant_id = m.myplant_id
+                 JOIN member mb  ON m.member_id = mb.member_id
+        WHERE mb.member_id = #{memberId}
+          AND m.del_flag IS NULL
+          AND mb.del_flag IS NULL
+          AND DATE(w.date_at) = CURDATE()
+          AND w.check_flag IS NULL
+
+    </select>
+
+    <select id="selectTodayDiaryByMemberId" resultType="com.zero.plantory.domain.dashboard.vo.TodayDiaryVO">
+
+        SELECT
+            d.diary_id,
+            m.myplant_id,
+            m.name AS myplant_name,
+            d.activity,
+            d.state,
+            d.memo,
+            d.created_at,
+            (
+                SELECT i.file_url
+                FROM image i
+                WHERE i.target_type = 'DIARY'
+                  AND i.target_id   = d.diary_id
+                  AND i.del_flag IS NULL
+                ORDER BY i.image_id ASC, i.created_at ASC
+                      LIMIT 1
+            ) AS image_url
+        FROM diary d
+            JOIN myplant m ON d.myplant_id = m.myplant_id
+            JOIN member mb ON m.member_id = mb.member_id
+        WHERE mb.member_id = #{memberId}
+          AND mb.del_flag IS NULL
+          AND m.del_flag IS NULL
+          AND DATE(d.created_at) = CURDATE()
+
+    </select>
+
+</mapper>
