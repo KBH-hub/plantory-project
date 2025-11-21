@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
+import com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO;
+import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import com.zero.plantory.global.vo.MemberVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 @SpringBootTest
@@ -80,22 +87,51 @@ class MemberMapperTest {
         log.info(String.valueOf(memberMapper.countByCompletedSharingCount(1L)));
     }
 
-//    @Test
-//    void selectMyWrittenListTest() {
-//        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
-//        request.setMemberId(1L);
-//        request.setCategory("ALL");
-//        request.setKeyword("분양");
-//        request.setLimit(10);
-//        request.setOffset(0);
-//
-//        List<MyWrittenListDTO> list = memberMapper.MyWrittenListRequestVO(request);
-//
-//        assertNotNull(list);
-//        assertFalse(list.isEmpty());
-//        list.forEach(System.out::println);
-//    }
+    @Test
+    @DisplayName("내가 쓴 글 확인 - 전체")
+    void selectMyWrittenListTest() {
+        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        request.setMemberId(1L);
+        request.setKeyword("분양");
+        request.setLimit(10);
+        request.setOffset(0);
+
+        log.info(String.valueOf(memberMapper.selectMyWrittenListAll(request)));
+    }
 
 
+    @Test
+    void selectMyWrittenListSharing() {
+        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        request.setMemberId(1L);
+        request.setKeyword("분양");
+        request.setLimit(10);
+        request.setOffset(0);
 
+        log.info(String.valueOf(memberMapper.selectMyWrittenListSharing(request)));
+    }
+
+    @Test
+    void selectMyWrittenListQuestion() {
+        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        request.setMemberId(1L);
+        request.setKeyword("초록");
+        request.setLimit(10);
+        request.setOffset(0);
+
+        log.info(String.valueOf(memberMapper.selectMyWrittenListQuestion(request)));
+    }
+
+
+    @Test
+    void deleteMyWrittenAll() {
+    }
+
+    @Test
+    void deleteMyWrittenSharing() {
+    }
+
+    @Test
+    void deleteMyWrittenQuestion() {
+    }
 }
