@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectMessageSeachVO {
+public class SelectMessageSearchVO {
     private Long memberId;
     private String boxType;
     private String targetType;

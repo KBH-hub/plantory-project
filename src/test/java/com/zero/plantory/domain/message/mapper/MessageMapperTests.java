@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.message.mapper;
 
-import com.zero.plantory.domain.message.vo.SelectMessageSeachVO;
 import com.zero.plantory.domain.message.vo.SelectMessageListVO;
 import com.zero.plantory.domain.message.vo.MessageVO;
+import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
     void selectMessagesTest() {
-        SelectMessageSeachVO dto = new SelectMessageSeachVO().builder()
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
                 .memberId(1L) // 받은 사람 아이디
                 .boxType("RECEIVED") // 받은 쪽지함
                 .targetType(null) // 나눔 or 질문 or 모두
@@ -31,7 +31,7 @@ public class MessageMapperTests {
                 .offset(0) // 조회 시작 번호
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(dto);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
@@ -39,7 +39,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 보낸 쪽지함 - 나눔 유형 필터")
     void getMessagesSharingTest() {
-        SelectMessageSeachVO dto = new SelectMessageSeachVO().builder()
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
                 .memberId(2L)
                 .boxType("SENT")
                 .targetType("SHARING")
@@ -48,7 +48,7 @@ public class MessageMapperTests {
                 .offset(0)
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(dto);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
@@ -56,7 +56,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("보낸 쪽지함 - 제목 키워드 검색")
     void selectMessagesSearchTest() {
-        SelectMessageSeachVO dto = new SelectMessageSeachVO().builder()
+        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
                 .memberId(2L)
                 .boxType("SENT")
                 .targetType(null)
@@ -65,7 +65,7 @@ public class MessageMapperTests {
                 .offset(0)
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(dto);
+        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
 
         log.info(String.valueOf(result));
     }
