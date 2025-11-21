@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캘린더</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/plantCalendar.css">
+</head>
+<body class="bg-light">
+
+<div th:replace="fragments/header :: headerBar"></div>
+
+    <div class="container-fluid text-center my-4">
+        <div class="row">
+
+            <div class="col-lg-8 mb-4">
+                <h3 class="fw-bold mb-3">식물 캘린더</h3>
+                <div class="calendar-wrapper shadow">
+                    <div class="card shadow-sm">
+                        <div class="calendar-header-bar"></div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <button id="prevMonth" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+
+                                <h5 id="monthLabel" class="mb-0 fs-2">로딩중...</h5>
+
+                                <button id="nextMonth" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+
+                            <div class="d-grid" style="grid-template-columns: repeat(7,1fr);">
+                                <div class="fw-bold text-center text-danger">일</div>
+                                <div class="fw-bold text-center">월</div>
+                                <div class="fw-bold text-center">화</div>
+                                <div class="fw-bold text-center">수</div>
+                                <div class="fw-bold text-center">목</div>
+                                <div class="fw-bold text-center">금</div>
+                                <div class="fw-bold text-center text-primary">토</div>
+                            </div>
+
+                            <div class="calendar-grid mt-2"></div>
+                            <div class="calendar-grid mt-2">
+
+                                <!-- 날짜 (예시 2일) -->
+                                <div class="calendar-cell">
+                                    <span>2</span>
+                                    <div class="badge bg-primary mt-1">물주기 +3</div>
+                                    <div class="badge bg-warning text-dark mt-1">관찰일지 +3</div>
+                                </div>
+
+                                <div class="calendar-cell">
+                                    <span>3</span>
+                                    <div class="badge bg-primary mt-1">물주기 +2</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="plant-section-wrapper shadow">
+                    <div class="section-title-bar">
+                        <h5 class="m-0 fw-bold text-white">오늘의 식물 관리</h5>
+                    </div>
+
+                    <div class="section-content p-3">
+
+                        <div class="card shadow-sm mb-5 overflow-auto" style="max-height: 300px;">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <span><i class="fa-solid fa-droplet me-2"></i>물주기</span>
+                            </div>
+
+                            <div class="card-body" id="wateringListContainer">
+
+                                <div class="bg-primary bg-opacity-10 rounded-2 border-start border-4 border-primary p-3">
+                                    <div class="d-flex align-items-start">
+                                        <div>
+                                            <div class="fw-bold">다육이</div>
+                                            <small class="text-muted">30일마다</small>
+                                        </div>
+                                        <div class="ms-auto d-flex align-items-center gap-3">
+                                            <span class="badge bg-primary rounded-2">2025-11-19</span>
+                                            <i class="fa-solid fa-xmark text-secondary fs-5 remove-btn"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <input type="checkbox" class="form-check-input">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                        <hr class="section-divider">
+
+                        <div class="card shadow-sm mb-3 overflow-auto" style="max-height: 300px;">
+                            <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+                                <span><i class="fa-solid fa-book me-2"></i>관찰일지</span>
+
+                                <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#diaryModal">
+                                    +추가
+                                </button>
+
+                                <div class="modal fade" id="diaryModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content" style="background:#f5f5f5;">
+
+                                            <div class="modal-header bg-warning text-white border-0">
+                                                <h5 class="modal-title fw-bold">2025-11-07 관찰일지 등록</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+
+
+                                            <div class="modal-body pt-0">
+
+                                                <label class="fw-bold">식물 선택 <span class="text-danger">*필수입니다.</span></label>
+                                                <select id="plantSelect" class="form-select mb-4">
+                                                    <option value="방울토마토">방울토마토</option>
+                                                    <option value="상추">상추</option>
+                                                    <option value="양상추">양상추</option>
+                                                    <option value="츄츄">츄츄</option>
+                                                </select>
+
+                                                <label class="fw-bold">활동</label>
+                                                <input id="activityInput" type="text" class="form-control mb-4" placeholder="예: 물주기">
+
+                                                <label class="fw-bold">식물 상태</label>
+                                                <input id="conditionInput" type="text" class="form-control mb-4" placeholder="예: 좋음">
+
+                                                <label class="fw-bold">사진</label>
+                                                <div id="photoList" class="d-flex gap-3 align-items-center mb-4">
+
+                                                    <div id="addPhotoBtn" class="d-flex justify-content-center align-items-center border rounded" style="width:110px;height:110px;background:#efefef;cursor:pointer;">
+                                                        <span class="fs-1">+</span>
+                                                    </div>
+
+                                                </div>
+
+                                                <label class="fw-bold">메모 <span class="text-danger">*필수입니다.</span></label>
+                                                <textarea id="memoInput" class="form-control" rows="4" placeholder="내용을 입력하세요"></textarea>
+
+                                            </div>
+
+                                            <div class="modal-footer border-0">
+                                                <button id="saveDiaryBtn" class="btn btn-success w-50 mx-auto" style="background:#4ca215;border:none;font-size:18px;">
+                                                    일지 저장
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">사진 추가</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <img id="previewImage" class="img-fluid rounded d-none mb-3" style="max-height:300px;object-fit:cover;">
+                                                <input type="file" id="imageInput" class="form-control" accept="image/*">
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                <button id="saveImageBtn" class="btn btn-primary">추가</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-body" id="diaryListContainer">
+
+                                <div class="d-flex flex-column bg-warning bg-opacity-10 rounded-2 border-start border-4 border-warning p-3 mb-3">
+
+                                    <div class="d-flex align-items-start">
+
+                                        <div>
+                                            <div class="fw-bold">다육이</div>
+                                        </div>
+
+                                        <div class="ms-auto d-flex align-items-center gap-3">
+                                            <span class="badge bg-warning text-dark">2025-11-19</span>
+                                            <i class="fa-solid fa-xmark text-secondary fs-5 remove-btn"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 ps-1 bg-light rounded-1 p-1">
+                                        <small class="text-muted">메모: 물 너무 주지 않기</small>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column bg-warning bg-opacity-10 rounded-2 border-start border-4 border-warning p-3">
+
+                                    <div class="d-flex align-items-start">
+                                        <div class="d-flex align-items-center">
+                                            <img src="Image/jejuOrangeCat.jpg" width="60" height="60" class="rounded me-3">
+                                            <div class="fw-bold">방울토마토</div>
+                                        </div>
+
+                                        <div class="ms-auto d-flex align-items-center gap-3">
+                                            <span class="badge bg-warning text-dark">2025-11-19</span>
+                                            <i class="fa-solid fa-xmark text-secondary fs-5 remove-btn"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2 ps-1 bg-light rounded-1 p-1">
+                                        <small class="text-muted">메모: 잎이 노란색, 햇빛 많이 필요</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script src="../static/js/plantCalendar.js"></script>
+
+</html>
