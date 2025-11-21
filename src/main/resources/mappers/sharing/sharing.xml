@@ -53,6 +53,22 @@
           AND s.del_flag IS NULL
     </select>
 
+    <select id="selectPopularSharingList" resultType="com.zero.plantory.domain.sharing.vo.SharingPopularVO">
+
+        SELECT
+            sharing_id,
+            title,
+            interest_num
+        FROM sharing
+        WHERE del_flag IS NULL
+          AND interest_num IS NOT NULL
+          AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        ORDER BY interest_num DESC, created_at DESC
+            LIMIT 3
+
+    </select>
+
+
 
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.sharing.mapper;
 
+import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @Slf4j
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -16,6 +19,13 @@ public class SharingMapperTests {
 
     @Autowired
     SharingMapper mapper;
+
+    @Test
+    @DisplayName("인기 나눔글 TOP3 조회")
+    void selectPopularSharingListTest() {
+        mapper.selectPopularSharingList()
+                .forEach(vo -> log.info(vo.toString()));
+    }
 
     @Test
     @DisplayName("내 관심 나눔 식물 수 조회")
