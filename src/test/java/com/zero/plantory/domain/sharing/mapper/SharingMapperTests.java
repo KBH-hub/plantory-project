@@ -22,6 +22,7 @@ public class SharingMapperTests {
     SharingMapper mapper;
 
     @Test
+    @DisplayName("나눔 게시글 등록 처리")
     void insertSharingTest() {
         SharingVO vo = SharingVO.builder()
                 .memberId(1L)
