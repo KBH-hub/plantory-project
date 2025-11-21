@@ -1,8 +1,6 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.request.SelectMyWrittenListRequestVO;
 import com.zero.plantory.global.vo.MemberVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -11,10 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -79,12 +73,29 @@ class MemberMapperTest {
     void countByInterestCount() {
         log.info(String.valueOf(memberMapper.countByInterestCount(1L)));
     }
-
+    //log.info(String.valueOf());
     @Test
     @DisplayName("공감내역 수 확인")
     void countByCompletedSharingCount() {
         log.info(String.valueOf(memberMapper.countByCompletedSharingCount(1L)));
     }
-//log.info(String.valueOf());
+
+//    @Test
+//    void selectMyWrittenListTest() {
+//        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+//        request.setMemberId(1L);
+//        request.setCategory("ALL");
+//        request.setKeyword("분양");
+//        request.setLimit(10);
+//        request.setOffset(0);
+//
+//        List<MyWrittenListDTO> list = memberMapper.MyWrittenListRequestVO(request);
+//
+//        assertNotNull(list);
+//        assertFalse(list.isEmpty());
+//        list.forEach(System.out::println);
+//    }
+
+
 
 }

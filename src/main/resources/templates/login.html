@@ -11,60 +11,62 @@
 
 <body class="bg-dark">
 
-<div class="container-fluid vh-100 d-flex">
-  
-<div class="col-md-6 d-flex flex-column justify-content-center align-items-center bg-success bg-opacity-50">
+<div class="container-fluid vh-100">
+    <div class="row h-100">
 
-    <h2 class="fw-bold mb-4">Plantory</h2>
-    <p class="text-white mb-4 fs-3">Sign up to continue</p>
+        <!-- Left -->
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center bg-success bg-opacity-50">
 
-    <div class="w-75">
+            <h2 class="fw-bold mb-4">Plantory</h2>
+            <p class="text-white mb-4 fs-3">Sign up to continue</p>
 
-      <label class="text-white">아이디</label>
-      <input type="text" class="form-control mb-3">
+            <div class="w-75">
+                <label class="text-white">아이디</label>
+                <input type="text" class="form-control mb-3">
 
-      <label class="text-white">비밀번호</label>
-      <input type="password" class="form-control mb-3">
+                <label class="text-white">비밀번호</label>
+                <input type="password" class="form-control mb-3">
 
-      <div class="form-check text-white mb-3">
-        <input type="checkbox" class="form-check-input" id="keepLogin">
-        <label class="form-check-label" for="keepLogin">이 사이트가 나를 기억하기</label>
-      </div>
+                <div class="form-check text-white mb-3">
+                    <input type="checkbox" class="form-check-input" id="keepLogin">
+                    <label class="form-check-label" for="keepLogin">이 사이트가 나를 기억하기</label>
+                </div>
 
-      <button class="btn btn-success w-100 mb-3">로그인</button>
+                <button class="btn btn-success w-100 mb-3">로그인</button>
 
-      <p class="text-center text-white">아직 아이디가 없으신가요?
-        <a href="termsOfService.html" class="text-danger">회원가입</a>
-      </p>
+                <p class="text-center text-white">
+                    아직 아이디가 없으신가요?
+                    <a href="termsOfService.html" class="text-danger">회원가입</a>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Right -->
+        <div class="col-12 col-md-6 bg-white d-flex flex-column justify-content-start align-items-center">
+
+            <h4 class="fw-bold text-center mb-4 mt-5">
+                로그인하고 저희 서비스를 이용해 보세요.<br>
+                식물을 관리하고 커뮤니티에서 함께 성장해요.
+            </h4>
+
+            <div class="d-flex flex-wrap justify-content-center gap-4">
+
+                <div class="border rounded p-0 bg-light shadow-lg" style="max-width:450px; width:90%; height:600px; overflow:hidden;">
+                    <img th:src="@{/image/fixme.png}" class="w-100 h-100" style="object-fit:cover;">
+                </div>
+
+                <div class="border rounded p-0 bg-light shadow-lg" style="max-width:450px; width:90%; height:600px; overflow:hidden;">
+                    <img th:src="@{/image/fixme2.png}" class="w-100 h-100" style="object-fit:cover;">
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-
-  </div>
-
-<div class="col-md-6 bg-white d-flex flex-column justify-content-start align-items-center">
-    
-    <h4 class="fw-bold text-center mb-4 mt-5">
-      로그인하고 저희 서비스를 이용해 보세요.<br>
-      식물을 관리하고 커뮤니티에서 함께 성장해요.
-    </h4>
-
-    <div class="d-flex gap-4">
-
-      <div class="border rounded p-0 bg-light shadow-lg" style="width:450px; height:600px; overflow:hidden;">
-        <img src="../static/image/fixme.png"
-             class="w-100 h-100" style="object-fit:cover;">
-      </div>
-
-      <div class="border rounded p-0 bg-light shadow-lg" style="width:450px; height:600px; overflow:hidden;">
-        <img src="../static/image/fixme2.png"
-             class="w-100 h-100" style="object-fit:cover;">
-      </div>
-
-    </div>
-
 </div>
 
 
-
-</div>
 </body>
 </html>

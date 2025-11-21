@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectMyWrittenListRequestVO {
+public class MyWrittenListRequestVO {
     private Long memberId;
     private String category;
     private String keyword;

@@ -1,8 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.request.SelectMyWrittenListRequestVO;
+import com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO;
 import com.zero.plantory.global.vo.MemberVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +16,6 @@ public interface MemberMapper {
     MemberVO selectByMemberInfo(@Param("memberId") Long memberId);
     int countByInterestCount(@Param("memberId") Long memberId);
     int countByCompletedSharingCount(@Param("memberId") Long memberId);
+//    List<MyWrittenListRequestVO>  MyWrittenListRequestVO(@Param("memberId") Long memberId);
 
 }
