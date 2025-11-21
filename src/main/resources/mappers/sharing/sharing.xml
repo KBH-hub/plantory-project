@@ -133,6 +133,41 @@
 
     </select>
 
+    <select id="countInterest" resultType="int">
+        SELECT COUNT(*)
+        FROM interest
+        WHERE member_id = #{memberId}
+          AND sharing_id = #{sharingId}
+    </select>
+
+
+    <insert id="insertInterest">
+        INSERT INTO interest (member_id, sharing_id)
+        VALUES (#{memberId}, #{sharingId})
+    </insert>
+
+
+    <delete id="deleteInterest">
+        DELETE FROM interest
+        WHERE member_id = #{memberId}
+          AND sharing_id = #{sharingId}
+    </delete>
+
+
+    <update id="increaseInterestNum">
+        UPDATE sharing
+        SET interest_num = interest_num + 1
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+
+    <update id="decreaseInterestNum">
+        UPDATE sharing
+        SET interest_num = GREATEST(interest_num - 1, 0)
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+
 
 
 

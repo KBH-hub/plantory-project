@@ -21,6 +21,42 @@ public class SharingMapperTests {
     @Autowired
     SharingMapper mapper;
 
+    private final Long memberId = 1L;
+    private final Long sharingId = 20L;
+
+    @Test
+    @DisplayName("관심 등록")
+    void insertInterestTest() {
+
+        int before = mapper.countInterest(memberId, sharingId);
+        log.info("등록 전 관심 여부 = {}", before);
+
+        if (before == 0) {
+            mapper.insertInterest(memberId, sharingId);
+            mapper.increaseInterestNum(sharingId);
+        }
+
+        int after = mapper.countInterest(memberId, sharingId);
+        log.info("등록 후 관심 여부 = {}", after);
+
+    }
+
+    @Test
+    @DisplayName("관심 해제")
+    void deleteInterestTest() {
+
+        int before = mapper.countInterest(memberId, sharingId);
+        log.info("해제 전 관심 여부 = {}", before);
+
+        if (before == 1) {
+            mapper.deleteInterest(memberId, sharingId);
+            mapper.decreaseInterestNum(sharingId);
+        }
+
+        int after = mapper.countInterest(memberId, sharingId);
+        log.info("해제 후 관심 여부 = {}", after);
+    }
+
     @Test
     @DisplayName("나눔 게시글 상세 댓글 조회")
     void selectSharingCommentsTest(){

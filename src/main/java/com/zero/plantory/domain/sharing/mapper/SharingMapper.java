@@ -16,5 +16,13 @@ public interface SharingMapper {
     SelectSharingDetailVO selectSharingDetail(Long sharingId);
     List<SelectSharingCommentVO> selectSharingComments(Long sharingId);
 
+    /** click interest */
+    int countInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
+    int insertInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
+    int increaseInterestNum(Long sharingId);
+
+    /** delete interest */
+    int deleteInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
+    int decreaseInterestNum(Long sharingId);
 
 }
