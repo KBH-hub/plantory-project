@@ -17,6 +17,38 @@ public class QuestionMapperTest {
     private QuestionMapper mapper;
 
     @Test
+    @DisplayName("질문 삭제")
+    void deleteQuestionTest(){
+        log.info("삭제 결과 = {}", mapper.deleteQuestion(20L));
+    }
+
+    @Test
+    @DisplayName("질문 수정 권한 체크")
+    void countMyQuestionTest() {
+
+        QuestionVO vo = QuestionVO.builder()
+                .questionId(21L)
+                .memberId(1L)
+                .build();
+
+        log.info("수정 권한 체크 count = {}", mapper.countMyQuestion(vo));
+    }
+
+    @Test
+    @DisplayName("질문 수정")
+    void updateQuestionTest() {
+
+        QuestionVO vo = QuestionVO.builder()
+                .questionId(21L)
+                .memberId(1L)
+                .title("테스트")
+                .content("질문수정테스트")
+                .build();
+
+        log.info("질문 수정 결과 = {}", mapper.updateQuestion(vo));
+    }
+
+    @Test
     @DisplayName("답글 수정 및 삭제 권한 체크")
     void countMyAnswerTest() {
 

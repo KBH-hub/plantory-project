@@ -6,8 +6,7 @@
 
 <mapper namespace="com.zero.plantory.domain.question.mapper.QuestionMapper">
 
-    <select id="selectQuestionList"
-            resultType="com.zero.plantory.domain.question.vo.SelectQuestionListVO">
+    <select id="selectQuestionList" resultType="com.zero.plantory.domain.question.vo.SelectQuestionListVO">
 
         SELECT
             q.question_id      AS questionId,
@@ -68,7 +67,7 @@
 
     </select>
 
-    <select id="selectAnswerList" resultType="com.zero.plantory.domain.question.vo.SelectAnswerListVO">
+    <select id="selectQuestionAnswers" resultType="com.zero.plantory.domain.question.vo.SelectAnswerListVO">
 
         SELECT
             a.answer_id AS answerId,
@@ -131,5 +130,36 @@
 
     </update>
 
+    <select id="countMyQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+
+        SELECT COUNT(*)
+        FROM question
+        WHERE question_id = #{questionId}
+          AND member_id = #{memberId}
+          AND del_flag IS NULL
+
+    </select>
+
+    <update id="updateQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+
+        UPDATE question
+        SET title = #{title},
+            content = #{content},
+            updated_at = NOW()
+        WHERE question_id = #{questionId}
+          AND member_id = #{memberId}
+          AND del_flag IS NULL
+
+    </update>
+
+
+
+    <update id="deleteQuestion">
+
+        UPDATE question
+        SET del_flag = NOW()
+        WHERE question_id = #{questionId}
+
+    </update>
 
 </mapper>

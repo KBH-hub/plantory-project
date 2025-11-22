@@ -15,9 +15,14 @@ public interface QuestionMapper {
     int insertQuestion(QuestionVO vo);
     SelectQuestionDetailVO selectQuestionDetail(@Param("questionId") Long questionId);
     List<SelectAnswerListVO> selectQuestionAnswers(@Param("questionId") Long questionId);
+
     int insertAnswer(AnswerVO vo);
     int countMyAnswer(AnswerVO vo);
     int updateAnswerById(AnswerVO vo);
     int deleteAnswer(AnswerVO vo);
 
+    int countMyQuestion(QuestionVO vo);
+    int updateQuestion(QuestionVO vo);
+
+    int deleteQuestion(@Param("questionId") Long questionId);
 }
