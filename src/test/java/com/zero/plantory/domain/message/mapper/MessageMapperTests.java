@@ -1,7 +1,8 @@
 package com.zero.plantory.domain.message.mapper;
 
 import com.zero.plantory.domain.message.vo.SelectMessageListVO;
-import com.zero.plantory.domain.global.vo.MessageVO;
+import com.zero.plantory.global.vo.MessageTargetType;
+import com.zero.plantory.global.vo.MessageVO;
 import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -110,7 +111,7 @@ public class MessageMapperTests {
                 .receiverId(8L)
                 .title("안녕하세요. 테스트 쪽지 제목입니다.")
                 .content("테스트 쪽지 내용입니다.")
-                .targetType("SHARING")
+                .targetType(MessageTargetType.SHARING)
                 .targetId(13L)
                 .build();
 

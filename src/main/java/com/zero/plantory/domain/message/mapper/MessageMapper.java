@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.message.mapper;
 
 import com.zero.plantory.domain.message.vo.SelectMessageListVO;
-import com.zero.plantory.domain.global.vo.MessageVO;
+import com.zero.plantory.global.vo.MessageVO;
 import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

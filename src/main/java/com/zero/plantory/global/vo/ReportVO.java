@@ -18,7 +18,7 @@ public class ReportVO {
     private Long targetMemberId;
     private String content;
     private String status;
-    private Date createAt;
+    private Date createdAt;
     private String adminMemo;
     private Date delFlag;
 }

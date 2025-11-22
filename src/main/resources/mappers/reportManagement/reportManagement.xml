@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.reportManagement.mapper.ReportManagementMapper">
+    <select id="selectReportList"
+            parameterType="com.zero.plantory.domain.reportManagement.vo.ReportManagementSearchVO"
+            resultType="com.zero.plantory.global.vo.ReportVO">
+        SELECT
+        r.report_id,
+        r.admin_id,
+        r.reporter_id,
+        r.target_member_id,
+        r.content,
+        r.status,
+        r.created_at,
+        r.admin_memo,
+        r.del_flag
+        FROM report r
+        <where>
+            r.del_flag IS NULL
+            <if test="keyword != null and keyword != ''">
+                AND r.content LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND r.status = #{status}
+            </if>
+        </where>
+        ORDER BY r.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <update id="deleteReports">
+        UPDATE report
+        SET del_flag = NOW()
+        WHERE del_flag IS NULL
+        AND report_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    
+    <select id="selectReportDetail" resultType="com.zero.plantory.domain.reportManagement.vo.ReportDetailVO">
+        SELECT
+            r.report_id,
+            r.admin_id,
+            r.reporter_id,
+            r.target_member_id,
+            reporter.membername reporter_name,
+            target.membername   target_name,
+            admin.membername    admin_name,
+            r.content,
+            r.status,
+            r.created_at,
+            r.admin_memo
+        FROM report r
+                 JOIN member reporter ON r.reporter_id = reporter.member_id
+                 JOIN member target   ON r.target_member_id = target.member_id
+                 LEFT JOIN member admin ON r.admin_id = admin.member_id
+        WHERE r.report_id = #{reportId}
+          AND r.del_flag IS NULL
+    </select>
+
+    <update id="insertAdminMemo">
+        UPDATE report
+        SET
+            admin_id = #{adminId},
+            admin_memo = #{adminMemo},
+            status = #{status},
+            created_at = NOW()
+        WHERE report_id = #{reportId}
+          AND del_flag IS NULL
+    </update>
+
+    <update id="updateStopDay">
+        UPDATE member
+        SET stop_day = DATE_ADD(NOW(), INTERVAL #{days} DAY)
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
+    </update>
+</mapper>
