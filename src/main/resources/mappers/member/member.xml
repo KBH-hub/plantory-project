@@ -282,6 +282,33 @@
 
     </select>
 
+    <select id="selectMyInfo" parameterType="long"
+            resultType="com.zero.plantory.domain.member.vo.MemberInfoVO">
+        SELECT member_id, membername, nickname, phone, address, role, notice_enabled, del_flag
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
 
+    <update id="updateMyInfo" parameterType="com.zero.plantory.domain.member.vo.MemberUpdateRequestVO">
+        UPDATE member
+        SET nickname = #{nickname},
+            phone = #{phone},
+            address = #{address}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateNoticeEnabled" parameterType="map">
+        UPDATE member
+        SET notice_enabled = #{enabled}
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
+    </update>
+
+    <update id="deleteMember" parameterType="long">
+        UPDATE member
+        SET del_flag = NOW()
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
+    </update>
 
 </mapper>

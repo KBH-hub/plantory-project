@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
+import com.zero.plantory.domain.member.vo.MemberInfoVO;
+import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
 import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
 import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
 import com.zero.plantory.global.vo.MemberVO;
@@ -14,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -80,7 +81,7 @@ class MemberMapperTest {
     void countByInterestCount() {
         log.info(String.valueOf(memberMapper.countByInterestCount(1L)));
     }
-    //log.info(String.valueOf());
+
     @Test
     @DisplayName("공감내역 수 확인")
     void countByCompletedSharingCount() {
@@ -101,6 +102,7 @@ class MemberMapperTest {
 
 
     @Test
+    @DisplayName("내가 올린 나눔글 조회")
     void selectMyWrittenListSharing() {
         MyWrittenListRequestVO request = new MyWrittenListRequestVO();
         request.setMemberId(1L);
@@ -112,6 +114,7 @@ class MemberMapperTest {
     }
 
     @Test
+    @DisplayName("분양 받은 나눔글 조회")
     void selectMyWrittenListQuestion() {
         MyWrittenListRequestVO request = new MyWrittenListRequestVO();
         request.setMemberId(1L);
@@ -192,5 +195,55 @@ class MemberMapperTest {
 
         assertNotNull(result);
         result.forEach(item -> log.info(item.toString()));
+    }
+
+    @Test
+    @DisplayName("내정보 조회")
+    void selectMyInfoTest() {
+        Long memberId = 20L;
+
+        MemberInfoVO result = memberMapper.selectMyInfo(memberId);
+
+        assertNotNull(result, "내 정보 조회 결과 없음");
+        log.info(result.toString());
+    }
+
+    @Test
+    @DisplayName("내 정보 수정 처리")
+    void updateMyInfoTest() {
+        MemberUpdateRequestVO request = MemberUpdateRequestVO.builder()
+                .memberId(20L)
+                .nickname("호준그린2")
+                .phone("010-7492-0000")
+                .address("서울특별시 구로구")
+                .build();
+
+        int updated = memberMapper.updateMyInfo(request);
+
+        assertTrue(updated > 0, "수정된 데이터 없음");
+        log.info("update result = {}", updated);
+    }
+
+    @Test
+    @DisplayName("알림 설정 변경")
+    void updateNoticeEnabledTest() {
+        Long memberId = 2L;
+        int enabled = 0;
+
+        int updated = memberMapper.updateNoticeEnabled(memberId, enabled);
+
+        assertTrue(updated > 0, "알림 설정 변경 실패");
+        log.info("notice enabled update result = {}", updated);
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 처리")
+    void deleteMemberTest() {
+        Long memberId = 2L;
+
+        int updated = memberMapper.deleteMember(memberId);
+
+        assertTrue(updated > 0, "회원 탈퇴 실패");
+        log.info("delete member result = {}", updated);
     }
 }
