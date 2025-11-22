@@ -111,7 +111,7 @@ public class MessageMapperTests {
                 .receiverId(8L)
                 .title("안녕하세요. 테스트 쪽지 제목입니다.")
                 .content("테스트 쪽지 내용입니다.")
-                .targetType(MessageTargetType.valueOf("SHARING"))
+                .targetType(MessageTargetType.SHARING)
                 .targetId(13L)
                 .build();
 
