@@ -224,23 +224,6 @@
           AND del_flag IS NULL
     </update>
 
-    <update id="deleteSharingImage"
-            parameterType="com.zero.plantory.global.vo.ImageVO">
-        UPDATE image
-        SET del_flag = NOW()
-        WHERE target_type = #{targetType}
-          AND target_id = #{targetId}
-          AND image_id  = #{imageId}
-    </update>
-
-    <insert id="insertSharingImage"
-            parameterType="com.zero.plantory.global.vo.ImageVO">
-        INSERT INTO image
-        (member_id, target_type, target_id, file_url, file_name, created_at, del_flag)
-        VALUES
-            (#{memberId}, #{targetType}, #{targetId}, #{fileUrl}, #{fileName}, NOW(), NULL)
-    </insert>
-
     <update id="deleteSharing" parameterType="long">
         UPDATE sharing
         SET del_flag = NOW()

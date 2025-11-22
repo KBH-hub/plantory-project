@@ -103,28 +103,6 @@ public class SharingMapperTests {
     }
 
     @Test
-    @DisplayName("나눔글 이미지 삭제")
-    void deleteSharingImageTest() {
-        log.info("이미지 삭제 결과 = {}",  mapper.deleteSharingImage(ImageTargetType.SHARING, 12L, 1L));
-    }
-
-
-    @Test
-    @DisplayName("나눔글 이미지 등록")
-    void insertSharingImageTest() {
-
-        ImageVO img = ImageVO.builder()
-                .memberId(1L)
-                .targetType(ImageTargetType.SHARING)
-                .targetId(12L)
-                .fileUrl("https://storage.googleapis.com/plantory/images/2025/11/20/sharing54_new.jpg")
-                .fileName("sharing5_new.jpg")
-                .build();
-
-        log.info("이미지 등록 결과 = {}",  mapper.insertSharingImage(img));
-    }
-
-    @Test
     @DisplayName("댓글 삭제")
     void deleteCommentTest() {
 
