@@ -2,8 +2,6 @@ package com.zero.plantory.domain.sharing.mapper;
 
 import com.zero.plantory.domain.sharing.vo.*;
 import com.zero.plantory.global.vo.CommentVO;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.zero.plantory.global.vo.SharingVO;
@@ -36,8 +34,6 @@ public interface SharingMapper {
     /**update sharing*/
     int countMySharing(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
     int updateSharing(SharingVO vo);
-    int deleteSharingImage(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId, @Param("imageId") Long imageId);
-    int insertSharingImage(ImageVO vo);
 
     int deleteSharing(@Param("sharingId") Long sharingId);
 
