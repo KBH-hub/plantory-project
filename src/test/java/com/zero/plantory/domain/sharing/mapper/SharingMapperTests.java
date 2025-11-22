@@ -54,7 +54,7 @@ public class SharingMapperTests {
     @Test
     @DisplayName("나눔지수 업데이트")
     void updateSharingRateTest() {
-        log.info("나눔지수 업데이트 결과 = {}", mapper.updateSharingRate(12L));
+        log.info("나눔지수 업데이트 ={}", mapper.updateSharingRate(1L, 1.5));
     }
 
     @Test

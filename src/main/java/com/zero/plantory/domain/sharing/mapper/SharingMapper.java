@@ -47,5 +47,6 @@ public interface SharingMapper {
     /** Sharing review*/
     List<SharingHistoryVO> selectMySharingGiven(@Param("memberId") Long memberId);
     List<SharingHistoryVO> selectMySharingReceived(@Param("memberId") Long memberId);
-    int updateSharingRate(@Param("memberId") Long memberId);
+    int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
+
 }

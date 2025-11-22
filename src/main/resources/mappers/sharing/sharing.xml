@@ -307,13 +307,11 @@
     </select>
 
 
-    <update id="updateSharingRate" parameterType="long">
+    <update id="updateSharingRate">
         UPDATE member
-        SET sharing_rate = COALESCE(sharing_rate, 0) + 1
+        SET sharing_rate = COALESCE(sharing_rate, 0) + #{score}
         WHERE member_id = #{memberId}
     </update>
-
-
 
 
 
