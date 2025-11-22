@@ -26,6 +26,13 @@ public class SharingMapperTests {
     private final Long writerId = 1L;
 
     @Test
+    @DisplayName("나눔 게시글 삭제")
+    void deleteSharingTest() {
+        log.info("삭제 결과 = {}", mapper.deleteSharing(12L));
+        log.info("삭제 후 존재 여부(0이면 삭제됨) = {}", mapper.countMySharing(12L, 1L));
+    }
+
+    @Test
     @DisplayName("나눔글 수정 권한 체크")
     void countMySharingTest() {
         int count = mapper.countMySharing(12L, 1L);

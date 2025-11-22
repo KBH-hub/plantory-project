@@ -39,6 +39,7 @@ public interface SharingMapper {
     int deleteSharingImage(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId, @Param("imageId") Long imageId);
     int insertSharingImage(ImageVO vo);
 
-    
+    int deleteSharing(@Param("sharingId") Long sharingId);
+
 
 }

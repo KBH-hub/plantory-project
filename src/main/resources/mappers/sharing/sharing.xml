@@ -241,6 +241,13 @@
             (#{memberId}, #{targetType}, #{targetId}, #{fileUrl}, #{fileName}, NOW(), NULL)
     </insert>
 
+    <update id="deleteSharing" parameterType="long">
+        UPDATE sharing
+        SET del_flag = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+
 
 
 
