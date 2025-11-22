@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.sharing.mapper;
 
+import com.zero.plantory.domain.sharing.vo.SharingHistoryVO;
+import com.zero.plantory.domain.sharing.vo.SharingPartnerVO;
 import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
 import com.zero.plantory.global.vo.*;
@@ -24,6 +26,50 @@ public class SharingMapperTests {
     private final Long memberId = 1L;
     private final Long sharingId = 20L;
     private final Long writerId = 1L;
+
+    @Test
+    @DisplayName("후기작성 - 내가 나눔한 기록 조회")
+    void selectMySharingGivenTest() {
+        mapper.selectMySharingGiven(1L)
+                .forEach(item ->
+                log.info("나눔한 기록 → id={}, 상대={}, 제목={}",
+                        item.getSharingId(),
+                        item.getPartnerNickname(),
+                        item.getTitle())
+        );
+    }
+
+    @Test
+    @DisplayName("후기 작성 - 내가 나눔받은 기록 조회")
+    void selectMySharingReceivedTest() {
+        mapper.selectMySharingReceived(1L)
+                .forEach(item ->
+                log.info("나눔받은 기록 → id={}, 상대={}, 제목={}",
+                        item.getSharingId(),
+                        item.getPartnerNickname(),
+                        item.getTitle())
+        );
+    }
+
+    @Test
+    @DisplayName("나눔지수 업데이트")
+    void updateSharingRateTest() {
+        log.info("나눔지수 업데이트 결과 = {}", mapper.updateSharingRate(12L));
+    }
+
+    @Test
+    @DisplayName("나눔 완료")
+    void updateSharingCompleteTest() {
+        log.info("나눔 완료 처리 결과 (영향받은 행 수) = {}",  mapper.updateSharingComplete(19L, 20L));
+    }
+
+    @Test
+    @DisplayName("나눔상대 조회")
+    void selectSharingMessagePartnersTest() {
+        mapper.selectSharingMessagePartners(12L, 19L)
+                        .forEach(user -> log.info("요청 보낸 사용자 = {}({})",
+                                user.getNickname(), user.getMemberId()));
+    }
 
     @Test
     @DisplayName("나눔 게시글 삭제")

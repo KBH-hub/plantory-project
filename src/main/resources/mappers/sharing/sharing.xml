@@ -247,6 +247,74 @@
         WHERE sharing_id = #{sharingId}
     </update>
 
+    <select id="selectSharingMessagePartners"
+            parameterType="map"
+            resultType="com.zero.plantory.domain.sharing.vo.SharingPartnerVO">
+        SELECT DISTINCT mb.member_id, mb.nickname
+        FROM message m
+                 JOIN member mb ON m.sender_id = mb.member_id
+        WHERE m.receiver_id = #{receiverId}
+          AND m.target_type = 'SHARING'
+          AND m.target_id = #{sharingId}
+          AND m.del_flag IS NULL
+          AND mb.del_flag IS NULL
+        ORDER BY mb.nickname ASC
+
+    </select>
+
+    <update id="updateSharingComplete">
+        UPDATE sharing
+        SET target_member_id = #{targetMemberId},
+            status = 'true',
+            updated_at = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+    <select id="selectMySharingGiven" resultType="com.zero.plantory.domain.sharing.vo.SharingHistoryVO">
+
+        SELECT
+            s.sharing_id     AS sharingId,
+            s.target_member_id AS partnerId,
+            mb.nickname      AS partnerNickname,
+            s.title,
+            s.created_at
+        FROM sharing s
+                 JOIN member mb ON s.target_member_id = mb.member_id
+        WHERE s.member_id = #{memberId}
+          AND s.status = 'true'
+          AND s.target_member_id IS NOT NULL
+          AND s.del_flag IS NULL
+          AND mb.del_flag IS NULL
+        ORDER BY s.created_at DESC
+    </select>
+
+
+    <select id="selectMySharingReceived" resultType="com.zero.plantory.domain.sharing.vo.SharingHistoryVO">
+
+        SELECT
+            s.sharing_id     AS sharingId,
+            s.member_id      AS partnerId,
+            mb.nickname      AS partnerNickname,
+            s.title,
+            s.created_at
+        FROM sharing s
+                 JOIN member mb ON s.member_id = mb.member_id
+        WHERE s.target_member_id = #{memberId}
+          AND s.status = 'true'
+          AND s.del_flag IS NULL
+          AND mb.del_flag IS NULL
+        ORDER BY s.created_at DESC
+    </select>
+
+
+    <update id="updateSharingRate" parameterType="long">
+        UPDATE member
+        SET sharing_rate = COALESCE(sharing_rate, 0) + 1
+        WHERE member_id = #{memberId}
+    </update>
+
+
+
 
 
 

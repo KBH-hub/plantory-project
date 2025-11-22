@@ -41,5 +41,11 @@ public interface SharingMapper {
 
     int deleteSharing(@Param("sharingId") Long sharingId);
 
+    List<SharingPartnerVO> selectSharingMessagePartners(@Param("receiverId") Long receiverId, @Param("sharingId") Long sharingId);
+    int updateSharingComplete(@Param("sharingId") Long sharingId, @Param("targetMemberId") Long targetMemberId);
 
+    /** Sharing review*/
+    List<SharingHistoryVO> selectMySharingGiven(@Param("memberId") Long memberId);
+    List<SharingHistoryVO> selectMySharingReceived(@Param("memberId") Long memberId);
+    int updateSharingRate(@Param("memberId") Long memberId);
 }
