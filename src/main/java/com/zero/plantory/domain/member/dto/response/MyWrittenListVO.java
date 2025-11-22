@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.vo;
+package com.zero.plantory.domain.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,12 @@ import java.time.LocalDateTime;
 @Builder
 public class MyWrittenListVO {
     private Long id;
+    private Long targetId;
+    private Long writerId;
     private Long memberId;
     private String nickname;
     private String title;
     private LocalDateTime createdAt;
+    private String type;
     private String category;
 }

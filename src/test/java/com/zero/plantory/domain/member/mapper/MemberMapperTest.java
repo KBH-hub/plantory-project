@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
+import com.zero.plantory.domain.member.dto.request.MyWrittenDeleteRequestVO;
 import com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import com.zero.plantory.global.vo.MemberVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -62,9 +62,9 @@ class MemberMapperTest {
     @Test
     @DisplayName("로그인 처리")
     void selectByMembernameTest() {
-        memberMapper.selectByMembername("test01");
+        memberMapper.selectByMembername("honggd01");
 
-        log.info(String.valueOf(memberMapper.selectByMembername("test01")));
+        log.info(String.valueOf(memberMapper.selectByMembername("honggd01")));
     }
 
 
@@ -122,16 +122,75 @@ class MemberMapperTest {
         log.info(String.valueOf(memberMapper.selectMyWrittenListQuestion(request)));
     }
 
-
     @Test
-    void deleteMyWrittenAll() {
+    @DisplayName("내가쓴글 체크박스 체크된 나눔글 삭제")
+    void deleteMyWrittenSharingTest() {
+        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
+                .memberId(1L)
+                .sharingIds(Arrays.asList(1L, 2L, 3L))
+                .build();
+
+        memberMapper.deleteMyWrittenSharing(request);
+
     }
 
     @Test
-    void deleteMyWrittenSharing() {
+    @DisplayName("내가쓴글 체크박스 체크된 질문글 삭제")
+    void deleteMyWrittenQuestionTest() {
+        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
+                .memberId(1L)
+                .questionIds(Arrays.asList(4L, 5L, 6L))
+                .build();
+
+        memberMapper.deleteMyWrittenQuestion(request);
     }
 
     @Test
-    void deleteMyWrittenQuestion() {
+    @DisplayName("댓글 단 글 검색 - 전체")
+    void selectMyCommentSearchAll() {
+        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
+                .memberId(1L)
+                .keyword("드려요")   // 예: 검색 키워드
+                .limit(10)
+                .offset(0)
+                .build();
+
+        var result = memberMapper.selectMyCommentSearchAll(request);
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty(), "검색 결과 없음");
+        result.forEach(item -> log.info(item.toString()));
+    }
+
+    @Test
+    @DisplayName("댓글 단 글 검색 - 나눔글")
+    void selectMyCommentSearchSharing() {
+        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
+                .memberId(1L)
+                .keyword("드려요")
+                .limit(10)
+                .offset(0)
+                .build();
+
+        var result = memberMapper.selectMyCommentSearchSharing(request);
+
+        assertNotNull(result);
+        result.forEach(item -> log.info(item.toString()));
+    }
+
+    @Test
+    @DisplayName("댓글 단 글 검색 - 질문글")
+    void selectMyCommentSearchQuestion() {
+        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
+                .memberId(1L)
+                .keyword("꽃")
+                .limit(10)
+                .offset(0)
+                .build();
+
+        var result = memberMapper.selectMyCommentSearchQuestion(request);
+
+        assertNotNull(result);
+        result.forEach(item -> log.info(item.toString()));
     }
 }
