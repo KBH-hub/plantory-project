@@ -18,7 +18,7 @@ public class MyPlantVO {
     private String type;
     private Date startAt;
     private Date endDate;
-    private String interval;
+    private int interval;
     private String soil;
     private String temperature;
     private Date createdAt;
