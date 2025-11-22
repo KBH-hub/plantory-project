@@ -1,8 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
+import com.zero.plantory.domain.member.vo.*;
+import com.zero.plantory.global.vo.ImageVO;
 import com.zero.plantory.global.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,6 +25,8 @@ public interface MemberMapper {
     List<MyWrittenListVO> selectMyCommentSearchAll(MyWrittenListRequestVO request);
     List<MyWrittenListVO> selectMyCommentSearchSharing(MyWrittenListRequestVO request);
     List<MyWrittenListVO> selectMyCommentSearchQuestion(MyWrittenListRequestVO request);
-
-
+    MemberInfoVO selectMyInfo(Long memberId);
+    int updateMyInfo(MemberUpdateRequestVO request);
+    int updateNoticeEnabled(@Param("memberId") Long memberId, @Param("enabled") int enabled);
+    int deleteMember(Long memberId);
 }
