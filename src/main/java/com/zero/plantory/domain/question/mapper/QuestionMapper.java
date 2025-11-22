@@ -3,6 +3,7 @@ package com.zero.plantory.domain.question.mapper;
 import com.zero.plantory.domain.question.vo.SelectAnswerListVO;
 import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
 import com.zero.plantory.domain.question.vo.SelectQuestionListVO;
+import com.zero.plantory.global.vo.AnswerVO;
 import com.zero.plantory.global.vo.QuestionVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,4 +15,9 @@ public interface QuestionMapper {
     int insertQuestion(QuestionVO vo);
     SelectQuestionDetailVO selectQuestionDetail(@Param("questionId") Long questionId);
     List<SelectAnswerListVO> selectQuestionAnswers(@Param("questionId") Long questionId);
+    int insertAnswer(AnswerVO vo);
+    int countMyAnswer(AnswerVO vo);
+    int updateAnswerById(AnswerVO vo);
+    int deleteAnswer(AnswerVO vo);
+
 }

@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.question.mapper;
 
 import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
+import com.zero.plantory.global.vo.AnswerVO;
 import com.zero.plantory.global.vo.QuestionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +17,64 @@ public class QuestionMapperTest {
     private QuestionMapper mapper;
 
     @Test
-    @DisplayName("질문 댓글 상세 조회")
+    @DisplayName("답글 수정 및 삭제 권한 체크")
+    void countMyAnswerTest() {
+
+        AnswerVO vo = AnswerVO.builder()
+                .answerId(1L)
+                .questionId(21L)
+                .writerId(1L)
+                .build();
+
+        log.info("권한 체크 결과 count = {}", mapper.countMyAnswer(vo));
+    }
+
+
+    @Test
+    @DisplayName("답글 수정 처리")
+    void updateAnswerTest() {
+
+        AnswerVO vo = AnswerVO.builder()
+                .answerId(1L)
+                .questionId(21L)
+                .writerId(1L)
+                .content("수정 테스트.")
+                .build();
+
+        log.info("답글 수정 결과 = {}", mapper.updateAnswerById(vo));
+    }
+
+
+    @Test
+    @DisplayName("답글 삭제 처리")
+    void deleteAnswerTest() {
+
+        AnswerVO vo = AnswerVO.builder()
+                .answerId(1L)
+                .questionId(21L)
+                .writerId(1L)
+                .build();
+
+        log.info("답글 삭제 결과 = {}", mapper.deleteAnswer(vo));
+    }
+
+    @Test
+    @DisplayName("답글 등록")
+    void insertAnswerTest() {
+
+        AnswerVO vo = AnswerVO.builder()
+                .questionId(21L)
+                .writerId(1L)
+                .content("답글 등록 테스트")
+                .build();
+
+        log.info("답글 등록 결과 = {}", mapper.insertAnswer(vo));  // 1 → 성공
+    }
+
+    @Test
+    @DisplayName("질문 답글 상세 조회")
     void selectAnswerListTest(){
-        log.info("질문 댓글 상세 = {}", mapper.selectQuestionAnswers(2L));
+        log.info("질문 답글 상세 = {}", mapper.selectQuestionAnswers(2L));
     }
 
     @Test

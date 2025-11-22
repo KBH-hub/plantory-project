@@ -85,6 +85,51 @@
         ORDER BY a.created_at ASC
     </select>
 
+    <insert id="insertAnswer"
+            parameterType="com.zero.plantory.global.vo.AnswerVO">
+
+        INSERT INTO answer
+            (question_id, writer_id, content, created_at, updated_at, del_flag)
+        VALUES
+            (#{questionId}, #{writerId}, #{content}, NOW(), NULL, NULL);
+
+    </insert>
+
+    <select id="countMyAnswer" parameterType="com.zero.plantory.global.vo.AnswerVO">
+
+        SELECT COUNT(*)
+        FROM answer
+        WHERE answer_id = #{answerId}
+          AND question_id = #{questionId}
+          AND writer_id = #{writerId}
+          AND del_flag IS NULL
+
+    </select>
+
+
+    <update id="updateAnswerById" parameterType="com.zero.plantory.global.vo.AnswerVO">
+
+        UPDATE answer
+        SET content = #{content},
+            updated_at = NOW()
+        WHERE answer_id = #{answerId}
+          AND question_id = #{questionId}
+          AND writer_id = #{writerId}
+          AND del_flag IS NULL
+
+    </update>
+
+
+    <update id="deleteAnswer" parameterType="com.zero.plantory.global.vo.AnswerVO">
+
+        UPDATE answer
+        SET del_flag = NOW()
+        WHERE answer_id = #{answerId}
+          AND question_id = #{questionId}
+          AND writer_id = #{writerId}
+          AND del_flag IS NULL
+
+    </update>
 
 
 </mapper>
