@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SharingVO {
+public class SelectSharingDetailVO {
     private Long sharingId;
     private Long memberId;
-    private Long targetMemberId;
+    private String nickname;
+    private Integer sharingRate;
+
     private String title;
     private String content;
     private String plantType;
@@ -22,8 +24,7 @@ public class SharingVO {
     private String managementNeeds;
     private Integer interestNum;
     private String status;
-    private LocalDateTime reviewFlag;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime delFlag;
+
 }
