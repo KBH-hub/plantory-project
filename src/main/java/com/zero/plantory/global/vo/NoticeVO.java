@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 public class NoticeVO {
     private Long noticeId;
-    private Long receiveId;
+    private Long receiverId;
     private NoticeTargetType targetType;
     private Long targetId;
     private String content;

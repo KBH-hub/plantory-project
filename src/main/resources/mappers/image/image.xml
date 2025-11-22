@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.image.ImageMapper">
+
+    <!-- 공통 컬럼 -->
+    <sql id="imageColumns">
+        image_id,
+        member_id,
+        target_type,
+        target_id,
+        file_url,
+        file_name,
+        created_at,
+        del_flag
+    </sql>
+
+
+    <!-- 단건 조회 -->
+    <select id="selectImageById" resultType="com.zero.plantory.global.vo.ImageVO">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM image
+        WHERE image_id = #{imageId}
+        AND del_flag IS NULL
+    </select>
+
+
+    <!-- 다건 조회 -->
+    <select id="selectImagesByTarget" resultType="com.zero.plantory.global.vo.ImageVO">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM image
+        WHERE target_type = #{targetType.name}
+        AND target_id   = #{targetId}
+        AND del_flag IS NULL
+        ORDER BY image_id ASC
+    </select>
+
+
+    <!-- 이미지 INSERT (GCS 저장 후 DB 저장) -->
+    <insert id="insertImage" parameterType="com.zero.plantory.global.vo.ImageVO">
+        INSERT INTO image (
+            member_id,
+            target_type,
+            target_id,
+            file_url,
+            file_name,
+            created_at,
+            del_flag
+        )
+        VALUES (
+                   #{memberId},
+                   #{targetType.name},
+                   #{targetId},
+                   #{fileUrl},
+                   #{fileName},
+                   NOW(),
+                   NULL
+               )
+    </insert>
+
+
+    <!-- 단건 이미지 soft delete -->
+    <update id="softDeleteImage">
+        UPDATE image
+        SET del_flag = NOW()
+        WHERE image_id = #{imageId}
+          AND del_flag IS NULL
+    </update>
+
+
+    <!-- 특정 게시글의 전체 이미지 soft delete -->
+    <update id="softDeleteImagesByTarget">
+        UPDATE image
+        SET del_flag = NOW()
+        WHERE target_type = #{targetType.name}
+          AND target_id = #{targetId}
+          AND del_flag IS NULL
+    </update>
+
+</mapper>
