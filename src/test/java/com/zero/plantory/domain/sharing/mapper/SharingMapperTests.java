@@ -2,8 +2,7 @@ package com.zero.plantory.domain.sharing.mapper;
 
 import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
-import com.zero.plantory.domain.sharing.vo.SharingVO;
-import com.zero.plantory.global.vo.CommentVO;
+import com.zero.plantory.global.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -25,6 +24,52 @@ public class SharingMapperTests {
     private final Long memberId = 1L;
     private final Long sharingId = 20L;
     private final Long writerId = 1L;
+
+    @Test
+    @DisplayName("나눔글 수정 권한 체크")
+    void countMySharingTest() {
+        int count = mapper.countMySharing(12L, 1L);
+        log.info("수정 권한 여부 = {}", count);
+    }
+
+    @Test
+    @DisplayName("나눔글 내용 수정")
+    void updateSharingTest() {
+
+        SharingVO vo = SharingVO.builder()
+                .sharingId(12L)
+                .memberId(1L)
+                .title("산세베리아 나눔해요 (시간 조율 가능)")
+                .content("튼튼한 산세베리아 나눔합니다. 평일 저녁이나 주말 가능해요.")
+                .plantType("산세베리아 골든 하니")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .build();
+
+        log.info("내용 수정 결과 = {}", mapper.updateSharing(vo));
+    }
+
+    @Test
+    @DisplayName("나눔글 이미지 삭제")
+    void deleteSharingImageTest() {
+        log.info("이미지 삭제 결과 = {}",  mapper.deleteSharingImage(ImageTargetType.SHARING, 12L, 1L));
+    }
+
+
+    @Test
+    @DisplayName("나눔글 이미지 등록")
+    void insertSharingImageTest() {
+
+        ImageVO img = ImageVO.builder()
+                .memberId(1L)
+                .targetType(ImageTargetType.SHARING)
+                .targetId(12L)
+                .fileUrl("https://storage.googleapis.com/plantory/images/2025/11/20/sharing54_new.jpg")
+                .fileName("sharing5_new.jpg")
+                .build();
+
+        log.info("이미지 등록 결과 = {}",  mapper.insertSharingImage(img));
+    }
 
     @Test
     @DisplayName("댓글 삭제")
@@ -57,7 +102,7 @@ public class SharingMapperTests {
     @DisplayName("댓글 수정")
     void updateCommentTest() {
 
-        Long commentId = 21L;
+        Long commentId = 1L;
 
         int count = mapper.countMyComment(commentId, sharingId, writerId);
         log.info("수정 권한 여부 = {}", count);
@@ -129,8 +174,8 @@ public class SharingMapperTests {
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .plantType("금전수")
-                .managementLevel("쉬움")
-                .managementNeeds("약간 돌봄")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .status("false")
                 .build();
 

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.sharing.mapper.SharingMapper">
+
 <select id="selectSharingListByAddressAndKeyword"
         parameterType="com.zero.plantory.domain.sharing.vo.SharingSearchVO"
         resultType="com.zero.plantory.domain.sharing.vo.SharingCardListVO">
@@ -69,7 +70,7 @@
     </select>
 
     <insert id="insertSharing"
-            parameterType="com.zero.plantory.domain.sharing.vo.SharingVO"
+            parameterType="com.zero.plantory.global.vo.SharingVO"
             useGeneratedKeys="true"
             keyProperty="sharingId">
 
@@ -87,8 +88,7 @@
              #{managementNeeds},
              0,
              'false',
-             NOW());
-
+             NOW())
     </insert>
 
     <select id="selectSharingDetail" resultType="com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO">
@@ -202,7 +202,44 @@
           AND del_flag IS NULL
     </update>
 
+    <select id="countMySharing" resultType="int">
+        SELECT COUNT(*)
+        FROM sharing
+        WHERE sharing_id = #{sharingId}
+          AND member_id = #{memberId}
+          AND del_flag IS NULL
+    </select>
 
+    <update id="updateSharing"
+            parameterType="com.zero.plantory.global.vo.SharingVO">
+        UPDATE sharing
+        SET title            = #{title},
+            content          = #{content},
+            plant_type       = #{plantType},
+            management_level = #{managementLevel},
+            management_needs = #{managementNeeds},
+            updated_at       = NOW()
+        WHERE sharing_id = #{sharingId}
+          AND member_id  = #{memberId}
+          AND del_flag IS NULL
+    </update>
+
+    <update id="deleteSharingImage"
+            parameterType="com.zero.plantory.global.vo.ImageVO">
+        UPDATE image
+        SET del_flag = NOW()
+        WHERE target_type = #{targetType}
+          AND target_id = #{targetId}
+          AND image_id  = #{imageId}
+    </update>
+
+    <insert id="insertSharingImage"
+            parameterType="com.zero.plantory.global.vo.ImageVO">
+        INSERT INTO image
+        (member_id, target_type, target_id, file_url, file_name, created_at, del_flag)
+        VALUES
+            (#{memberId}, #{targetType}, #{targetId}, #{fileUrl}, #{fileName}, NOW(), NULL)
+    </insert>
 
 
 
