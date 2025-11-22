@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.request.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.dto.response.MyWrittenListVO;
+import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
+import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
+import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import com.zero.plantory.global.vo.MemberVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

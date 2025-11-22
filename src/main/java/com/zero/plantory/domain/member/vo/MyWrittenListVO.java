@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.dto.response;
+package com.zero.plantory.domain.member.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

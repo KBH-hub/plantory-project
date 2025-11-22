@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.request.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO;
+import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
+import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
 import com.zero.plantory.global.vo.MemberVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;

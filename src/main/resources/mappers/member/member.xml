@@ -70,8 +70,8 @@
     </select>
 
     <select id="selectMyWrittenList"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
         SELECT
             s.sharing_id AS id,
             s.member_id AS writerId,
@@ -88,8 +88,8 @@
     </select>
 
     <select id="selectMyWrittenListAll"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
 
         (SELECT
         s.sharing_id AS id,
@@ -127,8 +127,8 @@
     </select>
 
     <select id="selectMyWrittenListSharing"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
 
         SELECT
         s.sharing_id AS id,
@@ -149,8 +149,8 @@
     </select>
 
     <select id="selectMyWrittenListQuestion"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
 
         SELECT
         q.question_id AS id,
@@ -171,7 +171,7 @@
     </select>
 
     <update id="deleteMyWrittenSharing"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenDeleteRequestVO">
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO">
         UPDATE sharing
         SET del_flag = NOW()
         WHERE sharing_id IN
@@ -183,7 +183,7 @@
     </update>
 
     <update id="deleteMyWrittenQuestion"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenDeleteRequestVO">
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO">
         UPDATE question
         SET del_flag = NOW()
         WHERE question_id IN
@@ -195,8 +195,8 @@
     </update>
 
     <select id="selectMyCommentSearchAll"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
 
         SELECT * FROM (
                           SELECT
@@ -237,8 +237,8 @@
     </select>
 
     <select id="selectMyCommentSearchSharing"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
 
         SELECT
             c.comment_id AS id,
@@ -260,8 +260,8 @@
     </select>
 
     <select id="selectMyCommentSearchQuestion"
-            parameterType="com.zero.plantory.domain.member.dto.request.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.dto.response.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
+            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
 
         SELECT
             a.answer_id AS id,
