@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zero.plantory.domain.question.mapper.QuestionMapper">
+
+    <select id="selectQuestionList"
+            resultType="com.zero.plantory.domain.question.vo.SelectQuestionListVO">
+
+        SELECT
+            q.question_id      AS questionId,
+            q.title            AS title,
+            m.nickname         AS nickname,
+            q.created_at       AS createdAt,
+
+            (
+                SELECT COUNT(*)
+                FROM answer a
+                WHERE a.question_id = q.question_id
+                  AND a.del_flag IS NULL
+            ) AS answerCount,
+
+            (
+                SELECT i.file_url
+                FROM image i
+                WHERE i.target_type = 'QUESTION'
+                  AND i.target_id = q.question_id
+                  AND i.del_flag IS NULL
+                ORDER BY i.image_id ASC, i.created_at ASC
+                                  LIMIT 1
+            ) AS imageUrl
+
+        FROM question q
+            JOIN member m ON q.member_id = m.member_id
+        WHERE q.del_flag IS NULL
+          AND m.del_flag IS NULL
+          AND (#{keyword} IS NULL OR q.title LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY q.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <insert id="insertQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+
+        INSERT INTO question
+            (member_id, title, content, created_at, updated_at, del_flag)
+        VALUES
+            (#{memberId}, #{title}, #{content}, NOW(), NULL, NULL);
+
+    </insert>
+
+    <select id="selectQuestionDetail" resultType="com.zero.plantory.domain.question.vo.SelectQuestionDetailVO">
+
+        SELECT
+            q.question_id AS questionId,
+            q.member_id AS memberId,
+            m.nickname AS nickname,
+            q.title AS title,
+            q.content AS content,
+            q.created_at AS createdAt,
+            q.updated_at AS updatedAt
+        FROM question q
+                 JOIN member m ON q.member_id = m.member_id
+        WHERE q.question_id = #{questionId}
+          AND q.del_flag IS NULL
+          AND m.del_flag IS NULL
+
+    </select>
+
+    <select id="selectAnswerList" resultType="com.zero.plantory.domain.question.vo.SelectAnswerListVO">
+
+        SELECT
+            a.answer_id AS answerId,
+            a.writer_id AS writerId,
+            m.nickname AS nickname,
+            a.content AS content,
+            a.created_at AS createdAt,
+            a.updated_at AS updatedAt
+        FROM answer a
+                 JOIN member m ON a.writer_id = m.member_id
+        WHERE a.question_id = #{questionId}
+          AND a.del_flag IS NULL
+          AND m.del_flag IS NULL
+        ORDER BY a.created_at ASC
+    </select>
+
+
+
+</mapper>

@@ -115,7 +115,7 @@
 
     <select id="selectSharingComments"
             parameterType="long"
-            resultType="com.zero.plantory.domain.sharing.vo.SelectSharingCommentVO">
+            resultType="com.zero.plantory.domain.sharing.vo.SelectCommentListVO">
 
         SELECT
             c.comment_id,
