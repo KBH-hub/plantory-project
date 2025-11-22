@@ -66,7 +66,7 @@ class MyPlantMapperTest {
     void updateMyPlantTest() {
         MyPlantVO vo  = MyPlantVO.builder()
                 .memberId(4L)
-                .myplantId(23L)
+                .myplantId(20L)
                 .name("수정11테스트마이플랜트명")
                 .type("수정11테스트마이플랜트타입")
                 .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))

@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.report.mapper;
 
-import com.zero.plantory.domain.global.vo.ReportVO;
 import com.zero.plantory.domain.report.vo.SelectNameListVO;
+import com.zero.plantory.global.vo.ReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

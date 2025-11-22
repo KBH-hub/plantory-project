@@ -70,7 +70,7 @@
     </update>
 
     <select id="selectMessageWriteInfo"
-            resultType="com.zero.plantory.domain.global.vo.MessageVO">
+            resultType="com.zero.plantory.global.vo.MessageVO">
         SELECT
             m.message_id,
             m.sender_id,
@@ -109,7 +109,7 @@
     </select>
 
     <insert id="insertMessage"
-            parameterType="com.zero.plantory.domain.global.vo.MessageVO">
+            parameterType="com.zero.plantory.global.vo.MessageVO">
         INSERT INTO message
         (sender_id, receiver_id, title, content, target_type, target_id, created_at)
         VALUES
@@ -118,7 +118,7 @@
     </insert>
 
     <select id="selectMessageDetail"
-            resultType="com.zero.plantory.domain.global.vo.MessageVO">
+            resultType="com.zero.plantory.global.vo.MessageVO">
         SELECT
             m.message_id,
             m.sender_id,

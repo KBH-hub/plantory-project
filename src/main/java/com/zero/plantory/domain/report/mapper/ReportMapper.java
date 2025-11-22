@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.report.mapper;
 
-import com.zero.plantory.domain.global.vo.ReportVO;
+import com.zero.plantory.global.vo.ReportVO;
 import com.zero.plantory.domain.report.vo.SelectNameListVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
