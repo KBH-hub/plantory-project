@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectSharingCommentVO {
+public class SelectCommentListVO {
     private Long commentId;
     private Long writerId;
     private String nickname;
