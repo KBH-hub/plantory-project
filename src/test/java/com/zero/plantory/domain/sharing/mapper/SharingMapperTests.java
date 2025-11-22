@@ -1,8 +1,10 @@
 package com.zero.plantory.domain.sharing.mapper;
 
+import com.zero.plantory.domain.sharing.vo.SharingHistoryVO;
+import com.zero.plantory.domain.sharing.vo.SharingPartnerVO;
 import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
 import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
-import com.zero.plantory.domain.sharing.vo.SharingVO;
+import com.zero.plantory.global.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -21,6 +23,202 @@ public class SharingMapperTests {
     @Autowired
     SharingMapper mapper;
 
+    private final Long memberId = 1L;
+    private final Long sharingId = 20L;
+    private final Long writerId = 1L;
+
+    @Test
+    @DisplayName("후기작성 - 내가 나눔한 기록 조회")
+    void selectMySharingGivenTest() {
+        mapper.selectMySharingGiven(1L)
+                .forEach(item ->
+                log.info("나눔한 기록 → id={}, 상대={}, 제목={}",
+                        item.getSharingId(),
+                        item.getPartnerNickname(),
+                        item.getTitle())
+        );
+    }
+
+    @Test
+    @DisplayName("후기 작성 - 내가 나눔받은 기록 조회")
+    void selectMySharingReceivedTest() {
+        mapper.selectMySharingReceived(1L)
+                .forEach(item ->
+                log.info("나눔받은 기록 → id={}, 상대={}, 제목={}",
+                        item.getSharingId(),
+                        item.getPartnerNickname(),
+                        item.getTitle())
+        );
+    }
+
+    @Test
+    @DisplayName("나눔지수 업데이트")
+    void updateSharingRateTest() {
+        log.info("나눔지수 업데이트 ={}", mapper.updateSharingRate(1L, 1.5));
+    }
+
+    @Test
+    @DisplayName("나눔 완료")
+    void updateSharingCompleteTest() {
+        log.info("나눔 완료 처리 결과 (영향받은 행 수) = {}",  mapper.updateSharingComplete(19L, 20L));
+    }
+
+    @Test
+    @DisplayName("나눔상대 조회")
+    void selectSharingMessagePartnersTest() {
+        mapper.selectSharingMessagePartners(12L, 19L)
+                        .forEach(user -> log.info("요청 보낸 사용자 = {}({})",
+                                user.getNickname(), user.getMemberId()));
+    }
+
+    @Test
+    @DisplayName("나눔 게시글 삭제")
+    void deleteSharingTest() {
+        log.info("삭제 결과 = {}", mapper.deleteSharing(12L));
+        log.info("삭제 후 존재 여부(0이면 삭제됨) = {}", mapper.countMySharing(12L, 1L));
+    }
+
+    @Test
+    @DisplayName("나눔글 수정 권한 체크")
+    void countMySharingTest() {
+        int count = mapper.countMySharing(12L, 1L);
+        log.info("수정 권한 여부 = {}", count);
+    }
+
+    @Test
+    @DisplayName("나눔글 내용 수정")
+    void updateSharingTest() {
+
+        SharingVO vo = SharingVO.builder()
+                .sharingId(12L)
+                .memberId(1L)
+                .title("산세베리아 나눔해요 (시간 조율 가능)")
+                .content("튼튼한 산세베리아 나눔합니다. 평일 저녁이나 주말 가능해요.")
+                .plantType("산세베리아 골든 하니")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .build();
+
+        log.info("내용 수정 결과 = {}", mapper.updateSharing(vo));
+    }
+
+    @Test
+    @DisplayName("나눔글 이미지 삭제")
+    void deleteSharingImageTest() {
+        log.info("이미지 삭제 결과 = {}",  mapper.deleteSharingImage(ImageTargetType.SHARING, 12L, 1L));
+    }
+
+
+    @Test
+    @DisplayName("나눔글 이미지 등록")
+    void insertSharingImageTest() {
+
+        ImageVO img = ImageVO.builder()
+                .memberId(1L)
+                .targetType(ImageTargetType.SHARING)
+                .targetId(12L)
+                .fileUrl("https://storage.googleapis.com/plantory/images/2025/11/20/sharing54_new.jpg")
+                .fileName("sharing5_new.jpg")
+                .build();
+
+        log.info("이미지 등록 결과 = {}",  mapper.insertSharingImage(img));
+    }
+
+    @Test
+    @DisplayName("댓글 삭제")
+    void deleteCommentTest() {
+
+        CommentVO vo = CommentVO.builder()
+                .commentId(21L)
+                .sharingId(20L)
+                .writerId(1L)
+                .build();
+
+        int count = mapper.countMyComment(vo.getCommentId(), vo.getSharingId(), vo.getWriterId());
+        log.info("삭제 권한 여부 = {}", count);
+
+        if (count == 1) {
+            int result = mapper.deleteComment(vo);
+            log.info("삭제 결과 = {}", result);
+        }
+    }
+
+    @Test
+    @DisplayName("댓글 등록")
+    void insertCommentTest() {
+
+        int result = mapper.insertComment(sharingId, writerId, "테스트 댓글입니다!");
+        log.info("댓글 등록 결과 = {}", result);
+    }
+
+    @Test
+    @DisplayName("댓글 수정")
+    void updateCommentTest() {
+
+        Long commentId = 1L;
+
+        int count = mapper.countMyComment(commentId, sharingId, writerId);
+        log.info("수정 권한 여부 = {}", count);
+
+        if (count == 1) {
+            CommentVO vo = CommentVO.builder()
+                    .commentId(21L)
+                    .sharingId(20L)
+                    .writerId(1L)
+                    .content("수정된 댓글입니다.")
+                    .build();
+
+            log.info("댓글 수정 결과 = {}", mapper.updateCommentById(vo));
+        }
+
+    }
+
+    @Test
+    @DisplayName("관심 등록")
+    void insertInterestTest() {
+
+        int before = mapper.countInterest(memberId, sharingId);
+        log.info("등록 전 관심 여부 = {}", before);
+
+        if (before == 0) {
+            mapper.insertInterest(memberId, sharingId);
+            mapper.increaseInterestNum(sharingId);
+        }
+
+        int after = mapper.countInterest(memberId, sharingId);
+        log.info("등록 후 관심 여부 = {}", after);
+
+    }
+
+    @Test
+    @DisplayName("관심 해제")
+    void deleteInterestTest() {
+
+        int before = mapper.countInterest(memberId, sharingId);
+        log.info("해제 전 관심 여부 = {}", before);
+
+        if (before == 1) {
+            mapper.deleteInterest(memberId, sharingId);
+            mapper.decreaseInterestNum(sharingId);
+        }
+
+        int after = mapper.countInterest(memberId, sharingId);
+        log.info("해제 후 관심 여부 = {}", after);
+    }
+
+    @Test
+    @DisplayName("나눔 게시글 상세 댓글 조회")
+    void selectSharingCommentsTest(){
+        log.info("selectSharingComments = {}", mapper.selectSharingComments(2L));
+    }
+
+    @Test
+    @DisplayName("나눔 게시글 상세조회")
+    void selectSharingDetailTest() {
+        log.info("sharingDetail = {}", mapper.selectSharingDetail(2L));
+
+    }
+
     @Test
     @DisplayName("나눔 게시글 등록 처리")
     void insertSharingTest() {
@@ -29,8 +227,8 @@ public class SharingMapperTests {
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .plantType("금전수")
-                .managementLevel("쉬움")
-                .managementNeeds("약간 돌봄")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .status("false")
                 .build();
 
