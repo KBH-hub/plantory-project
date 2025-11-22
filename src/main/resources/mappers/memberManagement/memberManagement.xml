@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.plantory.domain.memberManagement.mapper.MemberManagement">
+    <select id="selectMemberList" resultType="com.zero.plantory.global.vo.MemberVO">
+        SELECT
+        member_id,
+        membername,
+        nickname,
+        phone,
+        address,
+        skill_rate,
+        management_rate,
+        sharing_rate,
+        stop_day,
+        created_at
+        FROM member
+        <where>
+            del_flag IS NULL
+            <if test="keyword != null and keyword != ''">
+                AND membername LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY member_id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <update id="deleteContent">
+        <choose>
+            <when test="targetType.name() == 'SHARING'">
+                UPDATE sharing
+                SET del_flag = NOW()
+                WHERE sharing_id = #{targetId}
+                AND del_flag IS NULL
+            </when>
+            <when test="targetType.name() == 'QUESTION'">
+                UPDATE question
+                SET del_flag = NOW()
+                WHERE question_id = #{targetId}
+                AND del_flag IS NULL
+            </when>
+            <when test="targetType.name() == 'COMMENT'">
+                UPDATE comment
+                SET del_flag = NOW()
+                WHERE comment_id = #{targetId}
+                AND del_flag IS NULL
+            </when>
+            <when test="targetType.name() == 'ANSWER'">
+                UPDATE answer
+                SET del_flag = NOW()
+                WHERE answer_id = #{targetId}
+                AND del_flag IS NULL
+            </when>
+            <otherwise>
+                UPDATE comment SET del_flag = del_flag WHERE 1 = 2
+            </otherwise>
+        </choose>
+    </update>
+</mapper>
