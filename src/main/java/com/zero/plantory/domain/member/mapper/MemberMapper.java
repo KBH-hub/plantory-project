@@ -14,19 +14,5 @@ public interface MemberMapper {
     int countByNickname(@Param("nickname") String nickname);
     int insertMember(MemberVO memberVO);
     MemberVO selectByMembername(@Param("membername") String membername);
-    MemberVO selectByMemberInfo(@Param("memberId") Long memberId);
-    int countByInterestCount(@Param("memberId") Long memberId);
-    int countByCompletedSharingCount(@Param("memberId") Long memberId);
-    List<MyWrittenListVO> selectMyWrittenListAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyWrittenListSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyWrittenListQuestion(MyWrittenListRequestVO request);
-    int deleteMyWrittenSharing(MyWrittenDeleteRequestVO request);
-    int deleteMyWrittenQuestion(MyWrittenDeleteRequestVO request);
-    List<MyWrittenListVO> selectMyCommentSearchAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyCommentSearchSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyCommentSearchQuestion(MyWrittenListRequestVO request);
-    MemberInfoVO selectMyInfo(Long memberId);
-    int updateMyInfo(MemberUpdateRequestVO request);
-    int updateNoticeEnabled(@Param("memberId") Long memberId, @Param("enabled") int enabled);
-    int deleteMember(Long memberId);
 }
+

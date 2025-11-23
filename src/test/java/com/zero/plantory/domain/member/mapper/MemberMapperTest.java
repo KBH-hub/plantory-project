@@ -1,249 +1,54 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.vo.MemberInfoVO;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
 import com.zero.plantory.global.vo.MemberVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MemberMapperTest {
 
     @Autowired
     MemberMapper memberMapper;
 
     @Test
+    @DisplayName("회원가입 처리")
+    void insertMemberTest() {
+        MemberVO member = MemberVO.builder()
+                .membername("testUser")
+                .password("pw1234!")
+                .nickname("테스트유저")
+                .phone("010-1234-5678")
+                .address("서울특별시 영등포구")
+                .role(Role.USER)
+                .noticeEnabled(1)
+                .build();
+
+        int result = memberMapper.insertMember(member);
+        assertTrue(result > 0);
+    }
+
+    @Test
     @DisplayName("아이디 중복 확인")
     void countByMembernameTest() {
-        MemberVO memberVo = new MemberVO();
-        memberVo.setMembername("honggd01");
-
-        log.info(String.valueOf(memberMapper.countByMembername(memberVo.getMembername())));
+        int count = memberMapper.countByMembername("honggd01");
+        log.info("count = {}", count);
+        assertTrue(count >= 0);
     }
 
     @Test
     @DisplayName("닉네임 중복 확인")
     void countByNicknameTest() {
-        MemberVO memberVo = new MemberVO();
-        memberVo.setNickname("길동가든");
-
-        log.info(String.valueOf(memberMapper.countByNickname(memberVo.getNickname())));
+        int count = memberMapper.countByNickname("길동가든");
+        assertTrue(count >= 0);
     }
 
-    @Test
-    @DisplayName("회원가입 처리")
-    void insertMemberTest() {
-            MemberVO memberVo = MemberVO.builder()
-                    .membername("test01")
-                    .password("ms2024!")
-                    .nickname("식집사테스트")
-                    .phone("010-1111-2222")
-                    .address("서울특별시 금천구")
-                    .role(Role.USER)
-                    .noticeEnabled(1)
-                    .build();
-
-            log.info(String.valueOf(memberMapper.insertMember(memberVo)));
-    }
-
-    @Test
-    @DisplayName("로그인 처리")
-    void selectByMembernameTest() {
-        memberMapper.selectByMembername("honggd01");
-
-        log.info(String.valueOf(memberMapper.selectByMembername("honggd01")));
-    }
-
-
-
-    @Test
-    @DisplayName("내프로필정보확인")
-    void selectByMemberInfoTest() {
-        log.info(String.valueOf(memberMapper.selectByMemberInfo(1L)));
-    }
-
-    @Test
-    @DisplayName("내프로필정보(나눔지수)확인")
-    void countByInterestCount() {
-        log.info(String.valueOf(memberMapper.countByInterestCount(1L)));
-    }
-
-    @Test
-    @DisplayName("공감내역 수 확인")
-    void countByCompletedSharingCount() {
-        log.info(String.valueOf(memberMapper.countByCompletedSharingCount(1L)));
-    }
-
-    @Test
-    @DisplayName("내가 쓴 글 확인 - 전체")
-    void selectMyWrittenListTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
-        request.setMemberId(1L);
-        request.setKeyword("분양");
-        request.setLimit(10);
-        request.setOffset(0);
-
-        log.info(String.valueOf(memberMapper.selectMyWrittenListAll(request)));
-    }
-
-
-    @Test
-    @DisplayName("내가 올린 나눔글 조회")
-    void selectMyWrittenListSharing() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
-        request.setMemberId(1L);
-        request.setKeyword("분양");
-        request.setLimit(10);
-        request.setOffset(0);
-
-        log.info(String.valueOf(memberMapper.selectMyWrittenListSharing(request)));
-    }
-
-    @Test
-    @DisplayName("분양 받은 나눔글 조회")
-    void selectMyWrittenListQuestion() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
-        request.setMemberId(1L);
-        request.setKeyword("초록");
-        request.setLimit(10);
-        request.setOffset(0);
-
-        log.info(String.valueOf(memberMapper.selectMyWrittenListQuestion(request)));
-    }
-
-    @Test
-    @DisplayName("내가쓴글 체크박스 체크된 나눔글 삭제")
-    void deleteMyWrittenSharingTest() {
-        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
-                .memberId(1L)
-                .sharingIds(Arrays.asList(1L, 2L, 3L))
-                .build();
-
-        memberMapper.deleteMyWrittenSharing(request);
-
-    }
-
-    @Test
-    @DisplayName("내가쓴글 체크박스 체크된 질문글 삭제")
-    void deleteMyWrittenQuestionTest() {
-        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
-                .memberId(1L)
-                .questionIds(Arrays.asList(4L, 5L, 6L))
-                .build();
-
-        memberMapper.deleteMyWrittenQuestion(request);
-    }
-
-    @Test
-    @DisplayName("댓글 단 글 검색 - 전체")
-    void selectMyCommentSearchAll() {
-        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
-                .memberId(1L)
-                .keyword("드려요")   // 예: 검색 키워드
-                .limit(10)
-                .offset(0)
-                .build();
-
-        var result = memberMapper.selectMyCommentSearchAll(request);
-
-        assertNotNull(result);
-        assertFalse(result.isEmpty(), "검색 결과 없음");
-        result.forEach(item -> log.info(item.toString()));
-    }
-
-    @Test
-    @DisplayName("댓글 단 글 검색 - 나눔글")
-    void selectMyCommentSearchSharing() {
-        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
-                .memberId(1L)
-                .keyword("드려요")
-                .limit(10)
-                .offset(0)
-                .build();
-
-        var result = memberMapper.selectMyCommentSearchSharing(request);
-
-        assertNotNull(result);
-        result.forEach(item -> log.info(item.toString()));
-    }
-
-    @Test
-    @DisplayName("댓글 단 글 검색 - 질문글")
-    void selectMyCommentSearchQuestion() {
-        MyWrittenListRequestVO request = MyWrittenListRequestVO.builder()
-                .memberId(1L)
-                .keyword("꽃")
-                .limit(10)
-                .offset(0)
-                .build();
-
-        var result = memberMapper.selectMyCommentSearchQuestion(request);
-
-        assertNotNull(result);
-        result.forEach(item -> log.info(item.toString()));
-    }
-
-    @Test
-    @DisplayName("내정보 조회")
-    void selectMyInfoTest() {
-        Long memberId = 20L;
-
-        MemberInfoVO result = memberMapper.selectMyInfo(memberId);
-
-        assertNotNull(result, "내 정보 조회 결과 없음");
-        log.info(result.toString());
-    }
-
-    @Test
-    @DisplayName("내 정보 수정 처리")
-    void updateMyInfoTest() {
-        MemberUpdateRequestVO request = MemberUpdateRequestVO.builder()
-                .memberId(20L)
-                .nickname("호준그린2")
-                .phone("010-7492-0000")
-                .address("서울특별시 구로구")
-                .build();
-
-        int updated = memberMapper.updateMyInfo(request);
-
-        assertTrue(updated > 0, "수정된 데이터 없음");
-        log.info("update result = {}", updated);
-    }
-
-    @Test
-    @DisplayName("알림 설정 변경")
-    void updateNoticeEnabledTest() {
-        Long memberId = 2L;
-        int enabled = 0;
-
-        int updated = memberMapper.updateNoticeEnabled(memberId, enabled);
-
-        assertTrue(updated > 0, "알림 설정 변경 실패");
-        log.info("notice enabled update result = {}", updated);
-    }
-
-    @Test
-    @DisplayName("회원 탈퇴 처리")
-    void deleteMemberTest() {
-        Long memberId = 2L;
-
-        int updated = memberMapper.deleteMember(memberId);
-
-        assertTrue(updated > 0, "회원 탈퇴 실패");
-        log.info("delete member result = {}", updated);
-    }
 }
