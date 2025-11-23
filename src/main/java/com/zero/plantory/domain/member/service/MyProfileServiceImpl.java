@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MyProfileServiceImpl implements MyProfileService {
+public class MyprofileServiceImpl implements MyprofileService {
 
     private final MyProfileMapper myProfileMapper;
 

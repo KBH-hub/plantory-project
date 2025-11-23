@@ -3,7 +3,7 @@ package com.zero.plantory.domain.member.service;
 import com.zero.plantory.domain.member.vo.MemberInfoVO;
 import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
 
-public interface MyProfileService {
+public interface MyprofileService {
 
     MemberInfoVO getMyInfo(Long memberId);
 
