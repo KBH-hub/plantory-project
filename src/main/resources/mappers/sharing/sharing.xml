@@ -95,6 +95,7 @@
         SELECT
             s.sharing_id,
             s.member_id,
+            s.target_member_id,
             mb.nickname,
             mb.sharing_rate,
             s.title,
