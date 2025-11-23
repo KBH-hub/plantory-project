@@ -78,7 +78,11 @@
         WHERE member_id = #{memberId};
     </select>
 
-    <insert id="insertDiary">
+    <insert id="insertDiary"
+            parameterType="com.zero.plantory.global.vo.DiaryVO"
+            useGeneratedKeys="true"
+            keyProperty="diaryId"
+            keyColumn="diary_id">
         INSERT INTO diary (myplant_id,activity, state, memo, created_at)
         VALUES (#{myplantId},#{activity}, #{state}, #{memo},NOW());
     </insert>
