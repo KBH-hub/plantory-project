@@ -16,6 +16,7 @@ import java.util.List;
 public class SelectSharingDetailVO {
     private Long sharingId;
     private Long memberId;
+    private Long targetMemberId;
     private String nickname;
     private Integer sharingRate;
 
