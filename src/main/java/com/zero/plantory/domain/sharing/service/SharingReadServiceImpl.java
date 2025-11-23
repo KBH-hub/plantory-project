@@ -1,7 +1,10 @@
 package com.zero.plantory.domain.sharing.service;
 
+import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.domain.sharing.vo.*;
+import com.zero.plantory.global.vo.ImageTargetType;
+import com.zero.plantory.global.vo.ImageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,25 @@ import java.util.List;
 public class SharingReadServiceImpl implements SharingReadService {
 
     private final SharingMapper sharingMapper;
+    private final ImageMapper imageMapper;
 
     @Override
     public List<SharingCardListVO> getSharingList(SharingSearchVO vo) {
-        return sharingMapper.selectSharingListByAddressAndKeyword(vo);
+        List<SharingCardListVO> list = sharingMapper.selectSharingListByAddressAndKeyword(vo);
+
+        for (SharingCardListVO item : list) {
+            List<ImageVO> images = imageMapper.selectImagesByTarget(
+                    ImageTargetType.SHARING,
+                    item.getSharingId()
+            );
+
+            item.setImageUrl(null);
+            if (!images.isEmpty()) {
+                item.setImageUrl(images.get(0).getFileUrl());
+            }
+        }
+
+        return list;
     }
 
     @Override
@@ -25,7 +43,16 @@ public class SharingReadServiceImpl implements SharingReadService {
 
     @Override
     public SelectSharingDetailVO getSharingDetail(Long sharingId) {
-        return sharingMapper.selectSharingDetail(sharingId);
+        SelectSharingDetailVO detail = sharingMapper.selectSharingDetail(sharingId);
+
+        if (detail == null) {
+            return null;
+        }
+
+        List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.SHARING, sharingId);
+        detail.setImages(images);
+
+        return detail;
     }
 
     @Override

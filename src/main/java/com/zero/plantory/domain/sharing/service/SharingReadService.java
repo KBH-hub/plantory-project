@@ -11,13 +11,13 @@ public interface SharingReadService {
     /** 인기 나눔글 조회 */
     List<SharingPopularVO> getPopularSharingList();
 
-    /** 상세 조회 */
+    /** 나눔글 상세 조회 */
     SelectSharingDetailVO getSharingDetail(Long sharingId);
 
     /** 상세 댓글 조회 */
     List<SelectCommentListVO> getSharingComments(Long sharingId);
 
-    /** 메시지 대상 목록 조회 */
+    /** 메시지 상대 목록 조회 */
     List<SharingPartnerVO> getMessagePartners(Long receiverId, Long sharingId);
 
     /** 내가 나눔한 내역 조회 */
