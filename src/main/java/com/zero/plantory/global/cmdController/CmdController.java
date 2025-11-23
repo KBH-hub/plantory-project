@@ -46,4 +46,9 @@ public class CmdController {
         return "sharingPostRegist";
     }
 
+    @RequestMapping("/readQuestion")
+    public String readQuestion(){
+        return "readQuestion";
+    }
+
 }

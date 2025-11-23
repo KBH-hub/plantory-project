@@ -4,28 +4,33 @@
     <meta charset="UTF-8">
     <title>Plantory Header</title>
 
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
-<body>
+<body style="font-family: 'Noto Sans KR', sans-serif;">
+
 <nav th:fragment="headerBar"
-     class="bg-white px-4 shadow-sm sticky-top"
+     class="bg-white px-4 shadow-sm sticky-top d-flex align-items-center"
      style="height:70px;">
 
-    <div class="d-flex align-items-center justify-content-between" style="width:100%; white-space:nowrap;">
+    <div class="d-flex align-items-center justify-content-between w-100" style="white-space:nowrap;">
 
         <!-- 왼쪽 로고 -->
-        <a class="navbar-brand fw-bold fs-3 text-success no-shrink me-4" href="#">
-            Plantory
-        </a>
+        <a class="navbar-brand fw-bold fs-3 text-success no-shrink me-4">Plantory</a>
 
-        <!-- 중앙 메뉴 (스크롤 X, 줄바꿈 X, 여백만 조절됨) -->
+        <!-- 중앙 메뉴 -->
         <ul class="navbar-nav d-flex flex-row gap-4 mx-3 flex-grow-1 justify-content-center"
             style="white-space:nowrap;">
 
             <li class="nav-item dropdown no-shrink">
-                <a class="nav-link" data-bs-toggle="dropdown">커뮤니티</a>
+                <a class="nav-link fw-bold fs-5" data-bs-toggle="dropdown">커뮤니티</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item">나눔 게시판</a></li>
                     <li><a class="dropdown-item">질문 게시판</a></li>
@@ -33,7 +38,7 @@
             </li>
 
             <li class="nav-item dropdown no-shrink">
-                <a class="nav-link" data-bs-toggle="dropdown">식물사전</a>
+                <a class="nav-link fw-bold fs-5" data-bs-toggle="dropdown">식물사전</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item">실내 식물</a></li>
                     <li><a class="dropdown-item">건조 식물</a></li>
@@ -41,7 +46,7 @@
             </li>
 
             <li class="nav-item dropdown no-shrink">
-                <a class="nav-link" data-bs-toggle="dropdown">나의 식물</a>
+                <a class="nav-link fw-bold fs-5" data-bs-toggle="dropdown">나의 식물</a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item">식물 캘린더</a></li>
                     <li><a class="dropdown-item">내 식물 관리</a></li>
@@ -52,29 +57,25 @@
 
         <!-- 오른쪽 아이콘 -->
         <div class="d-flex align-items-center gap-4 no-shrink ms-4">
-
             <i class="bi bi-bell fs-4" style="cursor:pointer;"></i>
             <i class="bi bi-envelope fs-4" style="cursor:pointer;"></i>
             <i class="bi bi-exclamation-triangle fs-4" style="cursor:pointer;"></i>
 
             <div class="dropdown">
-                <a class="d-flex align-items-center" data-bs-toggle="dropdown">
+                <a class="d-flex align-items-center text-dark text-decoration-none" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle fs-3"></i>
                     <span class="ms-2">닉네임님</span>
                 </a>
-
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item">내 프로필</a></li>
                     <li><a class="dropdown-item text-danger">로그아웃</a></li>
                 </ul>
             </div>
-
         </div>
 
     </div>
 
 </nav>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
