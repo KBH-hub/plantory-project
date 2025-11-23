@@ -1,6 +1,5 @@
-package com.zero.plantory.domain.question.question;
+package com.zero.plantory.domain.question.service;
 
-import com.zero.plantory.domain.question.service.QuestionReadService;
 import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
 import com.zero.plantory.domain.question.vo.SelectQuestionListVO;
 import lombok.extern.slf4j.Slf4j;
