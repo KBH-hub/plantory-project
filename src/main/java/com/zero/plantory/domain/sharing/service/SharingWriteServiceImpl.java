@@ -1,12 +1,11 @@
 package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.notice.NoticeMapper;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
+import com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO;
 import com.zero.plantory.global.utils.StorageUploader;
-import com.zero.plantory.global.vo.CommentVO;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
-import com.zero.plantory.global.vo.SharingVO;
+import com.zero.plantory.global.vo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     private final SharingMapper sharingMapper;
     private final ImageMapper imageMapper;
     private final StorageUploader storageUploader;
+    private final NoticeMapper noticeMapper;
 
     @Override
     @Transactional
@@ -30,15 +30,24 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
         List<ImageVO> imageList = new ArrayList<>();
 
-        for (MultipartFile file : files) {
-            String url = storageUploader.uploadFile(file);
-            imageList.add(ImageVO.builder()
-                    .memberId(vo.getMemberId())
-                    .targetType(ImageTargetType.SHARING)
-                    .targetId(null)
-                    .fileUrl(url)
-                    .fileName(file.getOriginalFilename())
-                    .build());
+        if (vo.getTitle() == null || vo.getTitle().isBlank()) {
+            throw new IllegalArgumentException("제목은 필수입니다.");
+        }
+
+        if (files != null) {
+            for (MultipartFile file : files) {
+
+                if (file.isEmpty()) continue;
+
+                String url = storageUploader.uploadFile(file);
+
+                imageList.add(ImageVO.builder()
+                        .memberId(vo.getMemberId())
+                        .targetType(ImageTargetType.SHARING)
+                        .fileUrl(url)
+                        .fileName(file.getOriginalFilename())
+                        .build());
+            }
         }
 
         sharingMapper.insertSharing(vo);
@@ -129,7 +138,27 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Override
     @Transactional
     public boolean addComment(Long sharingId, Long writerId, String content) {
-        return sharingMapper.insertComment(sharingId, writerId, content) > 0;
+        SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
+        int inserted = sharingMapper.insertComment(sharingId, writerId, content);
+
+        if (inserted > 0) {
+
+            Long ownerId = sharing.getMemberId();
+
+            if (!writerId.equals(ownerId)) {
+
+                NoticeVO notice = NoticeVO.builder()
+                        .receiverId(ownerId)
+                        .targetId(sharingId)
+                        .targetType(NoticeTargetType.SHARING)
+                        .content("새로운 댓글이 등록되었습니다!")
+                        .build();
+
+                noticeMapper.insertNotice(notice);
+            }
+        }
+
+        return inserted > 0;
     }
 
     @Override
