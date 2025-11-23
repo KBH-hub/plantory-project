@@ -1,0 +1,126 @@
+package com.zero.plantory.domain.sharing.service;
+
+import com.zero.plantory.global.vo.CommentVO;
+import com.zero.plantory.global.vo.ManagementLevel;
+import com.zero.plantory.global.vo.ManagementNeeds;
+import com.zero.plantory.global.vo.SharingVO;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+@SpringBootTest
+@Slf4j
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class SharingWriteServiceTest {
+
+    @Autowired
+    private SharingWriteService sharingWriteService;
+
+    /** 1. 나눔글 + 이미지 등록 */
+    @Test
+    @Order(1)
+    @DisplayName("나눔글 + 이미지 등록")
+    void registerSharingTest() throws Exception {
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",
+                "test.png",
+                "image/png",
+                "test image bytes".getBytes()
+        );
+
+        SharingVO vo = SharingVO.builder()
+                .memberId(1L)
+                .title("테스트 글")
+                .content("테스트 내용")
+                .plantType("다육이")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .build();
+
+        Long id = sharingWriteService.registerSharing(vo, List.of(mockFile));
+        log.info("등록된 글 ID = {}", id);
+    }
+
+    /** 2. 나눔글 수정 */
+    @Test
+    @Order(2)
+    @DisplayName("나눔글 수정")
+    void updateSharingTest() throws IOException {
+        SharingVO vo = SharingVO.builder()
+                .sharingId(24L)
+                .memberId(1L)
+                .title("수정된 제목")
+                .content("수정된 내용")
+                .build();
+
+        log.info("수정 결과 = {}", sharingWriteService.updateSharing(vo, List.of()));
+    }
+
+    /** 3. 나눔글 삭제 */
+    @Test
+    @Order(3)
+    @DisplayName("나눔글 삭제")
+    void deleteSharingTest() {
+        log.info("삭제 결과 = {}", sharingWriteService.deleteSharing(24L, 1L));
+    }
+
+    /** 4. 관심 등록 */
+    @Test
+    @Order(4)
+    @DisplayName("관심 등록")
+    void addInterestTest() {
+        log.info("관심 등록 결과 = {}", sharingWriteService.addInterest(1L, 12L));
+    }
+
+    /** 5. 관심 해제 */
+    @Test
+    @Order(5)
+    @DisplayName("관심 해제")
+    void removeInterestTest() {
+        log.info("관심 해제 결과 = {}", sharingWriteService.removeInterest(1L, 12L));
+    }
+
+    /** 6. 댓글 등록 */
+    @Test
+    @Order(6)
+    @DisplayName("댓글 등록")
+    void addCommentTest() {
+        log.info("댓글 등록 결과 = {}", sharingWriteService.addComment(12L, 1L, "댓글 내용"));
+    }
+
+    /** 7. 댓글 수정 */
+    @Test
+    @Order(7)
+    @DisplayName("댓글 수정")
+    void updateCommentTest() {
+        CommentVO vo = CommentVO.builder()
+                .commentId(21L)
+                .sharingId(12L)
+                .writerId(1L)
+                .content("수정된 댓글")
+                .build();
+
+        log.info("댓글 수정 결과 = {}", sharingWriteService.updateComment(vo));
+    }
+
+    /** 8. 댓글 삭제 */
+    @Test
+    @Order(8)
+    @DisplayName("댓글 삭제")
+    void deleteCommentTest() {
+        CommentVO vo = CommentVO.builder()
+                .commentId(21L)
+                .sharingId(12L)
+                .writerId(1L)
+                .build();
+
+        log.info("댓글 삭제 결과 = {}", sharingWriteService.deleteComment(vo));
+    }
+
+}
