@@ -5,7 +5,6 @@ import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO;
 import com.zero.plantory.global.vo.NoticeTargetType;
 import com.zero.plantory.global.vo.NoticeVO;
-import com.zero.plantory.global.vo.SharingVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +15,25 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     private final NoticeMapper noticeMapper;
 
     @Override
-    public void completeSharing(Long sharingId, Long ownerId, Long receiverId) {
+    public void completeSharing(Long sharingId, Long memberId, Long targetMemberId) {
 
-        sharingMapper.updateSharingComplete(sharingId, receiverId);
+        SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
+        if (sharing == null) {
+            throw new IllegalArgumentException("존재하지 않는 나눔글입니다.");
+        }
+        if (!memberId.equals(sharing.getMemberId())) {
+            throw new IllegalArgumentException("나눔 완료 권한이 없습니다.");
+        }
+
+        if ("true".equals(sharing.getStatus())) {
+            throw new IllegalStateException("이미 완료된 나눔입니다.");
+        }
+
+
+        sharingMapper.updateSharingComplete(sharingId, targetMemberId);
 
         NoticeVO notice = NoticeVO.builder()
-                .receiverId(receiverId)
+                .receiverId(targetMemberId)
                 .targetId(sharingId)
                 .targetType(NoticeTargetType.SHARING)
                 .content("분양자가 나눔을 완료했습니다. 후기를 작성해주세요!")
@@ -29,6 +41,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         noticeMapper.insertNotice(notice);
     }
+
 
     public enum ReviewerType {
         GIVER,      // 분양자
@@ -42,12 +55,10 @@ public class SharingScoreServiceImpl implements SharingScoreService {
                                       int reShare,
                                       Integer satisfaction) {
 
-        // 1) Sharing 데이터 조회
         SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
 
         ReviewerType reviewerType;
 
-        // 2) 로그인 사용자와 비교하여 분양자/피분양자 판별
         if (loginUserId.equals(sharing.getMemberId())) {
             reviewerType = ReviewerType.GIVER;
         } else if (loginUserId.equals(sharing.getTargetMemberId())) {
@@ -56,16 +67,13 @@ public class SharingScoreServiceImpl implements SharingScoreService {
             throw new IllegalArgumentException("후기 작성 권한이 없습니다.");
         }
 
-        // 3) 후기 기반 점수 계산
         int score = calculateReviewScore(reviewerType, manner, reShare, satisfaction);
 
-        // 4) 점수 받을 대상 = 상대방 ID
         Long targetMemberId =
                 reviewerType == ReviewerType.GIVER
                         ? sharing.getTargetMemberId()        // 분양자가 후기 → 피분양자가 점수 증가
                         : sharing.getMemberId();             // 피분양자가 후기 → 분양자가 점수 증가
 
-        // 5) 누적 업데이트
         sharingMapper.updateSharingRate(targetMemberId, score);
     }
 
