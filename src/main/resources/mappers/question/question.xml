@@ -40,7 +40,8 @@
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
-    <insert id="insertQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+    <insert id="insertQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO" useGeneratedKeys="true"
+            keyProperty="questionId">
 
         INSERT INTO question
             (member_id, title, content, created_at, updated_at, del_flag)
@@ -85,7 +86,9 @@
     </select>
 
     <insert id="insertAnswer"
-            parameterType="com.zero.plantory.global.vo.AnswerVO">
+            parameterType="com.zero.plantory.global.vo.AnswerVO"
+            useGeneratedKeys="true"
+            keyProperty="answerId">
 
         INSERT INTO answer
             (question_id, writer_id, content, created_at, updated_at, del_flag)
