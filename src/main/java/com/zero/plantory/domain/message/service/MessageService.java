@@ -13,5 +13,4 @@ public interface MessageService {
     MessageVO findMessageWriteInfo(Long senderId, String targetType, Long targetId);
     int registerMessage(MessageVO message);
     MessageVO findMessageDetail(Long messageId, Long viewerId);
-
 }

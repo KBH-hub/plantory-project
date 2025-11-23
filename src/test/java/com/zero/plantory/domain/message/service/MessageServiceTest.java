@@ -98,9 +98,20 @@ class MessageServiceTest {
     }
 
     @Test
-    @DisplayName("메시지 상세 정보 조회")
-    void findMessageDetail() {
-        Long messageId = 1L;
+    @DisplayName("발신자 메시지 상세 정보 조회 시 읽음 처리 방지")
+    void senderFindMessageDetail() {
+        Long messageId = 5L;
+        Long viewerId = 8L;
+
+        MessageVO result = messageService.findMessageDetail(messageId, viewerId);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("수신자 메시지 상세 정보 조회 시 읽음 처리")
+    void receiverFindMessageDetail() {
+        Long messageId = 6L;
         Long viewerId = 1L;
 
         MessageVO result = messageService.findMessageDetail(messageId, viewerId);
