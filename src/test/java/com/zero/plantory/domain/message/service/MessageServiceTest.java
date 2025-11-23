@@ -42,7 +42,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("메시지 삭제 처리")
-    void removeMessage() {
+    void removeMessageTest() {
         List<Long> messageIds = List.of(1L, 2L);
         Long removerId = 1L;
 
@@ -53,7 +53,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("메시지 전송 시 필요 정보 조회")
-    void findMessageWriteInfo() {
+    void findMessageWriteInfoTest() {
         Long senderId = 11L; // 쪽지 보내는 사람
         String targetType = "QUESTION"; // 나눔 글 기준
         Long targetId = 3L;
@@ -65,7 +65,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("메시지 전송 실패 (제목 누락)처리")
-    void registerFailByTitleMessage() {
+    void registerFailByTitleMessageTest() {
         MessageVO vo = new MessageVO().builder()
                 .senderId(3L)
                 .receiverId(8L)
@@ -82,7 +82,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("메시지 전송 실패 (내용 누락)처리")
-    void registerFailByContentMessage() {
+    void registerFailByContentMessageTest() {
         MessageVO vo = new MessageVO().builder()
                 .senderId(3L)
                 .receiverId(8L)
@@ -99,7 +99,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("발신자 메시지 상세 정보 조회 시 읽음 처리 방지")
-    void senderFindMessageDetail() {
+    void senderFindMessageDetailTest() {
         Long messageId = 5L;
         Long viewerId = 8L;
 
@@ -110,7 +110,7 @@ class MessageServiceTest {
 
     @Test
     @DisplayName("수신자 메시지 상세 정보 조회 시 읽음 처리")
-    void receiverFindMessageDetail() {
+    void receiverFindMessageDetailTest() {
         Long messageId = 6L;
         Long viewerId = 1L;
 
