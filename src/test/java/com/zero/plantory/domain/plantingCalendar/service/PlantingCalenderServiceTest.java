@@ -171,7 +171,7 @@ class PlantingCalenderServiceTest {
                 .memo("맛있었음")
                 .build();
 
-        //등록한 사진 정보
+        //등록할 사진 정보
         List<MultipartFile> files = new ArrayList<>();
 
         MockMultipartFile file1 = new MockMultipartFile(

@@ -47,6 +47,7 @@ class MyPlantMapperTest {
     void insertMyPlantTest() {
         MyPlantVO vo  = MyPlantVO.builder()
                 .memberId(4L)
+                .myplantId(1L)
                 .name("테스트마이플랜트명")
                 .type("테스트마이플랜트타입")
                 .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
