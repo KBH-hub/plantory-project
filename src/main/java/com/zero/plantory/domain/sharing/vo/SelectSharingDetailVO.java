@@ -1,11 +1,13 @@
 package com.zero.plantory.domain.sharing.vo;
 
+import com.zero.plantory.global.vo.ImageVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +28,7 @@ public class SelectSharingDetailVO {
     private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private List<ImageVO> images;
 
 }

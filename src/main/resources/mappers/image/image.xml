@@ -31,7 +31,7 @@
         SELECT
         <include refid="imageColumns"/>
         FROM image
-        WHERE target_type = #{targetType.name}
+        WHERE target_type = #{targetType}
         AND target_id   = #{targetId}
         AND del_flag IS NULL
         ORDER BY image_id ASC
@@ -51,7 +51,7 @@
         )
         VALUES (
                    #{memberId},
-                   #{targetType.name},
+                   #{targetType},
                    #{targetId},
                    #{fileUrl},
                    #{fileName},
@@ -74,7 +74,7 @@
     <update id="softDeleteImagesByTarget">
         UPDATE image
         SET del_flag = NOW()
-        WHERE target_type = #{targetType.name}
+        WHERE target_type = #{targetType}
           AND target_id = #{targetId}
           AND del_flag IS NULL
     </update>

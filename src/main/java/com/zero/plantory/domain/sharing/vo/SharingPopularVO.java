@@ -13,4 +13,5 @@ public class SharingPopularVO {
     private Long sharingId;
     private String title;
     private Integer interestNum;
+    private String imageUrl;
 }
