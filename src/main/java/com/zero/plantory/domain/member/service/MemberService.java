@@ -6,7 +6,7 @@ import com.zero.plantory.global.vo.MemberVO;
 public interface MemberService {
     boolean isDuplicateMembername(String membername);
     boolean isDuplicateNickname(String nickname);
-    boolean registerMember(MemberVO memberVo);
+    boolean signUp(MemberVO memberVo);
     MemberVO login(String membername, String password);
 
 }

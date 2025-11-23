@@ -13,15 +13,17 @@
 <body class="bg-dark">
 
 <div class="container py-5">
-  <div class="mx-auto bg-white p-5 rounded" style="max-width:700px;">
+  <div class="mx-auto p-5 rounded shadow-lg bg-white" style="max-width:700px; border-radius:14px;">
 
-    <h2 class="text-center fw-bold mb-3">Plantory</h2>
-    <p class="text-center mb-4">식물을 관리하고 커뮤니티를 사용하려면 가입하세요.</p>
+    <div class="bg-dark text-white px-4 py-3 rounded mb-4 d-flex align-items-center" style="border-radius:10px;">
+      <h4 class="m-0 fw-bold">회원가입</h4>
+    </div>
 
-    <h5 class="fw-bold text-center mb-4">프로필</h5>
+    <h2 class="text-center fw-bold mb-3 text-success">Plantory</h2>
+    <p class="text-center mb-4 text-muted">식물을 관리하고 커뮤니티를 사용하려면 가입하세요.</p>
 
     <div class="text-center mb-4">
-      <i class="fa-solid fa-user-circle fs-1 text-secondary"></i>
+      <i class="fa-solid fa-user-circle" style="font-size:60px; color:#6c757d;"></i>
     </div>
 
     <div class="row g-3">
@@ -29,55 +31,63 @@
       <div class="col-md-6">
         <label class="fw-bold">아이디 <span class="text-danger small">*필수입니다.</span></label>
         <div class="input-group">
-          <input type="text" class="form-control">
-          <button class="btn btn-outline-secondary">중복 확인</button>
+          <input type="text" class="form-control form-control-lg">
+          <button class="btn btn-outline-success">중복 확인</button>
         </div>
       </div>
 
       <div class="col-md-6">
         <label class="fw-bold">주소 <span class="text-danger small">*필수입니다.</span></label>
-        <select class="form-select">
-          <option>전체 시/도</option>
-          <option>서울</option>
-          <option>부산</option>
-          <option>대전</option>
-        </select>
+        <div class="row g-2">
+          <div class="col-6">
+            <select id="sido" class="form-select form-select-lg">
+              <option value="">시/도</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <select id="sigungu" class="form-select form-select-lg">
+              <option value="">시/군/구</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="fw-bold">닉네임 <span class="text-danger small">*필수입니다.</span></label>
         <div class="input-group">
-          <input type="text" class="form-control">
-          <button class="btn btn-outline-secondary">중복 확인</button>
+          <input type="text" class="form-control form-control-lg">
+          <button class="btn btn-outline-success">중복 확인</button>
         </div>
       </div>
 
       <div class="col-md-6">
         <label class="fw-bold">휴대전화 <span class="text-danger small">*필수입니다.</span></label>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control form-control-lg" placeholder="예) 010-1234-5678">
       </div>
 
       <div class="col-md-6">
         <label class="fw-bold">비밀번호 <span class="text-danger small">*필수입니다.</span></label>
-        <input type="password" class="form-control">
+        <input type="password" class="form-control form-control-lg">
       </div>
 
       <div class="col-md-6">
         <label class="fw-bold">비밀번호 확인 <span class="text-danger small">*필수입니다.</span></label>
-        <input type="password" class="form-control">
+        <input type="password" class="form-control form-control-lg">
       </div>
 
     </div>
 
-    <button class="btn btn-primary w-100 mt-4">가입하기</button>
+    <button class="btn btn-success w-100 mt-4 py-3 fw-bold fs-5" style="border-radius:10px;">가입하기</button>
 
     <p class="text-center mt-3">
       이미 계정이 있으신가요?
-      <a href="login.html" class="text-danger fw-bold">로그인</a>
+      <a href="login.html" class="text-success fw-bold">로그인</a>
     </p>
 
   </div>
 </div>
 
+
 </body>
+<script th:src="@{/js/korean.js}"></script>
 </html>

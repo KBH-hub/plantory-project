@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 프로필</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .img-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 0.75rem;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .sub-title {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-4 pb-4">
+
+        <h4 class="fw-bold border-bottom pb-2">내 프로필</h4>
+        <p class="text-muted small mt-1">나의 식물 &gt; 내 프로필 &gt; 내정보 변경</p>
+
+        <div class="mt-4 text-center">
+            <div class="img-wrapper">
+                <img src="https://via.placeholder.com/130" class="profile-img border" alt="profile">
+                <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+            </div>
+        </div>
+
+        <form class="mt-4 px-3">
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">닉네임</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" placeholder="닉네임 입력">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-outline-dark">중복 확인</button>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">비밀번호</label>
+                <div class="col-sm-6">
+                    <input type="password" class="form-control" placeholder="새 비밀번호" disabled>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal"
+                        data-bs-target="#changePwModal">비밀번호변경</button>
+                </div>
+
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">휴대전화</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" value="01012345678">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">주소</label>
+                <div class="col-sm-3">
+                    <select id="sido" class="form-select">
+                        <option>전체 시/도</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <select id="sigungu" class="form-select">
+                        <option>시/군/구</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4 row">
+                <label class="col-sm-2 col-form-label">알림 설정</label>
+                <div class="col-sm-6">
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" checked>
+                        <label class="form-check-label">ON</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#withdrawModal">회원탈퇴</button>
+
+
+                <div>
+                    <button type="button" class="btn btn-danger">취소</button>
+                    <button type="submit" class="btn btn-success">확인</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+
+    <div class="modal fade" id="changePwModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">비밀번호 변경</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body pt-0">
+
+                    <label class="fw-bold">기존 비밀번호 <span id="oldPwMsg" class="text-danger d-none">*일치하지
+                            않습니다.</span></label>
+                    <input type="password" id="oldPw" class="form-control mb-4" placeholder="">
+
+                    <label class="fw-bold">새 비밀번호 <span id="newPwMsg" class="text-danger d-none">*기존과
+                            같습니다.</span></label>
+                    <input type="password" id="newPw" class="form-control mb-4" placeholder="">
+
+                    <label class="fw-bold">새 비밀번호 확인 <span id="newPwCheckMsg" class="text-danger d-none">*일치하지
+                            않습니다.</span></label>
+                    <input type="password" id="newPwCheck" class="form-control mb-4" placeholder="">
+                </div>
+
+                <div class="modal-footer border-0 d-flex justify-content-center gap-5">
+                    <button type="button" class="btn btn-secondary btn-lg px-5" data-bs-dismiss="modal">취소</button>
+                    <button type="button" id="pwConfirmBtn" class="btn btn-success btn-lg px-5">확인</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">회원탈퇴</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+
+                    <p class="text-danger fw-bold fs-5">정말로 탈퇴하시겠습니까?</p>
+
+                    <p class="text-muted small">
+                        탈퇴 시 모든 개인 정보와 데이터가 삭제되며, 복구가 불가능합니다.<br>
+                        단, 관련 법령에 따라 일부 정보는 일정 기간 보관될 수 있습니다.<br>
+                        탈퇴 후 5일 이내에는 동일한 아이디로 재가입이 제한됩니다.
+                    </p>
+
+                    <div class="form-check d-flex justify-content-center align-items-center mt-4">
+                        <input class="form-check-input me-1" type="checkbox" id="agreeWithdraw">
+                        <label class="form-check-label fw-bold" for="agreeWithdraw">위의 사항에 동의합니다.</label>
+                    </div>
+
+                    <span id="withdrawMsg" class="text-danger small d-none">*동의해야 회원탈퇴가 가능합니다.</span>
+
+                </div>
+
+                <div class="modal-footer border-0 d-flex justify-content-center gap-5">
+                    <button type="button" class="btn btn-secondary btn-lg px-5" data-bs-dismiss="modal">취소</button>
+                    <button type="button" id="withdrawBtn" class="btn btn-danger btn-lg px-5" disabled>회원 탈퇴</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+<script th:src="@{/js/korean.js}"></script>
+<script th:src="@{/js/change-password.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
