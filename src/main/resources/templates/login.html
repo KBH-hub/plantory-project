@@ -6,58 +6,78 @@
   <title>로그인</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-</head>
 
+  <style>
+      .login-panel {
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+      }
+      .preview-img-box {
+          max-width: 420px;
+          height: 500px;
+          overflow: hidden;
+          border-radius: 15px;
+      }
+      .preview-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+  </style>
+
+</head>
 <body class="bg-dark">
 
-<div class="container-fluid vh-100">
-    <div class="row h-100">
+<div class="container-fluid">
+    <div class="row">
 
-        <!-- Left -->
-        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center bg-success bg-opacity-50">
+        <!-- LEFT side -->
+        <div class="col-12 col-md-6 bg-success bg-opacity-50 login-panel">
 
-            <h2 class="fw-bold mb-4">Plantory</h2>
-            <p class="text-white mb-4 fs-3">Sign up to continue</p>
+            <h2 class="fw-bold mb-3 text-white">🌿 Plantory</h2>
+            <p class="text-white mb-4 fs-4">로그인하여 서비스를 이용해보세요</p>
 
             <div class="w-75">
-                <label class="text-white">아이디</label>
-                <input type="text" class="form-control mb-3">
 
-                <label class="text-white">비밀번호</label>
-                <input type="password" class="form-control mb-3">
+                <label class="text-white fw-bold">아이디</label>
+                <input type="text" class="form-control form-control-lg mb-3" placeholder="아이디 입력">
+
+                <label class="text-white fw-bold">비밀번호</label>
+                <input type="password" class="form-control form-control-lg mb-3" placeholder="비밀번호 입력">
 
                 <div class="form-check text-white mb-3">
                     <input type="checkbox" class="form-check-input" id="keepLogin">
-                    <label class="form-check-label" for="keepLogin">이 사이트가 나를 기억하기</label>
+                    <label class="form-check-label" for="keepLogin">로그인 상태 유지</label>
                 </div>
 
-                <button class="btn btn-success w-100 mb-3">로그인</button>
+                <button class="btn btn-dark w-100 py-2 fs-5 mb-3 fw-bold">로그인</button>
 
                 <p class="text-center text-white">
-                    아직 아이디가 없으신가요?
-                    <a href="termsOfService.html" class="text-danger">회원가입</a>
+                    아직 회원이 아니신가요?
+                    <a href="termsOfService.html" class="text-warning fw-bold">회원가입</a>
                 </p>
+
             </div>
 
         </div>
 
-        <!-- Right -->
-        <div class="col-12 col-md-6 bg-white d-flex flex-column justify-content-start align-items-center">
+        <div class="col-12 col-md-6 bg-white d-flex flex-column justify-content-center align-items-center">
 
-            <h4 class="fw-bold text-center mb-4 mt-5">
-                로그인하고 저희 서비스를 이용해 보세요.<br>
-                식물을 관리하고 커뮤니티에서 함께 성장해요.
+            <h4 class="fw-bold text-center mb-4 px-4">
+                식물 관리와 커뮤니티 참여를 통해 함께 성장해요 🌱
             </h4>
 
             <div class="d-flex flex-wrap justify-content-center gap-4">
 
-                <div class="border rounded p-0 bg-light shadow-lg" style="max-width:450px; width:90%; height:600px; overflow:hidden;">
-                    <img th:src="@{/image/fixme.png}" class="w-100 h-100" style="object-fit:cover;">
+                <div class="preview-img-box shadow">
+                    <img th:src="@{/image/fixme.png}" class="preview-img">
                 </div>
 
-                <div class="border rounded p-0 bg-light shadow-lg" style="max-width:450px; width:90%; height:600px; overflow:hidden;">
-                    <img th:src="@{/image/fixme2.png}" class="w-100 h-100" style="object-fit:cover;">
+                <div class="preview-img-box shadow">
+                    <img th:src="@{/image/fixme2.png}" class="preview-img">
                 </div>
 
             </div>
@@ -66,7 +86,6 @@
 
     </div>
 </div>
-
-
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </html>

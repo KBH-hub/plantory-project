@@ -25,6 +25,7 @@
         본 약관은 Plantory 서비스 이용과 관련하여 회사와 회원 간의 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.
       </p>
     </div>
+     <input type="checkbox" name="agree1" value="yes"> 이용약관에 동의합니다.
     <p class="text-danger small">※ 동의가 필요한 항목입니다.</p>
 
     <h6 class="fw-bold mt-4">개인정보 수집 및 이용 안내</h6>
@@ -35,10 +36,13 @@
         보유 기간: 회원 탈퇴 시 즉시 파기
       </p>
     </div>
+    <input type="checkbox" name="agree2" value="yes"> 개인정보 수집 및 이용에 동의합니다.
     <p class="text-danger small">※ 동의가 필요한 항목입니다.</p>
 
-    <button class="btn btn-primary w-100 mb-3" onclick="location.href='signUp.html'">
-      동의
+    <input type="checkbox" name="agree3" value="yes"> sms알림 수신에 동의합니다.
+
+    <button id="submitBtn" disabled class="btn btn-primary w-100 mb-3" onclick="location.href='signUp.html'">
+      동의하고 진행
     </button>
 
     <p class="text-center">
@@ -49,4 +53,25 @@
 </div>
 
 </body>
+<script>
+  const radios = document.querySelectorAll('input[type="checkbox"]');
+const submitBtn = document.getElementById('submitBtn');
+
+function checkAllSelected() {
+    const agree1 = document.querySelector('input[name="agree1"]:checked');
+    const agree2 = document.querySelector('input[name="agree2"]:checked');
+    const agree3 = document.querySelector('input[name="agree3"]:checked');
+
+    if (agree1 && agree2 && agree3) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+}
+
+radios.forEach(radio => {
+    radio.addEventListener('change', checkAllSelected);
+});
+
+</script>
 </html>
