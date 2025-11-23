@@ -14,9 +14,16 @@ public class SharingReadServiceTest {
     private SharingReadService sharingReadService;
 
     @Test
-    @DisplayName("나눔 리스트 조회")
+    @DisplayName("나눔 게시글 카드 리스트 조회")
     void getSharingListTest() {
-        log.info("나눔 리스트 = {}", sharingReadService.getSharingList(new SharingSearchVO()));
+        SharingSearchVO vo = SharingSearchVO.builder()
+                .userAddress("서울")
+                .keyword("")
+                .limit(10)
+                .offset(0)
+                .build();
+
+        log.info("조회 결과 = {}", sharingReadService.getSharingList(vo));
     }
 
     @Test
@@ -28,7 +35,7 @@ public class SharingReadServiceTest {
     @Test
     @DisplayName("나눔 상세 조회")
     void getSharingDetailTest() {
-        log.info("나눔 상세 = {}", sharingReadService.getSharingDetail(12L));
+        log.info("나눔 상세 = {}", sharingReadService.getSharingDetail(4L));
     }
 
     @Test
