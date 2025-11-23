@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class MyProfileServiceImplTest {
+class MyprofileServiceImplTest {
 
     @Mock
     private MyProfileMapper myProfileMapper;
 
     @InjectMocks
-    private MyProfileServiceImpl myProfileService;
+    private MyprofileServiceImpl myProfileService;
 
     @Test
     @DisplayName("내 정보 조회 테스트")
