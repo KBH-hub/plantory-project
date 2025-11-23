@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,12 +28,21 @@ public class SharingWriteServiceTest {
     @DisplayName("나눔글 + 이미지 등록")
     void registerSharingTest() throws Exception {
 
-        MockMultipartFile mockFile = new MockMultipartFile(
+        MockMultipartFile file1 = new MockMultipartFile(
                 "file",
-                "test.png",
+                "img1.png",
                 "image/png",
-                "test image bytes".getBytes()
+                "image1".getBytes()
         );
+
+        MockMultipartFile file2 = new MockMultipartFile(
+                "file",
+                "img2.png",
+                "image/png",
+                "image2".getBytes()
+        );
+
+        List<MultipartFile> fileList = List.of(file1, file2);
 
         SharingVO vo = SharingVO.builder()
                 .memberId(1L)
@@ -43,23 +53,37 @@ public class SharingWriteServiceTest {
                 .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .build();
 
-        Long id = sharingWriteService.registerSharing(vo, List.of(mockFile));
+        Long id = sharingWriteService.registerSharing(vo, fileList);
         log.info("등록된 글 ID = {}", id);
     }
 
     /** 2. 나눔글 수정 */
     @Test
     @Order(2)
-    @DisplayName("나눔글 수정")
-    void updateSharingTest() throws IOException {
+    @DisplayName("나눔글 수정 (이미지 변경 포함)")
+    void updateSharingTest() throws Exception {
+
+        MockMultipartFile newMockFile = new MockMultipartFile(
+                "file",
+                "updated.png",
+                "image/png",
+                "updated image".getBytes()
+        );
+
         SharingVO vo = SharingVO.builder()
-                .sharingId(24L)
-                .memberId(1L)
+                .sharingId(17L)
+                .memberId(18L)
                 .title("수정된 제목")
                 .content("수정된 내용")
+                .content("테스트 내용")
+                .plantType("다육이")
+                .managementLevel(ManagementLevel.EASY)
+                .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .build();
 
-        log.info("수정 결과 = {}", sharingWriteService.updateSharing(vo, List.of()));
+        boolean result = sharingWriteService.updateSharing(vo, List.of(newMockFile));
+
+        log.info("수정 결과 = {}", result);
     }
 
     /** 3. 나눔글 삭제 */
@@ -67,7 +91,7 @@ public class SharingWriteServiceTest {
     @Order(3)
     @DisplayName("나눔글 삭제")
     void deleteSharingTest() {
-        log.info("삭제 결과 = {}", sharingWriteService.deleteSharing(24L, 1L));
+        log.info("삭제 결과 = {}", sharingWriteService.deleteSharing(25L, 1L));
     }
 
     /** 4. 관심 등록 */
@@ -100,7 +124,7 @@ public class SharingWriteServiceTest {
     @DisplayName("댓글 수정")
     void updateCommentTest() {
         CommentVO vo = CommentVO.builder()
-                .commentId(21L)
+                .commentId(22L)
                 .sharingId(12L)
                 .writerId(1L)
                 .content("수정된 댓글")
@@ -115,7 +139,7 @@ public class SharingWriteServiceTest {
     @DisplayName("댓글 삭제")
     void deleteCommentTest() {
         CommentVO vo = CommentVO.builder()
-                .commentId(21L)
+                .commentId(22L)
                 .sharingId(12L)
                 .writerId(1L)
                 .build();

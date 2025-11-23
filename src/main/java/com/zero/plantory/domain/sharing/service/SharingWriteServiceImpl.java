@@ -24,30 +24,26 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     private final ImageMapper imageMapper;
     private final StorageUploader storageUploader;
 
-    /** 글+ 이미지 등록 */
     @Override
     @Transactional
     public Long registerSharing(SharingVO vo, List<MultipartFile> files) throws IOException {
 
         List<ImageVO> imageList = new ArrayList<>();
 
-        // 1) 이미지 먼저 업로드
         for (MultipartFile file : files) {
             String url = storageUploader.uploadFile(file);
             imageList.add(ImageVO.builder()
                     .memberId(vo.getMemberId())
                     .targetType(ImageTargetType.SHARING)
-                    .targetId(null)              // 글 저장 후 세팅
+                    .targetId(null)
                     .fileUrl(url)
                     .fileName(file.getOriginalFilename())
                     .build());
         }
 
-        // 2) 글 저장
         sharingMapper.insertSharing(vo);
         Long sharingId = vo.getSharingId();
 
-        // 3) 이미지 DB 저장
         for (ImageVO img : imageList) {
             img.setTargetId(sharingId);
             imageMapper.insertImage(img);
@@ -57,7 +53,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     }
 
 
-    /** 나눔글 수정 */
     @Override
     @Transactional
     public boolean updateSharing(SharingVO vo, List<MultipartFile> newImages) throws IOException {
@@ -68,13 +63,10 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
         Long sharingId = vo.getSharingId();
 
-        // 이미지를 변경하는 요청이 있는 경우에만 이미지 교체 수행
         if (newImages != null && !newImages.isEmpty()) {
 
-            // 기존 이미지 soft delete
             imageMapper.softDeleteImagesByTarget(ImageTargetType.SHARING, sharingId);
 
-            // 새 이미지 업로드 + DB저장
             for (MultipartFile file : newImages) {
 
                 String url = storageUploader.uploadFile(file);
@@ -93,7 +85,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     }
 
 
-    /** 나눔글 삭제 */
     @Override
     @Transactional
     public boolean deleteSharing(Long sharingId, Long memberId) {
@@ -109,7 +100,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
         return deleted > 0;
     }
 
-    /** 관심 등록 */
     @Override
     @Transactional
     public boolean addInterest(Long memberId, Long sharingId) {
@@ -123,7 +113,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
         return true;
     }
 
-    /** 관심 해제 */
     @Override
     @Transactional
     public boolean removeInterest(Long memberId, Long sharingId) {
@@ -137,14 +126,12 @@ public class SharingWriteServiceImpl implements SharingWriteService {
         return true;
     }
 
-    /** 댓글 등록 */
     @Override
     @Transactional
     public boolean addComment(Long sharingId, Long writerId, String content) {
         return sharingMapper.insertComment(sharingId, writerId, content) > 0;
     }
 
-    /** 댓글 수정 */
     @Override
     @Transactional
     public boolean updateComment(CommentVO vo) {
@@ -157,7 +144,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
         return sharingMapper.updateCommentById(vo) > 0;
     }
 
-    /** 댓글 삭제 */
     @Override
     @Transactional
     public boolean deleteComment(CommentVO vo) {
