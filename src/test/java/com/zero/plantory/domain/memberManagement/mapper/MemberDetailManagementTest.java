@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
-class MemberManagementTest {
+class MemberDetailManagementTest {
     @Autowired
     MemberManagement memberManagement;
 

@@ -4,6 +4,7 @@ import com.zero.plantory.domain.member.mapper.MemberMapper;
 import com.zero.plantory.global.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
-//    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 
@@ -37,30 +38,27 @@ public class MemberServiceImpl implements MemberService {
         if (memberMapper.countByMembername(memberVo.getMembername()) > 0) {
             throw new IllegalStateException("이미 사용 중인 아이디입니다.");
         }
-
         if (memberMapper.countByNickname(memberVo.getNickname()) > 0) {
             throw new IllegalStateException("이미 사용 중인 닉네임입니다.");
         }
+        memberVo.setPassword(bCryptPasswordEncoder.encode(memberVo.getPassword()));
+        return memberMapper.insertMember(memberVo) > 0;
 
-//        memberVo.setPassword(passwordEncoder.encode(memberVo.getPassword()));
 
-        int result = memberMapper.insertMember(memberVo);
-
-        return result > 0;
     }
 
     @Override
     public MemberVO login(String membername, String password) {
-        MemberVO memberVo = memberMapper.selectByMembername(membername);
+        MemberVO memberVO = memberMapper.selectByMembername(membername);
 
-        if (memberVo == null) {
+        if (memberVO == null) {
             return null;
         }
 
-        if (memberVo.getStopDay() != null) {
+        if (memberVO.getStopDay() != null) {
 
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime stopDay = memberVo.getStopDay();
+            LocalDateTime stopDay = memberVO.getStopDay();
 
             if (stopDay.isAfter(now)) {
                 long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
@@ -68,11 +66,11 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 
-//        if (!passwordEncoder.matches(password, member.getPassword())) {
-//            return null;
-//        }
+        if (!bCryptPasswordEncoder.matches(password, memberVO.getPassword())) {
+            return null;
+        }
 
-        return memberVo;
+        return memberVO;
     }
 
 
