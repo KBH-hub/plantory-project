@@ -81,4 +81,33 @@ public class CmdController {
         return "messageDetail";
     }
 
+    @RequestMapping("/dryPlantDictionary")
+    public String dryPlantDictionary(){
+        return "dryPlantDictionary";
+    }
+
+    @RequestMapping("/updateReview")
+    public String updateReview(){ return "updateReview"; }
+    
+    @RequestMapping("/updateReviewTargetMember")
+    public String updateReviewTargetMember(){
+        return "updateReviewTargetMember";
+    }
+
+    @RequestMapping("/createQuestion")
+    public String createQuestion(){
+        return "createQuestion";
+    }
+
+    @RequestMapping("/questionList")
+    public String questionList(){
+        return "questionList";
+    }
+
+    @RequestMapping("/readDictionary")
+    public String readDictionary(){
+        return "readDictionary";
+    }
+
+
 }
