@@ -88,7 +88,7 @@ public class CmdController {
 
     @RequestMapping("/updateReview")
     public String updateReview(){ return "updateReview"; }
-    
+
     @RequestMapping("/updateReviewTargetMember")
     public String updateReviewTargetMember(){
         return "updateReviewTargetMember";
@@ -108,6 +108,23 @@ public class CmdController {
     public String readDictionary(){
         return "readDictionary";
     }
+
+    @RequestMapping("/memberManagement")
+    public String memberManagement(){
+        return "memberManagement";
+    }
+
+    @RequestMapping("/myPlantManagement")
+    public String myPlantManagement(){return "myPlantManagement";}
+
+    @RequestMapping("/myProfile")
+    public String myProfile(){return "myProfile";}
+
+    @RequestMapping("/sharingHistory")
+    public String sharingHistory(){return "sharingHistory";}
+
+    @RequestMapping("/updateMyInfo")
+    public String updateMyInfo(){return "updateMyInfo";}
 
 
 }

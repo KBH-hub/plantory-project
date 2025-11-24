@@ -48,6 +48,7 @@
 </head>
 
 <body class="px-4 px-lg-5 py-5">
+<div th:replace="~{fragments/header :: headerBar}"></div>
 
     <h3 class="fw-bold mb-2">나눔 내역</h3>
     <p class="text-muted small mb-1">나의 식물 > 내프로필 > 나눔 내역</p>
@@ -81,8 +82,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/header.js"></script>
 
-    <script th:src="@{js/sharingHistory.js}"></script>
+<script th:src="@{js/sharingHistory.js}"></script>
 </body>
 
 </html>
