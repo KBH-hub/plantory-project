@@ -4,8 +4,10 @@
   <meta charset="utf-8"/>
   <title>쪽지함 - 상세</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+<div th:replace="~{fragments/header :: headerBar}"></div>
 <div class="container-xxl py-4">
 
   <h5 class="fw-bold mb-3">쪽지함</h5>
@@ -105,6 +107,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/header.js"></script>
 <script>
   // 모달 오픈 시: 내용 템플릿에 이전 내용 포함하여 편집 가능하게 채움
   const messageModal = document.getElementById('messageModal');

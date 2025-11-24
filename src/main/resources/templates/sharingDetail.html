@@ -61,8 +61,7 @@
     </style>
 </head>
 <body class="bg-light">
-
-<div th:replace="fragments/header :: headerBar"></div>
+<div th:replace="~{fragments/header :: headerBar}"></div>
 
 <div class="container my-4">
     <div class="card">
@@ -260,6 +259,8 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/header.js"></script>
+
 </body>
 <script>
     (function () {

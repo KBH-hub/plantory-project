@@ -4,20 +4,18 @@
     <meta charset="UTF-8">
     <title>식물사전</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
-<!-- 브라우저 폭 줄여도 가로 스크롤이 생기도록 설정 -->
 <body class="bg-light" style="overflow-x: auto;">
 
-<!-- 전체 UI가 찌그러지지 않도록 고정 최소 너비 지정 -->
+<div th:replace="~{fragments/header :: headerBar}"></div>
+
 <div class="container my-4" style="min-width: 1100px;">
 
     <h4 class="fw-bold mb-4">건조에 강한 실내식물</h4>
 
-    <!-- 필터 영역 테이블 -->
     <table class="table table-bordered bg-white">
         <tbody>
 
@@ -147,10 +145,8 @@
         </tbody>
     </table>
 
-    <!-- 결과 리스트 -->
     <div class="mt-4">
 
-        <!-- 1 아이템 -->
         <div class="row mb-4 p-3 bg-white border rounded">
             <div class="col-3">
                 <img src="https://via.placeholder.com/150" class="img-fluid border">
@@ -163,7 +159,6 @@
             </div>
         </div>
 
-        <!-- 2 아이템 -->
         <div class="row mb-4 p-3 bg-white border rounded">
             <div class="col-3">
                 <img src="https://via.placeholder.com/150" class="img-fluid border">
@@ -180,8 +175,8 @@
 
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/header.js"></script>
 
 </body>
 </html>

@@ -14,7 +14,7 @@
 </head>
 
 <body class="bg-light">
-<div th:replace="fragments/header :: headerBar"></div>
+<div th:replace="~{fragments/header :: headerBar}"></div>
 
 <main class="container-fluid px-4 py-4">
     <h5 class="fw-bold mb-3">나눔 게시글 수정</h5>
@@ -155,6 +155,7 @@
 
 <!-- 스크립트 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/header.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         /* ====== 식물 정보 초기/선택 동기화 ====== */
