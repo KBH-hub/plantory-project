@@ -8,7 +8,7 @@ document.getElementById("pwConfirmBtn").addEventListener("click", function () {
     const newPwMsg = document.getElementById("newPwMsg");
     const newPwCheckMsg = document.getElementById("newPwCheckMsg");
 
-    const currentPassword = "1234"; // 디폴트 더미 데이터 암호
+    const currentPassword = "1234";
     let valid = true;
 
     if (oldPw === "") {
