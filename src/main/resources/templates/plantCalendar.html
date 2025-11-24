@@ -25,7 +25,6 @@
 
                 <div class="card shadow-sm">
                     <div class="bg-dark" style="height:30px; margin-bottom:6px;"></div>
-                    <div class="calendar-header-bar"></div>
 
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -69,22 +68,26 @@
 
                         <div class="card shadow-sm mb-2 card-half">
                             <div
-                                class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                <span><i class="fa-solid fa-droplet me-2"></i>물주기</span>
+                                class="card-header bg-primary p-2 text-white d-flex justify-content-between align-items-center">
+                                <i class="bi bi-droplet me-2"></i>
+                                <span class="fw-semibold small">물주기</span>
                             </div>
                             <div class="card-body" id="wateringListContainer">
+                                <div class="text-muted small">오늘 물 줄 식물이 없습니다.</div>
                             </div>
                         </div>
 
                         <div class="divider-line"></div>
 
                         <div class="card shadow-sm card-half">
-                            <div class="card-header bg-warning d-flex justify-content-between align-items-center">
-                                <span><i class="fa-solid fa-book me-2"></i>관찰일지</span>
+                            <div class="card-header bg-warning p-2 d-flex justify-content-between align-items-center">
+                                <i class="bi bi-journal-text me-2"></i>
+                                <span class="fw-semibold small">관찰일지</span>
                                 <button class="btn btn-dark btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#diaryModal">+추가</button>
                             </div>
                             <div class="card-body" id="diaryListContainer"></div>
+                            <div class="text-muted small">최근 작성된 관찰일지가 없습니다.</div>
                         </div>
 
                     </div>

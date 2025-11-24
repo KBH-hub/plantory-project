@@ -1,60 +1,77 @@
-.calendar-wrapper {
-    width: 100%;
-    max-width: 90%;
-    margin: 0 auto;
+
+.container-fluid {
+    max-width: 1400px;
 }
 
-.calendar-header-bar {
-    width: 100%;
-    height: 30px;
-    background: #474747;
-    margin-bottom: 6px;
+.row {
+    display: flex;
+    align-items: stretch;
 }
 
-.calendar-grid div:nth-child(7n + 1) {
-    color: red !important;
-}
+
+
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
 }
+
 .calendar-cell {
-  min-height: 115px;
-  border: 0px solid #ddd;
-  border-radius: 3px;
-  padding: 4px;
-  font-size: 20px;
+    min-height: 75px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 4px;
+    font-size: 15px;
 }
+
 .calendar-cell span {
-  font-weight: bold;
+    font-weight: bold;
 }
+
 .calendar-cell.empty {
-  background: #ffffff;
-  border-style: dashed;
+    background: #ffffff;
+    border-style: dashed;
 }
-
-
 
 .plant-section-wrapper {
-    margin-top: 50px;
+    width: 100%;
+    padding: 0 10px;
     background: #fff;
     border-radius: 3px;
-    overflow: hidden;
-    height: 900px;
+    overflow-y: auto;
+    height: 100%;
+    margin-top: 32px;
 }
 
-.section-title-bar {
-    background: #474747;
-    padding: 10px 15px;
+.card-half {
+    width: 100% !important;
+    margin: 0 auto 10px auto;
 }
 
-.section-divider {
+.card-header {
+    padding: 10px 14px;
+}
+
+.card-body {
+    padding: 10px 12px;
+}
+
+.section-title-bar .bg-dark {
+    height: 30px;
+}
+
+.section-content {
+    height: calc(100% - 30px);
+    overflow-y: auto;
+}
+
+
+.card-half .card-body {
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.divider-line {
     border-top: 2px solid #ccc;
-    margin: 20px 0;
-}
-
-.remove-btn:hover {
-    color: #dc3545 !important;
-    cursor: pointer;
+    margin: 14px 0;
 }
