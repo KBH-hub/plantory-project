@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -52,13 +53,13 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     }
 
     @Override
-    public List<PlantingCalendarVO> getWateringCalendar(Date startDate, Date endDate) {
-        return plantingCalendarMapper.selectWateringCalendar(startDate, endDate);
+    public List<PlantingCalendarVO> getWateringCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
+        return plantingCalendarMapper.selectWateringCalendar(memberId, startDate, endDate);
     }
 
     @Override
-    public List<PlantingCalendarVO> getDiaryCalendar(Date startDate, Date endDate) {
-        return plantingCalendarMapper.selectDiaryCalendar(startDate, endDate);
+    public List<PlantingCalendarVO> getDiaryCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
+        return plantingCalendarMapper.selectDiaryCalendar(memberId, startDate, endDate);
     }
 
     @Override

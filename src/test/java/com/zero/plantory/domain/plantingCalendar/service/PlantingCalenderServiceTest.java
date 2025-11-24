@@ -14,6 +14,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,11 +60,12 @@ class PlantingCalenderServiceTest {
     @Test
     @DisplayName("캘린더 물주기 월간 조회")
     void getWateringCalendarTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-01 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-11-01 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantCalenderService.getWateringCalendar(startDate, endDate);
+                plantCalenderService.getWateringCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
     }
@@ -70,11 +73,12 @@ class PlantingCalenderServiceTest {
     @Test
     @DisplayName("캘린더 관찰일지 월간 조회")
     void getDiaryCalendarTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-01 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-11-01 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantCalenderService.getDiaryCalendar(startDate, endDate);
+                plantCalenderService.getDiaryCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
     }

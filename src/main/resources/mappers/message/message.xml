@@ -69,6 +69,15 @@
         </foreach>
     </update>
 
+    <update id="deleteSenderMessages">
+        UPDATE message
+        SET sender_del_flag = sysdate()
+        WHERE message_id IN
+        <foreach collection="messageIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="selectMessageWriteInfo"
             resultType="com.zero.plantory.global.vo.MessageVO">
         SELECT

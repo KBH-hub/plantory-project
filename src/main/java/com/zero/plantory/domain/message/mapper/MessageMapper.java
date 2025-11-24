@@ -13,6 +13,7 @@ public interface MessageMapper {
     List<SelectMessageListVO> selectMessages(SelectMessageSearchVO vo);
     int updateReadFlag(@Param("messageId") Long messageId);
     int deleteMessages(List<Long> messageIds);
+    int deleteSenderMessages(List<Long> messageIds);
     MessageVO selectMessageWriteInfo(@Param("senderId") Long senderId, @Param("targetType") String targetType, @Param("targetId") Long targetId);
     int insertMessage(MessageVO message);
     MessageVO selectMessageDetail(@Param("messageId") Long messageId);
