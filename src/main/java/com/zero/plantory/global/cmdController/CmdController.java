@@ -36,19 +36,49 @@ public class CmdController {
         return "reportManagement";
     }
 
-    @RequestMapping("/sharingCommunityList")
-    public String sharingCommunityList(){
-        return "sharingCommunityList";
-    }
-
-    @RequestMapping("/sharingPostRegist")
-    public String sharingPostRegist(){
-        return "sharingPostRegist";
-    }
-
     @RequestMapping("/readQuestion")
     public String readQuestion(){
         return "readQuestion";
+    }
+
+    @RequestMapping("/sharingList")
+    public String sharingList(){
+        return "sharingList";
+    }
+
+    @RequestMapping("/sharingCreate")
+    public String sharingCreate(){
+        return "sharingCreate";
+    }
+
+    @RequestMapping("/sharingUpdate")
+    public String sharingUpdate(){
+        return "sharingUpdate";
+    }
+
+    @RequestMapping("/sharingDetail")
+    public String sharingDetail(){
+        return "sharingDetail";
+    }
+
+    @RequestMapping("/sharingDetail-other")
+    public String sharingDetailOther(){
+        return "sharingDetail-other";
+    }
+
+    @RequestMapping("/dashboard")
+    public String dashboard(){
+        return "dashboard";
+    }
+
+    @RequestMapping("/messageList")
+    public String messageList(){
+        return "messageList";
+    }
+
+    @RequestMapping("/messageDetail")
+    public String messageDetail(){
+        return "messageDetail";
     }
 
 }
