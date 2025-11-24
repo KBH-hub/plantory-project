@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
+import com.zero.plantory.domain.plantingCalendar.dto.SMSRequestDTO;
 import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
 import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
 import com.zero.plantory.global.vo.DiaryVO;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,9 @@ class PlantingCalenderServiceTest {
     @Autowired
     PlantingCalenderService plantCalenderService;
 
+    @Autowired
+    SMSService smsService;
+
     @Test
     @DisplayName("물주기 등록")
     void registerWateringTest() {
@@ -34,6 +39,17 @@ class PlantingCalenderServiceTest {
         int result = plantCalenderService.registerWatering(myplantId);
 
         log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("물주기 알림 전송 처리")
+    void deleteDiaryTest() throws Exception {
+        SMSRequestDTO dto = SMSRequestDTO.builder()
+                .to("01096010238")
+                .from("01088952508")
+                .text("오늘(11.24) 재육볶음 물 주는 날입니다")
+                .build();
+        smsService.sendSMS(dto);
     }
 
     @Test
