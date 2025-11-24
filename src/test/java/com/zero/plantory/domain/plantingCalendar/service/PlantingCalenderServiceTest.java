@@ -45,11 +45,11 @@ class PlantingCalenderServiceTest {
     @DisplayName("물주기 알림 전송 처리")
     void deleteDiaryTest() throws Exception {
         SMSRequestDTO dto = SMSRequestDTO.builder()
-                .to("01096010238")
+                .to("01088952508")
                 .from("01088952508")
-                .text("오늘(11.24) 재육볶음 물 주는 날입니다")
+                .text("드디어 됐당")
                 .build();
-        smsService.sendSMS(dto);
+        log.info(smsService.sendSMS(dto).toString());
     }
 
     @Test
