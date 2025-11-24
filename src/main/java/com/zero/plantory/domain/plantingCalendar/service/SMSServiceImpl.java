@@ -16,17 +16,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SMSServiceImpl implements SMSService {
 
-    @Value("${solapi.api-key}")
-    private String apiKey;
-    @Value("${solapi.api-secret}")
-    private String apiSecret;
-
+    private final SolapiConfig solapi;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Map<String,Object> sendSMS(SMSRequestDTO request) throws Exception {
-        String auth = SolapiAuth.createAuthHeader(apiKey, apiSecret);
+        String auth = SolapiAuth.createAuthHeader(solapi.apiKey(), solapi.apiSecret());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", auth);
