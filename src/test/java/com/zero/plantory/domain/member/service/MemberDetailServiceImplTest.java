@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import static org.mockito.Mockito.*;
 
 @Slf4j
-class MemberServiceImplTest {
+class MemberDetailServiceImplTest {
 
     @Mock
     private MemberMapper memberMapper;

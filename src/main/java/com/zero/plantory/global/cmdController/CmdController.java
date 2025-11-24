@@ -1,82 +1,98 @@
 package com.zero.plantory.global.cmdController;
 
+import com.zero.plantory.domain.member.service.MemberService;
+import com.zero.plantory.global.vo.MemberVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequiredArgsConstructor
 @Controller
 public class CmdController {
+
+    final MemberService memberService;
 
     @RequestMapping("/")
     public String index(){
         return "login";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login(){
         return "login";
     }
 
-    @RequestMapping("/signUp")
+    @GetMapping("/signUp")
     public String signUp(){
         return "signUp";
     }
 
-    @RequestMapping("/termsOfService")
+    @PostMapping("/signUp")
+    public String signUpMember(MemberVO member){
+        memberService.signUp(member);
+        return "redirect:/login";
+    }
+
+
+
+    @GetMapping("/termsOfService")
     public String termsOfService(){
         return "termsOfService";
     }
 
-    @RequestMapping("/plantCalendar")
+    @GetMapping("/plantCalendar")
     public String plantCalendar(){
         return "plantCalendar";
     }
 
-    @RequestMapping("/reportManagement")
+    @GetMapping("/reportManagement")
     public String reportManagement(){
         return "reportManagement";
     }
 
-    @RequestMapping("/readQuestion")
+    @GetMapping("/readQuestion")
     public String readQuestion(){
         return "readQuestion";
     }
 
-    @RequestMapping("/sharingList")
+    @GetMapping("/sharingList")
     public String sharingList(){
         return "sharingList";
     }
 
-    @RequestMapping("/sharingCreate")
+    @GetMapping("/sharingCreate")
     public String sharingCreate(){
         return "sharingCreate";
     }
 
-    @RequestMapping("/sharingUpdate")
+    @GetMapping("/sharingUpdate")
     public String sharingUpdate(){
         return "sharingUpdate";
     }
 
-    @RequestMapping("/sharingDetail")
+    @GetMapping("/sharingDetail")
     public String sharingDetail(){
         return "sharingDetail";
     }
 
-    @RequestMapping("/sharingDetail-other")
+    @GetMapping("/sharingDetail-other")
     public String sharingDetailOther(){
         return "sharingDetail-other";
     }
 
-    @RequestMapping("/dashboard")
+    @GetMapping("/dashboard")
     public String dashboard(){
         return "dashboard";
     }
 
-    @RequestMapping("/messageList")
+    @GetMapping("/messageList")
     public String messageList(){
         return "messageList";
     }
 
-    @RequestMapping("/messageDetail")
+    @GetMapping("/messageDetail")
     public String messageDetail(){
         return "messageDetail";
     }

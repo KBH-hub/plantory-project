@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
 @SpringBootTest
-class MemberMapperTest {
+class MemberDetailMapperTest {
 
     @Autowired
     MemberMapper memberMapper;
