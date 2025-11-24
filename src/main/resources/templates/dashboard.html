@@ -9,141 +9,175 @@
 <body class="bg-light" style="min-width:1280px;">
 <div th:replace="fragments/header :: headerBar"></div>
 
-<div class="mx-auto" style="width:1280px; padding:16px;">
+<div class="mx-auto" style="width:1470px; padding:16px;">
+    <div class="mb-3">
+        <div id="plantBanner" class="carousel slide shadow-sm" data-bs-ride="carousel" style="height:200px; border-radius:8px; overflow:hidden;">
+            <div class="carousel-inner" style="height:100%;">
+                <!-- 1 -->
+                <div class="carousel-item active" style="height:100%;">
+                    <img th:src="@{/image/banner_1.png}" src="/image/banner_1.png" class="d-block w-100"
+                         alt="싱그러운 몬스테라" style="height:100%; object-fit:cover;">
+                    <div class="carousel-caption d-none d-md-block text-start">
+                        <h5 class="fw-bold mb-1">오늘의 인기 나눔</h5>
+                        <p class="mb-2 small">가까운 동네에서 식물을 나눔받아보세요.</p>
+                        <a href="/share/list" class="btn btn-sm btn-light fw-semibold">나눔 보러가기</a>
+                    </div>
+                </div>
+                <!-- 2 -->
+                <div class="carousel-item" style="height:100%;">
+                    <img th:src="@{/image/banner_2.png}" src="/image/banner_2.png" class="d-block w-100"
+                         alt="산세베리아" style="height:100%; object-fit:cover;">
+                    <div class="carousel-caption d-none d-md-block text-start">
+                        <h5 class="fw-bold mb-1">관리 쉬운 식물 검색</h5>
+                        <p class="mb-2 small">초보자에게 딱 맞는 식물을 찾아보세요.</p>
+                        <a href="/recommend" class="btn btn-sm btn-light fw-semibold">식물 사전 보러가기</a>
+                    </div>
+                </div>
+                <!-- 3 -->
+                <div class="carousel-item" style="height:100%;">
+                    <img th:src="@{/image/banner_3.png}" src="/image/banner_3.png" class="d-block w-100"
+                         alt="허브 & 다육" style="height:100%; object-fit:cover;">
+                    <div class="carousel-caption d-none d-md-block text-start">
+                        <h5 class="fw-bold mb-1">나의 식물 관리</h5>
+                        <p class="mb-2 small">나의 식물 일정을 관리하세요.</p>
+                        <a href="/share/schedule" class="btn btn-sm btn-light fw-semibold">식물 캘린더 보러가기</a>
+                    </div>
+                </div>
+            </div>
 
-    <div class="d-flex flex-nowrap" style="gap:16px;">
+            <!-- 좌우 컨트롤 -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#plantBanner" data-bs-slide="prev" style="width:7%;">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">이전</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#plantBanner" data-bs-slide="next" style="width:7%;">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">다음</span>
+            </button>
 
-        <div style="width:936px;">
-
-            <div class="d-flex flex-nowrap" style="gap:16px; margin-bottom:16px;">
-                <div class="card shadow-sm" style="width:300px;">
-                    <div class="card-body d-flex align-items-center" style="padding:16px;">
-                        <img th:src="@{/image/dashboard_1.png}" src="/image/dashboard_1.png"
-                             width="40" height="40" alt="내 식물" class="me-3" loading="lazy">
-                        <div style="min-width:0;">
-                            <div style="font-size:12px; color:#6c757d;">내 식물</div>
-                            <div style="font-size:32px; font-weight:600; line-height:32px;">5</div>
+            <!-- 인디케이터 -->
+            <div class="carousel-indicators" style="margin-bottom:6px;">
+                <button type="button" data-bs-target="#plantBanner" data-bs-slide-to="0" class="active" aria-current="true" aria-label="1"></button>
+                <button type="button" data-bs-target="#plantBanner" data-bs-slide-to="1" aria-label="2"></button>
+                <button type="button" data-bs-target="#plantBanner" data-bs-slide-to="2" aria-label="3"></button>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-nowrap" style="gap:20px;">
+        <div style="width:1000px;">
+            <div class="d-flex flex-nowrap gap-3 mb-3">
+                <div class="card shadow-sm" style="width:340px;">
+                    <div class="card-body d-flex align-items-center p-3">
+                        <img th:src="@{/image/dashboard_1.png}" src="/image/dashboard_1.png" width="40" height="40" alt="내 식물" class="me-3" loading="lazy">
+                        <div class="text-truncate">
+                            <div class="text-secondary small">내 식물</div>
+                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">5</div>
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-sm" style="width:300px;">
-                    <div class="card-body d-flex align-items-center" style="padding:16px;">
-                        <img th:src="@{/image/dashboard_2.png}" src="/image/dashboard_2.png"
-                             width="40" height="40" alt="오늘 물 필요 식물" class="me-3" loading="lazy">
-                        <div style="min-width:0;">
-                            <div style="font-size:12px; color:#6c757d;">오늘 물 필요 식물</div>
-                            <div style="font-size:32px; font-weight:600; line-height:32px;">2</div>
+                <div class="card shadow-sm" style="width:340px;">
+                    <div class="card-body d-flex align-items-center p-3">
+                        <img th:src="@{/image/dashboard_2.png}" src="/image/dashboard_2.png" width="40" height="40" alt="오늘 물 필요 식물" class="me-3" loading="lazy">
+                        <div class="text-truncate">
+                            <div class="text-secondary small">오늘 물 필요 식물</div>
+                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">2</div>
                         </div>
                     </div>
                 </div>
-                <div class="card shadow-sm" style="width:300px;">
-                    <div class="card-body d-flex align-items-center" style="padding:16px;">
-                        <img th:src="@{/image/dashboard_3.png}" src="/image/dashboard_3.png"
-                             width="40" height="40" alt="관심 필요 식물" class="me-3" loading="lazy">
-                        <div style="min-width:0;">
-                            <div style="font-size:12px; color:#6c757d;">관심 필요 식물</div>
-                            <div style="font-size:32px; font-weight:600; line-height:32px;">1</div>
+                <div class="card shadow-sm" style="width:340px;">
+                    <div class="card-body d-flex align-items-center p-3">
+                        <img th:src="@{/image/dashboard_3.png}" src="/image/dashboard_3.png" width="40" height="40" alt="관심 필요 식물" class="me-3" loading="lazy">
+                        <div class="text-truncate">
+                            <div class="text-secondary small">관심 필요 식물</div>
+                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">1</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <h6 style="margin:8px 0; font-size:16px;">주목할 만한 나눔</h6>
+            <h5 style="margin:8px 0; font-weight:700;">주목할 만한 나눔</h5>
 
-            <div class="d-flex flex-nowrap" style="gap:16px;">
-                <div class="card shadow-sm" style="width:300px;">
-                    <img src="data:image/jpeg;base64,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"
-                         alt="나뭇잎" style="width:300px; height:225px; object-fit:cover;">
-                    <div class="card-body" style="padding:16px;">
-                        <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600;">
-                            식물 나눔합니다~
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center" style="margin-top:8px;">
-                            <small class="text-muted">6시간 전</small>
-                            <small class="text-muted">
-                                <i class="bi bi-chat me-1"></i>2
-                                <i class="bi bi-heart ms-3 me-1"></i>5
-                            </small>
+            <div class="d-flex flex-nowrap gap-3">
+                <a href="#" class="text-decoration-none text-reset" style="width:350px;">
+                    <div class="card shadow-sm h-100">
+                        <img th:src="@{/image/sharing_ex_1.png}" src="/image/sharing_ex_1.png" alt="나뭇잎" class="w-100" style="height:375px; object-fit:cover;">
+                        <div class="card-body p-3">
+                            <div class="fw-semibold text-truncate">식물 나눔합니다~</div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-muted">6시간 전</small>
+                                <small class="text-muted">
+                                    <i class="bi bi-chat me-1"></i>2
+                                    <i class="bi bi-heart ms-3 me-1"></i>5
+                                </small>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card shadow-sm" style="width:300px;">
-                    <img src="data:image/jpeg;base64,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"
-                         alt="허브 화분" style="width:300px; height:225px; object-fit:cover;">
-                    <div class="card-body" style="padding:16px;">
-                        <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600;">
-                            식물 가져가실분
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center" style="margin-top:8px;">
-                            <small class="text-muted">6시간 전</small>
-                            <small class="text-muted">
-                                <i class="bi bi-chat me-1"></i>1
-                                <i class="bi bi-heart ms-3 me-1"></i>3
-                            </small>
+                <a href="#" class="text-decoration-none text-reset" style="width:350px;">
+                    <div class="card shadow-sm h-100">
+                        <img th:src="@{/image/sharing_ex_2.png}" src="/image/sharing_ex_2.png"alt="허브 화분" class="w-100" style="height:375px; object-fit:cover;">
+                        <div class="card-body p-3">
+                            <div class="fw-semibold text-truncate">식물 가져가실분</div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-muted">6시간 전</small>
+                                <small class="text-muted">
+                                    <i class="bi bi-chat me-1"></i>1
+                                    <i class="bi bi-heart ms-3 me-1"></i>3
+                                </small>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card shadow-sm" style="width:300px;">
-                    <img src="data:image/jpeg;base64,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"
-                         alt="칼라데움 잎" style="width:300px; height:225px; object-fit:cover;">
-                    <div class="card-body" style="padding:16px;">
-                        <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:600;">
-                            이사갑니다 나눔이요
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center" style="margin-top:8px;">
-                            <small class="text-muted">3시간 전</small>
-                            <small class="text-muted">
-                                <i class="bi bi-chat me-1"></i>0
-                                <i class="bi bi-heart ms-3 me-1"></i>5
-                            </small>
+                <a href="#" class="text-decoration-none text-reset" style="width:350px;">
+                    <div class="card shadow-sm h-100">
+                        <img th:src="@{/image/sharing_ex_3.png}" src="/image/sharing_ex_3.png" alt="칼라데움 잎" class="w-100" style="height:375px; object-fit:cover;">
+                        <div class="card-body p-3">
+                            <div class="fw-semibold text-truncate">이사갑니다 나눔이요</div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-muted">3시간 전</small>
+                                <small class="text-muted">
+                                    <i class="bi bi-chat me-1"></i>0
+                                    <i class="bi bi-heart ms-3 me-1"></i>5
+                                </small>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
-
         </div>
 
-        <div style="width:328px;"><div style="width:328px;">
+        <div style="width:420px;">
             <div class="card shadow-sm mb-3">
                 <div class="card-header bg-dark text-white py-2">
                     <h6 class="m-0 fw-bold">오늘의 식물 관리</h6>
                 </div>
 
-                <div class="card-body p-2">
-                    <!-- 물주기 -->
+                <div class="card-body p-2" style="min-height: 560px;">
                     <div class="card mb-2">
                         <div class="card-header bg-primary text-white py-2 d-flex align-items-center">
                             <i class="bi bi-droplet me-2"></i>
                             <span class="fw-semibold small">물주기</span>
                         </div>
-                        <div class="card-body p-2" id="wateringListContainer">
-                            <!-- 데이터 주입 전 기본 표시 -->
+                        <div class="card-body p-2" id="wateringListContainer" style="min-height: 225px;">
                             <div class="text-muted small">오늘 물 줄 식물이 없습니다.</div>
                         </div>
                     </div>
 
-                    <!-- 관찰일지 -->
                     <div class="card">
-                        <div class="card-header bg-warning py-2 d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-journal-text me-2"></i>
-                                <span class="fw-semibold small">관찰일지</span>
-                            </div>
-                            <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#diaryModal">+ 추가</button>
+                        <div class="card-header bg-warning py-2 d-flex align-items-center">
+                            <i class="bi bi-journal-text me-2"></i>
+                            <span class="fw-semibold small">관찰일지</span>
                         </div>
-                        <div class="card-body p-2" id="diaryListContainer">
-                            <!-- 데이터 주입 전 기본 표시 -->
+                        <div class="card-body p-2" id="diaryListContainer" style="min-height: 225px;">
                             <div class="text-muted small">최근 작성된 관찰일지가 없습니다.</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
