@@ -38,3 +38,7 @@ solapi:
 
 server:
   port: 5432
+
+openapi:
+  nongsaro:
+    key: ${OPENAPI_NONGSARO_KEY}
