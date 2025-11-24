@@ -82,11 +82,21 @@ public class MessageMapperTests {
     }
 
     @Test
-    @DisplayName("쪽지 삭제 처리")
+    @DisplayName("수신자 쪽지 삭제 처리")
     void deleteMessagesTest() {
         List<Long> messageIds = List.of(1L, 2L);
 
         int result = messageMapper.deleteMessages(messageIds);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("발신자 쪽지 삭제 처리")
+    void deleteSenderMessagesTest() {
+        List<Long> messageIds = List.of(1L, 2L);
+
+        int result = messageMapper.deleteSenderMessages(messageIds);
 
         log.info(String.valueOf(result));
     }

@@ -30,13 +30,26 @@ public class MessageServiceImpl implements MessageService {
         for (Long messageId : messageIds) {
             MessageVO message = messageMapper.selectMessageDetail(messageId);
             if (message == null) continue;
-            if (Objects.equals(removerId, message.getSenderId()) ||
-                    Objects.equals(removerId, message.getReceiverId())) {
+            if (Objects.equals(removerId, message.getReceiverId())) {
                 deletableIds.add(messageId);
             }
         }
         if (deletableIds.isEmpty()) return 0;
         return messageMapper.deleteMessages(deletableIds);
+    }
+
+    @Override
+    public int removeSenderMessages(List<Long> messageIds, Long removerId) {
+        List<Long> deletableIds = new ArrayList<>();
+        for (Long messageId : messageIds) {
+            MessageVO message = messageMapper.selectMessageDetail(messageId);
+            if (message == null) continue;
+            if (Objects.equals(removerId, message.getSenderId())) {
+                deletableIds.add(messageId);
+            }
+        }
+        if (deletableIds.isEmpty()) return 0;
+        return messageMapper.deleteSenderMessages(deletableIds);
     }
 
     @Override

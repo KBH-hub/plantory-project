@@ -41,12 +41,23 @@ class MessageServiceTest {
     }
 
     @Test
-    @DisplayName("메시지 삭제 처리")
+    @DisplayName("수신자 메시지 삭제 처리")
     void removeMessageTest() {
         List<Long> messageIds = List.of(1L, 2L);
         Long removerId = 1L;
 
         int result = messageService.removeMessages(messageIds, removerId);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
+    @DisplayName("발신자 메시지 삭제 처리")
+    void removeSenderMessageTest() {
+        List<Long> messageIds = List.of(3L, 4L);
+        Long removerId = 11L;
+
+        int result = messageService.removeSenderMessages(messageIds, removerId);
 
         log.info(String.valueOf(result));
     }

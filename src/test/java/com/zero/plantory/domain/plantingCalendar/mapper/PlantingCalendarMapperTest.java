@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -62,11 +64,12 @@ class PlantingCalendarMapperTest {
     @Test
     @DisplayName("물주기 월단위 조회 처리")
     void selectWateringByMonthTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-01 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-11-01 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantingCalendarMapper.selectWateringCalendar(startDate, endDate);
+                plantingCalendarMapper.selectWateringCalendar(memberId ,startDate, endDate);
 
         log.info(String.valueOf(result));
     }
@@ -74,22 +77,24 @@ class PlantingCalendarMapperTest {
     @Test
     @DisplayName("관찰일지 월단위 조회 처리")
     void selectDiaryByMonthTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-01 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-11-01 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantingCalendarMapper.selectDiaryCalendar(startDate, endDate);
+                plantingCalendarMapper.selectDiaryCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
     }
     @Test
     @DisplayName("물주기 일단위 조회 처리")
     void selectWateringByDayTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-19 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-10-20 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-19 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-10-20 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantingCalendarMapper.selectWateringCalendar(startDate, endDate);
+                plantingCalendarMapper.selectWateringCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
     }
@@ -97,11 +102,12 @@ class PlantingCalendarMapperTest {
     @Test
     @DisplayName("관찰일지 일단위 조회 처리")
     void selectDiaryByDayTest() {
-        Date startDate = java.sql.Timestamp.valueOf("2025-10-19 00:00:00");
-        Date endDate   = java.sql.Timestamp.valueOf("2025-10-20 00:00:00");
+        Long memberId = 1L;
+        LocalDateTime startDate = Timestamp.valueOf("2025-10-03 00:00:00").toLocalDateTime();
+        LocalDateTime endDate   = Timestamp.valueOf("2025-10-04 00:00:00").toLocalDateTime();
 
         List<PlantingCalendarVO> result =
-                plantingCalendarMapper.selectDiaryCalendar(startDate, endDate);
+                plantingCalendarMapper.selectDiaryCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
     }

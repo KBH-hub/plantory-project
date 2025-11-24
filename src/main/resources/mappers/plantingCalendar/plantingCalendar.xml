@@ -30,15 +30,17 @@
         SELECT
             w.watering_id,
             w.myplant_id,
-            p.name myplant_name,
-            NULL memo,
+            p.member_id,
+            p.name,
             w.date_at,
             'WATERING' type
         FROM watering w
-                 JOIN myplant p ON w.myplant_id = p.myplant_id
-        WHERE w.date_at >= #{startDate, jdbcType=TIMESTAMP}
-          AND w.date_at &lt;  #{endDate,   jdbcType=TIMESTAMP}
-        ORDER BY w.date_at ASC
+        JOIN myplant p ON w.myplant_id = p.myplant_id
+        WHERE p.member_id = 1
+            AND p.del_flag IS NULL
+            AND w.date_at >= #{startDate, jdbcType=TIMESTAMP}
+            AND w.date_at &lt; #{endDate, jdbcType=TIMESTAMP}
+        ORDER BY w.date_at ASC;
     </select>
 
     <select id="selectDiaryCalendar"
@@ -47,15 +49,18 @@
         SELECT
             d.diary_id,
             d.myplant_id,
+            p.member_id,
             p.name,
             d.memo,
             d.created_at,
-            'DIARY' type
+        'DIARY' type
         FROM diary d
-                 JOIN myplant p ON d.myplant_id = p.myplant_id
-        WHERE d.created_at >= #{startDate, jdbcType=TIMESTAMP}
-          AND d.created_at &lt;  #{endDate,   jdbcType=TIMESTAMP}
-        ORDER BY d.created_at ASC
+        JOIN myplant p ON d.myplant_id = p.myplant_id
+        WHERE p.member_id = #{memberId}
+            AND p.del_flag IS NULL
+            AND d.created_at >= #{startDate, jdbcType=TIMESTAMP}
+            AND d.created_at &lt; #{endDate, jdbcType=TIMESTAMP}
+        ORDER BY d.created_at ASC;
     </select>
 
     <select id="selectDiaryUpdateInfo" resultType="com.zero.plantory.global.vo.DiaryVO">

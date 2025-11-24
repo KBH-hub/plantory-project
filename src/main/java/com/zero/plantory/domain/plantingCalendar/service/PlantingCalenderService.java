@@ -7,6 +7,7 @@ import com.zero.plantory.global.vo.ImageVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public interface PlantingCalenderService {
     int registerWatering(Long myplantId);
     int updatePlantWateringCheck(Long wateringId);
     int removePlantWatering(Long myplantId, Long removerId);
-    List<PlantingCalendarVO> getWateringCalendar(Date startDate, Date endDate);
-    List<PlantingCalendarVO> getDiaryCalendar(Date startDate, Date endDate);
+    List<PlantingCalendarVO> getWateringCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate);
+    List<PlantingCalendarVO> getDiaryCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate);
     DiaryVO findDiaryUpdateInfo(Long diaryId);
     List<ImageVO> findDiaryUpdateImageInfo(Long diaryId);
     int updateDiary(DiaryVO vo, List<ImageVO> delImgList, List<MultipartFile> files, Long memberId) throws IOException;

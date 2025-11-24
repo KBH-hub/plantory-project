@@ -10,6 +10,7 @@ import java.util.List;
 public interface MessageService {
     List<SelectMessageListVO> getMessageList(SelectMessageSearchVO vo);
     int removeMessages(List<Long> messageIds, Long removerId);
+    int removeSenderMessages(List<Long> messageIds, Long removerId);
     MessageVO findMessageWriteInfo(Long senderId, String targetType, Long targetId);
     int registerMessage(MessageVO message);
     MessageVO findMessageDetail(Long messageId, Long viewerId);
