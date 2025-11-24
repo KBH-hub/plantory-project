@@ -32,5 +32,9 @@ mybatis:
 #    open-in-view: false
 #    generate-ddl: true
 
+solapi:
+  api-key: ${SOLAPI_API_KEY}
+  api-secret: ${SOLAPI_API_SECRET}
+
 server:
   port: 5432
