@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface PlantingCalenderService {
-    int registerWatering(Long myplantId);
     int updatePlantWateringCheck(Long wateringId);
     int removePlantWatering(Long myplantId, Long removerId);
     List<PlantingCalendarVO> getWateringCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate);
@@ -22,4 +21,5 @@ public interface PlantingCalenderService {
     int updateDiary(DiaryVO vo, List<ImageVO> delImgList, List<MultipartFile> files, Long memberId) throws IOException;
     List<selectMyPlantDiaryVO> getMyPlant(Long memberId);
     int registerDiary(DiaryVO vo, List<MultipartFile> files, Long memberId) throws IOException;
+    int processOnce(int batchSize);
 }

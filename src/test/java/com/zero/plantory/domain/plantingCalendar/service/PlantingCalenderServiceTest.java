@@ -31,23 +31,14 @@ class PlantingCalenderServiceTest {
     @Autowired
     SMSService smsService;
 
-    @Test
-    @DisplayName("물주기 등록")
-    void registerWateringTest() {
-        Long myplantId = 1L;
-
-        int result = plantCalenderService.registerWatering(myplantId);
-
-        log.info(String.valueOf(result));
-    }
 
     @Test
     @DisplayName("물주기 알림 전송 처리")
     void deleteDiaryTest() throws Exception {
         SMSRequestDTO dto = SMSRequestDTO.builder()
-                .to("01088952508")
-                .from("01088952508")
-                .text("드디어 됐당")
+                .to("01000000000")
+                .from("01000000000")
+                .text("문자 전송 테스트")
                 .build();
         log.info(smsService.sendSMS(dto).toString());
     }

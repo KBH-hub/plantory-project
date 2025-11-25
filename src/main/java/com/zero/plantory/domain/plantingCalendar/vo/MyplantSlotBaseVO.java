@@ -11,7 +11,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DueWateringRowVO {
+public class MyplantSlotBaseVO {
     private Long myplantId;
-    private LocalDateTime nextAt;
+    private LocalDateTime startAt;
+    private LocalDateTime endDate;
+    private Integer interval;
+    private String phone;
+    private String name;
 }

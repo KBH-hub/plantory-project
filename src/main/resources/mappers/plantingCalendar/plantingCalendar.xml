@@ -92,44 +92,27 @@
         VALUES (#{myplantId},#{activity}, #{state}, #{memo},NOW());
     </insert>
 
-    <select id="selectDueWateringWithNextAt" parameterType="int"
-            resultType="com.zero.plantory.domain.plantingCalendar.vo.DueWateringRowVO">
-        SELECT s.myplantId, s.nextAt
-        FROM (
-        SELECT
-        mp.myplant_id AS myplantId,
-        CASE
-        WHEN NOW() &lt;= mp.start_at THEN mp.start_at
-        ELSE DATE_ADD(
+    <select id="selectMyplantsForWindow" parameterType="int"
+            resultType="com.zero.plantory.domain.plantingCalendar.vo.MyplantSlotBaseVO">
+        SELECT mp.myplant_id,
         mp.start_at,
-        INTERVAL CAST(
-        CEIL(
-        TIMESTAMPDIFF(SECOND, mp.start_at, NOW()) / (mp.`interval` * 86400)
-        ) * mp.`interval` AS SIGNED
-        ) DAY
-        )
-        END AS nextAt,
-        mp.end_date
+        mp.end_date,
+        mp.`interval`,
+        m.phone,
+        mp.name
         FROM myplant mp
-        WHERE mp.del_flag IS NULL
-        AND mp.start_at IS NOT NULL
-        AND mp.end_date IS NOT NULL
+        JOIN member m ON m.member_id = mp.member_id
+        WHERE mp.del_flag   IS NULL
+        AND mp.start_at   IS NOT NULL
+        AND mp.end_date   IS NOT NULL
         AND mp.`interval` IS NOT NULL
-        ) s
-        WHERE s.nextAt >  NOW()
-        AND s.nextAt &lt;= DATE_ADD(NOW(), INTERVAL 1 DAY)
-        AND s.nextAt &lt;= s.end_date
-        AND NOT EXISTS (
-        SELECT 1 FROM watering w
-        WHERE w.myplant_id = s.myplantId
-        AND w.date_at    = s.nextAt
-        )
-        ORDER BY s.nextAt ASC
+        AND mp.start_at &lt;= DATE_ADD(NOW(), INTERVAL 1 DAY)
+        AND mp.end_date >= NOW()
         LIMIT #{limit}
     </select>
 
-    <insert id="insertWateringAt">
-        INSERT INTO watering (myplant_id, date_at)
+    <insert id="insertWateringAtIgnore">
+        INSERT IGNORE INTO watering (myplant_id, date_at)
         VALUES (#{myplantId}, #{dateAt})
     </insert>
 </mapper>
