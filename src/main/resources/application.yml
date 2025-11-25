@@ -39,3 +39,13 @@ server:
 openapi:
   nongsaro:
     key: ${OPENAPI_NONGSARO_KEY}
+
+security:
+  remember-me:
+    key: dev-test-key   # 개발용
+
+
+#security:
+#  remember-me:
+#    key: ${REMEMBER_ME_KEY} #AWS 도커에 올릴땐 export REMEMBER_ME_KEY="랜덤문자열"처리
+

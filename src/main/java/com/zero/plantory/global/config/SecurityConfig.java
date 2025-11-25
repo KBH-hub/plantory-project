@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,11 +23,12 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final Environment env;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**");
+                .requestMatchers("/static/**", "/css/**", "/js/**", "/image/**","/data/**");
     }
 
 
@@ -58,21 +60,32 @@ public class SecurityConfig {
                                 "/members/login",
                                 "/members/signUp",
                                 "/termsOfService",
-                                "/css/**",
-                                "/js/**",
-                                "/image/**",
-                                "/data/**",
                                 "/api/members/exists"
                         ).permitAll()
-                        .requestMatchers("/**").hasRole("ADMIN")
+
+                        .requestMatchers(
+                                "/community/**",
+                                "/sharing/**",
+                                "/dashboard",
+                                "/my/**"
+                        ).authenticated()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .loginProcessingUrl("/members/login")
-                        .defaultSuccessUrl("/dashboard")
+                        .loginProcessingUrl("/login-process")
+                        .usernameParameter("membername")
+                        .defaultSuccessUrl("/dashboard",true)
                         .failureUrl("/login?error=true")
                         .permitAll()
+                )
+                .rememberMe(remember -> remember
+                        .key(env.getProperty("security.remember-me.key"))
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(60 * 60 * 24 * 7)
+                        .userDetailsService(userDetailsService)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
