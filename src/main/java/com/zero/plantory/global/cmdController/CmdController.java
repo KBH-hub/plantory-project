@@ -19,9 +19,98 @@ public class CmdController {
         return "login";
     }
 
+    @RequestMapping("/createQuestion")
+    public String createQuestion(){
+        return "createQuestion";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "dashboard";
+    }
+
+    @RequestMapping("/dryPlantDictionary")
+    public String dryPlantDictionary(){
+        return "dryPlantDictionary";
+    }
+
     @GetMapping("/login")
     public String login(){
         return "login";
+    }
+
+    @RequestMapping("/memberManagement")
+    public String memberManagement(){
+        return "memberManagement";
+    }
+
+    @GetMapping("/messageDetail")
+    public String messageDetail(){
+        return "messageDetail";
+    }
+
+    @GetMapping("/messageList")
+    public String messageList(){
+        return "messageList";
+    }
+
+    @RequestMapping("/myPlantManagement")
+    public String myPlantManagement(){return "myPlantManagement";}
+
+    @RequestMapping("/myProfile")
+    public String myProfile(){return "myProfile";}
+
+    @GetMapping("/plantCalendar")
+    public String plantCalendar(){
+        return "plantCalendar";
+    }
+
+    @RequestMapping("/questionList")
+    public String questionList(){
+        return "questionList";
+    }
+
+    @RequestMapping("/readDictionary")
+    public String readDictionary(){
+        return "readDictionary";
+    }
+
+    @GetMapping("/readQuestion")
+    public String readQuestion(){
+        return "readQuestion";
+    }
+
+    @GetMapping("/reportManagement")
+    public String reportManagement(){
+        return "reportManagement";
+    }
+
+    @GetMapping("/sharingCreate")
+    public String sharingCreate(){
+        return "sharingCreate";
+    }
+
+    @GetMapping("/sharingDetail")
+    public String sharingDetail(){
+        return "sharingDetail";
+    }
+
+    @GetMapping("/sharingDetail-other")
+    public String sharingDetailOther(){
+        return "sharingDetail-other";
+    }
+
+    @RequestMapping("/sharingHistory")
+    public String sharingHistory(){return "sharingHistory";}
+
+    @GetMapping("/sharingList")
+    public String sharingList(){
+        return "sharingList";
+    }
+
+    @GetMapping("/sharingUpdate")
+    public String sharingUpdate(){
+        return "sharingUpdate";
     }
 
     @GetMapping("/signUp")
@@ -35,72 +124,13 @@ public class CmdController {
         return "redirect:/login";
     }
 
-
-
     @GetMapping("/termsOfService")
     public String termsOfService(){
         return "termsOfService";
     }
 
-    @GetMapping("/plantCalendar")
-    public String plantCalendar(){
-        return "plantCalendar";
-    }
-
-    @GetMapping("/reportManagement")
-    public String reportManagement(){
-        return "reportManagement";
-    }
-
-    @GetMapping("/readQuestion")
-    public String readQuestion(){
-        return "readQuestion";
-    }
-
-    @GetMapping("/sharingList")
-    public String sharingList(){
-        return "sharingList";
-    }
-
-    @GetMapping("/sharingCreate")
-    public String sharingCreate(){
-        return "sharingCreate";
-    }
-
-    @GetMapping("/sharingUpdate")
-    public String sharingUpdate(){
-        return "sharingUpdate";
-    }
-
-    @GetMapping("/sharingDetail")
-    public String sharingDetail(){
-        return "sharingDetail";
-    }
-
-    @GetMapping("/sharingDetail-other")
-    public String sharingDetailOther(){
-        return "sharingDetail-other";
-    }
-
-    @GetMapping("/dashboard")
-    public String dashboard(){
-        return "dashboard";
-    }
-
-    @GetMapping("/messageList")
-    public String messageList(){
-        return "messageList";
-    }
-
-    @GetMapping("/messageDetail")
-    public String messageDetail(){
-        return "messageDetail";
-    }
-
-    @RequestMapping("/dryPlantDictionary")
-    public String dryPlantDictionary(){
-        return "dryPlantDictionary";
-    }
+    @RequestMapping("/updateMyInfo")
+    public String updateMyInfo(){return "updateMyInfo";}
 
     @RequestMapping("/updateReview")
     public String updateReview(){ return "updateReview"; }
@@ -109,38 +139,5 @@ public class CmdController {
     public String updateReviewTargetMember(){
         return "updateReviewTargetMember";
     }
-
-    @RequestMapping("/createQuestion")
-    public String createQuestion(){
-        return "createQuestion";
-    }
-
-    @RequestMapping("/questionList")
-    public String questionList(){
-        return "questionList";
-    }
-
-    @RequestMapping("/readDictionary")
-    public String readDictionary(){
-        return "readDictionary";
-    }
-
-    @RequestMapping("/memberManagement")
-    public String memberManagement(){
-        return "memberManagement";
-    }
-
-    @RequestMapping("/myPlantManagement")
-    public String myPlantManagement(){return "myPlantManagement";}
-
-    @RequestMapping("/myProfile")
-    public String myProfile(){return "myProfile";}
-
-    @RequestMapping("/sharingHistory")
-    public String sharingHistory(){return "sharingHistory";}
-
-    @RequestMapping("/updateMyInfo")
-    public String updateMyInfo(){return "updateMyInfo";}
-
 
 }
