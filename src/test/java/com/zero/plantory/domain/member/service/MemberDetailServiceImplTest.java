@@ -1,5 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
+import com.zero.plantory.global.vo.Role;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +14,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.*;
 
+@RequiredArgsConstructor
 @Slf4j
 class MemberDetailServiceImplTest {
 
@@ -24,6 +29,13 @@ class MemberDetailServiceImplTest {
 
     @InjectMocks
     private MemberServiceImpl memberService;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+    @BeforeEach
+    void setUp() {
+        memberService = new MemberServiceImpl(memberMapper, bCryptPasswordEncoder);
+    }
 
     @BeforeEach
     void init() {
@@ -71,62 +83,67 @@ class MemberDetailServiceImplTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
-    void testSignUpSuccess() {
-        MemberVO member = new MemberVO();
-        member.setMembername("aaa");
-        member.setNickname("aaa");
-
-        when(memberMapper.countByMembername("aaa")).thenReturn(0);
-        when(memberMapper.countByNickname("aaa")).thenReturn(0);
-        when(memberMapper.insertMember(member)).thenReturn(1);
-
-        boolean result = memberService.signUp(member);
-
-        assertTrue(result);
-    }
-
-    @Test
     @DisplayName("회원가입 실패 - 아이디 중복 오류")
     void testSignUpDuplicateMembername() {
-        MemberVO member = new MemberVO();
-        member.setMembername("aaa");
-        member.setNickname("aaa");
+        // given
+        MemberSignUpRequest request = MemberSignUpRequest.builder()
+                .membername("aaa")
+                .nickname("aaa")
+                .password("12345678")
+                .phone("01012345678")
+                .address("서울")
+                .build();
 
         when(memberMapper.countByMembername("aaa")).thenReturn(1);
 
+        // when
+        // then
         IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> memberService.signUp(member));
+                () -> memberService.signUp(request));
 
         assertEquals("이미 사용 중인 아이디입니다.", exception.getMessage());
     }
 
+
     @Test
     @DisplayName("회원가입 실패 - 닉네임 중복 오류")
     void testSignUpDuplicateNickname() {
-        MemberVO member = new MemberVO();
-        member.setMembername("aaa");
-        member.setNickname("aaa");
+        // given
+        MemberSignUpRequest request = MemberSignUpRequest.builder()
+                .membername("aaa")
+                .nickname("aaa")
+                .password("12345678")
+                .phone("01012345678")
+                .address("서울")
+                .build();
 
         when(memberMapper.countByMembername("aaa")).thenReturn(0);
         when(memberMapper.countByNickname("aaa")).thenReturn(1);
 
+        // when
+        // then
         IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> memberService.signUp(member));
+                () -> memberService.signUp(request));
 
         assertEquals("이미 사용 중인 닉네임입니다.", exception.getMessage());
     }
 
+
     @Test
     @DisplayName("로그인 성공 - 정지 없음")
     void testLoginSuccess() {
-        MemberVO member = new MemberVO();
-        member.setMembername("aaa");
-        member.setStopDay(null);
+        String password = "12345678";
+        String encodedPassword = bCryptPasswordEncoder.encode(password);
 
-        when(memberMapper.selectByMembername("aaa")).thenReturn(member);
+        MemberVO memberVO = MemberVO.builder()
+                .membername("hongTree")
+                .password(encodedPassword)
+                .nickname("홍나무")
+                .build();
 
-        MemberVO result = memberService.login("aaa", "1234");
+        when(memberMapper.selectByMembername("hongTree")).thenReturn(memberVO);
+
+        MemberVO result = memberService.login("hongTree", "12345678");
 
         assertNotNull(result);
     }

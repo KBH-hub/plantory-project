@@ -30,45 +30,57 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()   // 모든 요청 허용
-                )
-                .formLogin(AbstractHttpConfigurer::disable)  // 로그인 기능 끄기
-                .httpBasic(AbstractHttpConfigurer::disable); // Basic 로그인도 비활성화
-
-        return http.build();
-    }
-
-
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //
 //        http
-//                .csrf(csrf -> csrf.disable())
+//                .csrf(AbstractHttpConfigurer::disable)
 //                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/", "/login", "/signUp", "/termsOfService", "/css/**", "/js/**", "/image/**", "/data/**").permitAll()
-//                        .requestMatchers("/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated()
+//                        .anyRequest().permitAll()
 //                )
-//                .formLogin(login -> login
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/login-process")
-//                        .defaultSuccessUrl("/dashboard")
-//                        .failureUrl("/login?error=true")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/login")
-//                );
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable);
 //
 //        return http.build();
 //    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/signUp",
+                                "/members/login",
+                                "/members/signUp",
+                                "/termsOfService",
+                                "/css/**",
+                                "/js/**",
+                                "/image/**",
+                                "/data/**",
+                                "/api/members/exists"
+                        ).permitAll()
+                        .requestMatchers("/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/members/login")
+                        .defaultSuccessUrl("/dashboard")
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                );
+
+        return http.build();
+    }
 
 
     @Bean

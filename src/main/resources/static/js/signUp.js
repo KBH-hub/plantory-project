@@ -6,11 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const pw = document.querySelector('input[type="password"]');
     const pwCheck = document.getElementById("pwCheck");
 
-
     form.addEventListener("submit", (event) => {
+        const sido = document.getElementById("sido").value;
+        const sigungu = document.getElementById("sigungu").value;
+        document.getElementById("addressInput").value = `${sido} ${sigungu}`;
 
         if (!isIdChecked || !isNickNameChecked) {
-            alert("아이디와 닉네임 중복을 확인해주세요.");
+            showAlert("아이디와 닉네임 중복을 확인해주세요.");
             event.preventDefault();
             return;
         }
@@ -29,65 +31,54 @@ document.addEventListener("DOMContentLoaded", () => {
         form.classList.add("was-validated");
     });
 
-    const phoneInput = document.getElementById("phoneNumberInput");
+    document.getElementById("checkIdBtn")
+        .addEventListener("click", () => checkDuplicate("membernameInput", "membernameMessage", "/api/members/exists"));
 
-    phoneInput.addEventListener("keydown", function (e) {
-        const allowed = [
-            "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"
-        ];
+    document.getElementById("checkNickNameBtn")
+        .addEventListener("click", () => checkDuplicate("nicknameInput", "nicknameMessage", "/api/members/exists"));
 
-        const isNumberKey = /^[0-9]$/.test(e.key);
-
-        if (!isNumberKey && !allowed.includes(e.key)) {
-            e.preventDefault();
-        }
+    document.getElementById("membernameInput").addEventListener("input", () => {
+        isIdChecked = false;
     });
 
-    phoneInput.addEventListener("input", function(e) {
-        let value = e.target.value.replace(/[^0-9]/g, "");
-        if (value.length > 11) value = value.slice(0, 11);
-
-        if (value.length > 7) {
-            value = value.replace(/(\d{3})(\d{4})(\d{0,4})/, "$1-$2-$3");
-        } else if (value.length > 3) {
-            value = value.replace(/(\d{3})(\d{0,4})/, "$1-$2");
-        }
-
-        e.target.value = value;
+    document.getElementById("nicknameInput").addEventListener("input", () => {
+        isNickNameChecked = false;
     });
 });
 
-document.getElementById("checkIdBtn")
-    .addEventListener("click", () => checkDuplicate("아이디", "membernameInput", "membernameMessage", "/members/exists"));
-
-document.getElementById("checkNickNameBtn")
-    .addEventListener("click", () => checkDuplicate("닉네임", "nicknameInput", "nicknameMessage", "/members/exists"));
-
-function checkDuplicate(type, inputId, messageId, url) {
+function checkDuplicate(inputId, messageId, url) {
     const value = document.getElementById(inputId).value.trim();
-    const messageEl = document.getElementById(messageId);
+    const messageElement = document.getElementById(messageId);
+
+    let paramKey = inputId === "membernameInput" ? "membername" : "nickname";
 
     if (!value) {
-        messageEl.textContent = `${type}를 입력해주세요.`;
-        messageEl.style.color = "red";
+        messageElement.textContent = `${paramKey === "membername" ? "아이디" : "닉네임"}를 입력해주세요.`;
+        messageElement.style.color = "red";
         return;
     }
 
-    axios.get(url, { params: { [type]: value } })
+    axios.get(url, { params: { [paramKey]: value } })
         .then(res => {
-            if (res.data === true) {
-                messageEl.innerHTML = `이미 존재하는 ${type}입니다.`;
-                messageEl.style.color = "red";
-
-                if(type === "아이디") isIdChecked = false;
-                if(type === "닉네임") isNickNameChecked = false;
-            } else {
-                messageEl.innerHTML = `사용 가능한 ${type}입니다.`;
-                messageEl.style.color = "green";
+            if (res.data.code === "DUPLICATE_MEMBERNAME") {
+                isIdChecked = false;
+                messageElement.innerHTML = res.data.message;
+                messageElement.style.color = "red";
+                return;
             }
 
-            if (type === "아이디") isIdChecked = true;
-            if (type === "닉네임") isNickNameChecked = true;
+            if (res.data.code === "DUPLICATE_NICKNAME") {
+                isNickNameChecked = false;
+                messageElement.innerHTML = res.data.message;
+                messageElement.style.color = "red";
+                return;
+            }
+
+            messageElement.innerHTML = res.data.message;
+            messageElement.style.color = "green";
+
+            if (inputId === "membernameInput") isIdChecked = true;
+            if (inputId === "nicknameInput") isNickNameChecked = true;
         })
         .catch(err => console.error(err));
 }

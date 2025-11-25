@@ -13,8 +13,8 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/members")
-public class MemberController {
+@RequestMapping("/api/members")
+public class MemberRestController {
 
     private final MemberService memberService;
 
@@ -22,27 +22,29 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> checkExists(
             @RequestParam(required = false) String membername,
             @RequestParam(required = false) String nickname) {
-        boolean exists = false;
-        if (membername != null) {
-            exists = memberService.isDuplicateMembername(membername);
-        } else if (nickname != null) {
-            exists = memberService.isDuplicateNickname(nickname);
-        }
-        if (exists) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(Map.of(
-                            "exists", true,
-                            "message", "이미 사용 중 입니다. "
-                    ));
+
+        if (membername != null && memberService.isDuplicateMembername(membername)) {
+            return ResponseEntity.ok(Map.of(
+                    "code", "DUPLICATE_MEMBERNAME",
+                    "target", "membername",
+                    "message", "이미 사용 중인 아이디입니다."
+            ));
         }
 
-        return ResponseEntity
-                .ok(Map.of(
-                        "exists", false,
-                        "message", "사용 가능합니다."
-                ));
+        if (nickname != null && memberService.isDuplicateNickname(nickname)) {
+            return ResponseEntity.ok(Map.of(
+                    "code", "DUPLICATE_NICKNAME",
+                    "target", "nickname",
+                    "message", "이미 사용 중인 닉네임입니다."
+            ));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "code", "OK",
+                "message", "사용 가능합니다."
+        ));
     }
+
 
 
 }

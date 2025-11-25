@@ -1,7 +1,9 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
 import com.zero.plantory.global.vo.MemberVO;
+import com.zero.plantory.global.vo.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,8 +21,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-
     @Override
     public boolean isDuplicateMembername(String membername) {
         return memberMapper.countByMembername(membername) > 0;
@@ -33,18 +33,32 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public boolean signUp(MemberVO memberVo) {
+    public void signUp(MemberSignUpRequest request) {
 
-        if (memberMapper.countByMembername(memberVo.getMembername()) > 0) {
+        log.info(String.valueOf(request));
+
+        if (memberMapper.countByMembername(request.getMembername()) > 0) {
             throw new IllegalStateException("이미 사용 중인 아이디입니다.");
         }
-        if (memberMapper.countByNickname(memberVo.getNickname()) > 0) {
+        if (memberMapper.countByNickname(request.getNickname()) > 0) {
             throw new IllegalStateException("이미 사용 중인 닉네임입니다.");
         }
-        memberVo.setPassword(bCryptPasswordEncoder.encode(memberVo.getPassword()));
-        return memberMapper.insertMember(memberVo) > 0;
 
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
+        log.info(String.valueOf(request));
+
+        MemberVO memberVO = MemberVO.builder()
+                .membername(request.getMembername())
+                .password(encodedPassword)
+                .nickname(request.getNickname())
+                .phone(request.getPhone())
+                .address(request.getAddress())
+                .noticeEnabled(1)
+                .role(Role.USER)
+                .build();
+
+                 memberMapper.insertMember(memberVO);
     }
 
     @Override
