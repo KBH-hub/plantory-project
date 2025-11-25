@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.dashboard.service;
 
-import com.zero.plantory.domain.dashboard.vo.RecommendedSharingVO;
-import com.zero.plantory.domain.dashboard.vo.TodayDiaryVO;
-import com.zero.plantory.domain.dashboard.vo.TodayWateringVO;
+import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponseDTO;
+import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponseDTO;
+import com.zero.plantory.domain.dashboard.dto.TodayWateringResponseDTO;
 
 import java.util.List;
 
@@ -11,8 +11,7 @@ public interface DashboardService {
     int countTodayWatering(Long memberId);
     int countCareNeededPlants(Long memberId);
 
-    List<RecommendedSharingVO> getRecommendedSharingList();
-
-    List<TodayWateringVO> getTodayWatering(Long memberId);
-    List<TodayDiaryVO> getTodayDiary(Long memberId);
+    List<RecommendedSharingResponseDTO> getRecommendedSharingList();
+    List<TodayWateringResponseDTO> getTodayWatering(Long memberId);
+    List<TodayDiaryResponseDTO> getTodayDiary(Long memberId);
 }

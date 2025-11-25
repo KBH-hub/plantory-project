@@ -62,7 +62,7 @@
                   AND i.del_flag IS NULL
                 ORDER BY i.image_id ASC, i.created_at ASC
                  LIMIT 1
-            ) AS image_url
+            ) AS file_url
         FROM sharing s
         WHERE s.del_flag IS NULL
           AND s.interest_num IS NOT NULL
