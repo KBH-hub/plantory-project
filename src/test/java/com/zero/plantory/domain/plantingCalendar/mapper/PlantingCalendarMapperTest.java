@@ -21,16 +21,6 @@ class PlantingCalendarMapperTest {
     PlantingCalendarMapper plantingCalendarMapper;
 
     @Test
-    @DisplayName("물주기 등록 처리")
-    void insertWateringTest() {
-        Long myplantId = 2L;
-
-        int result = plantingCalendarMapper.insertWatering(myplantId);
-
-        log.info(String.valueOf(result));
-    }
-
-    @Test
     @DisplayName("물주기 체크박스 수정 처리")
     void updatePlantWateringCheckTest() {
         Long wateringId = 1L;

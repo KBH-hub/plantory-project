@@ -36,7 +36,7 @@
             'WATERING' type
         FROM watering w
         JOIN myplant p ON w.myplant_id = p.myplant_id
-        WHERE p.member_id = 1
+        WHERE p.member_id = #{memberId}
             AND p.del_flag IS NULL
             AND w.date_at >= #{startDate, jdbcType=TIMESTAMP}
             AND w.date_at &lt; #{endDate, jdbcType=TIMESTAMP}
@@ -90,5 +90,29 @@
             keyColumn="diary_id">
         INSERT INTO diary (myplant_id,activity, state, memo, created_at)
         VALUES (#{myplantId},#{activity}, #{state}, #{memo},NOW());
+    </insert>
+
+    <select id="selectMyplantsForWindow" parameterType="int"
+            resultType="com.zero.plantory.domain.plantingCalendar.vo.MyplantSlotBaseVO">
+        SELECT mp.myplant_id,
+        mp.start_at,
+        mp.end_date,
+        mp.`interval`,
+        m.phone,
+        mp.name
+        FROM myplant mp
+        JOIN member m ON m.member_id = mp.member_id
+        WHERE mp.del_flag   IS NULL
+        AND mp.start_at   IS NOT NULL
+        AND mp.end_date   IS NOT NULL
+        AND mp.`interval` IS NOT NULL
+        AND mp.start_at &lt;= DATE_ADD(NOW(), INTERVAL 1 DAY)
+        AND mp.end_date >= NOW()
+        LIMIT #{limit}
+    </select>
+
+    <insert id="insertWateringAtIgnore">
+        INSERT IGNORE INTO watering (myplant_id, date_at)
+        VALUES (#{myplantId}, #{dateAt})
     </insert>
 </mapper>
