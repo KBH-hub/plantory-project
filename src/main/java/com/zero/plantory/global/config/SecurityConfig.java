@@ -32,68 +32,68 @@ public class SecurityConfig {
     }
 
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()
-//                )
-//                .formLogin(AbstractHttpConfigurer::disable)
-//                .httpBasic(AbstractHttpConfigurer::disable);
-//
-//        return http.build();
-//    }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/login",
-                                "/signUp",
-                                "/members/login",
-                                "/members/signUp",
-                                "/termsOfService",
-                                "/api/members/exists"
-                        ).permitAll()
-
-                        .requestMatchers(
-                                "/community/**",
-                                "/sharing/**",
-                                "/dashboard",
-                                "/my/**"
-                        ).authenticated()
-
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login-process")
-                        .usernameParameter("membername")
-                        .defaultSuccessUrl("/dashboard",true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
-                .rememberMe(remember -> remember
-                        .key(env.getProperty("security.remember-me.key"))
-                        .rememberMeParameter("remember-me")
-                        .tokenValiditySeconds(60 * 60 * 24 * 7)
-                        .userDetailsService(userDetailsService)
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                );
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
+
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/",
+//                                "/login",
+//                                "/signUp",
+//                                "/members/login",
+//                                "/members/signUp",
+//                                "/termsOfService",
+//                                "/api/members/exists"
+//                        ).permitAll()
+//
+//                        .requestMatchers(
+//                                "/community/**",
+//                                "/sharing/**",
+//                                "/dashboard",
+//                                "/my/**"
+//                        ).authenticated()
+//
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(login -> login
+//                        .loginPage("/login")
+//                        .loginProcessingUrl("/login-process")
+//                        .usernameParameter("membername")
+//                        .defaultSuccessUrl("/dashboard",true)
+//                        .failureUrl("/login?error=true")
+//                        .permitAll()
+//                )
+//                .rememberMe(remember -> remember
+//                        .key(env.getProperty("security.remember-me.key"))
+//                        .rememberMeParameter("remember-me")
+//                        .tokenValiditySeconds(60 * 60 * 24 * 7)
+//                        .userDetailsService(userDetailsService)
+//                )
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login")
+//                );
+//
+//        return http.build();
+//    }
 
 
     @Bean
