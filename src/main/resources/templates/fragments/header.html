@@ -7,7 +7,7 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+    <th:block th:replace="~{fragments/head :: commonHead}"></th:block>
     <style>
         /* 드롭다운 메뉴 스타일 */
         .dropdown-menu {
@@ -26,9 +26,9 @@
 <body>
 
 <th:block th:fragment="headerBar">
-    <nav class="bg-white px-4 shadow-sm d-flex align-items-center sticky-top" style="height:80px; width: 1920px;">
+    <nav class="bg-white px-4 shadow-sm d-flex align-items-center sticky-top" style="height:80px;  min-width:1470px;">
 
-        <div class="d-flex align-items-center justify-content-between w-100">
+        <div class="d-flex align-items-center justify-content-between w-100" style="min-width:1450px;">
 
             <!-- 왼쪽 로고 -->
             <a th:href="@{/dashboard}" style="cursor:pointer;">

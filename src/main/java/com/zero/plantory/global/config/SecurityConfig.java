@@ -30,57 +30,57 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                )
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
-
-        return http.build();
-    }
-
-
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //
 //        http
-//                .csrf(csrf -> csrf.disable())
+//                .csrf(AbstractHttpConfigurer::disable)
 //                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-//                                "/",
-//                                "/login",
-//                                "/signUp",
-//                                "/members/login",
-//                                "/members/signUp",
-//                                "/termsOfService",
-//                                "/css/**",
-//                                "/js/**",
-//                                "/image/**",
-//                                "/data/**",
-//                                "/api/members/exists"
-//                        ).permitAll()
-//                        .requestMatchers("/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated()
+//                        .anyRequest().permitAll()
 //                )
-//                .formLogin(login -> login
-//                        .loginPage("/login")
-//                        .loginProcessingUrl("/members/login")
-//                        .defaultSuccessUrl("/dashboard")
-//                        .failureUrl("/login?error=true")
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/login")
-//                );
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .httpBasic(AbstractHttpConfigurer::disable);
 //
 //        return http.build();
 //    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/signUp",
+                                "/members/login",
+                                "/members/signUp",
+                                "/termsOfService",
+                                "/css/**",
+                                "/js/**",
+                                "/image/**",
+                                "/data/**",
+                                "/api/members/exists"
+                        ).permitAll()
+                        .requestMatchers("/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/members/login")
+                        .defaultSuccessUrl("/dashboard")
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                );
+
+        return http.build();
+    }
 
 
     @Bean
