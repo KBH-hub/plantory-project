@@ -1,48 +1,30 @@
 package com.zero.plantory.domain.member.controller;
 
+import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
+@Slf4j
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/exists")
-    public ResponseEntity<Map<String, Object>> checkExists(
-            @RequestParam(required = false) String membername,
-            @RequestParam(required = false) String nickname) {
-        boolean exists = false;
-        if (membername != null) {
-            exists = memberService.isDuplicateMembername(membername);
-        } else if (nickname != null) {
-            exists = memberService.isDuplicateNickname(nickname);
-        }
-        if (exists) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(Map.of(
-                            "exists", true,
-                            "message", "이미 사용 중 입니다. "
-                    ));
+    @PostMapping("/signUp")
+    public String signUp(MemberSignUpRequest request) {
+        try {
+            memberService.signUp(request);
+            return "redirect:/login";
+        } catch (IllegalStateException e) {
+            return "redirect:/signUp?error=" + e.getMessage();
         }
 
-        return ResponseEntity
-                .ok(Map.of(
-                        "exists", false,
-                        "message", "사용 가능합니다."
-                ));
     }
-
 
 }
