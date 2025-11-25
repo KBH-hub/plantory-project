@@ -1,159 +1,169 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"/>
-  <title>쪽지함</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <title>쪽지함</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 </head>
 <body class="bg-light">
 <div th:replace="~{fragments/header :: headerBar}"></div>
-<div class="container-xxl py-4">
-  <h5 class="fw-bold mb-3">쪽지함</h5>
+<div class="mx-auto" style="width:1470px;">
+    <div class="container-xxl py-4">
+        <h5 class="fw-bold mb-3">쪽지함</h5>
 
-  <div class="card shadow-sm">
-    <!-- 상단 툴바 -->
-    <div class="card-header">
-      <div class="row g-2 align-items-center">
-        <!-- 좌측: 탭 + 삭제 -->
-        <div class="col d-flex flex-wrap align-items-center gap-3">
-          <div class="d-flex align-items-center gap-2">
-            <a href="#" class="link-secondary text-decoration-none fw-semibold">받은 쪽지</a>
-            <span class="text-secondary">|</span>
-            <a href="#" class="link-secondary text-decoration-none">보낸 쪽지</a>
-          </div>
-          <button class="btn btn-outline-secondary btn-sm" id="btnDelete" type="button">선택 삭제</button>
-        </div>
+        <div class="card shadow-sm">
+            <!-- 상단 툴바 -->
+            <div class="card-header">
+                <div class="row g-2 align-items-center">
+                    <!-- 좌측: 탭 + 삭제 -->
+                    <div class="col d-flex flex-wrap align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="#" class="link-secondary text-decoration-none fw-semibold">받은 쪽지</a>
+                            <span class="text-secondary">|</span>
+                            <a href="#" class="link-secondary text-decoration-none">보낸 쪽지</a>
+                        </div>
+                        <button class="btn btn-outline-secondary btn-sm" id="btnDelete" type="button">선택 삭제</button>
+                    </div>
 
-        <!-- 우측: 검색 -->
-        <div class="col-auto">
-          <form class="d-flex align-items-center gap-2">
-            <select class="form-select form-select-sm" style="width:110px">
-              <option selected>전체</option>
-              <option>질문</option>
-              <option>나눔</option>
-            </select>
-            <input type="text" class="form-control form-control-sm" placeholder="검색어 입력" style="width:220px">
-            <button class="btn btn-secondary btn-sm" type="button"><i class="bi bi-search"></i></button>
-          </form>
+                    <!-- 우측: 검색 -->
+                    <div class="col-auto">
+                        <form class="d-flex align-items-center gap-2">
+                            <select class="form-select form-select-sm" style="width:110px">
+                                <option selected>전체</option>
+                                <option>질문</option>
+                                <option>나눔</option>
+                            </select>
+                            <input type="text" class="form-control form-control-sm" placeholder="검색어 입력"
+                                   style="width:220px">
+                            <button class="btn btn-secondary btn-sm" type="button"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 목록 -->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light small">
+                        <tr>
+                            <!-- 헤더/바디 컬럼 개수와 순서를 1:1로 맞춤 -->
+                            <th class="text-center" style="width:44px;">
+                                <input class="form-check-input" type="checkbox" id="checkAll" aria-label="전체선택">
+                            </th>
+                            <th class="text-nowrap" style="width:96px;">읽음 상태</th>
+                            <th class="text-nowrap" style="width:120px;">보낸 사람</th>
+                            <th class="text-nowrap" style="width:120px;">받는 사람</th>
+                            <th class="text-nowrap" style="width:90px;">카테고리</th>
+                            <th>관련 글</th>
+                            <th style="width:320px;">제목</th>
+                            <th class="text-nowrap" style="width:170px;">받은 시간</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>식물왕</td>
+                            <td>닉네임</td>
+                            <td>나눔</td>
+                            <td class="text-truncate"><a href="/messageDetail">다육이 나눔합니다.<a></td>
+                            <td class="text-truncate">쪽지드립니다!</td>
+                            <td>2025-11-08 17:55:08</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>식물초보</td>
+                            <td>닉네임</td>
+                            <td>나눔</td>
+                            <td class="text-truncate">다육이 나눔합니다.</td>
+                            <td class="text-truncate">내일자 나눔 가능한가요?</td>
+                            <td>2025-11-06 19:06:05</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>나나나</td>
+                            <td>닉네임</td>
+                            <td>나눔</td>
+                            <td class="text-truncate">방울토마토 분양가가 어떻게…</td>
+                            <td class="text-truncate">분양예정 재고 남나요</td>
+                            <td>2025-11-03 12:03:40</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>정든화</td>
+                            <td>닉네임</td>
+                            <td>나눔</td>
+                            <td class="text-truncate">포트분갈이 나눔</td>
+                            <td class="text-truncate">혹시 내일도 가능할까요??</td>
+                            <td>2025-11-01 10:44:02</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>감자튀김</td>
+                            <td>닉네임</td>
+                            <td>문의</td>
+                            <td class="text-truncate">우드스탠드 배송지 변경…</td>
+                            <td class="text-truncate">배송지 변경 가능한가요?</td>
+                            <td>2025-10-31 19:42:12</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><input class="form-check-input row-check" type="checkbox"
+                                                           aria-label="선택"></td>
+                            <td>읽음</td>
+                            <td>나나나나</td>
+                            <td>닉네임</td>
+                            <td>질문</td>
+                            <td class="text-truncate">씨앗 화분 성장중인가요?</td>
+                            <td class="text-truncate">씨앗 발아 일정이 담기나요</td>
+                            <td>2025-10-31 09:01:22</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 페이징 -->
+                <div class="d-flex justify-content-center py-3">
+                    <nav aria-label="쪽지함 페이지">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><span class="page-link" aria-label="처음">&laquo;</span></li>
+                            <li class="page-item disabled"><span class="page-link" aria-label="이전">&lsaquo;</span></li>
+                            <li class="page-item active"><span class="page-link">1</span></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#" aria-label="다음">&rsaquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#" aria-label="마지막">&raquo;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-    <!-- 목록 -->
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light small">
-          <tr>
-            <!-- 헤더/바디 컬럼 개수와 순서를 1:1로 맞춤 -->
-            <th class="text-center" style="width:44px;">
-              <input class="form-check-input" type="checkbox" id="checkAll" aria-label="전체선택">
-            </th>
-            <th class="text-nowrap" style="width:96px;">읽음 상태</th>
-            <th class="text-nowrap" style="width:120px;">보낸 사람</th>
-            <th class="text-nowrap" style="width:120px;">받는 사람</th>
-            <th class="text-nowrap" style="width:90px;">카테고리</th>
-            <th>관련 글</th>
-            <th style="width:320px;">제목</th>
-            <th class="text-nowrap" style="width:170px;">받은 시간</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>식물왕</td>
-            <td>닉네임</td>
-            <td>나눔</td>
-            <td class="text-truncate"><a href="/messageDetail">다육이 나눔합니다.<a></td>
-            <td class="text-truncate">쪽지드립니다!</td>
-            <td>2025-11-08 17:55:08</td>
-          </tr>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>식물초보</td>
-            <td>닉네임</td>
-            <td>나눔</td>
-            <td class="text-truncate">다육이 나눔합니다.</td>
-            <td class="text-truncate">내일자 나눔 가능한가요?</td>
-            <td>2025-11-06 19:06:05</td>
-          </tr>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>나나나</td>
-            <td>닉네임</td>
-            <td>나눔</td>
-            <td class="text-truncate">방울토마토 분양가가 어떻게…</td>
-            <td class="text-truncate">분양예정 재고 남나요</td>
-            <td>2025-11-03 12:03:40</td>
-          </tr>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>정든화</td>
-            <td>닉네임</td>
-            <td>나눔</td>
-            <td class="text-truncate">포트분갈이 나눔</td>
-            <td class="text-truncate">혹시 내일도 가능할까요??</td>
-            <td>2025-11-01 10:44:02</td>
-          </tr>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>감자튀김</td>
-            <td>닉네임</td>
-            <td>문의</td>
-            <td class="text-truncate">우드스탠드 배송지 변경…</td>
-            <td class="text-truncate">배송지 변경 가능한가요?</td>
-            <td>2025-10-31 19:42:12</td>
-          </tr>
-          <tr>
-            <td class="text-center"><input class="form-check-input row-check" type="checkbox" aria-label="선택"></td>
-            <td>읽음</td>
-            <td>나나나나</td>
-            <td>닉네임</td>
-            <td>질문</td>
-            <td class="text-truncate">씨앗 화분 성장중인가요?</td>
-            <td class="text-truncate">씨앗 발아 일정이 담기나요</td>
-            <td>2025-10-31 09:01:22</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 페이징 -->
-      <div class="d-flex justify-content-center py-3">
-        <nav aria-label="쪽지함 페이지">
-          <ul class="pagination pagination-sm mb-0">
-            <li class="page-item disabled"><span class="page-link" aria-label="처음">&laquo;</span></li>
-            <li class="page-item disabled"><span class="page-link" aria-label="이전">&lsaquo;</span></li>
-            <li class="page-item active"><span class="page-link">1</span></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#" aria-label="다음">&rsaquo;</a></li>
-            <li class="page-item"><a class="page-link" href="#" aria-label="마지막">&raquo;</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/header.js"></script>
+    <script>
+        // 전체 선택
+        document.getElementById('checkAll').addEventListener('change', (e) => {
+            document.querySelectorAll('.row-check').forEach(cb => cb.checked = e.target.checked);
+        });
+        // 삭제(데모)
+        document.getElementById('btnDelete').addEventListener('click', () => {
+            const n = [...document.querySelectorAll('.row-check')].filter(c => c.checked).length;
+            alert(n ? `${n}건 선택됨 (삭제 로직 연동)` : '선택된 쪽지가 없습니다.');
+            window.location.reload();
+        });
+    </script>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/header.js"></script>
-<script>
-  // 전체 선택
-  document.getElementById('checkAll').addEventListener('change', (e) => {
-    document.querySelectorAll('.row-check').forEach(cb => cb.checked = e.target.checked);
-  });
-  // 삭제(데모)
-  document.getElementById('btnDelete').addEventListener('click', () => {
-    const n = [...document.querySelectorAll('.row-check')].filter(c => c.checked).length;
-    alert(n ? `${n}건 선택됨 (삭제 로직 연동)` : '선택된 쪽지가 없습니다.');
-  });
-</script>
 </body>
 </html>
