@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 
+src/main/java/com/zero/plantory/global/config/SecurityConfig.java
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

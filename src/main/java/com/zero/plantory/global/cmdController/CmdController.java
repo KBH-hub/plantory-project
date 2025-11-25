@@ -118,12 +118,6 @@ public class CmdController {
         return "signUp";
     }
 
-    @PostMapping("/signUp")
-    public String signUpMember(MemberVO member){
-        memberService.signUp(member);
-        return "redirect:/login";
-    }
-
     @GetMapping("/termsOfService")
     public String termsOfService(){
         return "termsOfService";
