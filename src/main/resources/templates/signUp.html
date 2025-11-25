@@ -26,20 +26,20 @@
             <i class="fa-solid fa-user-circle" style="font-size:60px; color:#6c757d;"></i>
         </div>
 
-        <form id="signUpForm" class="needs-validation" novalidate>
+        <form id="signUpForm" action="/members/signup" method="post" class="needs-validation" novalidate>
 
             <div class="row g-3">
 
                 <div class="col-md-6">
                     <label class="fw-bold">아이디 <span class="text-danger small">*</span></label>
                     <div class="input-group">
-                        <input id= "membernameInput" type="text" class="form-control form-control"
+                        <input id="membernameInput" type="text" class="form-control form-control"
                                required>
-                        <button id= "checkIdBtn" type="button" class="btn btn-outline-success">중복 확인</button>
+                        <button id="checkIdBtn" type="button" class="btn btn-outline-success">중복 확인</button>
                     </div>
                     <div id="membernameMessage" class="mt-1 fw-bold"></div>
                 </div>
-
+                
                 <div class="col-md-6">
                     <label class="fw-bold">주소 <span class="text-danger small">*</span></label>
                     <div class="row g-2">
@@ -69,14 +69,19 @@
 
                 <div class="col-md-6">
                     <label class="fw-bold">휴대전화 <span class="text-danger small">*</span></label>
-                    <input type="text" class="form-control form-control"
-                           placeholder="예) 010-1234-5678" required>
+                    <input id="phoneNumberInput"
+                           type="text"
+                           class="form-control"
+                           maxlength="13"
+                           pattern="^010[0-9]{8}$"
+                           required
+                           placeholder="예) 010-1234-5678">
                     <div class="invalid-feedback">전화번호를 입력해주세요.</div>
                 </div>
 
                 <div class="col-md-6">
                     <label class="fw-bold">비밀번호 <span class="text-danger small">*</span></label>
-                    <input type="password" class="form-control form-control"
+                    <input id="passwordInput" type="password" class="form-control form-control"
                            required pattern="^(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"
                            placeholder="8자 이상 + 숫자 + 특수문자 포함">
                     <div class="invalid-feedback">비밀번호는 8자 이상, 숫자 & 특수문자를 포함해야 합니다.</div>
