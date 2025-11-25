@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.plantingCalendar.mapper;
 
+import com.zero.plantory.domain.plantingCalendar.vo.DueWateringRowVO;
 import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
 import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
 import com.zero.plantory.global.vo.DiaryVO;
@@ -22,4 +23,11 @@ public interface PlantingCalendarMapper {
     int updateDiary(DiaryVO vo);
     List<selectMyPlantDiaryVO> selectMyPlant(@Param("memberId") Long memberId);
     int insertDiary(DiaryVO vo);
+
+    // 다음 물주기 대상과 계산된 next_at을 함께 조회
+    List<DueWateringRowVO> selectDueWateringWithNextAt(@Param("limit") int limit);
+
+    // 계산된 next_at을 그대로 기록( NOW() 대신 )
+    int insertWateringAt(@Param("myplantId") Long myplantId,
+                         @Param("dateAt") java.time.LocalDateTime dateAt);
 }

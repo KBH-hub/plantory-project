@@ -131,4 +131,17 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
         }
         throw new IllegalStateException("관찰일지 등록 실패(업데이트 누락)");
     }
+
+    @Transactional
+    public int processOnce(int batchSize) {
+        var rows = plantingCalendarMapper.selectDueWateringWithNextAt(batchSize);
+        int ok = 0;
+        for (var r : rows) {
+            // 중복 방지(같은 nextAt에 이미 기록이 있으면 skip) — DDL 변경 없이 애플리케이션 체크
+            // 필요하면 mapper에 existsWatering(myplantId, dateAt) 추가
+            plantingCalendarMapper.insertWateringAt(r.getMyplantId(), r.getNextAt());
+            ok++;
+        }
+        return ok;
+    }
 }
