@@ -13,7 +13,7 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
     />
 </head>
-
+<link rel="stylesheet" th:href="@{/css/header.css}">
 <body class="bg-light">
 
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
@@ -177,7 +177,6 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"
 ></script>
-<script src="/js/common/header.js"></script>
-
+<script th:src="@{/js/common/header.js}"></script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+.share-image-fixed {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    max-height: 180px
+}
+
+@media (min-width: 768px) {
+    .share-image-fixed {
+        max-height: 300px
+    }
+}
+
+.carousel-control-prev, .carousel-control-next {
+    width: 7%
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45))
+}
+
+.share-image-wrap {
+    border-radius: .5rem;
+    overflow: hidden
+}
