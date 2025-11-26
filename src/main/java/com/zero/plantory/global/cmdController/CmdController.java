@@ -14,12 +14,12 @@ public class CmdController {
 
     @RequestMapping("/")
     public String index(){
-        return "login";
+        return "member/login";
     }
 
-    @RequestMapping("/createQuestion")
-    public String createQuestion(){
-        return "createQuestion";
+    @GetMapping("/signUp")
+    public String signUp(){
+        return "member/signUp";
     }
 
     @GetMapping("/dashboard")
@@ -29,107 +29,107 @@ public class CmdController {
 
     @RequestMapping("/dryPlantDictionary")
     public String dryPlantDictionary(){
-        return "dryPlantDictionary";
+        return "dictionary/dryPlantDictionary";
     }
 
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "member/login";
     }
 
     @RequestMapping("/memberManagement")
     public String memberManagement(){
-        return "memberManagement";
+        return "admin/memberManagement";
     }
 
     @GetMapping("/messageDetail")
     public String messageDetail(){
-        return "messageDetail";
+        return "message/messageDetail";
     }
 
     @GetMapping("/messageList")
     public String messageList(){
-        return "messageList";
+        return "message/messageList";
     }
 
     @RequestMapping("/myPlantManagement")
-    public String myPlantManagement(){return "myPlantManagement";}
+    public String myPlantManagement(){return "myProfile/myPlantManagement";}
 
     @RequestMapping("/myProfile")
-    public String myProfile(){return "myProfile";}
+    public String myProfile(){return "myProfile/myProfile";}
 
     @GetMapping("/plantCalendar")
     public String plantCalendar(){
-        return "plantCalendar";
+        return "myPlant/plantCalendar";
+    }
+
+    @RequestMapping("/createQuestion")
+    public String createQuestion(){
+        return "question/createQuestion";
     }
 
     @RequestMapping("/questionList")
     public String questionList(){
-        return "questionList";
+        return "question/questionList";
     }
 
     @RequestMapping("/readDictionary")
     public String readDictionary(){
-        return "readDictionary";
+        return "dictionary/readDictionary";
     }
 
     @GetMapping("/readQuestion")
     public String readQuestion(){
-        return "readQuestion";
+        return "question/readQuestion";
     }
 
     @GetMapping("/reportManagement")
     public String reportManagement(){
-        return "reportManagement";
+        return "admin/reportManagement";
     }
 
     @GetMapping("/sharingCreate")
     public String sharingCreate(){
-        return "sharingCreate";
+        return "sharing/sharingCreate";
     }
 
     @GetMapping("/sharingDetail")
     public String sharingDetail(){
-        return "sharingDetail";
+        return "sharing/sharingDetail";
     }
 
     @GetMapping("/sharingDetail-other")
     public String sharingDetailOther(){
-        return "sharingDetail-other";
+        return "sharing/sharingDetail-other";
     }
 
     @RequestMapping("/sharingHistory")
-    public String sharingHistory(){return "sharingHistory";}
+    public String sharingHistory(){return "myProfile/mySharingHistory";}
 
     @GetMapping("/sharingList")
     public String sharingList(){
-        return "sharingList";
+        return "sharing/sharingList";
     }
 
     @GetMapping("/sharingUpdate")
     public String sharingUpdate(){
-        return "sharingUpdate";
-    }
-
-    @GetMapping("/signUp")
-    public String signUp(){
-        return "signUp";
+        return "sharing/sharingUpdate";
     }
 
     @GetMapping("/termsOfService")
     public String termsOfService(){
-        return "termsOfService";
+        return "member/termsOfService";
     }
 
     @RequestMapping("/updateMyInfo")
-    public String updateMyInfo(){return "updateMyInfo";}
+    public String updateMyInfo(){return "myProfile/updateMyInfo";}
 
     @RequestMapping("/updateReview")
-    public String updateReview(){ return "updateReview"; }
+    public String updateReview(){ return "sharing/updateReview"; }
 
     @RequestMapping("/updateReviewTargetMember")
     public String updateReviewTargetMember(){
-        return "updateReviewTargetMember";
+        return "sharing/updateReviewTargetMember";
     }
 
 }
