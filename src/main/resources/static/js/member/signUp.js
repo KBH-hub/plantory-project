@@ -6,6 +6,20 @@ let isNickNameChecked = false;
     const pw = document.querySelector('input[type="password"]');
     const pwCheck = document.getElementById("pwCheck");
 
+document.getElementById("checkIdBtn")
+    .addEventListener("click", () => checkDuplicate("membernameInput", "membernameMessage", "/api/members/exists"));
+
+document.getElementById("checkNickNameBtn")
+    .addEventListener("click", () => checkDuplicate("nicknameInput", "nicknameMessage", "/api/members/exists"));
+
+document.getElementById("membernameInput").addEventListener("input", () => {
+    isIdChecked = false;
+});
+
+document.getElementById("nicknameInput").addEventListener("input", () => {
+    isNickNameChecked = false;
+});
+
     form.addEventListener("submit", (event) => {
         const sido = document.getElementById("sido").value;
         const sigungu = document.getElementById("sigungu").value;
@@ -29,20 +43,6 @@ let isNickNameChecked = false;
         }
 
         form.classList.add("was-validated");
-
-    document.getElementById("checkIdBtn")
-        .addEventListener("click", () => checkDuplicate("membernameInput", "membernameMessage", "/api/members/exists"));
-
-    document.getElementById("checkNickNameBtn")
-        .addEventListener("click", () => checkDuplicate("nicknameInput", "nicknameMessage", "/api/members/exists"));
-
-    document.getElementById("membernameInput").addEventListener("input", () => {
-        isIdChecked = false;
-    });
-
-    document.getElementById("nicknameInput").addEventListener("input", () => {
-        isNickNameChecked = false;
-    });
 });
 
 function checkDuplicate(inputId, messageId, url) {

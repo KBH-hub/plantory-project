@@ -29,7 +29,7 @@ public class CmdController {
 
     @RequestMapping("/plantDictionary")
     public String plantDictionary(){
-        return "plantDictionary";
+        return "dictionary/plantDictionary";
     }
 
     @GetMapping("/login")
@@ -53,7 +53,7 @@ public class CmdController {
     }
 
     @RequestMapping("/myPlantManagement")
-    public String myPlantManagement(){return "myProfile/myPlantManagement";}
+    public String myPlantManagement(){return "myPlant/myPlantManagement";}
 
     @RequestMapping("/myProfile")
     public String myProfile(){return "myProfile/myProfile";}
@@ -90,21 +90,21 @@ public class CmdController {
 
     @GetMapping("/createSharing")
     public String createSharing(){
-        return "createSharing";
+        return "sharing/createSharing";
     }
 
     @GetMapping("/readSharing")
     public String readSharing(){
-        return "readSharing";
+        return "sharing/readSharing";
     }
 
     @GetMapping("/readSharing-other")
     public String readSharingOther(){
-        return "readSharing-other";
+        return "sharing/readSharing-other";
     }
 
-    @RequestMapping("/sharingHistory")
-    public String sharingHistory(){return "myProfile/mySharingHistory";}
+    @RequestMapping("/mySharingHistory")
+    public String mySharingHistory(){return "myProfile/mySharingHistory";}
 
     @GetMapping("/sharingList")
     public String sharingList(){

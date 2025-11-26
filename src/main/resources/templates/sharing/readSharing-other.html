@@ -6,33 +6,8 @@
     <title>Plantory - 나눔 게시글 상세(타인)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .share-image-fixed {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            max-height: 180px
-        }
-
-        @media (min-width: 768px) {
-            .share-image-fixed {
-                max-height: 300px
-            }
-        }
-
-        .carousel-control-prev, .carousel-control-next {
-            width: 7%
-        }
-
-        .carousel-control-prev-icon, .carousel-control-next-icon {
-            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45))
-        }
-
-        .share-image-wrap {
-            border-radius: .5rem;
-            overflow: hidden
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/sharingDetail-other.css}"/>
 </head>
 <body class="bg-light">
 
@@ -217,39 +192,6 @@
 <script src="/js/common/header.js"></script>
 
 </body>
-
-<script>
-    // 모달 열릴 때 받는사람/관련글 세팅
-    const messageModal = document.getElementById('messageModal');
-    messageModal.addEventListener('show.bs.modal', function (event) {
-        const btn = event.relatedTarget;
-        const toName = btn?.getAttribute('data-to-name') || '';
-        const postTitle = btn?.getAttribute('data-post-title') || '';
-        document.getElementById('msgTo').value = toName;
-        document.getElementById('msgPost').value = postTitle;
-        // 이전 입력 유지 원치 않으면 아래 두 줄 주석 해제
-        // document.getElementById('msgTitle').value = '';
-        // document.getElementById('msgContent').value = '';
-        setTimeout(() => document.getElementById('msgTitle').focus(), 100);
-    });
-
-    // 제출 훅(백엔드 연결 지점)
-    document.getElementById('messageForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const payload = {
-            toName: document.getElementById('msgTo').value,
-            postTitle: document.getElementById('msgPost').value,
-            title: document.getElementById('msgTitle').value.trim(),
-            content: document.getElementById('msgContent').value.trim()
-        };
-        if (!payload.title || !payload.content) return;
-
-        // TODO: 실제 API로 교체
-        // const res = await fetch('/api/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        // if(res.ok){ bootstrap.Modal.getInstance(messageModal).hide(); }
-
-        // 데모: 전송 후 닫기
-        bootstrap.Modal.getInstance(messageModal).hide();
-    });
-</script>
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/sharing/sharingDetail-other.js}"></script>
 </html>

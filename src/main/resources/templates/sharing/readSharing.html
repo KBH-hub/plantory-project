@@ -7,58 +7,8 @@
     <title>Plantory - 나눔 게시글 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .share-image-fixed {
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
-            max-height: 180px;
-        }
-
-        @media (min-width: 768px) {
-            .share-image-fixed {
-                max-height: 300px;
-            }
-        }
-
-        .carousel-control-prev, .carousel-control-next {
-            width: 7%;
-        }
-
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45));
-        }
-
-        .share-image-wrap {
-            border-radius: .5rem;
-            overflow: hidden;
-        }
-         /* 높이 동결(고정) + 본문만 스크롤 */
-         .modal-fixed .modal-dialog{
-             max-width: 420px;             /* 폭도 통일(선택) */
-         }
-        .modal-fixed .modal-content{
-            height: 420px;                /* ← 원하는 고정 높이 */
-            display: flex;                /* 헤더/본문/푸터 수직 배치 */
-            flex-direction: column;
-        }
-        .modal-fixed .modal-header,
-        .modal-fixed .modal-footer{
-            flex: 0 0 auto;               /* 고정 높이 영역 */
-        }
-        .modal-fixed .modal-body{
-            flex: 1 1 auto;               /* 남은 공간 채우기 */
-            overflow: auto;               /* 내용 많아지면 내부 스크롤 */
-        }
-
-        /* 작은 화면에서는 화면높이 기반으로 안전하게 고정 */
-        @media (max-width: 575.98px){
-            .modal-fixed .modal-content{
-                height: calc(100dvh - 3rem); /* 상하 마진 감안 */
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/sharingDetail.css}">
 </head>
 <body class="bg-light">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
@@ -259,90 +209,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/common/header.js"></script>
-
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/sharing/sharingDetail.js}"></script>
 </body>
-<script>
-    (function () {
-        const cache = new Map();
-        const getModal = (sel) => {
-            if (!cache.has(sel)) {
-                cache.set(sel, new bootstrap.Modal(document.querySelector(sel), {
-                    backdrop: 'static',
-                    keyboard: false
-                }));
-            }
-            return cache.get(sel);
-        };
-
-        const goNext = (currentSel, nextSel) => {
-            const currEl = document.querySelector(currentSel);
-            const next = getModal(nextSel);
-            const handler = () => {
-                currEl.removeEventListener('hidden.bs.modal', handler);
-                next.show();
-            };
-            currEl.addEventListener('hidden.bs.modal', handler, { once: true });
-            getModal(currentSel).hide();
-        };
-
-        const goBack = (currentSel, prevSel) => {
-            const currEl = document.querySelector(currentSel);
-            const prev = getModal(prevSel);
-            const handler = () => {
-                currEl.removeEventListener('hidden.bs.modal', handler);
-                prev.show();
-            };
-            currEl.addEventListener('hidden.bs.modal', handler, { once: true });
-            getModal(currentSel).hide();
-        };
-
-        /* ▶ 여기 추가: '나눔 완료' 버튼 → 1번 모달 오픈 */
-        document.getElementById('btnComplete')
-            .addEventListener('click', () => getModal('#modalSelectCounterpart').show());
-
-        // 라디오 선택 -> "선택 완료" 버튼 활성화
-        const radios = document.querySelectorAll('input[name="doneTarget"]');
-        const btnSelectDone = document.getElementById('btnSelectDone');
-        let selectedName = '';
-        radios.forEach(r => r.addEventListener('change', () => {
-            selectedName = r.value;
-            btnSelectDone.disabled = !selectedName;
-        }));
-
-        // 전환 제어(+ 유효성 검사 및 이름 전달)
-        document.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-next],[data-back]');
-            if (!btn) return;
-
-            const current = btn.getAttribute('data-current');
-            const next = btn.getAttribute('data-next');
-            const back = btn.getAttribute('data-back');
-
-            if (next) {
-                if (current === '#modalSelectCounterpart' && next === '#modalConfirmDone') {
-                    if (!selectedName) return;
-                    document.getElementById('confirmName').textContent = `‘${selectedName}’`;
-                }
-                if (current === '#modalConfirmDone' && next === '#modalDoneResult') {
-                    document.getElementById('resultName').textContent = `‘${selectedName}’`;
-                }
-                goNext(current, next);
-            } else if (back) {
-                goBack(current, back);
-            }
-        });
-
-        // 마지막 모달 닫힐 때 초기화
-        document.getElementById('modalDoneResult').addEventListener('hidden.bs.modal', () => {
-            ['modalConfirmDone', 'modalSelectCounterpart'].forEach(id => {
-                const inst = bootstrap.Modal.getInstance(document.getElementById(id));
-                inst && inst.hide();
-            });
-            radios.forEach(r => r.checked = false);
-            btnSelectDone.disabled = true;
-            selectedName = '';
-        });
-    })();
-</script>
 </html>
