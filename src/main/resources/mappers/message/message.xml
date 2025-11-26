@@ -12,6 +12,7 @@
         m.receiver_id,
         receiver.nickname AS receiver_nickname,
         m.title,
+        m.content,
         m.target_type,
         m.target_id,
         m.created_at,

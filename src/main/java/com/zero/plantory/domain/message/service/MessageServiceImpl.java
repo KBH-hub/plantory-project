@@ -32,19 +32,25 @@ public class MessageServiceImpl implements MessageService {
                 .limit(request.getLimit())
                 .build();
         List<SelectMessageListVO> messageList = messageMapper.selectMessages(vo);
+        System.out.println(messageList+"123");
         List<MessageListResponse> messageListResponse = new ArrayList<>();
-        for (SelectMessageListVO selectMessageListVO : messageList) {
-            MessageListResponse.builder()
-                    .messageId(selectMessageListVO.getMessageId())
-                    .senderId(selectMessageListVO.getSenderId())
-                    .senderNickname(selectMessageListVO.getSenderNickname())
-                    .receiverNickname(selectMessageListVO.getReceiverNickname())
-                    .title(selectMessageListVO.getTitle())
-                    .targetType(selectMessageListVO.getTargetType())
-                    .createdAt(selectMessageListVO.getCreatedAt())
-                    .readFlag(selectMessageListVO.getReadFlag())
-                    .delFlag(selectMessageListVO.getDelFlag())
-                    .build();
+        for (SelectMessageListVO message : messageList) {
+            messageListResponse.add(
+                    MessageListResponse.builder()
+                            .messageId(message.getMessageId())
+                            .senderId(message.getSenderId())
+                            .senderNickname(message.getSenderNickname())
+                            .receiverId(message.getReceiverId())
+                            .receiverNickname(message.getReceiverNickname())
+                            .title(message.getTitle())
+                            .content(message.getContent())
+                            .targetType(message.getTargetType())
+                            .targetId(message.getTargetId())
+                            .createdAt(message.getCreatedAt())
+                            .readFlag(message.getReadFlag())
+                            .delFlag(message.getDelFlag())
+                            .build()
+            );
         }
 
         return messageListResponse;
@@ -81,20 +87,20 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageResponse findMessageWriteInfo(Long senderId, String targetType, Long targetId) {
         MessageVO message = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
-           MessageResponse response = MessageResponse.builder()
-                   .messageId(message.getMessageId())
-                   .senderId(message.getSenderId())
-                   .receiverId(message.getReceiverId())
-                   .title(message.getTitle())
-                   .content(message.getContent())
-                   .targetType(message.getTargetType())
-                   .targetId(message.getTargetId())
-                   .createdAt(message.getCreatedAt())
-                   .readFlag(message.getReadFlag())
-                   .delFlag(message.getDelFlag())
-                   .build();
+        MessageResponse response = MessageResponse.builder()
+                .messageId(message.getMessageId())
+                .senderId(message.getSenderId())
+                .receiverId(message.getReceiverId())
+                .title(message.getTitle())
+                .content(message.getContent())
+                .targetType(message.getTargetType())
+                .targetId(message.getTargetId())
+                .createdAt(message.getCreatedAt())
+                .readFlag(message.getReadFlag())
+                .delFlag(message.getDelFlag())
+                .build();
 
-        return null;
+        return response;
     }
 
 
