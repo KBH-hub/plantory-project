@@ -24,7 +24,7 @@ public class MessageMapperTests {
     @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
     void selectMessagesTest() {
         SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
-                .memberId(1L) // 받은 사람 아이디
+                .memberId(21L) // 받은 사람 아이디
                 .boxType("RECEIVED") // 받은 쪽지함
                 .targetType(null) // 나눔 or 질문 or 모두
                 .title(null) // 검색어

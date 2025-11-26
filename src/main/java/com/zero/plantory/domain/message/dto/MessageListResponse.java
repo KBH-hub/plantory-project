@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.message.vo;
+package com.zero.plantory.domain.message.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectMessageListVO {
+public class MessageListResponse {
     private Long messageId;
     private Long senderId;
     private String senderNickname;

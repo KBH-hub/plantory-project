@@ -1,5 +1,6 @@
-package com.zero.plantory.domain.message.vo;
+package com.zero.plantory.domain.message.dto;
 
+import com.zero.plantory.global.vo.MessageTargetType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,18 +12,15 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectMessageListVO {
+public class MessageRequest {
     private Long messageId;
     private Long senderId;
-    private String senderNickname;
     private Long receiverId;
-    private String receiverNickname;
     private String title;
     private String content;
-    private String targetType;
+    private MessageTargetType targetType;
     private Long targetId;
     private Date createdAt;
     private Date readFlag;
     private Date delFlag;
-    private Long totalCount;
 }

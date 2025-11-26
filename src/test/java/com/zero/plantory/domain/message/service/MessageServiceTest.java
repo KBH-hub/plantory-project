@@ -1,19 +1,19 @@
 package com.zero.plantory.domain.message.service;
 
-import com.zero.plantory.domain.message.vo.SelectMessageListVO;
-import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
+import com.zero.plantory.domain.message.dto.MessageListResponse;
+import com.zero.plantory.domain.message.dto.MessageRequest;
+import com.zero.plantory.domain.message.dto.MessageResponse;
+import com.zero.plantory.domain.message.dto.SearchMessageRequest;
 import com.zero.plantory.global.vo.MessageTargetType;
 import com.zero.plantory.global.vo.MessageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -25,16 +25,16 @@ class MessageServiceTest {
     @Test
     @DisplayName("쪽지 리스트 조회")
     void getMessageListTest() {
-        SelectMessageSearchVO vo = SelectMessageSearchVO.builder()
-                .memberId(2L)
-                .boxType("SENT")
+        SearchMessageRequest request = SearchMessageRequest.builder()
+                .memberId(21L)
+                .boxType("RECEIVED")
                 .targetType("SHARING")
                 .title(null)
                 .limit(10)
                 .offset(0)
                 .build();
 
-        List<SelectMessageListVO> result = messageService.getMessageList(vo);
+        List<MessageListResponse> result = messageService.getMessageList(request);
 
         log.info("result={}", result);
 
@@ -69,7 +69,7 @@ class MessageServiceTest {
         String targetType = "QUESTION"; // 나눔 글 기준
         Long targetId = 3L;
 
-        MessageVO result = messageService.findMessageWriteInfo(senderId, targetType, targetId);
+        MessageResponse result = messageService.findMessageWriteInfo(senderId, targetType, targetId);
 
         log.info(String.valueOf(result));
     }
@@ -77,7 +77,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 실패 (제목 누락)처리")
     void registerFailByTitleMessageTest() {
-        MessageVO vo = new MessageVO().builder()
+        MessageRequest request = new MessageRequest().builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("")
@@ -86,15 +86,23 @@ class MessageServiceTest {
                 .targetId(13L)
                 .build();
 
-        int result = messageService.registerMessage(vo);
+        boolean result;
+        try {
+            messageService.registerMessage(request);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
 
-        log.info("inserted rows = " + result);
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
     }
 
     @Test
     @DisplayName("메시지 전송 실패 (내용 누락)처리")
     void registerFailByContentMessageTest() {
-        MessageVO vo = new MessageVO().builder()
+        MessageRequest request = new MessageRequest().builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("테스트 제목입니다.")
@@ -103,9 +111,17 @@ class MessageServiceTest {
                 .targetId(13L)
                 .build();
 
-        int result = messageService.registerMessage(vo);
+        boolean result;
+        try {
+            messageService.registerMessage(request);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
 
-        log.info("inserted rows = " + result);
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -114,7 +130,7 @@ class MessageServiceTest {
         Long messageId = 5L;
         Long viewerId = 8L;
 
-        MessageVO result = messageService.findMessageDetail(messageId, viewerId);
+        MessageResponse result = messageService.findMessageDetail(messageId, viewerId);
 
         log.info(String.valueOf(result));
     }
@@ -125,7 +141,7 @@ class MessageServiceTest {
         Long messageId = 6L;
         Long viewerId = 1L;
 
-        MessageVO result = messageService.findMessageDetail(messageId, viewerId);
+        MessageResponse result = messageService.findMessageDetail(messageId, viewerId);
 
         log.info(String.valueOf(result));
     }
