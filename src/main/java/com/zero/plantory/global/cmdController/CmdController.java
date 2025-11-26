@@ -1,11 +1,9 @@
 package com.zero.plantory.global.cmdController;
 
 import com.zero.plantory.domain.member.service.MemberService;
-import com.zero.plantory.global.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor

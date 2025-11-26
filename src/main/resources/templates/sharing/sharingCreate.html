@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>나눔 게시글 수정</title>
+    <title>나눔 게시글 등록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
     <style>
@@ -17,19 +17,11 @@
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <main class="container-fluid px-4 py-4">
-    <h5 class="fw-bold mb-3">나눔 게시글 수정</h5>
+    <h5 class="fw-bold mb-3">나눔 게시글 등록</h5>
     <hr class="mt-1 mb-4"/>
 
     <div>
-        <!-- 초기 선택값 & 기존 이미지 JSON 주입 -->
-        <form id="editForm"
-              data-plant-name="산세베리아 ‘골든 하니’"
-              data-plant-condition="보통"
-              data-plant-difficulty="중간"
-              data-initial-images='[
-                {"id":101,"url":"https://images.pexels.com/photos/4505162/pexels-photo-4505162.jpeg?auto=compress&cs=tinysrgb&w=400"},
-                {"id":102,"url":"https://images.pexels.com/photos/3076899/pexels-photo-3076899.jpeg?auto=compress&cs=tinysrgb&w=400"}
-              ]'>
+        <form>
             <!-- 이미지 업로드 + 미리보기 -->
             <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-semibold small">식물 이미지</label>
@@ -50,11 +42,6 @@
                     </div>
 
                     <div class="small text-muted mt-2">최대 5장까지 업로드 가능합니다.</div>
-
-                    <!-- 서버 전송용 hidden: 삭제된 기존 이미지 id 목록(콤마 구분) -->
-                    <input type="hidden" name="deletedImageIds" id="deletedImageIds" value=""/>
-                    <!-- 필요시 기존 이미지 유지 순서나 전체 목록이 필요하면 아래 hidden을 추가로 활용 -->
-                    <input type="hidden" name="keptImageIds" id="keptImageIds" value=""/>
                 </div>
             </div>
 
@@ -65,19 +52,17 @@
                         <label class="col-sm-2-5 col-form-label fw-semibold small">식물 종류 <span class="text-danger">*</span></label>
                         <div class="col" style="max-width:560px;">
                             <div class="input-group input-group-sm">
-                                <input id="plantNameInput" name="plantName" type="text" class="form-control" placeholder="식물 종류를 입력해 주세요.">
+                                <input id="plantNameInput" type="text" class="form-control" placeholder="식물 종류를 입력해 주세요.">
                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#plantSearchModal">불러오기</button>
                             </div>
                         </div>
                         <div class="col-auto">
                             <label class="form-label small fw-semibold mb-1 d-block">상태</label>
                             <input id="plantConditionInput" type="text" class="form-control form-control-sm" style="width:180px;" disabled>
-                            <input id="plantConditionHidden" name="plantCondition" type="hidden">
                         </div>
                         <div class="col-auto">
                             <label class="form-label small fw-semibold mb-1 d-block">관리 난이도</label>
                             <input id="plantDifficultyInput" type="text" class="form-control form-control-sm" style="width:200px;" disabled>
-                            <input id="plantDifficultyHidden" name="plantDifficulty" type="hidden">
                         </div>
                     </div>
                 </div>
@@ -87,7 +72,7 @@
             <div class="row mb-3">
                 <label class="col-sm-2 col-form-label fw-semibold small">제목 <span class="text-danger">*</span></label>
                 <div class="col-sm-10">
-                    <input name="title" type="text" class="form-control form-control-sm" placeholder="제목을 입력해 주세요.">
+                    <input type="text" class="form-control form-control-sm" placeholder="제목을 입력해 주세요.">
                 </div>
             </div>
 
@@ -95,14 +80,14 @@
             <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-semibold small">설명 <span class="text-danger">*</span></label>
                 <div class="col-sm-10">
-                    <textarea name="content" class="form-control" rows="5" placeholder="식물에 대한 간단한 소개를 적어주세요."></textarea>
+                    <textarea class="form-control" rows="5" placeholder="식물에 대한 간단한 소개를 적어주세요."></textarea>
                 </div>
             </div>
 
             <!-- 버튼 -->
             <div class="d-flex justify-content-center gap-3 pt-2">
-                <a type="button" href="/sharingDetail"  class="btn btn-secondary px-5">취소</a>
-                <a type="submit" href="/sharingDetail" class="btn btn-success px-5">등록</a>
+                <a type="button" href="/sharingList" class="btn btn-secondary px-5">취소</a>
+                <a type="submit" href="/sharingList" class="btn btn-success px-5">등록</a>
             </div>
         </form>
     </div>
@@ -155,77 +140,36 @@
 
 <!-- 스크립트 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/header.js"></script>
+<script src="/js/common/header.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        /* ====== 식물 정보 초기/선택 동기화 ====== */
-        function setPlantInfo(name, condition, difficulty) {
-            const nameInput = document.getElementById('plantNameInput');
-            const condInput = document.getElementById('plantConditionInput');
-            const diffInput = document.getElementById('plantDifficultyInput');
-            const condHidden = document.getElementById('plantConditionHidden');
-            const diffHidden = document.getElementById('plantDifficultyHidden');
-
-            if (nameInput) nameInput.value = name || '';
-            if (condInput) condInput.value = condition || '';
-            if (diffInput) diffInput.value = difficulty || '';
-            if (condHidden) condHidden.value = condition || '';
-            if (diffHidden) diffHidden.value = difficulty || '';
-        }
-
+        /* 모달 선택 → 입력값 채우기 */
         document.querySelectorAll('.plant-select-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                setPlantInfo(
-                    this.getAttribute('data-plant-name') || '',
-                    this.getAttribute('data-plant-condition') || '',
-                    this.getAttribute('data-plant-difficulty') || ''
-                );
+                const name = this.getAttribute('data-plant-name') || '';
+                const condition = this.getAttribute('data-plant-condition') || '';
+                const difficulty = this.getAttribute('data-plant-difficulty') || '';
+                const nameInput = document.getElementById('plantNameInput');
+                const condInput = document.getElementById('plantConditionInput');
+                const diffInput = document.getElementById('plantDifficultyInput');
+                if (nameInput) nameInput.value = name;
+                if (condInput) condInput.value = condition;
+                if (diffInput) diffInput.value = difficulty;
             });
         });
 
-        (function applyInitialPlantSelection(){
-            const formEl = document.getElementById('editForm');
-            if (!formEl) return;
-            const initName = formEl.dataset.plantName || '';
-            const initCond = formEl.dataset.plantCondition || '';
-            const initDiff = formEl.dataset.plantDifficulty || '';
-            if (initName) setPlantInfo(initName, initCond, initDiff);
-        })();
-
-        /* ====== 이미지 업로드 & 기존 이미지 주입 ====== */
+        /* 이미지 업로드: 업로드 타일이 항상 마지막 칸으로 이동 */
         const input    = document.getElementById('plantImages');
         const thumbs   = document.getElementById('thumbs');
         const preview  = document.getElementById('previewList');
         const addTile  = document.getElementById('addTile');
         const countEl  = document.getElementById('imgCount');
-        const delHidden= document.getElementById('deletedImageIds');
-        const keptHidden= document.getElementById('keptImageIds');
-
-        // 기존 이미지 모델: {id:number, url:string}
-        let existingImages = [];
-        // 삭제된 기존 이미지 id 목록
-        let deletedExistingIds = [];
-        // 새로 추가한 File 배열
         let filesState = [];
-
-        // 페이지 로드시 기존 이미지 JSON 주입
-        (function loadInitialImages(){
-            const formEl = document.getElementById('editForm');
-            if (!formEl) return;
-            try {
-                const raw = formEl.dataset.initialImages || '[]';
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) existingImages = parsed.filter(x => x && x.url);
-            } catch(e) {
-                existingImages = [];
-            }
-            syncHiddenFields();
-            renderPreviews();
-        })();
 
         input.addEventListener('change', function () {
             const incoming = Array.from(input.files || []).filter(f => f.type.startsWith('image/'));
-            const room = 5 - getTotalCount();
+            const room = 5 - filesState.length;
             const accepted = incoming.slice(0, Math.max(0, room));
             if (accepted.length < incoming.length) alert('이미지는 최대 5장까지 등록 가능합니다.');
             filesState = filesState.concat(accepted);
@@ -233,23 +177,11 @@
             renderPreviews();
         });
 
-        function getTotalCount() {
-            return existingImages.length + filesState.length;
-        }
-
         function syncInputWithState() {
             const dt = new DataTransfer();
             filesState.forEach(f => dt.items.add(f));
             input.files = dt.files;
-            countEl.textContent = String(getTotalCount());
-        }
-
-        function syncHiddenFields() {
-            // 삭제된 기존 이미지 id -> hidden
-            if (delHidden) delHidden.value = deletedExistingIds.join(',');
-            // 남아있는 기존 이미지 id -> hidden (서버가 "유지" 확인/정렬에 쓰고 싶을 때)
-            if (keptHidden) keptHidden.value = existingImages.map(x => x.id).join(',');
-            countEl.textContent = String(getTotalCount());
+            countEl.textContent = String(filesState.length);
         }
 
         function renderPreviews() {
@@ -257,46 +189,6 @@
             const oldUrls = Array.from(preview.querySelectorAll('img')).map(img => img.dataset.url);
             preview.innerHTML = '';
 
-            // 1) 기존 이미지 먼저 렌더
-            existingImages.forEach((item, idx) => {
-                const card = document.createElement('div');
-                card.className = 'position-relative';
-                card.style.width = '120px';
-                card.style.height = '120px';
-
-                const img = document.createElement('img');
-                img.src = item.url;
-                img.alt = 'existing-' + item.id;
-                img.className = 'rounded border';
-                img.style.width = '120px';
-                img.style.height = '120px';
-                img.style.objectFit = 'cover';
-
-                const delBtn = document.createElement('button');
-                delBtn.type = 'button';
-                delBtn.className = 'btn btn-sm btn-danger position-absolute top-0 end-0 m-1';
-                delBtn.setAttribute('aria-label', '삭제');
-                delBtn.innerHTML = '<i class="bi bi-x-lg"></i>';
-                delBtn.addEventListener('click', function () {
-                    // 삭제: 기존 배열에서 제거 + 삭제목록에 id 추가
-                    const removed = existingImages.splice(idx, 1)[0];
-                    if (removed && removed.id != null) {
-                        deletedExistingIds.push(removed.id);
-                    }
-                    syncHiddenFields();
-                    renderPreviews();
-                });
-
-                // 기존 이미지 배지
-                const badge = document.createElement('span');
-
-                card.appendChild(img);
-                card.appendChild(delBtn);
-                card.appendChild(badge);
-                preview.appendChild(card);
-            });
-
-            // 2) 새로 업로드된 파일 렌더
             filesState.forEach((file, idx) => {
                 const url = URL.createObjectURL(file);
 
@@ -325,11 +217,8 @@
                     renderPreviews();
                 });
 
-                const badge = document.createElement('span');
-
                 card.appendChild(img);
                 card.appendChild(delBtn);
-                card.appendChild(badge);
                 preview.appendChild(card);
             });
 
@@ -338,8 +227,6 @@
 
             // 메모리 해제
             oldUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch (e) {} });
-
-            syncHiddenFields();
         }
     });
 </script>
