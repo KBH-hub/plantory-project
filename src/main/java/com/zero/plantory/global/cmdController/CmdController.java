@@ -27,9 +27,9 @@ public class CmdController {
         return "dashboard";
     }
 
-    @RequestMapping("/dryPlantDictionary")
-    public String dryPlantDictionary(){
-        return "dictionary/dryPlantDictionary";
+    @RequestMapping("/plantDictionary")
+    public String plantDictionary(){
+        return "plantDictionary";
     }
 
     @GetMapping("/login")
@@ -88,19 +88,19 @@ public class CmdController {
         return "admin/reportManagement";
     }
 
-    @GetMapping("/sharingCreate")
-    public String sharingCreate(){
-        return "sharing/sharingCreate";
+    @GetMapping("/createSharing")
+    public String createSharing(){
+        return "createSharing";
     }
 
-    @GetMapping("/sharingDetail")
-    public String sharingDetail(){
-        return "sharing/sharingDetail";
+    @GetMapping("/readSharing")
+    public String readSharing(){
+        return "readSharing";
     }
 
-    @GetMapping("/sharingDetail-other")
-    public String sharingDetailOther(){
-        return "sharing/sharingDetail-other";
+    @GetMapping("/readSharing-other")
+    public String readSharingOther(){
+        return "readSharing-other";
     }
 
     @RequestMapping("/sharingHistory")
