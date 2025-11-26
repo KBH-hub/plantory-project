@@ -1,6 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    let posts = [
+let posts = [
         { writer: "장명훈", category: "나눔", title: "다육이 나눕니다.", date: "2025-11-08" },
         { writer: "장명훈", category: "질문", title: "물주는 주기 어떻게 할까요?", date: "2025-11-07" },
         { writer: "장명훈", category: "나눔", title: "선인장 드려요", date: "2025-11-05" },
@@ -162,5 +160,3 @@ document.addEventListener("DOMContentLoaded", function () {
     categorySelect.addEventListener("change", () => { currentPage = 1; renderTable(); });
 
     renderTable();
-
-});

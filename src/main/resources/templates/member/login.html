@@ -34,6 +34,9 @@
                         <input type="checkbox" class="form-check-input" id="keepLogin" name="remember-me">
                         <label class="form-check-label" for="keepLogin">로그인 상태 유지</label>
                     </div>
+                    <p th:if="${param.error}" class="text-danger mt-3">
+                        아이디 또는 비밀번호가 올바르지 않습니다.
+                    </p>
 
                     <button type="submit" class="btn btn-dark w-100 py-2 fs-5 mb-3 fw-bold">로그인</button>
                 </form>
