@@ -39,8 +39,8 @@
                     <li class="nav-item dropdown ph-menu-item">
                         <a class="nav-link fw-bold fs-5 ph-menu-text" href="#" data-bs-toggle="dropdown">식물사전</a>
                         <ul class="dropdown-menu ph-dropdown">
-                            <li><a class="dropdown-item ph-dropdown-item" href="#">실내 식물</a></li>
-                            <li><a class="dropdown-item ph-dropdown-item" href="#">건조 식물</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/readDictionary}">실내 식물</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/readDictionary}">건조 식물</a></li>
                         </ul>
                     </li>
 
@@ -48,8 +48,8 @@
                     <li class="nav-item dropdown ph-menu-item">
                         <a class="nav-link fw-bold fs-5 ph-menu-text" href="#" data-bs-toggle="dropdown">나의 식물</a>
                         <ul class="dropdown-menu ph-dropdown">
-                            <li><a class="dropdown-item ph-dropdown-item" href="#">식물 캘린더</a></li>
-                            <li><a class="dropdown-item ph-dropdown-item" href="#">내 식물 관리</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/plantCalendar}">식물 캘린더</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/myPlantManagement}">내 식물 관리</a></li>
                         </ul>
                     </li>
                 </ul>

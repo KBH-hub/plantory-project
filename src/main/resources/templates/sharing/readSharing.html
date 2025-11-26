@@ -1,41 +1,16 @@
+<!-- share-detail.html : 나눔 게시글 상세조회 (헤더: fragments/header::headerBar 사용) -->
 <!doctype html>
 <html lang="ko">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Plantory - 나눔 게시글 상세(타인)</title>
+    <title>Plantory - 나눔 게시글 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .share-image-fixed {
-            width: 100%;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            max-height: 180px
-        }
-
-        @media (min-width: 768px) {
-            .share-image-fixed {
-                max-height: 300px
-            }
-        }
-
-        .carousel-control-prev, .carousel-control-next {
-            width: 7%
-        }
-
-        .carousel-control-prev-icon, .carousel-control-next-icon {
-            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45))
-        }
-
-        .share-image-wrap {
-            border-radius: .5rem;
-            overflow: hidden
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/sharingDetail.css}">
 </head>
 <body class="bg-light">
-
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="container my-4">
@@ -43,7 +18,7 @@
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <div id="shareCarouselGuest" class="carousel slide share-image-wrap" data-bs-ride="false">
+                    <div id="shareCarousel" class="carousel slide share-image-wrap" data-bs-ride="false">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxASEBUSEhIQEBAQEA8QEA8PEA8PDw8SFREWFhUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGhAQGi0mHyUtLy4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIALcBEwMBEQACEQEDEQH/xAAcAAACAwEBAQEAAAAAAAAAAAADBAECBQYABwj/xAA6EAACAgEDAwIEBAUBBwUAAAABAgARAwQSIQUxQSJRBhNhcTKBkaEUQlKx0cEjYnKS4fDxFSQlgrL/xAAaAQADAQEBAQAAAAAAAAAAAAABAgMABAUG/8QAMREAAgIBAwMCBQMFAQADAAAAAAECEQMSITEEQVETImFxgbHwBTKhFJHB0eEjQmLx/9oADAMBAAIRAxEAPwDotTj4ngZeDhERinlZWxkVInE2MDyLMmBg1EYAdEuI2YZxpUVZWuDUG3zoh1bXIHEg5Z0rq4iUwL5RG/qYgpiubN7Scupb4DRnaizFUr5GoVJlEBlN0pFtCMq2QyqyM1A2cymtmoHUCtjEOajWkAXcxW7HQMiYYo8ZDAjGMeEISagGIIhMeAmsI3hwyMpBNDT6ec85gbNDBp5zymCzc0GknDlyBRsYcE4pTKJDCYhJuQyQ1jWaIwwqTqjC+TWeOKB4jWc3m7T6nLPY4RJ55uRhBkTlkEGwioDKrjhcjUOYcUjKRqDhJOw0T8ubUagTpGTA0LZUlYsWhXIkqmahXIkrFmEsyy8WYXlBaKsYUaihMZM1EWY2pmoowmTCkDKxrGKEQhBssZMJUpDYSNk1hIhGPVMENp8VmJORjU0+nnLOZmaen085ZzFNTTaacs8hkjY0uKcc5FEPqsg2OWAgMGxx4chGlE7YoxepSjHJagz28rOISbvPPnYSjGQkwntsSwBsKRJMyHMaSLY6DbYlhKMIUAC4joDFsiyqYoFkjpgA5MUdSMZ+oxTohIAk6y6ZigwEw60gFxpTB6gSDpDN6iMUfSt7RlkQQDYD7R1NBKHFDqNZX5UbUE98ubUEg4ptQQORI6YxVVhbCaOkxznySMa2mxzjnIBq6fHOWcjD+BZzyYTT04nNIdDYWH09hrPVJNUYuhjQe4RlDO2DMXuUMchlae5k3OEVecmSKDZXGlzhm6CMriiKEmYPjwmLLHPwFDK46kJRkuUOidsQJDLCmAC6x0wC7rHTFAkSgpRlhTMI6jHzLwkYENNH9QwXHpSfER5KNQzj6f7yTzDKIX+DEX1WHSDfSRlkBQrl0v0lY5AULPpAfEqslAFMukqWjksIL5MbUYo+GFSChd8MqpD2QmKZyDY9plkJs1mtplnJNmNTCs5ZMI0gkmYe05kJDIfSVjuhixEDiglTISVMJK5KhjkaME+dLesY5A5J9O0cBWpDJCwpjmDDOZYA2MrjnTHEkgDWFIkkMhkJJuKGIOESM+ni+wQGTFOLJg08BsXdJC6MxbJjlExWgBxx9QtEFIbMBOG4+oFBE0wiOYyQZMUVyGSChIljUWGKDUai408GsNFH0gMKyMDiJZdNUtHJYtC2bS3KxyUK0Z76Wp0LIAE2njKZgbaeOphBnBG1hsJjx8xXIJo6YTmmY08U5pDIZSSYRnEZOQR7DkiKTQyDBo2sYqTJt2YoximKboaNZybE3PsaaOALgbmJpsBr4BxKQx0MMqkWaCg+ITmkOg4ihLVA0EG6SE4mFcmOeZli0xgORJJMDF2SUTFoCyR0wUXXHA5DJF9kWxqCLjithoIqRWw0EVIthovtgMeKzWYBmwx4yA0LnT34lNYtA30BMZZqBpK/+mQ+ubQUbpg9oy6hh0C+TpkpHODSLnR1H9WwUWTHUzlYBrGZJoNjONpJoaw6mTYQ6ZKiNGsIM8XSNqLfPEGk1g31AjKDNqFjq5T0hdRkHFPt5YjhsZwYZN4hkaOJYKodDSCJJDIIJy5IjIIpkAhRME9URowLIs4ssBhXIs4ZRaMAZYqYAJHMdACBYLCkWRYBg2yCmEsFiBLATBLBZqMXVIVExf5F+J04+jy5I6oR2A2jyaeTWF3uEN8gS/pRoJR8Ik540YA2ISDRqA5MUVMFCmXBKxmK0J5cUtGQjQICOIXBihCLkitGsIMsXSGyDmh0mso2aFRNYtm1P1lY4wWJNq+e8ssYLNVsfM+zcdzmGcWExHAZIcTHISgUQwmOTcLGQVcUnLCEnZOWeKgkgSTgEtEcWYqwkZY7YbFcyzky49uAWKuJwVQQRjLcAbGs6IYW+Q2HTHK+gkawm2LKCGPFZz5MfdDIrUhQQqLHUaMFRY6izE67V/KxgmgNwu/afWdFJYejTfBz5ZUyun1yO23sT+G/5v8ArPO67DHXrhwx8eRPYZaeay5UiTbMBcTnmjAmEkYWyLMmKxPKkrFiMSyrUvFkmUuMCz2+agWUOSFRNZRssZRNYtmzmUjA1ieR5ZIwIxzHXYVsz61bsikaOFI9FEMDHJuAwfGsTQEKFgcQkFZGeNBICTmeEJYY4voGIbHFeGjAXxyE8SMLvhE530kZAsWyYIv9Go8CtnscRwoKYYRWMEBkpDImpGUbGKhZzaNwhVEZIIbGJbFBzkorlmOZ+Ic+9mWwAjbQL70J7HVTpPHxpOCcrkI4NQSAasgUPFETlx55L2tX4Ffk3OmdYLHawG0Le++R/mD0o9TN6fbsXhma2ka+PKrC1II+nicObFPG6kdUZKXBDCc8kMBM5zAcgigYplEpFk2IaidECUhQtLUKDZ4yQARyRqBYN3jJGsXdpRI1gjHCVhCd7i01T6yDBpGMaSwUNKsbSEuoiOIUEAi6QlgsVwMTsi+mjFgIPTCUeRnAwDJOeUAASIFjACcRXEAvkE58mOwcEo04ZxodMuGnMxkXDSTGLiKxkeuQkwhUy7bbvSsa9zU9D9Maj1EXL4/YWbqLOK1WVGclQQG5o97+5lM8sc56o3RwANOfxD/7f5nPLsw9gyElqsgHtXFRlJykq2AN4dayN6aAFULsHnmz5j5ctrRSr83+Y0W47o6fHlDKGHZgCJ5Uttj0E7VoqZz7sIN5qAxTLKREZnagTogRkJOsumIAyR0BsFGFsqRGRrBMIyNYNhGTDZ6pg2fUXwT6qLLuJRcHM6cbsVoIVlgERWYuIpgizDFwJqMQwiMwNxIyQBZxINABGCgFWEDiYWyCc84ii5ajOHLCgpnvmzhmqHTLDLOaQyYRM0k3uMmWOeTk6DZIy3x4irI07QeTl9bpCrkHtZo+xvidscmrc43DTsLK9ML99u4dueOYzVx2FC0f0sERbVgrYug8+P27wNhS2Oj6E14iP6WNfY8/3uc2SGp2deF+0eIk9CKgcsnKIBHOYYom2Z2UzoiSYB5RCsXcSiEYIxwA3MKMCYx0jAXeOkErvhoJ9kfHPp6OsH8udGMWgWRZcVi5MViF8ZgCg4mGLgzWZEGKzMo0m0ACUk3AxU4ptBqKtjh0goXyYpKcAUJ6jDOLLitCsRyAiefkws1gTkM8/Jj3HTLDIZyuLGsOjRXDYNhkyyXA6Yj1eyQASAw8DuR4v9J0YtNJ9yOW7McoT6T+LwT/ADf9Z0X3RGi247fqTtJ/4f8AyIK3Aw3NhbHHJqJtTYat0dF0TERjJ/rPH2HA/wBYjT4OrEtrH2U+x/SOunyviL/sx7Qpq8qqLZkUf7zqP7mGX6d1L30V86X3YjyRXcyX1aNwrK3vtYH+0g8E4fuRNzT4FnMZCgnaOkBizGUQgFzHQATGOjAXMdGF2aUSGRTdDQT7nU+no6yGWViAUziVQjFHmaJkoIjMgoMwxcGYJFwGLAQ0YgiBoxBgMDYTUAoyxXE1CmdJzzghWIZsU48kBaEnSebkxoxWpzyxjWevgk8AckkgBR7kngTn9Gc3UVf5/AbEM3WsKmlY5G9sYtf+Y0P0uN/QUvdJfTf/AF/kV5EiMfXdO/oybsV9mcDYD9WB4kn0c47wdh9SMtmHz4CBTjcvBDpywHgkeR9RJJ09tn47Aa8gWXb6iQ4FMrL/AD+K+9lY6d7cCPbc8CEUs5PCl8rDuB/SPqeB+Y940IepNJcfm4eEYfUOqZMnDO91xhxuwx4l8Agce3Pcz04tr9uyEcm+QOl1zp+Gy3NE2dv2uWhllDdE6spqM2V+XYkQScpbs1pCozUeCbHYg8iLpDZr6Dq5NLk+wft/zf5nJl6Zcx/sOpeTRyGciQ7BExxQTxkAA5lEAC5joyF3MokOihMNBPvFz6U6yI6YBXPKJisQbvGsky6mAxa4AlrmCSkyMFviMEqYrMRtimJ2zGooUgbMAy45KQGhLPinNkjsKxDLjnnziKL5WVF3ve26AFbnar2rfmv0/vOGHVu+PzZfH7GcqW5yHWOo5MzENSop9OJTar+f8zfUzSl/8UqXj85fxJ6r3M0ZaPZfzuJptAbsnNqQe69+ODNHG1wwDfR+vPgrG15cP9HbLi/4D7fTtEz9LHKr4f8ADHjOtjq/kKyDLibficbqHHPuV8G+9fpPKdp6Zcoo47WuAHW9K/yUxIC+XK4yuFHJA5FnwASP0nX0cXOb0r4fn53NKNRRjL0oYx67J8gcfue89J9Pk5lt8Dnc0gGZEHdcg9gpWv7RdCjzYt2KZDjb+uuTW4G/2mXxYb8IA20cLY/SGw/MEzUPeFbhNzoWqLqUbuotT7r/ANP9ZwdXj0vUu48XsaLJOVMIJxHTFFnMqgC7mOgoA8ohgRMYJ94ufQpnWQWjKQBXO0omIxE949ki6mGwlhMEm5mzBEEyGLmZmPBYjYaCBIthJ2wWYoywORgLCRcgAXSJJgoTz6cfYckk9gB3JnNKGp0hWjl+oD57liW0+lxqUGRuHyC7IANd6JhcFP8A+sF37v8A/Tn2k7OU1Jxk1hDnnu4HP5zklov22LRVlGO/mBS39FEEfc3cVwrbgyfgEuQ0TtUE8gBQaH3PNwNKwsEmoYtbMwQcmib+wjqEfBjodJ1krgy5MOE/JwoWzWzG2NgMAbHFWR7SObHieSEVtJ7b72dOH3JpnQ/DmtXWaRchQ4txdQ2NitlSVLD6Eg8GxG6jqoYE8UfbJbquPNDPEZnU+latPwn+ITx4yD7jz+X6SOL9WUtp7P8AO5zz6Z9mYedq/FuQ1yrhgLqvM7I5YTWz/wBHO8ck+BRso5ND6EDtE1eEamCRC3YEn7XcRyS5KJPsPafoeZu4CD3fg/p3kZdVjj3KLG++xs6HpWPEbFlqoknj8hOLL1Msm3YpSXAxkEihWKZZaIonkl0AA8dBQtklEMAJlKCfeiZ62o6gTPDrAK5Hl8cicgBMumTJmsxO6ZyMWRoFIZB0MexgqrFlIKQRUk2wlwsFho8RBZqBMJOUjAmWSbBQNhFbMZPxDmVcXqBYMwGwGt/nbdj2EXXFcksnBzGXpz5T8zVZV0+IdsIZWybbFXXuff68TSxSn7sstK8dyNd2zP1/WseM7NLiRFXtlILOx97PP/faSl1EY+3EqXnuZvwY+mxqSXdizE2Ae5JPc+0gmnvIST8Gv0/pgycANlYn1FeMa/QueP7/AGgnmw4o+92/CNHHKXBoZvgoZAB8xcQHcKjZD+pYf2nLDq9cvbCl8zoWD4nQYujY9Ppmxrwmx918liV5JnL1HT5JT9RsvCKiqRm/BCV0/AB22NX5uxnL+oapdTOvP+B6rY22E4ZJgAZsQI5AI9iARGimt0wMSyaTH/Qn/IsdZJ+WIwewDsAPsAI2pvlig2jIUC4joAvlMeIrE8xl4iimSVRhbIZVBQplaVSGQAtKUMfeHadzOixfLkiOVAYhkz8ymPJRFsgZZ1xypilw8OsxVskDybAK48vMisysJoYHjrPZRDamU12MefLRESWVRaTCe0+W7+hiY+ojkuuwT2fLXEXLmUdu5gAz+3JkPXRic/IvtRgySem0YWNlgfbvIPJKc1RqFeqdNx6hNr7qVtwKHabojv8AmYcvuXPAjipcnPav4X0/c5M9+5ZW/uJ5eXqtHO4jxQFh8FJ3OZgCAa2AH+8qsr0pvYHpLyaWD4a0mMbmByt/vt6R+Q4iTyJQvUFQijQ9C8DhR+HbQH6Ti0409TdlHIuurF0O3vKLqk5KMVsDUV6jrB8nJVEjFk//ACZd9UpLQuRoO2jJ+FVrp2mq+cCE/mLkOui1mlJeX9ymT9zNnFhoizW7uIV0tuOrbUSs9rVANDmT63FjxvTDkIhknChWAcR0KxdpRCAsg4uMjCxFmpXhWCrYPNozVx45LC8bRl5Z0xJimRpaKGQrkMqhkLEyqGPvx0zE1xPReGblp7l6YJumuTRIA8kczLo5uVMGhmdqtCVcqDdd5zzxuEmkTcNxbJjK94upoVxoNhwZCao8+T2jKUm6MosBrCVO095zdT1DgqA470C05N3zOGOeVhSNjAvE78cnyUSL4dSC23z/AKSsOqg5aE9zWKZ9UbKd2Bu/9J5fVddJLQ/3JhCaEMhJY8HnaOeY3QTy43KWTaL+/wABiOpZty9ytc12MT9R6hZIKUHx878GAaViapubAN9hJdJJycd9/iBvwE1WdbKh9x8t2H2nT1XU45SeOE/r2AC0uWgWY8fa5z9JkyKLnN+0zaDfxHcdh3544Nf5nSuoVuP3A2Iatixr2PYC7+3vPNyueSemuPAsme+ZuU8PuUi1NA1KaFODW+pc/IF2L6vMNljhVHqv8h/mSnGMopY+3PzNLgDpMqMK3Cj25ko47lT2FTVFNTlKt6eVujXiLoTbTFb8AtbkCYcpLbicOX0/02hqVxJepArh/ciPgvVn+C0won/2+PuO3E6eoySh1U1V+5/crmdZGjW1PUcYu/FD2i5c6ntVkdSFsOcE2O04WtLGi0MYthb13RHAXyZbEser/wBOPga02W1eHGiXd/8AfaWzdPCEbT3A6RjE3c5+BORj+EZlAAMEG3LZD6bQpn6e6EGXba2khdDTD4MV3uPjgSWpLgq3sc91XGA9AVfj853YHcbZzSW4jm0zgWQQPeXjNPgIm+Ik8SylQyLDpjnmD14jaWfoFhzPpsiudo6iDZEnKU5Y3ToIsumUc+T+s5JRUIiqB7NolYciO8FwtgcLC4sdACGEHtYyVIyurdPVjuH4p5XWdOrbTEnCxdMQ21XI9/ecEZpppdgaRXGcpJvgfsZ5ss2fy/8ABkrKb2R+a7XzNGWTp8lvkUC2bcbB+rEQTm5zUm9+4L8BOlZ2JLXwLAHczt6TJkjLVJ2viZO+DzaoHIQeeDyZzZMznkc3wNfYksE2shDjc28E8p3qPCfpKOS7vt4vj60K9uD21Ga93JO1E4B3VZ/KUjjx5pNp88L87GE1ZxlKleOR9OJzNaVKPzVGfITNqixIFilPpPZb5JN9uwjxc5rS/p4ruK5GTo9dmRifWKtrIBCgjg/QVUrBPHJSx8olGUrMnWdbcMdzbTdg33Hkky0MGp6lu3z8xHNjOfqA+WBkF7lVgnIDWLUsfbzXmLDE02kPJ7KzO0IY5FCtWO/UeSF4J5I7fhP7S7imnqW5JRth31zhiNy0o4IIo/b3kfRjXAd7ML4i+Ihi02YMG35UbGhIoEkVYnd0fRPJmg1wnbOjpV77On+EtTtw4sQaqwY1O7wdonB1UZetKS2ts0p6ptmrm2OGJql7nwTOKMXB8iumB6drFZ9pqgAa+/vLLFFNOfAUxrIyfMsngHgDvUi9Lb0rYKq9xvULjcUHHAuj7y81B8S4Xf7DOhTDpwJyTkzKI7pch2tTbSpBB9xOnBPRjk4umtzNgsrs71+K/PiTevNPm2zWD1GJg1AA158Ee8EsLjLTz8gO2ZQ0m7NuP5SqyVDSha3GOp6dW9NivpApaZN3YaTEz0pRRFR/Xl3CkhsaNZH1WUPpAeu8+1WdY5uyxO++0d5nmXsWxkTXvC4q1rMiTK5Hey4MhNNYtlb5Pa54GD9UxNvFFu3w+wWQW5pjyfEr6kYtRyPd9hXuUyLztsUVb2J8dpDLBuXpRezjL4+OPuv8VYKMvM5bhQ3Fg2QTwas1PDyqWVuGNOl5q/rQLMVtU7E/zbPp4k2pTqyNsBp+ohlNHliQQBXaPKEosVStD+hxvYCqSas1VbY/TY8s5+yN+UUXgYyaZ8jhlxjancfzE/X6fWdMsEsu8MdVylywO2yvWQuRD8lWbPuCKqoWB2hbs+AB/wB950zxw6lalGVp1xykq/shcnG3Jj5RkCLjzALlVy38t0xNXt8VX6TjzQlifpuNL8sVXVPk1Mr4ExbS5OcgFrvdQH6Kee35Ey2WHTRxf+b93fb8p/Df4j2lzyZur6sqOC4tWG1rQfhA44HBPIP1uTxxk5b8bbUltxx/Ispbiumy48mVnDMf4lWQI52BlPNJ25ofYAGdMHJyaa/L/PCMldtCXTuiYW+a7Mmo2uUsOMoX5YBPaqPNVzfF9jKzcsdJ/wAfn9gemjkfiXU5Nxxq2PHhXIyXvYfOK15qqFcV/rOrpcUVvJNy/vROab+RpfCvUtq5F3YnZQGFsCvINKxUHjg9ge05+qxe+LaaXyAnRb4k6g2HEu5MT5HZg1Ko/Bailsk0Sw7mq8R8XT6srim1FcGZwWpOfWZLG/ImmUO4PjnwB9p68Fj6aG+zlwVVxxuuWbum6gzj/ZbmyqtuQaAHbj3nBPAov37Lscqt8cjnTviVrAs0hKuGurPn7yOboFV+eB0yU68fnMA1puNbeSSBM+jXpq1uFy3pHXdPV8iAMCN6ks4IAAAJNH8quea8aUrXCKJbG6M2LHgBDKq7V/EynK5PYD3Pk+1/lG9NTxulS7+fp/nwNarYoqZCoYDhmCj/AHifAnFHppyWpLa6+ozboK+FQjAtTj+3Hj25jPFGKafKFKdO1vy91lWWqJbt9psOV45bRu9mmFOhDX9eLEqNoABIVQAol568qWqkvCVIGozdN1BmAPYc8xZ4UnRO2QdYzH0nvxz3r3hWJJe41j+g1SqbNsKoA9gYqpO2rHTIOsHvJekx7PpuPERzZ+nmfS4+llF60zrCM1Lx+k6cmf0cHt5vj/Zq3AlTkHcgA8j3qcThPrsaptRT37cfEAZlJBA4P15FTvljyzxyhhdP47qu7VB+ZnPj3amqKrjQc1wTfj9Z4s+nWXr1CtMYR7Lx4/uAjUMfnEdxtAArnmc/WZWuu0SV2qS/O5mic2I7uKtVqhwBZo17n9uI08X/AK1CvakqXCvZ15b7dtueAVsZOlw/LL7Nzs3IDcgCzYr38ThxOSuONW39u9/Pgmo09hdxlVCyouM5LAQLzQ+nvVmO3lhLWopJ7VX58wUyvQOhY6JyqzMSSBdbTfn2no9L0sJq8qfwS+HkSMEhrUXpxuxNQf0gZMZU8eAW7j6iSyQn0Sc8T2ltut/pfPzQzqIJuoHGFYI7WtMQpONB4tvBMjDJkxpZY+Kfj4V8X3F1UY3WOuXk/h8d9g7sDkVVDcDcLok0eL8H2MaEprFd0rfDe/zV8+ews5W6RyCdSHzd7YgzekM43NhI8X4Wz7y/oNRpP6d/+kYyadmkudszfNOVQ3qGQKPQAwNbeeeQPA5qScFHbSPvLcQz/GBOM4wNwUFUxMC/4j6W7cN2oj6jtxOtdNPaLftBrbVCI+IHbBtbN8kL/MyfgXdtbj2NfTvD/TVNVG/r5RSLdUD0eqxYU+VgzON+U5SXLCl2jcF3D1Xx7/eNkhPL7skVxW38d9qNRy/xD68i/wC0XGuNUTGrsb2gEu/AJvcf7z0uluMH7bb5r+F/YVK0aGm6gceOldSzMhOVlyZmIC8m1Ba7NWfac8sKnO5LZXtsv9In+4zOpfEGpWkXUlsS5CxxhiFIY+rdXJ5sztw9PCUd47/5KY43ybHw5eMsqXm3i12Cy9gcGu9e/kfacHVr1avahrt0a2Dpen0bbj81WdBvRmUBQxu65u68EAfeQy5MmaNPn5E2ldlOvc4gcClmUKcuJFZ8jByW/CAfN37VB0qbnU/o+2wN3wcZjxMhY2wIJYjafSD/AGnrtqSSFe/CO+6J1XIcVhQUIKAZCqqCbstu4C7gBZ7XPCz9Olkq9/gUV7ivUNWiP8wZceXKxD6fBj+blL/0gmtm27AIbx5l8WDXCnst0+359xapnX9Jz5gytkZMvpUKAXG13qhzwO/cfWebPSmlC/FMfhjfxJq0x+vO4C7VVcOIgvmazY3dq8k89h+dljlllUq28b/Pfi/4NLbc4/qHX9rClB2iwvPy1vt942Lo9S5r7k2za6dlQ4yXr5rpRPAAJHYfS7nLkWmVJbDpmTqN6jYx2qb5UH1fYzojpl7lyCtqEunahhkHquibPFAS2aCceCa2Ok1mrx7gA6kFV/DVA/5nD6TKWXxYiVBpefciSk6Y59VfUbRbCge3vc+gzfqP9PjUsiqL4834Z2hqvnvfP7cTu9KMnr5vd/22o1g9I5N7uDfInH+lZsktfrbSb3Xw8mYb9q4BnoUql207J/b+QGdqtccWMFjuYtsAUbmLE9gB3P0niS6vqcXTxUmpTbrb5/f/AIHZGF0ZNRkzZM+UZMO1wgGQbVVK/pPe+OfrOKHT5nk9WTpp+6T7N9nfbtXZCK7s1nUnH6W3EOK2twRu8EePV+0CxynhkoyVqVKntXwrtctk+N+wewgj/L5BYcMCtBnu6FHtVnv/AJnH08lgySptOml3af2578+OREBxanIcxBpuzY1Y/gIVl5JryR3lMeabzb7u+72Xjxx5Yu6YTHq2xqCQgyrw5vdXNMFI72R+0b+pn0ypfuT552/KNbowusdTGXVIgOJm/CxUgtyTuBb6bTx45lc2WeZa5r8/OCc3uR8T6rUYsChlyjED6VxB2JC+rlU5K+mvrY940V1G2ObpU6TdKvt9QTTo5zPkQOFxkOAoGTMSzZGcb74C2QWZuAv8113EbRb3+i7dvz6CJLg47quoy48Xyt6sGI3lFddjWDVMg448f+fUwQhOeuvlx/v7kXtsyuj12bALO00u9XY0q7h5auOD2+vuI2TFDK9v+lIaktgb9eyan/a5jbqNopQgGMt2sdzYseRRjvpVh9sePne40r5YV+q4zb5j6kUEIiKwc2BXP4Tzcmunkvbj4fdmUnZj/wDrPzSS4O5npFIG1VoV9bvcb83Ox9L6aqPjcaaMXU6gH1MCWYUBf4Uqh+c7YQrZdvuUjHwPjWhcIUGhxe6t5A+lfX9vynP6WrJb/wCEdNtmcu0tuY8EEdrP6CdDuqSKq6pD+k14NrudF2naFVHtvqSRt888/aRlhXL5JvHS3NDpmqrbkcHuqjGACG2kH9LE582PmMX8bFcUmNDqmobUKcROFcor5YAUBl44erI7m7k/QxRxPXvXf5lK2o0etdSX5iMVCthHCEFnysw7vkJsr5rueB545+nwtxavn+PkvIs3Qx0/WfKxlmxjPlcNWE2ARt9JYXxySfESUU8i7Jd2BN18Tn+p9QfLmxK+H+FVCgvEqnYq9uFqgoBNfed+LDGEJSUtTfn87hcbT3PofwvnGI5DqCSqhCMqN8sZR6ti2wsm79I9/wBfDy+m5xtNrfZdnt/H52Fxpx5OX+K/iHG2pC42VsagFiCHJbngt3NXVff3nd0nRtYraafa/H53NO077Ga+r+btUgqLUgrwQL5B/eWWP07aJt3ybZyYib+cQxpVRabt3YE8GcWmdftHpWJ59ZpxuAfKz7qN+lVPkD3bj95aOLK6bSr8/gO10Zur6kqLsTjn1Mx5M6YYHJ6pE5X+1If6Jr92QKSWFE7q7UCROfqcOmNoaDvY3hmPlsh+oU0ftx2nBpXhFNLPuWrpQSbZSaIPix4nb+qRjgxOb90W90+1p7r+PyzuTF9CzGwD6QB35N/4nmfps8uRyxwk9K87/L6fmxkFW/AALXfJPH0nSlkcWsaSbu93w128b/IN9wTZ9oJY2EAG3nvf6TmjneO1klqhBJad+b+i247ugtrkyF+Tl1ShnZ3x/wC0xYCDjxYbIO8sot23ChzQHjyadDm6dxiqtuTpcRV71tv3/j5E5bs2NW21bAJtb2BqBFizz7CdfVxjGNq6abq9q2t7/Db/AAMCwLYDAgY1XdRBv3uhOPpcbcVNNKEFe99t7254+H+w+DmurbWyCnJ53bVBTlT2+3NTzJNOUnF3fwr6VuSdJg9PmY71IO0JV7+Xsdz9AQPvFi1Hfd3yk6+Xz8mfADUdQ2YzkYEqpoi+AfP9hHx425KL38EnLaxTSavT5AuUbNvO1hhO6xx3JBAFngDn3rg9L1408U938/8AoW00E6th1Osx4v4fAc6Om4s+ddOU4sVTcCmPg8z0Om6SeWXO627Nc8JeOAzg7o4rVqce5AyrkxfMxllFqrjIQa9Iuh6brnkyjXupohXkU650pW0+7+dV3LVbmviyeAB3J88fWN0vUOOWuxqsrgy//G5EIG1n++96AUn8x+8eTl/VRp/EaH7TidJo8m49lUni/VdnwB9vNT2cmWFeWNLS0rA6jqXqA2h1Ar1WLMeODa7oaGLawD597jaAvjaC3P38X9gI6hpi7dj6UluU1WJlIsg7u9DtGhJSWxotNbA3Yd7snuPYRkmFL4BcWlOw5LDItBgL3KT9D/pElkWrT3NJ9hzAMIQekjKCebJVh4P0P05/KSn6mrn2ksjbNTX7Ewizty+ltoDMORyL/OcmLVLJtuhUlwIdN1jfMG0DcCSgHHgnue06M2NaHq+oXGqo6jp3UceMpmz47OcBUPcCi3tyOb8Ty82Gc08eKX7d2ZPuZ3VGBzWu92ysVGMNs7GuGPbidGC/Tp0ku/IHBN2OaTouXGWbK9I3zNmMUzVX8x8cEdpLJ1UJpKC3VbgaQl1D4jyYiMe3c2MfjdifUR3QCtvHm7+0vh6KE1rT58f5GjDYwVbdZ/CRRA7/ALztarYSSUdhrRahh/xEUPzkskEyco09jR6XiFtkcs1Yye/Y9r/Lmc+eTpQj5GikxTqfVMjgDcFxkVSIqMaAHqPJJ473LYcEIu63+ZRGM7c2GJ78GdiW26HSVbo2fh7WsjEckNRP3UGq/ecfV4lKNiNUbeXXNfBauKurPHfgzhjhVG3P/9k="
@@ -58,25 +33,26 @@
                                      alt="추가 이미지 2" class="d-block w-100 share-image-fixed">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#shareCarouselGuest"
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#shareCarousel"
                                 data-bs-slide="prev" aria-label="이전 이미지">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#shareCarouselGuest"
+                        <button class="carousel-control-next" type="button" data-bs-target="#shareCarousel"
                                 data-bs-slide="next" aria-label="다음 이미지">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         </button>
+
                         <div class="carousel-indicators m-0">
-                            <button type="button" data-bs-target="#shareCarouselGuest" data-bs-slide-to="0"
-                                    class="active" aria-label="1"></button>
-                            <button type="button" data-bs-target="#shareCarouselGuest" data-bs-slide-to="1"
+                            <button type="button" data-bs-target="#shareCarousel" data-bs-slide-to="0" class="active"
+                                    aria-label="1"></button>
+                            <button type="button" data-bs-target="#shareCarousel" data-bs-slide-to="1"
                                     aria-label="2"></button>
-                            <button type="button" data-bs-target="#shareCarouselGuest" data-bs-slide-to="2"
+                            <button type="button" data-bs-target="#shareCarousel" data-bs-slide-to="2"
                                     aria-label="3"></button>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-7">
                     <div class="d-flex justify-content-between">
                         <h5 class="fw-bold mb-1">이쁜 몬스테라 나눔요~</h5>
@@ -90,6 +66,7 @@
                         <span class="mx-2">|</span>
                         관리난이도: <span class="text-dark">쉬움</span>
                     </div>
+
                     <div class="p-2 bg-white">
                         <p class="mb-1">대형몬스테라 무료 나눔합니다!</p>
                         <p class="mb-1">이사로 인해 부득이하게 놓고 갑니다!</p>
@@ -99,30 +76,21 @@
                 </div>
             </div>
 
-            <!-- 작성자 + 타인 액션 -->
             <div class="my-3">
+
                 <div class="d-flex align-items-center">
                     <div class="me-3">
                         <div class="bg-secondary rounded-circle" style="width:48px;height:48px;"></div>
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex align-items-center gap-2">
-                            <span class="fw-semibold">김민수</span>
+                            <span class="fw-semibold">닉네임</span>
                         </div>
                     </div>
                     <div class="d-flex align-items-center mt-3 justify-content-end gap-3 flex-wrap">
-                        <button class="btn btn-outline-danger px-4">관심</button>
-                        <button
-                                type="button"
-                                class="btn btn-success px-4"
-                                id="openMsgBtn"
-                                data-bs-toggle="modal"
-                                data-bs-target="#messageModal"
-                                data-to-name="김민수"
-                                data-post-title="이쁜 몬스테라 나눔요~"
-                        >
-                            쪽지 보내기
-                        </button>
+                        <a href="/sharingUpdate" class="btn btn-primary px-4">수정</a>
+                        <button class="btn btn-danger px-4">삭제</button>
+                        <button id="btnComplete" class="btn btn-success px-4">나눔 완료</button>
                     </div>
                 </div>
 
@@ -130,7 +98,17 @@
 
                 <div class="mb-2 text-muted small">댓글</div>
                 <ul class="list-group mt-3">
-                    <!-- 새 샘플(실명 + 텍스트 수정/삭제) -->
+                    <li class="list-group-item">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="fw-semibold">모니모니</span>
+                                    <small class="text-muted">방금</small>
+                                </div>
+                                <p class="mb-0 mt-1">화분 포함인가요? 위치 확인했습니다. 대기줄 가능하면 신청합니다.</p>
+                            </div>
+                        </div>
+                    </li>
                     <li class="list-group-item">
                         <div class="d-flex">
                             <div class="flex-grow-1">
@@ -143,36 +121,12 @@
                                         <small class="text-muted ms-2">1분 전</small>
                                     </div>
                                 </div>
-                                <p class="mb-0 mt-1">저녁 7시 픽업 가능할까요?</p>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="fw-semibold">모니모니</span>
-                                    <small class="text-muted">방금</small>
-                                </div>
-                                <p class="mb-0 mt-1">화분 포함인가요? 위치 확인했습니다. 대기줄 가능하면 신청합니다.</p>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="fw-semibold">김민수</span>
-                                    <small class="text-muted">방금</small>
-                                </div>
                                 <p class="mb-0 mt-1">화분 포함입니다~</p>
                             </div>
                         </div>
                     </li>
                 </ul>
-                <div class="input-group mt-2">
+                <div class="input-group">
                     <input type="text" class="form-control" placeholder="댓글을 입력하세요.">
                     <button class="btn btn-secondary">등록</button>
                 </div>
@@ -180,76 +134,82 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+<!-- 2) 모달 1: 나눔 완료 상대 선택 -->
+<div class="modal fade modal-fixed" id="modalSelectCounterpart" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
-        <form class="modal-content" id="messageForm">
-            <div class="modal-header">
-                <h5 class="modal-title">쪽지 보내기</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료 상대 선택</h6>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label small text-muted">받는 사람</label>
-                    <input type="text" class="form-control" id="msgTo" readonly>
+                <div class="small text-muted mb-2">이 글에 대해 마지막으로 나눈 상대</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="doneTarget" id="opt1" value="식물왕이">
+                    <label class="form-check-label" for="opt1">식물왕이</label>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label small text-muted">관련 글</label>
-                    <input type="text" class="form-control" id="msgPost" readonly>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label small">제목</label>
-                    <input type="text" class="form-control" id="msgTitle" placeholder="제목을 입력하세요." required>
-                </div>
-                <div class="mb-0">
-                    <label class="form-label small">내용</label>
-                    <textarea class="form-control" id="msgContent" rows="6" placeholder="쪽지를 입력하세요."
-                              required></textarea>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="doneTarget" id="opt2" value="나눠나나">
+                    <label class="form-check-label" for="opt2">나눠나나</label>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="submit" class="btn btn-success">쪽지 보내기</button>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+                <button id="btnSelectDone" class="btn btn-success"
+                        data-next="#modalConfirmDone"
+                        data-current="#modalSelectCounterpart" disabled>선택 완료</button>
+
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<!-- 3) 모달 2: 완료 확인 -->
+<div class="modal fade modal-fixed" id="modalConfirmDone" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료</h6>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    <strong id="confirmName" class="text-success"></strong>님과의 나눔을 종료하시겠습니까?
+                </p>
+                <small class="text-muted">(나눔 완료 후, 취소는 불가능합니다)</small>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-secondary"
+                        data-back="#modalSelectCounterpart"
+                        data-current="#modalConfirmDone">취소</button>
+                <button class="btn btn-success"
+                        data-next="#modalDoneResult"
+                        data-current="#modalConfirmDone">나눔 완료</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4) 모달 3: 완료 안내 + 후기 유도 -->
+<div class="modal fade modal-fixed" id="modalDoneResult" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료 확인!</h6>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0"><strong id="resultName" class="text-success"></strong>님과의 나눔이 완료되었습니다.</p>
+                <small class="text-muted">후기를 남겨 서로의 나눔지수를 올려보세요!</small>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+                <a id="goReview" href="/review/write" class="btn btn-success">후기 작성하러 가기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/common/header.js"></script>
-
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/sharing/sharingDetail.js}"></script>
 </body>
-
-<script>
-    // 모달 열릴 때 받는사람/관련글 세팅
-    const messageModal = document.getElementById('messageModal');
-    messageModal.addEventListener('show.bs.modal', function (event) {
-        const btn = event.relatedTarget;
-        const toName = btn?.getAttribute('data-to-name') || '';
-        const postTitle = btn?.getAttribute('data-post-title') || '';
-        document.getElementById('msgTo').value = toName;
-        document.getElementById('msgPost').value = postTitle;
-        // 이전 입력 유지 원치 않으면 아래 두 줄 주석 해제
-        // document.getElementById('msgTitle').value = '';
-        // document.getElementById('msgContent').value = '';
-        setTimeout(() => document.getElementById('msgTitle').focus(), 100);
-    });
-
-    // 제출 훅(백엔드 연결 지점)
-    document.getElementById('messageForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const payload = {
-            toName: document.getElementById('msgTo').value,
-            postTitle: document.getElementById('msgPost').value,
-            title: document.getElementById('msgTitle').value.trim(),
-            content: document.getElementById('msgContent').value.trim()
-        };
-        if (!payload.title || !payload.content) return;
-
-        // TODO: 실제 API로 교체
-        // const res = await fetch('/api/messages', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        // if(res.ok){ bootstrap.Modal.getInstance(messageModal).hide(); }
-
-        // 데모: 전송 후 닫기
-        bootstrap.Modal.getInstance(messageModal).hide();
-    });
-</script>
 </html>
