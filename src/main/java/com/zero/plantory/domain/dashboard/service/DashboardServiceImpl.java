@@ -90,7 +90,7 @@ public class DashboardServiceImpl implements DashboardService {
                     .state(vo.getState())
                     .memo(vo.getMemo())
                     .createdAt(vo.getCreatedAt())
-                    .imageUrl(vo.getImageUrl())
+                    .fileUrl(vo.getImageUrl())
                     .build();
 
             dtoList.add(dto);
