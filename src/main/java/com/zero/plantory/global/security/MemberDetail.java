@@ -4,6 +4,7 @@ import com.zero.plantory.global.vo.MemberVO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,16 +13,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class MemberDetail implements UserDetails {
 
-    private MemberVO memberVO;
-
-    public MemberDetail(MemberVO memberVO) {
-        this.memberVO = memberVO;
-    }
-
-
+    private final MemberVO memberVO;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -38,4 +33,5 @@ public class MemberDetail implements UserDetails {
     public String getUsername() {
         return memberVO.getMembername();
     }
+
 }

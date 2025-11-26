@@ -5,6 +5,7 @@
   <title>쪽지함</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 <body class="bg-light">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
@@ -143,17 +144,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/common/header.js"></script>
-<script>
-  // 전체 선택
-  document.getElementById('checkAll').addEventListener('change', (e) => {
-    document.querySelectorAll('.row-check').forEach(cb => cb.checked = e.target.checked);
-  });
-  // 삭제(데모)
-  document.getElementById('btnDelete').addEventListener('click', () => {
-    const n = [...document.querySelectorAll('.row-check')].filter(c => c.checked).length;
-    alert(n ? `${n}건 선택됨 (삭제 로직 연동)` : '선택된 쪽지가 없습니다.');
-  });
-</script>
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/message/messageList.js}"></script>
 </body>
 </html>

@@ -1,0 +1,15 @@
+body {
+    background: #f4f4f4;
+}
+
+.plant-card img {
+    height: 260px;
+    object-fit: cover;
+}
+
+.plant-card:hover {
+    transform: translateY(-4px);
+    transition: 0.25s;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15) !important;
+    cursor: pointer;
+}

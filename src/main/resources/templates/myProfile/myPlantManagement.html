@@ -8,24 +8,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-
-  <style>
-    body {
-      background: #f4f4f4;
-    }
-
-    .plant-card img {
-      height: 260px;
-      object-fit: cover;
-    }
-
-    .plant-card:hover {
-      transform: translateY(-4px);
-      transition: 0.25s;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15) !important;
-      cursor: pointer;
-    }
-  </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/myPlantManagement.css}">
 </head>
 
 <body class="p-5">
@@ -198,6 +182,6 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script></script>
-
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/myPlant/myPlantManagement.js}"></script>
 </html>
