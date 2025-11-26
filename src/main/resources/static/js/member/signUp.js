@@ -1,7 +1,7 @@
 let isIdChecked = false;
 let isNickNameChecked = false;
 
-document.addEventListener("DOMContentLoaded", () => {
+
     const form = document.getElementById("signUpForm");
     const pw = document.querySelector('input[type="password"]');
     const pwCheck = document.getElementById("pwCheck");
@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         form.classList.add("was-validated");
-    });
 
     document.getElementById("checkIdBtn")
         .addEventListener("click", () => checkDuplicate("membernameInput", "membernameMessage", "/api/members/exists"));
