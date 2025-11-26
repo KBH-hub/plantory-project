@@ -22,7 +22,7 @@
                     <div class="carousel-caption d-none d-md-block text-start">
                         <h5 class="fw-bold mb-1">오늘의 인기 나눔</h5>
                         <p class="mb-2 small">가까운 동네에서 식물을 나눔받아보세요.</p>
-                        <a href="@{/sharingList}" class="btn btn-sm btn-light fw-semibold">나눔 보러가기</a>
+                        <a th:href="@{/sharingList}" class="btn btn-sm btn-light fw-semibold">나눔 보러가기</a>
                     </div>
                 </div>
                 <!-- 2 -->
@@ -32,7 +32,7 @@
                     <div class="carousel-caption d-none d-md-block text-start">
                         <h5 class="fw-bold mb-1">관리 쉬운 식물 검색</h5>
                         <p class="mb-2 small">초보자에게 딱 맞는 식물을 찾아보세요.</p>
-                        <a href="@{/plantDictionary}" class="btn btn-sm btn-light fw-semibold">식물 사전 보러가기</a>
+                        <a th:href="@{/plantDictionary}" class="btn btn-sm btn-light fw-semibold">식물 사전 보러가기</a>
                     </div>
                 </div>
                 <!-- 3 -->
@@ -42,7 +42,7 @@
                     <div class="carousel-caption d-none d-md-block text-start">
                         <h5 class="fw-bold mb-1">나의 식물 관리</h5>
                         <p class="mb-2 small">나의 식물 일정을 관리하세요.</p>
-                        <a href="@{/myPlantManagement}" class="btn btn-sm btn-light fw-semibold">식물 캘린더 보러가기</a>
+                        <a th:href="@{/plantCalendar}" class="btn btn-sm btn-light fw-semibold">식물 캘린더 보러가기</a>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
             <div class="d-flex flex-nowrap gap-3" id="recommendedContainer">
             </div>
         </div>
-
+    <a th:href="@{/plantCalendar}" class="text-decoration-none text-reset">
         <div style="width:420px;">
             <div class="card shadow-sm mb-3">
                 <div class="card-header bg-dark text-white py-2">
@@ -130,6 +130,7 @@
                 </div>
             </div>
         </div>
+    </a>
     </div>
 </div>
 

@@ -98,14 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ====================================
 //  오늘 물주기 리스트 렌더링
-// ====================================
 async function loadTodayWatering() {
     const memberId = Number(document.body.dataset.memberId);
 
     const container = document.getElementById("wateringListContainer");
-    container.innerHTML = `<div class="text-muted small">불러오는 중...</div>`;
 
     try {
         const res = await axios.get("/api/dashboard/watering", {
@@ -119,14 +116,15 @@ async function loadTodayWatering() {
             return;
         }
 
-        container.innerHTML = ""; // 초기화
+        container.innerHTML = "";
 
         list.forEach(item => {
             const card = `
-                <div class="p-2 mb-2 border rounded" style="background:#f5faff;">
+                <div class="p-2 mb-2 border rounded position-relative" style="background:#f5faff;">
+                    <span class="badge bg-dark position-absolute top-0 end-0 mt-2 me-2">오늘</span>
+        
                     <div class="fw-bold">${item.name}</div>
-                    <div class="text-muted small">${item.cycleText}</div>
-                    <span class="badge bg-dark float-end">오늘</span>
+                    <div class="text-muted small">${item.interval}일마다</div>
                 </div>
             `;
             container.insertAdjacentHTML("beforeend", card);
@@ -143,7 +141,6 @@ async function loadTodayDiary() {
     const memberId = Number(document.body.dataset.memberId);
 
     const container = document.getElementById("diaryListContainer");
-    container.innerHTML = `<div class="text-muted small">불러오는 중...</div>`;
 
     try {
         const res = await axios.get("/api/dashboard/diary", {
@@ -160,23 +157,32 @@ async function loadTodayDiary() {
         container.innerHTML = "";
 
         list.forEach(item => {
-            const imagePart = item.imageUrl
-                ? `<img src="${item.imageUrl}" style="width:60px; height:60px; object-fit:cover;" class="rounded">`
+            const imagePart = item.fileUrl
+                ? `<img src="${item.fileUrl}" 
+                style="width:60px; height:60px; object-fit:cover;" 
+                class="rounded">`
                 : `<div style="width:60px; height:60px; background:#eee;" class="rounded"></div>`;
 
             const card = `
-                <div class="d-flex align-items-center p-2 mb-2 border rounded" style="background:#fff7e6;">
-                    <div style="flex-grow:1;">
-                        <div class="fw-bold">${item.myplantName}</div>
-                        <div class="text-muted small text-truncate">${item.memo}</div>
+            <div class="d-flex align-items-center p-2 mb-2 border rounded position-relative"
+                 style="background:#fff7e6;">
+                 
+              <!--  <span class="badge bg-dark position-absolute top-0 end-0 mt-2 me-2">오늘</span>-->
+    
+                <div style="flex-grow:1;">
+                    <div class="fw-bold">${item.myplantName}</div>
+                    <div class="text-muted small text-truncate" style="max-width:200px;">
+                        ${item.memo ?? ""}
                     </div>
-                    <div class="ms-2">${imagePart}</div>
-                    <span class="badge bg-dark ms-2">오늘</span>
                 </div>
-            `;
+    
+                <div class="ms-2">${imagePart}</div>
+            </div>
+        `;
 
             container.insertAdjacentHTML("beforeend", card);
         });
+
 
     } catch (err) {
         console.error("Diary load error:", err);

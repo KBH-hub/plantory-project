@@ -17,5 +17,5 @@ public class TodayDiaryResponseDTO {
     private String state;
     private String memo;
     private String createdAt;
-    private String imageUrl;
+    private String fileUrl;
 }
