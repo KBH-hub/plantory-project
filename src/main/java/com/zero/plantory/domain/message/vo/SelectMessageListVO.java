@@ -24,4 +24,5 @@ public class SelectMessageListVO {
     private Date createdAt;
     private Date readFlag;
     private Date delFlag;
+    private Long totalCount;
 }

@@ -32,7 +32,6 @@ public class MessageServiceImpl implements MessageService {
                 .limit(request.getLimit())
                 .build();
         List<SelectMessageListVO> messageList = messageMapper.selectMessages(vo);
-        System.out.println(messageList+"123");
         List<MessageListResponse> messageListResponse = new ArrayList<>();
         for (SelectMessageListVO message : messageList) {
             messageListResponse.add(
@@ -49,6 +48,7 @@ public class MessageServiceImpl implements MessageService {
                             .createdAt(message.getCreatedAt())
                             .readFlag(message.getReadFlag())
                             .delFlag(message.getDelFlag())
+                            .totalCount(message.getTotalCount())
                             .build()
             );
         }

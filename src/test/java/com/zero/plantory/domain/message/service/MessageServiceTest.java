@@ -7,6 +7,7 @@ import com.zero.plantory.domain.message.dto.SearchMessageRequest;
 import com.zero.plantory.global.vo.MessageTargetType;
 import com.zero.plantory.global.vo.MessageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ class MessageServiceTest {
     @DisplayName("쪽지 리스트 조회")
     void getMessageListTest() {
         SearchMessageRequest request = SearchMessageRequest.builder()
-                .memberId(2L)
-                .boxType("SENT")
+                .memberId(21L)
+                .boxType("RECEIVED")
                 .targetType("SHARING")
                 .title(null)
                 .limit(10)
@@ -85,9 +86,17 @@ class MessageServiceTest {
                 .targetId(13L)
                 .build();
 
-        int result = messageService.registerMessage(request);
+        boolean result;
+        try {
+            messageService.registerMessage(request);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
 
-        log.info("inserted rows = " + result);
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -102,9 +111,17 @@ class MessageServiceTest {
                 .targetId(13L)
                 .build();
 
-        int result = messageService.registerMessage(request);
+        boolean result;
+        try {
+            messageService.registerMessage(request);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
 
-        log.info("inserted rows = " + result);
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
     }
 
     @Test

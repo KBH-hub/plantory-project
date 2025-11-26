@@ -32,7 +32,8 @@
         AND q.del_flag IS NULL
         )
         ELSE NULL
-        END AS target_title
+        END AS target_title,
+        COUNT(*) OVER() AS total_count
         FROM message m
         JOIN member sender   ON m.sender_id   = sender.member_id
         JOIN member receiver ON m.receiver_id = receiver.member_id
