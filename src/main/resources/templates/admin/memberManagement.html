@@ -5,43 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 관리 - Plantory 관리자</title>
-
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .table-container {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .pagination .page-link {
-            border-radius: 6px !important;
-            margin: 0 3px;
-        }
-
-        .page-link.active {
-            background-color: #343a40 !important;
-            border-color: #343a40 !important;
-            color: #fff !important;
-        }
-
-        .search-input>input {
-            border-radius: 50px 0 0 50px !important;
-        }
-
-        .search-input>button {
-            border-radius: 0 50px 50px 0 !important;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/memberManagement.css}">
 
 </head>
 <body>
@@ -170,7 +137,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/common/header.js"></script>
+<script th:src="@{/js/common/header.js}"></script>
 </body>
 
 </html>

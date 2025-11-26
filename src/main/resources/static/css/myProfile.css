@@ -1,0 +1,30 @@
+.profile-img {
+    width: 110px;
+    height: 110px;
+    background: #eee;
+    border-radius: 50%;
+}
+
+.tab-active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.pagination li a {
+    color: black;
+}
+
+.pagination {
+    user-select: none;
+}
+
+.tab-active {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+    color: black !important;
+}

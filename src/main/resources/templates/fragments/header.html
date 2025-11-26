@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Plantory Header</title>
@@ -7,267 +8,109 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        /* 드롭다운 메뉴 스타일 */
-        .dropdown-menu {
-            z-index: 1050;
-        }
-
-        /* 모달 z-index 조정 */
-        .modal {
-            z-index: 1055;
-        }
-
-
-    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 
 <body>
 
 <th:block th:fragment="headerBar">
-    <nav class="bg-white px-4 shadow-sm d-flex align-items-center sticky-top" style="height:80px;  min-width:1470px;">
+    <div class="ph-wrapper">
+        <nav class="bg-white px-4 shadow-sm d-flex align-items-center sticky-top ph-nav" style="height:80px; min-width:1470px;">
 
-        <div class="d-flex align-items-center justify-content-between w-100" style="min-width:1450px;">
+            <div class="d-flex align-items-center justify-content-between w-100" style="min-width:1450px;">
 
-            <!-- 왼쪽 로고 -->
-            <a th:href="@{/dashboard}" style="cursor:pointer;">
-                <img th:src="@{/image/plantory_logo.png}" alt="Plantory Logo" style="height:70px; width:auto;">
-            </a>
+                <!-- 왼쪽 로고 -->
+                <a th:href="@{/dashboard}" class="ph-logo">
+                    <img th:src="@{/image/plantory_logo.png}" alt="Plantory Logo" class="ph-logo-img">
+                </a>
 
-            <!-- ================= 중앙 메뉴 ================= -->
-            <ul class="navbar-nav d-flex flex-row gap-4 mx-3 flex-grow-1 justify-content-center"
-                style="white-space:nowrap;">
+                <!-- 중앙 메뉴 -->
+                <ul class="navbar-nav d-flex flex-row gap-4 mx-3 flex-grow-1 justify-content-center ph-menu">
+                    <!-- 커뮤니티 -->
+                    <li class="nav-item dropdown ph-menu-item">
+                        <a class="nav-link fw-bold fs-5 ph-menu-text" href="#" data-bs-toggle="dropdown">커뮤니티</a>
+                        <ul class="dropdown-menu ph-dropdown">
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/sharingList}">나눔 게시판</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" th:href="@{/questionList}">질문 게시판</a></li>
+                        </ul>
+                    </li>
 
-                <!-- 커뮤니티 -->
-                <li class="nav-item dropdown no-shrink">
-                    <a class="nav-link fw-bold fs-5" href="#" data-bs-toggle="dropdown" style="cursor:pointer;">커뮤니티</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">나눔 게시판</a></li>
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">질문 게시판</a></li>
-                    </ul>
-                </li>
+                    <!-- 식물사전 -->
+                    <li class="nav-item dropdown ph-menu-item">
+                        <a class="nav-link fw-bold fs-5 ph-menu-text" href="#" data-bs-toggle="dropdown">식물사전</a>
+                        <ul class="dropdown-menu ph-dropdown">
+                            <li><a class="dropdown-item ph-dropdown-item" href="#">실내 식물</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" href="#">건조 식물</a></li>
+                        </ul>
+                    </li>
 
-                <!-- 식물사전 -->
-                <li class="nav-item dropdown no-shrink">
-                    <a class="nav-link fw-bold fs-5" href="#" data-bs-toggle="dropdown" style="cursor:pointer;">식물사전</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">실내 식물</a></li>
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">건조 식물</a></li>
-                    </ul>
-                </li>
+                    <!-- 나의 식물 -->
+                    <li class="nav-item dropdown ph-menu-item">
+                        <a class="nav-link fw-bold fs-5 ph-menu-text" href="#" data-bs-toggle="dropdown">나의 식물</a>
+                        <ul class="dropdown-menu ph-dropdown">
+                            <li><a class="dropdown-item ph-dropdown-item" href="#">식물 캘린더</a></li>
+                            <li><a class="dropdown-item ph-dropdown-item" href="#">내 식물 관리</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-                <!-- 나의 식물 -->
-                <li class="nav-item dropdown no-shrink">
-                    <a class="nav-link fw-bold fs-5" href="#" data-bs-toggle="dropdown" style="cursor:pointer;">나의 식물</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">식물 캘린더</a></li>
-                        <li><a class="dropdown-item" href="#" style="cursor:pointer;">내 식물 관리</a></li>
-                    </ul>
-                </li>
+                <!-- 오른쪽 아이콘 -->
+                <div class="d-flex align-items-center gap-4 ms-4 ph-right">
 
-            </ul>
+                    <!-- 알림 아이콘 -->
+                    <div class="dropdown ph-alarm">
+                        <i class="bi bi-bell fs-4 ph-alarm-icon" id="alarmDropdownBtn" data-bs-toggle="dropdown"></i>
 
-            <!-- ================= 오른쪽 아이콘 ================= -->
-            <div class="d-flex align-items-center gap-4 no-shrink ms-4">
+                        <div class="dropdown-menu dropdown-menu-end p-0 border-0 shadow ph-alarm-box" id="alarmDropdown">
+                            <!-- 헤더 -->
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center ph-alarm-header">
+                                <h5 class="fw-bold mb-0">알림</h5>
+                                <i class="bi bi-trash fs-5 ph-alarm-trash" id="alarmDeleteBtn"></i>
+                            </div>
 
-                <!-- 알림 아이콘 -->
-                <div class="dropdown">
-                    <i class="bi bi-bell fs-4"
-                       id="alarmDropdownBtn"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false"
-                       style="cursor:pointer;"></i>
-
-                    <div class="dropdown-menu dropdown-menu-end p-0 border-0 shadow"
-                         style="width:380px; max-height:400px; overflow-y:auto; overflow-x:hidden;"
-                         id="alarmDropdown">
-
-                        <!-- 헤더 -->
-                        <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold mb-0">알림</h5>
-                            <i class="bi bi-trash fs-5" id="alarmDeleteBtn" style="cursor:pointer;"></i>
-                        </div>
-
-                        <!-- 알림 리스트 -->
-                        <div id="alarmList">
-
-                            <div class="p-3 border-bottom d-flex align-items-start alarm-item">
-                                <input type="checkbox" class="form-check-input me-2 alarm-check d-none">
-                                <div class="w-100">
-                                    <small class="text-secondary d-block">2025-10-27 10:42</small>
-                                    <a href="#" class="fw-semibold text-dark text-decoration-none d-block text-truncate">
-                                        방토방토님의 나눔이 완료되었습니다. 후기를 작성하시겠습니까?
-                                    </a>
+                            <!-- 알림 목록 -->
+                            <div id="alarmList" class="ph-alarm-list">
+                                <div class="p-3 border-bottom d-flex align-items-start ph-alarm-item">
+                                    <input type="checkbox" class="form-check-input me-2 alarm-check d-none">
+                                    <div class="w-100">
+                                        <small class="text-secondary d-block">2025-10-27 10:42</small>
+                                        <a href="#" class="fw-semibold text-dark d-block text-truncate">방토방토님의 나눔이 완료되었습니다...</a>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="p-3 border-bottom d-flex align-items-start alarm-item">
-                                <input type="checkbox" class="form-check-input me-2 alarm-check d-none">
-                                <div class="w-100">
-                                    <small class="text-secondary d-block">2025-10-23 11:15</small>
-                                    <a href="#" class="fw-semibold text-dark text-decoration-none d-block text-truncate">
-                                        식물고라니 님이 쪽지를 보냈습니다.
-                                    </a>
-                                </div>
+                            <!-- Footer -->
+                            <div class="d-flex justify-content-between p-2 ph-alarm-footer">
+                                <button class="btn btn-light btn-sm">닫기</button>
+                                <button class="btn btn-secondary btn-sm">모두 읽음</button>
                             </div>
-
-                            <div class="p-3 border-bottom d-flex align-items-start alarm-item">
-                                <input type="checkbox" class="form-check-input me-2 alarm-check d-none">
-                                <div class="w-100">
-                                    <small class="text-secondary d-block">2025-09-27 14:24</small>
-                                    <a href="#" class="fw-semibold text-dark text-decoration-none d-block text-truncate">
-                                        [방울토마토] 게시글에 댓글이 작성되었습니다. 이것은 매우 긴 알림 내용입니다.
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- 푸터 -->
-                        <div id="alarmFooter" class="d-flex justify-content-between p-2">
-                            <button class="btn btn-light btn-sm">닫기</button>
-                            <button class="btn btn-secondary btn-sm">모두 읽음</button>
                         </div>
                     </div>
 
+                    <!-- 쪽지 -->
+                    <i class="bi bi-envelope fs-4 ph-mail"></i>
+
+                    <!-- 신고 -->
+                    <i class="bi bi-exclamation-triangle fs-4 ph-report" data-bs-toggle="modal" data-bs-target="#reportModal"></i>
+
+                    <!-- 프로필 -->
+                    <div class="dropdown ph-profile">
+                        <a class="d-flex align-items-center text-dark text-decoration-none ph-profile-btn" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-3"></i>
+                            <span class="ms-2">닉네임님</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end ph-profile-menu">
+                            <li><a class="dropdown-item" th:href="@{/myProfile}">내 프로필</a></li>
+                            <li><a class="dropdown-item text-danger" th:href="@{/logout}">로그아웃</a></li>
+                        </ul>
+                    </div>
+
                 </div>
-
-                <!-- 쪽지함 -->
-                <i class="bi bi-envelope fs-4" style="cursor:pointer;"></i>
-
-                <!-- 신고 버튼 -->
-                <i class="bi bi-exclamation-triangle fs-4"
-                   style="cursor:pointer;"
-                   data-bs-toggle="modal"
-                   data-bs-target="#reportModal"></i>
-
-                <!-- 프로필 -->
-                <div class="dropdown">
-                    <a class="d-flex align-items-center text-dark text-decoration-none" href="#" data-bs-toggle="dropdown" style="cursor:pointer;">
-                        <i class="bi bi-person-circle fs-3"></i>
-                        <span class="ms-2">닉네임님</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" th:href="@{/myProfile}" style="cursor:pointer;">내 프로필</a></li>
-                        <li><a class="dropdown-item text-danger" th:href="@{/logout}" style="cursor:pointer;">로그아웃</a></li>
-                    </ul>
-                </div>
-
             </div>
-        </div>
-    </nav>
-
-    <!--                    신고하기 모달                      -->
-
-    <div class="modal fade" id="reportModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">신고하기</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-
-                    <label class="fw-bold">피신고자 아이디 *</label>
-                    <div class="d-flex gap-2 mb-3">
-                        <input type="text" class="form-control" id="reportTargetInput" readonly placeholder="회원검색을 통해 선택하세요">
-                        <button type="button" class="btn btn-dark"
-                                onclick="openMemberSearchModal()"
-                                style="min-width:90px;">회원검색</button>
-                    </div>
-
-                    <label class="fw-bold">내용 *</label>
-                    <textarea class="form-control mb-3" id="reportContent" rows="4" placeholder="신고 내용을 입력하세요."></textarea>
-
-                    <label class="fw-bold d-block">근거사진 *</label>
-                    <div class="border rounded d-flex justify-content-center align-items-center"
-                         style="width:120px; height:120px; cursor:pointer;"
-                         onclick="document.getElementById('reportImageInput').click()">
-                        <i class="bi bi-camera fs-2 text-secondary" id="cameraIcon"></i>
-                        <img id="reportImagePreview" style="display:none; width:100%; height:100%; object-fit:cover;" />
-                    </div>
-                    <input type="file" id="reportImageInput" accept="image/*" style="display:none;">
-
-                    <p class="text-danger small mt-2">
-                        *허위신고 시 불이익이 있을 수 있습니다.
-                    </p>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button class="btn btn-success" onclick="submitReport()">신고하기</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!--                  회원 검색 모달                        -->
-
-    <div class="modal fade" id="memberSearchModal" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">회원 검색</h5>
-                    <button type="button" class="btn-close" onclick="closeMemberSearchModal()"></button>
-                </div>
-
-                <div class="modal-body">
-
-                    <!-- 검색바 -->
-                    <div class="mb-3">
-                        <label class="fw-bold">피신고자 아이디 *</label>
-
-                        <div class="d-flex gap-2">
-                            <input class="form-control" id="memberSearchInput" placeholder="닉네임 입력" onkeypress="if(event.key==='Enter') searchMember()">
-                            <button class="btn btn-dark" style="min-width:70px;" onclick="searchMember()">검색</button>
-                        </div>
-                    </div>
-
-                    <!-- 검색 결과 테이블 -->
-                    <div class="table-responsive mt-4">
-                        <table class="table align-middle text-center">
-                            <thead class="table-light">
-                            <tr>
-                                <th>닉네임</th>
-                                <th>회원 선택</th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="searchResultBody">
-                            <tr>
-                                <td>진민준</td>
-                                <td><button class="btn btn-success btn-sm" onclick="selectMember('진민준')">선택</button></td>
-                            </tr>
-                            <tr>
-                                <td>진경문</td>
-                                <td><button class="btn btn-success btn-sm" onclick="selectMember('진경문')">선택</button></td>
-                            </tr>
-                            <tr>
-                                <td>식물고라니</td>
-                                <td><button class="btn btn-success btn-sm" onclick="selectMember('식물고라니')">선택</button></td>
-                            </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary w-25" onclick="closeMemberSearchModal()">취소</button>
-                </div>
-
-            </div>
-        </div>
+        </nav>
     </div>
 </th:block>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>

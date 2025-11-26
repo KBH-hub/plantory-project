@@ -1,0 +1,58 @@
+/* 최상위 wrapper */
+.ph-wrapper {
+    width: 100%;
+}
+
+/* 네비게이션 최소 폭 */
+.ph-nav {
+    min-width: 1470px;
+}
+
+/* 로고 */
+.ph-logo {
+    cursor: pointer;
+}
+.ph-logo-img {
+    height: 70px;
+    width: auto;
+}
+
+/* 중앙 메뉴 */
+.ph-menu .ph-menu-text {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* 드롭다운 */
+.ph-dropdown {
+    min-width: 150px;
+}
+.ph-dropdown-item {
+    cursor: pointer;
+}
+
+/* 오른쪽 영역 */
+.ph-right i {
+    cursor: pointer;
+}
+
+/* 알림 */
+.ph-alarm-icon { cursor: pointer; }
+
+.ph-alarm-box {
+    width: 380px;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.ph-alarm-item {
+    cursor: pointer;
+}
+
+/* 모달 관련 요소는 prefix로 격리 */
+.ph-report {}
+.ph-mail {}
+.ph-profile {}
+.ph-profile-btn {}
+.ph-profile-menu {}
