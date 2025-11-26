@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
 </head>
-<body class="bg-light">
+<body class="bg-light" th:data-member-id="${memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
@@ -64,6 +64,7 @@
             </div>
         </div>
     </div>
+
     <div class="d-flex flex-nowrap" style="gap:20px;">
         <div style="width:1000px;">
             <div class="d-flex flex-nowrap gap-3 mb-3">
@@ -72,7 +73,7 @@
                         <img th:src="@{/image/dashboard_1.png}" src="/image/dashboard_1.png" width="40" height="40" alt="내 식물" class="me-3" loading="lazy">
                         <div class="text-truncate">
                             <div class="text-secondary small">내 식물</div>
-                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">5</div>
+                            <div class="fw-semibold" id="countMyPlants" style="font-size:32px; line-height:32px;">5</div>
                         </div>
                     </div>
                 </div>
@@ -81,7 +82,7 @@
                         <img th:src="@{/image/dashboard_2.png}" src="/image/dashboard_2.png" width="40" height="40" alt="오늘 물 필요 식물" class="me-3" loading="lazy">
                         <div class="text-truncate">
                             <div class="text-secondary small">오늘 물 필요 식물</div>
-                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">2</div>
+                            <div class="fw-semibold" id="countWatering" style="font-size:32px; line-height:32px;">2</div>
                         </div>
                     </div>
                 </div>
@@ -90,7 +91,7 @@
                         <img th:src="@{/image/dashboard_3.png}" src="/image/dashboard_3.png" width="40" height="40" alt="관심 필요 식물" class="me-3" loading="lazy">
                         <div class="text-truncate">
                             <div class="text-secondary small">관심 필요 식물</div>
-                            <div class="fw-semibold" style="font-size:32px; line-height:32px;">1</div>
+                            <div class="fw-semibold" id="countCareneeded" style="font-size:32px; line-height:32px;">1</div>
                         </div>
                     </div>
                 </div>
@@ -182,6 +183,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/common/header.js"></script>
+<script src="/js/dashboard.js"></script>
 </body>
 </html>
