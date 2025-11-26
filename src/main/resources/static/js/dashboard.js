@@ -46,7 +46,7 @@ async function loadRecommendedSharings() {
                    style="width:350px;">
                     <div class="card shadow-sm h-100">
                     
-                        <img src="${item.thumbnailUrl}" 
+                        <img src="${item.fileUrl}" 
                              alt="thumbnail" 
                              class="w-100"
                              style="height:375px; object-fit:cover;">
