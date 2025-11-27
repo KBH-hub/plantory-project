@@ -19,21 +19,12 @@ public class SharingReadServiceImpl implements SharingReadService {
 
     @Override
     public List<SharingCardListResponse> getSharingList(SharingSearchRequest request) {
-        List<SharingCardListResponse> list = sharingMapper.selectSharingListByAddressAndKeyword(request);
+        return sharingMapper.selectSharingListByAddressAndKeyword(request);
+    }
 
-        for (SharingCardListResponse item : list) {
-            List<ImageDTO> images = imageMapper.selectImagesByTarget(
-                    ImageTargetType.SHARING,
-                    item.getSharingId()
-            );
-
-            item.setImageUrl(null);
-            if (!images.isEmpty()) {
-                item.setImageUrl(images.get(0).getFileUrl());
-            }
-        }
-
-        return list;
+    @Override
+    public int countInterest(Long memberId) {
+        return sharingMapper.countInterestByMemberId(memberId);
     }
 
     @Override

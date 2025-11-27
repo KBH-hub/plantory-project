@@ -19,5 +19,5 @@ public class SharingCardListResponse {
     private LocalDateTime createdAt;
 
     private Integer commentCount;
-    private String imageUrl;
+    private String fileUrl;
 }
