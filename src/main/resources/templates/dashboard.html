@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
-<body class="bg-light" th:data-member-id="${#authentication.principal.memberVO.memberId}">
+<body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
