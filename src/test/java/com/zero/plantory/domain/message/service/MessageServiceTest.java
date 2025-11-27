@@ -4,7 +4,9 @@ import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
+import com.zero.plantory.global.dto.BoxType;
 import com.zero.plantory.global.dto.MessageTargetType;
+import com.zero.plantory.global.dto.TargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +28,8 @@ class MessageServiceTest {
     void getMessageListTest() {
         MessageSearchRequest request = MessageSearchRequest.builder()
                 .memberId(20L)
-                .boxType("RECEIVED")
-                .targetType("SHARING")
+                .boxType(BoxType.RECEIVED)
+                .targetType(TargetType.SHARING)
                 .title(null)
                 .limit(10)
                 .offset(0)
@@ -43,9 +45,8 @@ class MessageServiceTest {
     @DisplayName("수신자 메시지 삭제 처리")
     void removeMessageTest() {
         List<Long> messageIds = List.of(1L, 2L);
-        Long removerId = 2L;
 
-        int result = messageService.removeMessages(messageIds, removerId);
+        int result = messageService.removeMessages(messageIds);
 
         log.info(String.valueOf(result));
     }
@@ -56,7 +57,7 @@ class MessageServiceTest {
         List<Long> messageIds = List.of(3L, 4L);
         Long removerId = 11L;
 
-        int result = messageService.removeSenderMessages(messageIds, removerId);
+        int result = messageService.removeSenderMessages(messageIds);
 
         log.info(String.valueOf(result));
     }
@@ -76,7 +77,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 실패 (제목 누락)처리")
     void registerFailByTitleMessageTest() {
-        MessageRequest request = new MessageRequest().builder()
+        MessageRequest request = MessageRequest.builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("")
@@ -101,7 +102,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 실패 (내용 누락)처리")
     void registerFailByContentMessageTest() {
-        MessageRequest request = new MessageRequest().builder()
+        MessageRequest request = MessageRequest.builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("테스트 제목입니다.")

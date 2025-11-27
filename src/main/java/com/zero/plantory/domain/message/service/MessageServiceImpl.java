@@ -25,31 +25,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public int removeMessages(List<Long> messageIds, Long removerId) {
-        List<Long> deletableIds = new ArrayList<>();
-        for (Long messageId : messageIds) {
-            MessageResponse message = messageMapper.selectMessageDetail(messageId);
-            if (message == null) continue;
-            if (Objects.equals(removerId, message.getReceiverId())) {
-                deletableIds.add(messageId);
-            }
-        }
-        if (deletableIds.isEmpty()) return 0;
-        return messageMapper.deleteMessages(deletableIds);
+    public int removeMessages(List<Long> messageIds) {
+        return messageMapper.deleteMessages(messageIds);
     }
 
     @Override
-    public int removeSenderMessages(List<Long> messageIds, Long removerId) {
-        List<Long> deletableIds = new ArrayList<>();
-        for (Long messageId : messageIds) {
-            MessageResponse message = messageMapper.selectMessageDetail(messageId);
-            if (message == null) continue;
-            if (Objects.equals(removerId, message.getSenderId())) {
-                deletableIds.add(messageId);
-            }
-        }
-        if (deletableIds.isEmpty()) return 0;
-        return messageMapper.deleteSenderMessages(deletableIds);
+    public int removeSenderMessages(List<Long> messageIds) {
+        return messageMapper.deleteSenderMessages(messageIds);
     }
 
     @Override
@@ -74,18 +56,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageResponse findMessageDetail(Long messageId, Long viewerId) {
         MessageResponse message = messageMapper.selectMessageDetail(messageId);
-        MessageResponse response = MessageResponse.builder()
-                .messageId(message.getMessageId())
-                .senderId(message.getSenderId())
-                .receiverId(message.getReceiverId())
-                .title(message.getTitle())
-                .content(message.getContent())
-                .targetType(message.getTargetType())
-                .targetId(message.getTargetId())
-                .createdAt(message.getCreatedAt())
-                .readFlag(message.getReadFlag())
-                .delFlag(message.getDelFlag())
-                .build();
         if (message == null) {
             throw new IllegalStateException("메시지 존재하지 않음");
         }
@@ -96,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
-        return response;
+        return message;
     }
 
 

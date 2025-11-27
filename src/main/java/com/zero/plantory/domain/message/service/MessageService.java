@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface MessageService {
     List<MessageListResponse> getMessageList(MessageSearchRequest request);
-    int removeMessages(List<Long> messageIds, Long removerId);
-    int removeSenderMessages(List<Long> messageIds, Long removerId);
+    int removeMessages(List<Long> messageIds);
+    int removeSenderMessages(List<Long> messageIds);
     MessageResponse findMessageWriteInfo(Long senderId, String targetType, Long targetId);
     int registerMessage(MessageRequest request);
     MessageResponse findMessageDetail(Long messageId, Long viewerId);
