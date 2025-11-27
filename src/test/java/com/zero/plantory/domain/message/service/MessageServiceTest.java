@@ -4,7 +4,9 @@ import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
+import com.zero.plantory.global.dto.BoxType;
 import com.zero.plantory.global.dto.MessageTargetType;
+import com.zero.plantory.global.dto.TargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +28,8 @@ class MessageServiceTest {
     void getMessageListTest() {
         MessageSearchRequest request = MessageSearchRequest.builder()
                 .memberId(20L)
-                .boxType("RECEIVED")
-                .targetType("SHARING")
+                .boxType(BoxType.RECEIVED)
+                .targetType(TargetType.SHARING)
                 .title(null)
                 .limit(10)
                 .offset(0)

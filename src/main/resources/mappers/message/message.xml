@@ -8,7 +8,7 @@
         SELECT
         m.message_id,
         m.sender_id,
-        sender.nickname AS sender_nickname,
+        sender.nickname   AS sender_nickname,
         m.receiver_id,
         receiver.nickname AS receiver_nickname,
         m.title,
@@ -19,35 +19,28 @@
         m.read_flag,
         m.del_flag,
         CASE
-        WHEN m.target_type = 'SHARING' THEN (
-        SELECT s.title
-        FROM sharing s
-        WHERE s.sharing_id = m.target_id
-        AND s.del_flag IS NULL
-        )
-        WHEN m.target_type = 'QUESTION' THEN (
-        SELECT q.title
-        FROM question q
-        WHERE q.question_id = m.target_id
-        AND q.del_flag IS NULL
-        )
+        WHEN m.target_type = 'SHARING'  THEN (SELECT s.title FROM sharing  s WHERE s.sharing_id  = m.target_id AND s.del_flag IS NULL)
+        WHEN m.target_type = 'QUESTION' THEN (SELECT q.title FROM question q WHERE q.question_id = m.target_id AND q.del_flag IS NULL)
         ELSE NULL
         END AS target_title,
         COUNT(*) OVER() AS total_count
         FROM message m
-        JOIN member sender ON m.sender_id = sender.member_id
+        JOIN member sender   ON m.sender_id   = sender.member_id
         JOIN member receiver ON m.receiver_id = receiver.member_id
         <where>
             m.del_flag IS NULL
-            <if test="boxType == 'RECEIVED'">
+
+            <if test="boxType == @com.zero.plantory.global.dto.BoxType@RECEIVED">
                 AND m.receiver_id = #{memberId}
             </if>
-            <if test="boxType == 'SENT'">
+            <if test="boxType == @com.zero.plantory.global.dto.BoxType@SENT">
                 AND m.sender_id = #{memberId}
             </if>
-            <if test="targetType != null and targetType != ''">
+
+            <if test="targetType != null">
                 AND m.target_type = #{targetType}
             </if>
+
             <if test="title != null and title != ''">
                 AND m.title LIKE CONCAT('%', #{title}, '%')
             </if>

@@ -4,7 +4,9 @@ import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
+import com.zero.plantory.global.dto.BoxType;
 import com.zero.plantory.global.dto.MessageTargetType;
+import com.zero.plantory.global.dto.TargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,7 @@ public class MessageMapperTests {
     void selectMessagesTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(21L) // 받은 사람 아이디
-                .boxType("RECEIVED") // 받은 쪽지함
+                .boxType(BoxType.RECEIVED) // 받은 쪽지함
                 .targetType(null) // 나눔 or 질문 or 모두
                 .title(null) // 검색어
                 .limit(10) // 한 화면에 보여줄 개수
@@ -41,8 +43,8 @@ public class MessageMapperTests {
     void getMessagesSharingTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(2L)
-                .boxType("SENT")
-                .targetType("SHARING")
+                .boxType(BoxType.SENT)
+                .targetType(TargetType.SHARING)
                 .title(null)
                 .limit(10)
                 .offset(0)
@@ -58,7 +60,7 @@ public class MessageMapperTests {
     void selectMessagesSearchTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(2L)
-                .boxType("SENT")
+                .boxType(BoxType.SENT)
                 .targetType(null)
                 .title("위치")
                 .limit(10)
