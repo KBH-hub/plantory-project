@@ -87,12 +87,15 @@
         }
 
         tbody.innerHTML = list.map(item => {
+            const isUnread = !item.readFlag;
+            const rowClass = `cursor-pointer${isUnread ? ' fw-semibold' : ''}`;
             const readText = item.readFlag ? '읽음' : '안읽음';
             const category = labelTargetType(item.targetType);
             const relatedUrl = buildTargetUrl(item.targetType, item.targetId);
-            const relatedText = esc(item.content || '(관련 글 보기)');
+            const relatedText = esc(item.targetTitle || '(삭제된 글)');
+            console.log(item);
             return `
-        <tr data-id="${item.messageId}" class="cursor-pointer">
+        <tr data-id="${item.messageId}" class="${rowClass}">
           <td class="text-center" style="width:44px;">
             <input type="checkbox" class="form-check-input row-check" value="${item.messageId}">
           </td>

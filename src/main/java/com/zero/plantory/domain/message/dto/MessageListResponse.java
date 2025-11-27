@@ -20,7 +20,7 @@ public class MessageListResponse {
     private String title;
     private String content;
     private String targetType;
-    private Long targetId;
+    private String targetTitle;
     private Date createdAt;
     private Date readFlag;
     private Date delFlag;

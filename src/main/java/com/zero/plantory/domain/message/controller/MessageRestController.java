@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.message.controller;
 
 import com.zero.plantory.domain.message.dto.MessageListResponse;
+import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.domain.message.service.MessageService;
@@ -63,5 +64,14 @@ public class MessageRestController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/messageRegist")
+    public ResponseEntity<Map<String, String>> registerMessage(@RequestBody MessageRequest messageRequest) {
+        int result = messageService.registerMessage(messageRequest);
+        if (result > 0) {
+            return ResponseEntity.ok().body(Map.of("message", "regist message success"));
+        }
+        return ResponseEntity.status(400).body(Map.of("message", "regist message fail"));
     }
 }

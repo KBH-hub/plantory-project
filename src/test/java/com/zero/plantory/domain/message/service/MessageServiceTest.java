@@ -77,7 +77,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 실패 (제목 누락)처리")
     void registerFailByTitleMessageTest() {
-        MessageRequest request = new MessageRequest().builder()
+        MessageRequest request = MessageRequest.builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("")
@@ -102,7 +102,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 실패 (내용 누락)처리")
     void registerFailByContentMessageTest() {
-        MessageRequest request = new MessageRequest().builder()
+        MessageRequest request = MessageRequest.builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("테스트 제목입니다.")
