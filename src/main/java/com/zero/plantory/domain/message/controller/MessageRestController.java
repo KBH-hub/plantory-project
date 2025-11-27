@@ -1,8 +1,10 @@
 package com.zero.plantory.domain.message.controller;
 
 import com.zero.plantory.domain.message.dto.MessageListResponse;
+import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.domain.message.service.MessageService;
+import com.zero.plantory.domain.message.service.MessageServiceImpl;
 import com.zero.plantory.global.dto.BoxType;
 import com.zero.plantory.global.dto.TargetType;
 import lombok.RequiredArgsConstructor;
@@ -37,27 +39,29 @@ public class MessageRestController {
 
 
     @DeleteMapping("/deleteMessages")
-    public ResponseEntity<Map<String, String>> deleteMessages(@RequestBody List<Long> messageIds, Long removerId) {
-        int result = messageService.removeMessages(messageIds, removerId);
+    public ResponseEntity<Map<String, String>> deleteMessages(@RequestBody List<Long> messageIds) {
+        int result = messageService.removeMessages(messageIds);
         if (result > 0) {
-            return ResponseEntity.ok().body(Map.of("message", "delete member success"));
+            return ResponseEntity.ok().body(Map.of("message", "delete message success"));
         }
-        return ResponseEntity.status(400).body(Map.of("message", "delete member fail"));
+        return ResponseEntity.status(400).body(Map.of("message", "delete message fail"));
     }
 
     @DeleteMapping("/deleteSenderMessages")
-    public ResponseEntity<Map<String, String>> deleteSenderMessages(@RequestBody List<Long> messageIds, Long removerId) {
-        int result = messageService.removeMessages(messageIds, removerId);
+    public ResponseEntity<Map<String, String>> deleteSenderMessages(@RequestBody List<Long> messageIds) {
+        int result = messageService.removeSenderMessages(messageIds);
         if (result > 0) {
-            return ResponseEntity.ok().body(Map.of("message", "delete member success"));
+            return ResponseEntity.ok().body(Map.of("message", "delete message success"));
         }
-        return ResponseEntity.status(400).body(Map.of("message", "delete member fail"));
+        return ResponseEntity.status(400).body(Map.of("message", "delete message fail"));
     }
 
-    @GetMapping("/getMessage")
-    public ResponseEntity<MessageListResponse> getMessage() {
-
-
-        return null;
+    @GetMapping("/{messageId}")
+    public ResponseEntity<MessageResponse> getMessage(@PathVariable Long messageId,  Long viewerId) {
+        MessageResponse result = messageService.findMessageDetail(messageId, viewerId);
+        if(result == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(result);
     }
 }

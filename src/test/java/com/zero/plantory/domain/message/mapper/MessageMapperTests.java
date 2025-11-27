@@ -42,7 +42,7 @@ public class MessageMapperTests {
     @DisplayName("쪽지 리스트 화면 - 보낸 쪽지함 - 나눔 유형 필터")
     void getMessagesSharingTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
-                .memberId(2L)
+                .memberId(21L)
                 .boxType(BoxType.SENT)
                 .targetType(TargetType.SHARING)
                 .title(null)
@@ -59,10 +59,10 @@ public class MessageMapperTests {
     @DisplayName("보낸 쪽지함 - 제목 키워드 검색")
     void selectMessagesSearchTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
-                .memberId(2L)
+                .memberId(21L)
                 .boxType(BoxType.SENT)
                 .targetType(null)
-                .title("위치")
+                .title("나눔")
                 .limit(10)
                 .offset(0)
                 .build();

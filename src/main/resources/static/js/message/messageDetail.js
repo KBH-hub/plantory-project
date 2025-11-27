@@ -1,3 +1,5 @@
+
+
 // 모달 오픈 시: 내용 템플릿에 이전 내용 포함하여 편집 가능하게 채움
 const messageModal = document.getElementById('messageModal');
 messageModal.addEventListener('show.bs.modal', (ev) => {

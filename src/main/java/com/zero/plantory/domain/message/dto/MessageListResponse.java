@@ -24,5 +24,6 @@ public class MessageListResponse {
     private Date createdAt;
     private Date readFlag;
     private Date delFlag;
+    private Date senderDelFlag;
     private Long totalCount;
 }
