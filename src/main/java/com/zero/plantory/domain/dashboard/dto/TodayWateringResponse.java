@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.dashboard.dto.response;
+package com.zero.plantory.domain.dashboard.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodayWateringDTO {
+public class TodayWateringResponse {
     private String name;
     private Integer interval;
 }

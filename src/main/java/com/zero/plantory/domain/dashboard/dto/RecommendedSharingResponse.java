@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.dashboard.dto.response;
+package com.zero.plantory.domain.dashboard.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecommendedSharingDTO {
+public class RecommendedSharingResponse {
     private Long sharingId;
     private String title;
     private String status;

@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.dashboard.service;
 
-import com.zero.plantory.domain.dashboard.dto.response.RecommendedSharingDTO;
-import com.zero.plantory.domain.dashboard.dto.response.TodayDiaryDTO;
-import com.zero.plantory.domain.dashboard.dto.response.TodayWateringDTO;
+import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponse;
+import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponse;
+import com.zero.plantory.domain.dashboard.dto.TodayWateringResponse;
 import com.zero.plantory.domain.dashboard.mapper.DashboardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,17 +30,17 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<RecommendedSharingDTO> getRecommendedSharingList() {
+    public List<RecommendedSharingResponse> getRecommendedSharingList() {
         return dashboardMapper.selectRecommendedSharing();
     }
 
     @Override
-    public List<TodayWateringDTO> getTodayWatering(Long memberId) {
+    public List<TodayWateringResponse> getTodayWatering(Long memberId) {
         return dashboardMapper.selectTodayWateringByMemberId(memberId);
     }
 
     @Override
-    public List<TodayDiaryDTO> getTodayDiary(Long memberId) {
+    public List<TodayDiaryResponse> getTodayDiary(Long memberId) {
         return dashboardMapper.selectTodayDiaryByMemberId(memberId);
     }
 }
