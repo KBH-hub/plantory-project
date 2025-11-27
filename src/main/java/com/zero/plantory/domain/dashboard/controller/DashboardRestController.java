@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.dashboard.controller;
 
-import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponseDTO;
-import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponseDTO;
-import com.zero.plantory.domain.dashboard.dto.TodayWateringResponseDTO;
+import com.zero.plantory.domain.dashboard.dto.RecommendedSharingDTO;
+import com.zero.plantory.domain.dashboard.dto.TodayDiaryDTO;
+import com.zero.plantory.domain.dashboard.dto.TodayWateringDTO;
 import com.zero.plantory.domain.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +34,17 @@ public class DashboardRestController {
     }
 
     @GetMapping("/recommended")
-    public List<RecommendedSharingResponseDTO> recommended() {
+    public List<RecommendedSharingDTO> recommended() {
         return dashboardService.getRecommendedSharingList();
     }
 
     @GetMapping("/watering")
-    public List<TodayWateringResponseDTO> watering(@RequestParam Long memberId) {
+    public List<TodayWateringDTO> watering(@RequestParam Long memberId) {
         return dashboardService.getTodayWatering(memberId);
     }
 
     @GetMapping("/diary")
-    public List<TodayDiaryResponseDTO> diary(@RequestParam Long memberId) {
+    public List<TodayDiaryDTO> diary(@RequestParam Long memberId) {
         return dashboardService.getTodayDiary(memberId);
     }
 }

@@ -1,13 +1,15 @@
-package com.zero.plantory.domain.dashboard.vo;
+package com.zero.plantory.domain.dashboard.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class TodayWateringVO {
+public class TodayWateringDTO {
     private String name;
     private Integer interval;
 }
