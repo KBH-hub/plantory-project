@@ -2,7 +2,7 @@ package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.notice.NoticeMapper;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
-import com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO;
+import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.global.vo.NoticeTargetType;
 import com.zero.plantory.global.vo.NoticeVO;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     @Override
     public void completeSharing(Long sharingId, Long memberId, Long targetMemberId) {
 
-        SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
         if (sharing == null) {
             throw new IllegalArgumentException("존재하지 않는 나눔글입니다.");
         }
@@ -55,7 +55,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
                                       int reShare,
                                       Integer satisfaction) {
 
-        SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
 
         ReviewerType reviewerType;
 

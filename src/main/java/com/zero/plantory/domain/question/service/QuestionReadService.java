@@ -1,15 +1,15 @@
 package com.zero.plantory.domain.question.service;
 
-import com.zero.plantory.domain.question.vo.SelectAnswerListVO;
-import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
-import com.zero.plantory.domain.question.vo.SelectQuestionListVO;
+import com.zero.plantory.domain.question.dto.SelectAnswerListResponse;
+import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
+import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;
 
 import java.util.List;
 
 public interface QuestionReadService {
-    List<SelectQuestionListVO> getQuestionList(String keyword, Integer limit, Integer offset);
+    List<SelectQuestionListResponse> getQuestionList(String keyword, Integer limit, Integer offset);
 
-    SelectQuestionDetailVO getQuestionDetail(Long questionId);
+    SelectQuestionDetailResponse getQuestionDetail(Long questionId);
 
-    List<SelectAnswerListVO> getAnswerList(Long questionId);
+    List<SelectAnswerListResponse> getAnswerList(Long questionId);
 }

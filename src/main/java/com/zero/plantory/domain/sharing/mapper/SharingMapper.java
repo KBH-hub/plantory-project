@@ -1,21 +1,19 @@
 package com.zero.plantory.domain.sharing.mapper;
 
-import com.zero.plantory.domain.sharing.vo.*;
-import com.zero.plantory.global.vo.CommentVO;
+import com.zero.plantory.domain.sharing.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.zero.plantory.global.vo.SharingVO;
 
 import java.util.List;
 
 @Mapper
 public interface SharingMapper {
-    List<SharingCardListVO> selectSharingListByAddressAndKeyword(SharingSearchVO vo);
+    List<SharingCardListResponse> selectSharingListByAddressAndKeyword(SharingSearchRequest request);
     int countInterestByMemberId(Long memberId);
-    List<SharingPopularVO> selectPopularSharingList();
-    int insertSharing(SharingVO vo);
-    SelectSharingDetailVO selectSharingDetail(Long sharingId);
-    List<SelectCommentListVO> selectSharingComments(Long sharingId);
+    List<SharingPopularResponse> selectPopularSharingList();
+    int insertSharing(SharingRequest request);
+    SelectSharingDetailResponse selectSharingDetail(Long sharingId);
+    List<SelectCommentListResponse> selectSharingComments(Long sharingId);
 
     /** click interest */
     int countInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
@@ -28,21 +26,21 @@ public interface SharingMapper {
 
     int insertComment(@Param("sharingId") Long sharingId, @Param("writerId") Long writerId, @Param("content") String content);
     int countMyComment(@Param("commentId") Long commentId, @Param("sharingId") Long sharingId, @Param("writerId") Long writerId);
-    int updateCommentById(CommentVO vo);
-    int deleteComment(CommentVO vo);
+    int updateCommentById(CommentRequest request);
+    int deleteComment(CommentRequest request);
 
     /**update sharing*/
     int countMySharing(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
-    int updateSharing(SharingVO vo);
+    int updateSharing(SharingRequest request);
 
     int deleteSharing(@Param("sharingId") Long sharingId);
 
-    List<SharingPartnerVO> selectSharingMessagePartners(@Param("receiverId") Long receiverId, @Param("sharingId") Long sharingId);
+    List<SharingPartnerResponse> selectSharingMessagePartners(@Param("receiverId") Long receiverId, @Param("sharingId") Long sharingId);
     int updateSharingComplete(@Param("sharingId") Long sharingId, @Param("targetMemberId") Long targetMemberId);
 
     /** Sharing review*/
-    List<SharingHistoryVO> selectMySharingGiven(@Param("memberId") Long memberId);
-    List<SharingHistoryVO> selectMySharingReceived(@Param("memberId") Long memberId);
+    List<SharingHistoryResponse> selectMySharingGiven(@Param("memberId") Long memberId);
+    List<SharingHistoryResponse> selectMySharingReceived(@Param("memberId") Long memberId);
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
 
 }

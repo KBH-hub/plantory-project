@@ -2,8 +2,10 @@ package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.notice.NoticeMapper;
+import com.zero.plantory.domain.question.dto.AnswerRequest;
+import com.zero.plantory.domain.question.dto.QuestionRequest;
 import com.zero.plantory.domain.question.mapper.QuestionMapper;
-import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
+import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
 import com.zero.plantory.global.utils.StorageUploader;
 import com.zero.plantory.global.vo.*;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +28,16 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
     @Override
     @Transactional
-    public Long registerQuestion(QuestionVO vo, List<MultipartFile> images) throws IOException {
+    public Long registerQuestion(QuestionRequest request, List<MultipartFile> images) throws IOException {
 
-        if (vo.getTitle() == null || vo.getTitle().isBlank())
+        if (request.getTitle() == null || request.getTitle().isBlank())
             throw new IllegalArgumentException("제목은 필수입니다.");
 
-        if (vo.getContent() == null || vo.getContent().isBlank())
+        if (request.getContent() == null || request.getContent().isBlank())
             throw new IllegalArgumentException("내용은 필수입니다.");
 
-        questionMapper.insertQuestion(vo);
-        Long questionId = vo.getQuestionId();
+        questionMapper.insertQuestion(request);
+        Long questionId = request.getQuestionId();
 
         if (images != null) {
             for (MultipartFile file : images) {
@@ -43,7 +45,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
                 String url = storageUploader.uploadFile(file);
 
                 ImageVO img = ImageVO.builder()
-                        .memberId(vo.getMemberId())
+                        .memberId(request.getMemberId())
                         .targetType(ImageTargetType.QUESTION)
                         .targetId(questionId)
                         .fileUrl(url)
@@ -59,15 +61,15 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
     @Override
     @Transactional
-    public boolean updateQuestion(QuestionVO vo, Long loginMemberId, List<MultipartFile> newImages) throws IOException {
+    public boolean updateQuestion(QuestionRequest request, Long loginMemberId, List<MultipartFile> newImages) throws IOException {
 
-        if (!loginMemberId.equals(vo.getMemberId()))
+        if (!loginMemberId.equals(request.getMemberId()))
             throw new IllegalStateException("본인의 질문만 수정할 수 있습니다.");
 
-        if (questionMapper.countMyQuestion(vo) == 0)
+        if (questionMapper.countMyQuestion(request) == 0)
             throw new IllegalStateException("수정 권한 없음");
 
-        Long questionId = vo.getQuestionId();
+        Long questionId = request.getQuestionId();
 
         if (newImages != null && !newImages.isEmpty()) {
 
@@ -78,7 +80,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
                 String url = storageUploader.uploadFile(file);
 
                 ImageVO img = ImageVO.builder()
-                        .memberId(vo.getMemberId())
+                        .memberId(request.getMemberId())
                         .targetType(ImageTargetType.QUESTION)
                         .targetId(questionId)
                         .fileUrl(url)
@@ -89,19 +91,19 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
             }
         }
 
-        return questionMapper.updateQuestion(vo) > 0;
+        return questionMapper.updateQuestion(request) > 0;
     }
 
     @Override
     @Transactional
     public boolean deleteQuestion(Long questionId, Long loginMemberId) {
 
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .questionId(questionId)
                 .memberId(loginMemberId)
                 .build();
 
-        if (questionMapper.countMyQuestion(vo) == 0)
+        if (questionMapper.countMyQuestion(request) == 0)
             throw new IllegalStateException("본인의 질문만 삭제할 수 있습니다.");
 
         imageMapper.softDeleteImagesByTarget(ImageTargetType.QUESTION, questionId);
@@ -111,23 +113,23 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
     @Override
     @Transactional
-    public boolean addAnswer(AnswerVO vo) {
+    public boolean addAnswer(AnswerRequest request) {
 
-        if (vo.getWriterId() == null)
+        if (request.getWriterId() == null)
             throw new IllegalArgumentException("로그인 정보 없음");
-        if (vo.getContent() == null || vo.getContent().isBlank())
+        if (request.getContent() == null || request.getContent().isBlank())
             throw new IllegalArgumentException("내용은 필수입니다.");
 
-        int inserted = questionMapper.insertAnswer(vo);
+        int inserted = questionMapper.insertAnswer(request);
 
         if (inserted > 0) {
-            SelectQuestionDetailVO question = questionMapper.selectQuestionDetail(vo.getQuestionId());
+            SelectQuestionDetailResponse question = questionMapper.selectQuestionDetail(request.getQuestionId());
             Long ownerId = question.getMemberId();
 
-            if (!vo.getWriterId().equals(ownerId)) {
+            if (!request.getWriterId().equals(ownerId)) {
                 NoticeVO notice = NoticeVO.builder()
                         .receiverId(ownerId)
-                        .targetId(vo.getQuestionId())
+                        .targetId(request.getQuestionId())
                         .targetType(NoticeTargetType.QUESTION)
                         .content("새로운 답변이 등록되었습니다!")
                         .build();
@@ -141,27 +143,27 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
     @Override
     @Transactional
-    public boolean updateAnswer(AnswerVO vo, Long loginMemberId) {
+    public boolean updateAnswer(AnswerRequest request, Long loginMemberId) {
 
-        if (!vo.getWriterId().equals(loginMemberId))
+        if (!request.getWriterId().equals(loginMemberId))
             throw new IllegalStateException("본인의 답변만 수정 가능");
 
-        if (questionMapper.countMyAnswer(vo) == 0)
+        if (questionMapper.countMyAnswer(request) == 0)
             throw new IllegalStateException("수정 권한 없음");
 
-        return questionMapper.updateAnswerById(vo) > 0;
+        return questionMapper.updateAnswerById(request) > 0;
     }
 
     @Override
     @Transactional
-    public boolean deleteAnswer(AnswerVO vo, Long loginMemberId) {
+    public boolean deleteAnswer(AnswerRequest request, Long loginMemberId) {
 
-        if (!vo.getWriterId().equals(loginMemberId))
+        if (!request.getWriterId().equals(loginMemberId))
             throw new IllegalStateException("본인의 답변만 삭제 가능");
 
-        if (questionMapper.countMyAnswer(vo) == 0)
+        if (questionMapper.countMyAnswer(request) == 0)
             throw new IllegalStateException("삭제 권한 없음");
 
-        return questionMapper.deleteAnswer(vo) > 0;
+        return questionMapper.deleteAnswer(request) > 0;
     }
 }

@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.sharing.service;
 
-import com.zero.plantory.global.vo.CommentVO;
-import com.zero.plantory.global.vo.SharingVO;
+import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface SharingWriteService {
     /** 나눔글 등록 */
-    Long registerSharing(SharingVO vo, List<MultipartFile> files) throws IOException;
+    Long registerSharing(SharingRequest request, List<MultipartFile> files) throws IOException;
 
     /** 나눔글 수정 */
-    boolean updateSharing(SharingVO vo, List<MultipartFile> images) throws IOException;
+    boolean updateSharing(SharingRequest request, List<MultipartFile> images) throws IOException;
 
     /** 나눔글 삭제 */
     boolean deleteSharing(Long sharingId, Long memberId);
@@ -27,9 +27,9 @@ public interface SharingWriteService {
     boolean addComment(Long sharingId, Long writerId, String content);
 
     /** 댓글 수정 */
-    boolean updateComment(CommentVO vo);
+    boolean updateComment(CommentRequest request);
 
     /** 댓글 삭제 */
-    boolean deleteComment(CommentVO vo);
+    boolean deleteComment(CommentRequest request);
 
 }
