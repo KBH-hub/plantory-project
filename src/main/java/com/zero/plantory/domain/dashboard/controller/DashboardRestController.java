@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.dashboard.controller;
 
+import com.zero.plantory.domain.dashboard.dto.DashboardSummaryResponse;
 import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponse;
 import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponse;
 import com.zero.plantory.domain.dashboard.dto.TodayWateringResponse;
@@ -18,33 +19,16 @@ import java.util.List;
 public class DashboardRestController {
     private final DashboardService dashboardService;
 
-    @GetMapping("/countMyplants")
-    public int countMyPlants(@RequestParam Long memberId) {
-        return dashboardService.countMyPlants(memberId);
+    @GetMapping("/summaries")
+    public DashboardSummaryResponse getDashboardSummary(@RequestParam Long memberId) {
+        return DashboardSummaryResponse.builder()
+                .myPlantsCount(dashboardService.countMyPlants(memberId))
+                .todayWateringCount(dashboardService.countTodayWatering(memberId))
+                .careNeededCount(dashboardService.countCareNeededPlants(memberId))
+                .recommendeds(dashboardService.getRecommendedSharingList())
+                .waterings(dashboardService.getTodayWatering(memberId))
+                .diaries(dashboardService.getTodayDiary(memberId))
+                .build();
     }
 
-    @GetMapping("/countWatering")
-    public int countTodayWatering(@RequestParam Long memberId) {
-        return dashboardService.countTodayWatering(memberId);
-    }
-
-    @GetMapping("/countCareneeded")
-    public int countCareNeeded(@RequestParam Long memberId) {
-        return dashboardService.countCareNeededPlants(memberId);
-    }
-
-    @GetMapping("/recommended")
-    public List<RecommendedSharingResponse> recommended() {
-        return dashboardService.getRecommendedSharingList();
-    }
-
-    @GetMapping("/watering")
-    public List<TodayWateringResponse> watering(@RequestParam Long memberId) {
-        return dashboardService.getTodayWatering(memberId);
-    }
-
-    @GetMapping("/diary")
-    public List<TodayDiaryResponse> diary(@RequestParam Long memberId) {
-        return dashboardService.getTodayDiary(memberId);
-    }
 }

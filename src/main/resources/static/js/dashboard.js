@@ -16,157 +16,131 @@ function timeAgo(createdAt) {
     return diffWeeks + "주 전";
 }
 
-
-async function loadDashboardCounts() {
+async function loadDashboardSummary() {
     const memberId = Number(document.body.dataset.memberId);
 
     try {
-        const resMyPlants = await axios.get("/api/dashboard/countMyplants", {
+        const res = await axios.get("/api/dashboard/summaries", {
             params: { memberId }
         });
-        document.getElementById("countMyPlants").textContent = resMyPlants.data;
 
-        const resWatering = await axios.get("/api/dashboard/countWatering", {
-            params: { memberId }
-        });
-        document.getElementById("countWatering").textContent = resWatering.data;
+        const data = res.data;
 
-        const resCareNeeded = await axios.get("/api/dashboard/countCareneeded", {
-            params: { memberId }
-        });
-        document.getElementById("countCareneeded").textContent = resCareNeeded.data;
+        document.getElementById("countMyPlants").textContent = data.myPlantsCount;
+        document.getElementById("countWatering").textContent = data.todayWateringCount;
+        document.getElementById("countCareneeded").textContent = data.careNeededCount;
+
+        renderRecommendedSharings(data.recommendeds);
+
+        renderWateringList(data.waterings);
+
+        renderDiaryList(data.diaries);
 
     } catch (err) {
-        console.error("Dashboard count API error:", err);
+        console.error("Dashboard summary load error:", err);
     }
 }
 
-async function loadRecommendedSharings() {
-    const template = document.getElementById("recommendedCardTemplate");
+function renderRecommendedSharings(list) {
     const container = document.getElementById("recommendedContainer");
+    container.innerHTML = "";
 
-    try {
-        const res = await axios.get("/api/dashboard/recommended");
-        const list = res.data;
+    list.forEach(item => {
+        const card = `
+            <a href="/readSharing/${item.sharingId}"
+               class="text-decoration-none text-reset"
+               style="width:350px;">
 
-        container.innerHTML = "";
+                <div class="card shadow-sm h-100">
 
-        list.forEach(item => {
-            const clone = template.content.cloneNode(true);
+                    <img src="${item.fileUrl}"
+                         class="w-100"
+                         style="height:375px; object-fit:cover;">
 
-            clone.querySelector("a").href = `/readSharing/${item.sharingId}`;
-            clone.querySelector(".thumbnail").src = item.fileUrl;
-            clone.querySelector(".title").textContent = item.title;
-            clone.querySelector(".time").textContent = timeAgo(item.createdAt);
+                    <div class="card-body p-3">
 
-            clone.querySelector(".comment").textContent = item.commentCount;
-            clone.querySelector(".interest").textContent = item.interestNum;
+                        <div class="fw-semibold text-truncate">
+                            ${item.title}
+                        </div>
 
-            container.appendChild(clone);
-        });
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted">
+                                ${timeAgo(item.createdAt)}
+                            </small>
 
-    } catch (err) {
-        console.error("Recommended sharing load error:", err);
-    }
-}
+                            <small class="text-muted">
+                                <i class="bi bi-chat me-1"></i>${item.commentCount}
+                                <i class="bi bi-heart ms-3 me-1"></i>${item.interestNum}
+                            </small>
+                        </div>
 
-
-
-async function loadTodayWatering() {
-    const memberId = Number(document.body.dataset.memberId);
-
-    const container = document.getElementById("wateringListContainer");
-
-    try {
-        const res = await axios.get("/api/dashboard/watering", {
-            params: { memberId }
-        });
-
-        const list = res.data;
-
-        if (list.length === 0) {
-            container.innerHTML = `<div class="text-muted small">오늘 물 줄 식물이 없습니다.</div>`;
-            return;
-        }
-
-        container.innerHTML = "";
-
-        list.forEach(item => {
-            const card = `
-                <div class="p-2 mb-2 border rounded position-relative" style="background:#f5faff;">
-                    <span class="badge bg-dark position-absolute top-0 end-0 mt-2 me-2">오늘</span>
-        
-                    <div class="fw-bold">${item.name}</div>
-                    <div class="text-muted small">${item.interval}일마다</div>
-                </div>
-            `;
-            container.insertAdjacentHTML("beforeend", card);
-        });
-
-    } catch (err) {
-        console.error("Watering load error:", err);
-        container.innerHTML = `<div class="text-danger small">불러오기 실패</div>`;
-    }
-}
-
-
-async function loadTodayDiary() {
-    const memberId = Number(document.body.dataset.memberId);
-
-    const container = document.getElementById("diaryListContainer");
-
-    try {
-        const res = await axios.get("/api/dashboard/diary", {
-            params: { memberId }
-        });
-
-        const list = res.data;
-
-        if (list.length === 0) {
-            container.innerHTML = `<div class="text-muted small">최근 작성된 관찰일지가 없습니다.</div>`;
-            return;
-        }
-
-        container.innerHTML = "";
-
-        list.forEach(item => {
-            const imagePart = item.fileUrl
-                ? `<img src="${item.fileUrl}" 
-                style="width:60px; height:60px; object-fit:cover;" 
-                class="rounded">`
-                : `<div style="width:60px; height:60px; background:#eee;" class="rounded"></div>`;
-
-            const card = `
-            <div class="d-flex align-items-center p-2 mb-2 border rounded position-relative"
-                 style="background:#fff7e6;">
-                 
-              <!--  <span class="badge bg-dark position-absolute top-0 end-0 mt-2 me-2">오늘</span>-->
-    
-                <div style="flex-grow:1;">
-                    <div class="fw-bold">${item.myplantName}</div>
-                    <div class="text-muted small text-truncate" style="max-width:200px;">
-                        ${item.memo ?? ""}
                     </div>
                 </div>
-    
-                <div class="ms-2">${imagePart}</div>
-            </div>
+
+            </a>
         `;
 
-            container.insertAdjacentHTML("beforeend", card);
-        });
-
-
-    } catch (err) {
-        console.error("Diary load error:", err);
-        container.innerHTML = `<div class="text-danger small">불러오기 실패</div>`;
-    }
+        container.insertAdjacentHTML("beforeend", card);
+    });
 }
 
+function renderWateringList(list) {
+    const container = document.getElementById("wateringListContainer");
+
+    if (list.length === 0) {
+        container.innerHTML = `<div class="text-muted small">오늘 물 줄 식물이 없습니다.</div>`;
+        return;
+    }
+
+    container.innerHTML = "";
+
+    list.forEach(item => {
+        const card = `
+            <div class="p-2 mb-2 border rounded position-relative" style="background:#f5faff;">
+                <span class="badge bg-dark position-absolute top-0 end-0 mt-2 me-2">오늘</span>
+                <div class="fw-bold">${item.name}</div>
+                <div class="text-muted small">${item.interval}일마다</div>
+            </div>
+        `;
+        container.insertAdjacentHTML("beforeend", card);
+    });
+}
+
+function renderDiaryList(list) {
+    const container = document.getElementById("diaryListContainer");
+
+    if (list.length === 0) {
+        container.innerHTML = `<div class="text-muted small">최근 작성된 관찰일지가 없습니다.</div>`;
+        return;
+    }
+
+    container.innerHTML = "";
+
+    list.forEach(item => {
+        const imagePart = item.fileUrl
+            ? `<img src="${item.fileUrl}" style="width:60px; height:60px; object-fit:cover;" class="rounded">`
+            : `<div style="width:60px; height:60px; background:#eee;" class="rounded"></div>`;
+
+        const card = `
+        <div class="d-flex align-items-center p-2 mb-2 border rounded position-relative"
+             style="background:#fff7e6;">
+
+            <div style="flex-grow:1;">
+                <div class="fw-bold">${item.myplantName}</div>
+                <div class="text-muted small text-truncate" style="max-width:200px;">
+                    ${item.memo ?? ""}
+                </div>
+            </div>
+
+            <div class="ms-2">${imagePart}</div>
+        </div>
+        `;
+
+        container.insertAdjacentHTML("beforeend", card);
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadDashboardCounts();
-    loadRecommendedSharings();
-    loadTodayWatering();
-    loadTodayDiary();
+    loadDashboardSummary();
 });
+
