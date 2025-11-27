@@ -15,12 +15,15 @@ import java.util.Date;
 public class MessageResponse {
     private Long messageId;
     private Long senderId;
+    private String senderNickname;
     private Long receiverId;
     private String title;
     private String content;
     private MessageTargetType targetType;
     private Long targetId;
+    private String targetTitle;
     private Date createdAt;
     private Date readFlag;
     private Date delFlag;
+    private Date senderDelFlag;
 }

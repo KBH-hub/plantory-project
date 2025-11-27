@@ -151,6 +151,7 @@
             m.created_at,
             m.read_flag,
             m.del_flag,
+            m.sender_del_flag,
             CASE
                 WHEN m.target_type = 'SHARING' THEN (
                     SELECT s.title

@@ -100,10 +100,8 @@
           <td style="width:120px;">${esc(item.senderNickname ?? '')}</td>
           <td style="width:120px;">${esc(item.receiverNickname ?? '')}</td>
           <td style="width:90px;">${category}</td>
-          <td class="text-truncate" style="max-width:320px;">${esc(item.title || '')}</td>
-          <td class="text-truncate">
-            ${relatedUrl ? `<a href="${relatedUrl}" class="text-decoration-none">${relatedText}</a>` : '-'}
-          </td>
+          <td class="text-truncate" style="max-width:180px;">${esc(item.title || '')}</td>
+          <td class="text-truncate">${relatedText}</td>
           <td class="text-nowrap" style="width:170px;">${fmtKST(item.createdAt)}</td>
         </tr>
       `;
@@ -282,10 +280,11 @@
         const tbody = document.getElementById('messageTbody');
         if (!tbody) return;
 
-        const onRowClick = (messageId) => {
-            // 필요 시 상세 로직으로 교체
-            console.log('messageId:', messageId);
-        };
+        function onRowClick(messageId) {
+            const viewerId = state.memberId;
+            window.location.href = `/messageDetail?messageId=${encodeURIComponent(messageId)}&viewerId=${encodeURIComponent(viewerId)}`;
+        }
+
 
         tbody.addEventListener('click', (ev) => {
             if (ev.target.closest('input[type="checkbox"]')) return;

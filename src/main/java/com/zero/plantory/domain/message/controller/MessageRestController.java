@@ -57,7 +57,7 @@ public class MessageRestController {
     }
 
     @GetMapping("/{messageId}")
-    public ResponseEntity<MessageResponse> getMessage(@PathVariable Long messageId,  Long viewerId) {
+    public ResponseEntity<MessageResponse> getMessage(@PathVariable Long messageId, @RequestParam Long viewerId) {
         MessageResponse result = messageService.findMessageDetail(messageId, viewerId);
         if(result == null) {
             return ResponseEntity.notFound().build();
