@@ -25,19 +25,13 @@ async function loadDashboardCounts() {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDashboardCounts();
-    loadRecommendedSharings();
-});
-
-
 async function loadRecommendedSharings() {
     try {
         const res = await axios.get("/api/dashboard/recommended");
         const list = res.data;
 
         const container = document.getElementById("recommendedContainer");
-        container.innerHTML = ""; // 기존 정적 카드 제거
+        container.innerHTML = "";
 
         list.forEach(item => {
             const card = `
@@ -91,14 +85,7 @@ function timeAgo(createdAt) {
     return diffWeeks + "주 전";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDashboardCounts();
-    loadTodayWatering();
-    loadTodayDiary();
-});
 
-
-//  오늘 물주기 리스트 렌더링
 async function loadTodayWatering() {
     const memberId = Number(document.body.dataset.memberId);
 
@@ -189,3 +176,11 @@ async function loadTodayDiary() {
         container.innerHTML = `<div class="text-danger small">불러오기 실패</div>`;
     }
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadDashboardCounts();
+    loadRecommendedSharings();
+    loadTodayWatering();
+    loadTodayDiary();
+});
