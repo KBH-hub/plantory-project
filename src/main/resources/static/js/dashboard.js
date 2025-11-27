@@ -1,3 +1,22 @@
+function timeAgo(createdAt) {
+    const now = new Date();
+    const past = new Date(createdAt);
+    const diffMs = now - past;
+
+    const diffMinutes = Math.floor(diffMs / 60000);
+    const diffHours   = Math.floor(diffMs / 3600000);
+    const diffDays    = Math.floor(diffMs / 86400000);
+
+    if (diffMinutes < 1) return "방금 전";
+    if (diffMinutes < 60) return diffMinutes + "분 전";
+    if (diffHours < 24)   return diffHours + "시간 전";
+    if (diffDays < 7)     return diffDays + "일 전";
+
+    const diffWeeks = Math.floor(diffDays / 7);
+    return diffWeeks + "주 전";
+}
+
+
 async function loadDashboardCounts() {
     const memberId = Number(document.body.dataset.memberId);
 
@@ -22,42 +41,28 @@ async function loadDashboardCounts() {
     }
 }
 
-
 async function loadRecommendedSharings() {
+    const template = document.getElementById("recommendedCardTemplate");
+    const container = document.getElementById("recommendedContainer");
+
     try {
         const res = await axios.get("/api/dashboard/recommended");
         const list = res.data;
 
-        const container = document.getElementById("recommendedContainer");
         container.innerHTML = "";
 
         list.forEach(item => {
-            const card = `
-                <a href="/readSharing/${item.sharingId}" 
-                   class="text-decoration-none text-reset" 
-                   style="width:350px;">
-                    <div class="card shadow-sm h-100">
-                    
-                        <img src="${item.fileUrl}" 
-                             alt="thumbnail" 
-                             class="w-100"
-                             style="height:375px; object-fit:cover;">
-                             
-                        <div class="card-body p-3">
-                            <div class="fw-semibold text-truncate">${item.title}</div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <small class="text-muted">${timeAgo(item.createdAt)}</small>
-                                <small class="text-muted">
-                                    <i class="bi bi-chat me-1"></i>${item.commentCount}
-                                    <i class="bi bi-heart ms-3 me-1"></i>${item.interestNum}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            `;
+            const clone = template.content.cloneNode(true);
 
-            container.insertAdjacentHTML("beforeend", card);
+            clone.querySelector("a").href = `/readSharing/${item.sharingId}`;
+            clone.querySelector(".thumbnail").src = item.fileUrl;
+            clone.querySelector(".title").textContent = item.title;
+            clone.querySelector(".time").textContent = timeAgo(item.createdAt);
+
+            clone.querySelector(".comment").textContent = item.commentCount;
+            clone.querySelector(".interest").textContent = item.interestNum;
+
+            container.appendChild(clone);
         });
 
     } catch (err) {
@@ -65,23 +70,6 @@ async function loadRecommendedSharings() {
     }
 }
 
-function timeAgo(createdAt) {
-    const now = new Date();
-    const past = new Date(createdAt);
-    const diffMs = now - past;
-
-    const diffMinutes = Math.floor(diffMs / 60000);
-    const diffHours   = Math.floor(diffMs / 3600000);
-    const diffDays    = Math.floor(diffMs / 86400000);
-
-    if (diffMinutes < 1) return "방금 전";
-    if (diffMinutes < 60) return diffMinutes + "분 전";
-    if (diffHours < 24)   return diffHours + "시간 전";
-    if (diffDays < 7)     return diffDays + "일 전";
-
-    const diffWeeks = Math.floor(diffDays / 7);
-    return diffWeeks + "주 전";
-}
 
 
 async function loadTodayWatering() {

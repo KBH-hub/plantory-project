@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.sharing.service;
 
-import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
+import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class SharingReadServiceTest {
     @Test
     @DisplayName("나눔 게시글 카드 리스트 조회")
     void getSharingListTest() {
-        SharingSearchVO vo = SharingSearchVO.builder()
+        SharingSearchRequest vo = SharingSearchRequest.builder()
                 .userAddress("서울")
                 .keyword("")
                 .limit(10)

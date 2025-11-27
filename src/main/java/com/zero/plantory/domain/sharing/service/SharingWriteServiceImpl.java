@@ -2,8 +2,10 @@ package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.notice.NoticeMapper;
+import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
-import com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO;
+import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.global.utils.StorageUploader;
 import com.zero.plantory.global.vo.*;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +28,11 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
     @Override
     @Transactional
-    public Long registerSharing(SharingVO vo, List<MultipartFile> files) throws IOException {
+    public Long registerSharing(SharingRequest request, List<MultipartFile> files) throws IOException {
 
         List<ImageVO> imageList = new ArrayList<>();
 
-        if (vo.getTitle() == null || vo.getTitle().isBlank()) {
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
             throw new IllegalArgumentException("제목은 필수입니다.");
         }
 
@@ -42,7 +44,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
                 String url = storageUploader.uploadFile(file);
 
                 imageList.add(ImageVO.builder()
-                        .memberId(vo.getMemberId())
+                        .memberId(request.getMemberId())
                         .targetType(ImageTargetType.SHARING)
                         .fileUrl(url)
                         .fileName(file.getOriginalFilename())
@@ -50,8 +52,8 @@ public class SharingWriteServiceImpl implements SharingWriteService {
             }
         }
 
-        sharingMapper.insertSharing(vo);
-        Long sharingId = vo.getSharingId();
+        sharingMapper.insertSharing(request);
+        Long sharingId = request.getSharingId();
 
         for (ImageVO img : imageList) {
             img.setTargetId(sharingId);
@@ -64,13 +66,13 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
     @Override
     @Transactional
-    public boolean updateSharing(SharingVO vo, List<MultipartFile> newImages) throws IOException {
+    public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
 
-        if (sharingMapper.countMySharing(vo.getSharingId(), vo.getMemberId()) == 0) {
+        if (sharingMapper.countMySharing(request.getSharingId(), request.getMemberId()) == 0) {
             throw new IllegalStateException("본인 글만 수정 가능");
         }
 
-        Long sharingId = vo.getSharingId();
+        Long sharingId = request.getSharingId();
 
         if (newImages != null && !newImages.isEmpty()) {
 
@@ -81,7 +83,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
                 String url = storageUploader.uploadFile(file);
 
                 imageMapper.insertImage(ImageVO.builder()
-                        .memberId(vo.getMemberId())
+                        .memberId(request.getMemberId())
                         .targetType(ImageTargetType.SHARING)
                         .targetId(sharingId)
                         .fileUrl(url)
@@ -90,7 +92,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
             }
         }
 
-        return sharingMapper.updateSharing(vo) > 0;
+        return sharingMapper.updateSharing(request) > 0;
     }
 
 
@@ -138,7 +140,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Override
     @Transactional
     public boolean addComment(Long sharingId, Long writerId, String content) {
-        SelectSharingDetailVO sharing = sharingMapper.selectSharingDetail(sharingId);
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
         int inserted = sharingMapper.insertComment(sharingId, writerId, content);
 
         if (inserted > 0) {
@@ -163,26 +165,26 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
     @Override
     @Transactional
-    public boolean updateComment(CommentVO vo) {
+    public boolean updateComment(CommentRequest request) {
 
-        int isMine = sharingMapper.countMyComment(vo.getCommentId(), vo.getSharingId(), vo.getWriterId());
+        int isMine = sharingMapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         if (isMine == 0) {
             throw new IllegalStateException("본인 댓글만 수정 가능");
         }
 
-        return sharingMapper.updateCommentById(vo) > 0;
+        return sharingMapper.updateCommentById(request) > 0;
     }
 
     @Override
     @Transactional
-    public boolean deleteComment(CommentVO vo) {
+    public boolean deleteComment(CommentRequest request) {
 
-        int isMine = sharingMapper.countMyComment(vo.getCommentId(), vo.getSharingId(), vo.getWriterId());
+        int isMine = sharingMapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         if (isMine == 0) {
             throw new IllegalStateException("본인 댓글만 삭제 가능");
         }
 
-        return sharingMapper.deleteComment(vo) > 0;
+        return sharingMapper.deleteComment(request) > 0;
     }
 
 

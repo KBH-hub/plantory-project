@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.question.service;
 
-import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
-import com.zero.plantory.domain.question.vo.SelectQuestionListVO;
+import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
+import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class QuestionReadServiceTest {
     @Test
     @DisplayName("질문 목록 조회")
     void selectQuestionListTest() {
-        List<SelectQuestionListVO> result = questionReadService.getQuestionList("", 10, 0);
+        List<SelectQuestionListResponse> result = questionReadService.getQuestionList("", 10, 0);
         log.info("조회 결과 = {}", result);
     }
 
@@ -30,7 +30,7 @@ public class QuestionReadServiceTest {
 
         Long questionId = 2L;
 
-        SelectQuestionDetailVO vo = questionReadService.getQuestionDetail(questionId);
+        SelectQuestionDetailResponse vo = questionReadService.getQuestionDetail(questionId);
 
         log.info("질문 상세 = {}", vo);
         log.info("이미지 리스트 = {}", vo.getImages());

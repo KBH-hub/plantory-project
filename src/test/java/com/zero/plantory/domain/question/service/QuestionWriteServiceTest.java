@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.question.service;
 
+import com.zero.plantory.domain.question.dto.AnswerRequest;
+import com.zero.plantory.domain.question.dto.QuestionRequest;
 import com.zero.plantory.global.vo.AnswerVO;
 import com.zero.plantory.global.vo.QuestionVO;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +40,13 @@ public class QuestionWriteServiceTest {
 
         List<MultipartFile> files = List.of(f1, f2);
 
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .memberId(2L)
                 .title("테스트 질문 제목")
                 .content("테스트 질문 내용")
                 .build();
 
-        createdQuestionId = questionWriteService.registerQuestion(vo, files);
+        createdQuestionId = questionWriteService.registerQuestion(request, files);
 
         log.info("등록된 질문 ID = {}", createdQuestionId);
         Assertions.assertNotNull(createdQuestionId);
@@ -61,14 +63,14 @@ public class QuestionWriteServiceTest {
                 "file", "updated.png", "image/png", "updated image".getBytes()
         );
 
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .questionId(createdQuestionId)
                 .memberId(2L)
                 .title("수정된 제목")
                 .content("수정된 내용")
                 .build();
 
-        boolean result = questionWriteService.updateQuestion(vo, 2L, List.of(updated));
+        boolean result = questionWriteService.updateQuestion(request, 2L, List.of(updated));
 
         log.info("수정 결과 = {}", result);
         Assertions.assertTrue(result);
@@ -81,18 +83,18 @@ public class QuestionWriteServiceTest {
     @DisplayName("답변 등록 + 알림")
     void addAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .questionId(createdQuestionId)
                 .writerId(4L)
                 .content("테스트 답변입니다.")
                 .build();
 
-        boolean result = questionWriteService.addAnswer(vo);
+        boolean result = questionWriteService.addAnswer(request);
 
         log.info("답변 등록 결과 = {}", result);
         Assertions.assertTrue(result);
 
-        createdAnswerId = vo.getAnswerId();
+        createdAnswerId = request.getAnswerId();
     }
 
 
@@ -101,14 +103,14 @@ public class QuestionWriteServiceTest {
     @DisplayName("답변 수정")
     void updateAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .answerId(createdAnswerId)
                 .questionId(createdQuestionId)
                 .writerId(4L)
                 .content("수정된 답변 내용입니다.")
                 .build();
 
-        boolean result = questionWriteService.updateAnswer(vo, 4L);
+        boolean result = questionWriteService.updateAnswer(request, 4L);
 
         log.info("답변 수정 결과 = {}", result);
         Assertions.assertTrue(result);
@@ -121,13 +123,13 @@ public class QuestionWriteServiceTest {
     @DisplayName("답변 삭제")
     void deleteAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .answerId(createdAnswerId)
                 .questionId(createdQuestionId)
                 .writerId(4L)
                 .build();
 
-        boolean result = questionWriteService.deleteAnswer(vo, 4L);
+        boolean result = questionWriteService.deleteAnswer(request, 4L);
 
         log.info("답변 삭제 결과 = {}", result);
         Assertions.assertTrue(result);

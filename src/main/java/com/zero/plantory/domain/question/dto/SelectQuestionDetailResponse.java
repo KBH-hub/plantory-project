@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.question.vo;
+package com.zero.plantory.domain.question.dto;
 
 import com.zero.plantory.global.vo.ImageVO;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectQuestionDetailVO {
+public class SelectQuestionDetailResponse {
     private Long questionId;
     private Long memberId;
     private String nickname;

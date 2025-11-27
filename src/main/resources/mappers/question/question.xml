@@ -6,7 +6,7 @@
 
 <mapper namespace="com.zero.plantory.domain.question.mapper.QuestionMapper">
 
-    <select id="selectQuestionList" resultType="com.zero.plantory.domain.question.vo.SelectQuestionListVO">
+    <select id="selectQuestionList" resultType="com.zero.plantory.domain.question.dto.SelectQuestionListResponse">
 
         SELECT
             q.question_id      AS questionId,
@@ -40,7 +40,7 @@
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
-    <insert id="insertQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO" useGeneratedKeys="true"
+    <insert id="insertQuestion" parameterType="com.zero.plantory.domain.question.dto.QuestionRequest" useGeneratedKeys="true"
             keyProperty="questionId">
 
         INSERT INTO question
@@ -50,7 +50,7 @@
 
     </insert>
 
-    <select id="selectQuestionDetail" resultType="com.zero.plantory.domain.question.vo.SelectQuestionDetailVO">
+    <select id="selectQuestionDetail" resultType="com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse">
 
         SELECT
             q.question_id AS questionId,
@@ -68,7 +68,7 @@
 
     </select>
 
-    <select id="selectQuestionAnswers" resultType="com.zero.plantory.domain.question.vo.SelectAnswerListVO">
+    <select id="selectQuestionAnswers" resultType="com.zero.plantory.domain.question.dto.SelectAnswerListResponse">
 
         SELECT
             a.answer_id AS answerId,
@@ -86,7 +86,7 @@
     </select>
 
     <insert id="insertAnswer"
-            parameterType="com.zero.plantory.global.vo.AnswerVO"
+            parameterType="com.zero.plantory.domain.question.dto.AnswerRequest"
             useGeneratedKeys="true"
             keyProperty="answerId">
 
@@ -97,7 +97,7 @@
 
     </insert>
 
-    <select id="countMyAnswer" parameterType="com.zero.plantory.global.vo.AnswerVO">
+    <select id="countMyAnswer" parameterType="com.zero.plantory.domain.question.dto.AnswerRequest">
 
         SELECT COUNT(*)
         FROM answer
@@ -109,7 +109,7 @@
     </select>
 
 
-    <update id="updateAnswerById" parameterType="com.zero.plantory.global.vo.AnswerVO">
+    <update id="updateAnswerById" parameterType="com.zero.plantory.domain.question.dto.AnswerRequest">
 
         UPDATE answer
         SET content = #{content},
@@ -122,7 +122,7 @@
     </update>
 
 
-    <update id="deleteAnswer" parameterType="com.zero.plantory.global.vo.AnswerVO">
+    <update id="deleteAnswer" parameterType="com.zero.plantory.domain.question.dto.AnswerRequest">
 
         UPDATE answer
         SET del_flag = NOW()
@@ -133,7 +133,7 @@
 
     </update>
 
-    <select id="countMyQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+    <select id="countMyQuestion" parameterType="com.zero.plantory.domain.question.dto.QuestionRequest">
 
         SELECT COUNT(*)
         FROM question
@@ -143,7 +143,7 @@
 
     </select>
 
-    <update id="updateQuestion" parameterType="com.zero.plantory.global.vo.QuestionVO">
+    <update id="updateQuestion" parameterType="com.zero.plantory.domain.question.dto.QuestionRequest">
 
         UPDATE question
         SET title = #{title},

@@ -1,9 +1,8 @@
 package com.zero.plantory.domain.sharing.mapper;
 
-import com.zero.plantory.domain.sharing.vo.SharingHistoryVO;
-import com.zero.plantory.domain.sharing.vo.SharingPartnerVO;
-import com.zero.plantory.domain.sharing.vo.SharingPopularVO;
-import com.zero.plantory.domain.sharing.vo.SharingSearchVO;
+import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SharingRequest;
+import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
 import com.zero.plantory.global.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @Slf4j
 @SpringBootTest
@@ -89,7 +86,7 @@ public class SharingMapperTests {
     @DisplayName("나눔글 내용 수정")
     void updateSharingTest() {
 
-        SharingVO vo = SharingVO.builder()
+        SharingRequest request = SharingRequest.builder()
                 .sharingId(12L)
                 .memberId(1L)
                 .title("산세베리아 나눔해요 (시간 조율 가능)")
@@ -99,24 +96,24 @@ public class SharingMapperTests {
                 .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .build();
 
-        log.info("내용 수정 결과 = {}", mapper.updateSharing(vo));
+        log.info("내용 수정 결과 = {}", mapper.updateSharing(request));
     }
 
     @Test
     @DisplayName("댓글 삭제")
     void deleteCommentTest() {
 
-        CommentVO vo = CommentVO.builder()
+        CommentRequest request = CommentRequest.builder()
                 .commentId(21L)
                 .sharingId(20L)
                 .writerId(1L)
                 .build();
 
-        int count = mapper.countMyComment(vo.getCommentId(), vo.getSharingId(), vo.getWriterId());
+        int count = mapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         log.info("삭제 권한 여부 = {}", count);
 
         if (count == 1) {
-            int result = mapper.deleteComment(vo);
+            int result = mapper.deleteComment(request);
             log.info("삭제 결과 = {}", result);
         }
     }
@@ -139,14 +136,14 @@ public class SharingMapperTests {
         log.info("수정 권한 여부 = {}", count);
 
         if (count == 1) {
-            CommentVO vo = CommentVO.builder()
+            CommentRequest request = CommentRequest.builder()
                     .commentId(21L)
                     .sharingId(20L)
                     .writerId(1L)
                     .content("수정된 댓글입니다.")
                     .build();
 
-            log.info("댓글 수정 결과 = {}", mapper.updateCommentById(vo));
+            log.info("댓글 수정 결과 = {}", mapper.updateCommentById(request));
         }
 
     }
@@ -200,7 +197,7 @@ public class SharingMapperTests {
     @Test
     @DisplayName("나눔 게시글 등록 처리")
     void insertSharingTest() {
-        SharingVO vo = SharingVO.builder()
+        SharingRequest request = SharingRequest.builder()
                 .memberId(1L)
                 .title("테스트 제목")
                 .content("테스트 내용")
@@ -210,8 +207,8 @@ public class SharingMapperTests {
                 .status("false")
                 .build();
 
-        mapper.insertSharing(vo);
-        log.info("생성된 sharing_id = {}", vo.getSharingId());
+        mapper.insertSharing(request);
+        log.info("생성된 sharing_id = {}", request.getSharingId());
     }
 
     @Test
@@ -230,7 +227,7 @@ public class SharingMapperTests {
     @Test
     @DisplayName("나눔식물 조회 및 검색")
     void selectSharingListByAddressAndKeywordTest() {
-        SharingSearchVO vo = SharingSearchVO.builder()
+        SharingSearchRequest vo = SharingSearchRequest.builder()
                 .userAddress("서울특별시 금천구")
                 .keyword("")   // 검색어 없음 → 전체조회
                 .limit(10)

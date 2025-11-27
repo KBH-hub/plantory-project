@@ -98,9 +98,30 @@
             </div>
 
             <h5 style="margin:8px 0; font-weight:700;">주목할 만한 나눔</h5>
+            <div class="d-flex flex-nowrap gap-3" id="recommendedContainer"></div>
+            <template id="recommendedCardTemplate">
+                <a class="text-decoration-none text-reset" style="width:350px;">
+                    <div class="card shadow-sm h-100">
 
-            <div class="d-flex flex-nowrap gap-3" id="recommendedContainer">
-            </div>
+                        <img class="thumbnail w-100"
+                             style="height:375px; object-fit:cover;">
+
+                        <div class="card-body p-3">
+                            <div class="fw-semibold text-truncate title"></div>
+
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small class="text-muted time"></small>
+
+                                <small class="text-muted info">
+                                    <i class="bi bi-chat me-1"></i><span class="comment"></span>
+                                    <i class="bi bi-heart ms-3 me-1"></i><span class="interest"></span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </template>
+
         </div>
     <a th:href="@{/plantCalendar}" class="text-decoration-none text-reset">
         <div style="width:420px;">
