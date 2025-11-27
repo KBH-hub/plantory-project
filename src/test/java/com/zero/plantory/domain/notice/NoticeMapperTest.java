@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.notice;
 
-import com.zero.plantory.global.vo.NoticeTargetType;
-import com.zero.plantory.global.vo.NoticeVO;
+import com.zero.plantory.global.dto.NoticeTargetType;
+import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class NoticeMapperTest {
     @Test
     @DisplayName("알림 생성")
     void insertNoticeTest() {
-        NoticeVO vo = NoticeVO.builder()
+        NoticeDTO vo = NoticeDTO.builder()
                 .receiverId(3L)
                 .targetType(NoticeTargetType.SHARING)
                 .targetId(5L)

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.notice.NoticeMapper">
 
-    <select id="selectNoticesByReceiver" resultType="com.zero.plantory.global.vo.NoticeVO">
+    <select id="selectNoticesByReceiver" resultType="com.zero.plantory.global.dto.NoticeDTO">
         SELECT
             notice_id,
             receiver_id,
@@ -20,7 +20,7 @@
         ORDER BY created_at DESC
     </select>
 
-    <insert id="insertNotice" parameterType="com.zero.plantory.global.vo.NoticeVO">
+    <insert id="insertNotice" parameterType="com.zero.plantory.global.dto.NoticeDTO">
         INSERT INTO notice
         (receiver_id, target_type, target_id, content, read_flag, created_at, del_flag)
         VALUES

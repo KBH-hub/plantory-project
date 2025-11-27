@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.question.dto;
 
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +22,5 @@ public class SelectQuestionDetailResponse {
     private String updatedAt;
 
     private String imageUrl;
-    private List<ImageVO> images;
+    private List<ImageDTO> images;
 }

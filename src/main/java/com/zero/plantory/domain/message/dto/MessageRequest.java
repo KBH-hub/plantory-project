@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.message.dto;
 
-import com.zero.plantory.global.vo.MessageTargetType;
+import com.zero.plantory.global.dto.MessageTargetType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

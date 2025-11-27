@@ -1,12 +1,12 @@
 package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
-import com.zero.plantory.domain.question.mapper.QuestionMapper;
 import com.zero.plantory.domain.question.dto.SelectAnswerListResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.domain.question.mapper.QuestionMapper;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class QuestionReadServiceImpl implements QuestionReadService {
             throw new IllegalArgumentException("존재하지 않는 질문입니다.");
         }
 
-        List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.QUESTION, questionId);
+        List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.QUESTION, questionId);
 
         vo.setImages(images);
 

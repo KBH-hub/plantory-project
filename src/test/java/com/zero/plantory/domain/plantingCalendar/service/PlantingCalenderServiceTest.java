@@ -1,9 +1,8 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
 import com.zero.plantory.domain.plantingCalendar.dto.*;
-import com.zero.plantory.global.vo.DiaryVO;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -111,7 +110,7 @@ class PlantingCalenderServiceTest {
     void findDiaryUpdateImageInfoTest() {
         Long diaryId = 30L;
 
-        List<ImageVO> result = plantCalenderService.findDiaryUpdateImageInfo(diaryId);
+        List<ImageDTO> result = plantCalenderService.findDiaryUpdateImageInfo(diaryId);
 
         log.info(String.valueOf(result));
     }
@@ -129,14 +128,14 @@ class PlantingCalenderServiceTest {
                 .build();
 
         //삭제할 이미지 정보
-        List<ImageVO> delImgList = new ArrayList();
-        delImgList.add(ImageVO.builder()
+        List<ImageDTO> delImgList = new ArrayList();
+        delImgList.add(ImageDTO.builder()
                         .memberId(17L)
                         .targetType(ImageTargetType.REPORT)
                         .targetId(4L)
                         .imageId(22L)
                 .build());
-        delImgList.add(ImageVO.builder()
+        delImgList.add(ImageDTO.builder()
                         .memberId(17L)
                         .targetType(ImageTargetType.REPORT)
                         .targetId(4L)

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.myPlant.mapper.MyPlantMapper">
-    <select id="selectMyPlantList" resultType="com.zero.plantory.global.vo.MyPlantVO">
+    <select id="selectMyPlantList" resultType="com.zero.plantory.domain.myPlant.dto.MyPlantResponse">
         SELECT myplant_id,NAME,start_at
         FROM myplant
         WHERE del_flag IS NULL

@@ -1,11 +1,10 @@
 package com.zero.plantory.domain.message.service;
 
+import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
-import com.zero.plantory.domain.message.mapper.MessageMapper;
-import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
-import com.zero.plantory.global.vo.MessageVO;
+import com.zero.plantory.domain.message.mapper.MessageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

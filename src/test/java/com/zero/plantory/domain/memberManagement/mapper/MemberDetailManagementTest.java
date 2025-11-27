@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
 import com.zero.plantory.domain.member.dto.MemberResponse;
-import com.zero.plantory.global.vo.DeleteTargetType;
+import com.zero.plantory.global.dto.DeleteTargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

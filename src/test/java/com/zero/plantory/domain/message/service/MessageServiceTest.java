@@ -4,7 +4,7 @@ import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
-import com.zero.plantory.global.vo.MessageTargetType;
+import com.zero.plantory.global.dto.MessageTargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

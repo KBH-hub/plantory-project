@@ -3,9 +3,8 @@ package com.zero.plantory.domain.message.mapper;
 import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
-import com.zero.plantory.global.vo.MessageTargetType;
-import com.zero.plantory.global.vo.MessageVO;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
+import com.zero.plantory.global.dto.MessageTargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j

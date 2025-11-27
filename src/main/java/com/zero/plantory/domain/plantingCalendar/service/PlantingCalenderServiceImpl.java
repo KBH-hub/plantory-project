@@ -5,9 +5,8 @@ import com.zero.plantory.domain.plantingCalendar.dto.*;
 import com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper;
 import com.zero.plantory.global.config.SolapiConfig;
 import com.zero.plantory.global.utils.StorageUploader;
-import com.zero.plantory.global.vo.DiaryVO;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,24 +65,24 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     }
 
     @Override
-    public List<ImageVO> findDiaryUpdateImageInfo(Long diaryId) {
+    public List<ImageDTO> findDiaryUpdateImageInfo(Long diaryId) {
         return imageMapper.selectImagesByTarget(ImageTargetType.DIARY, diaryId);
     }
 
     @Override
     @Transactional
-    public int updateDiary(DiaryRequest request, List<ImageVO> delImgList, List<MultipartFile> files, Long memberId) throws IOException {
+    public int updateDiary(DiaryRequest request, List<ImageDTO> delImgList, List<MultipartFile> files, Long memberId) throws IOException {
         int result = 0;
         result += plantingCalendarMapper.updateDiary(request);
 
-        for (ImageVO image : delImgList) {
+        for (ImageDTO image : delImgList) {
             result += imageMapper.softDeleteImagesByTarget(ImageTargetType.DIARY, image.getImageId());
         }
 
         for (MultipartFile file : files) {
             String url = storageUploader.uploadFile(file);
 
-            ImageVO image = ImageVO.builder()
+            ImageDTO image = ImageDTO.builder()
                     .memberId(memberId)
                     .targetType(ImageTargetType.DIARY)
                     .targetId(request.getDiaryId())
@@ -114,7 +113,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
         for (MultipartFile file : files) {
             String url = storageUploader.uploadFile(file);
 
-            ImageVO image = ImageVO.builder()
+            ImageDTO image = ImageDTO.builder()
                     .memberId(memberId)
                     .targetType(ImageTargetType.DIARY)
                     .targetId(request.getDiaryId())

@@ -1,8 +1,7 @@
 package com.zero.plantory.domain.report.mapper;
 
-import com.zero.plantory.domain.report.dto.ReportRequest;
-import com.zero.plantory.global.vo.ReportVO;
 import com.zero.plantory.domain.report.dto.NameListResponse;
+import com.zero.plantory.domain.report.dto.ReportRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;

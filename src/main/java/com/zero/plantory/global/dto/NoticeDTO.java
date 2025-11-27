@@ -1,4 +1,4 @@
-package com.zero.plantory.global.vo;
+package com.zero.plantory.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportVO {
-    private Long reportId;
-    private Long adminId;
-    private Long reporterId;
-    private Long targetMemberId;
+public class NoticeDTO {
+    private Long noticeId;
+    private Long receiverId;
+    private NoticeTargetType targetType;
+    private Long targetId;
     private String content;
-    private String status;
+    private Date readFlag;
     private Date createdAt;
-    private String adminMemo;
     private Date delFlag;
+
 }

@@ -2,8 +2,6 @@ package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.question.dto.AnswerRequest;
 import com.zero.plantory.domain.question.dto.QuestionRequest;
-import com.zero.plantory.global.vo.AnswerVO;
-import com.zero.plantory.global.vo.QuestionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

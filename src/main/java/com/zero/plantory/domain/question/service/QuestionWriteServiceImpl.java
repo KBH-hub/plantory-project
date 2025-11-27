@@ -4,10 +4,13 @@ import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.notice.NoticeMapper;
 import com.zero.plantory.domain.question.dto.AnswerRequest;
 import com.zero.plantory.domain.question.dto.QuestionRequest;
-import com.zero.plantory.domain.question.mapper.QuestionMapper;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
+import com.zero.plantory.domain.question.mapper.QuestionMapper;
 import com.zero.plantory.global.utils.StorageUploader;
-import com.zero.plantory.global.vo.*;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
+import com.zero.plantory.global.dto.NoticeTargetType;
+import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +47,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
                 String url = storageUploader.uploadFile(file);
 
-                ImageVO img = ImageVO.builder()
+                ImageDTO img = ImageDTO.builder()
                         .memberId(request.getMemberId())
                         .targetType(ImageTargetType.QUESTION)
                         .targetId(questionId)
@@ -79,7 +82,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
 
                 String url = storageUploader.uploadFile(file);
 
-                ImageVO img = ImageVO.builder()
+                ImageDTO img = ImageDTO.builder()
                         .memberId(request.getMemberId())
                         .targetType(ImageTargetType.QUESTION)
                         .targetId(questionId)
@@ -127,7 +130,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
             Long ownerId = question.getMemberId();
 
             if (!request.getWriterId().equals(ownerId)) {
-                NoticeVO notice = NoticeVO.builder()
+                NoticeDTO notice = NoticeDTO.builder()
                         .receiverId(ownerId)
                         .targetId(request.getQuestionId())
                         .targetType(NoticeTargetType.QUESTION)

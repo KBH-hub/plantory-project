@@ -2,8 +2,6 @@ package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.question.dto.AnswerRequest;
 import com.zero.plantory.domain.question.dto.QuestionRequest;
-import com.zero.plantory.global.vo.AnswerVO;
-import com.zero.plantory.global.vo.QuestionVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

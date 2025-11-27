@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.sharing.dto;
 
-import com.zero.plantory.global.vo.ManagementLevel;
-import com.zero.plantory.global.vo.ManagementNeeds;
+import com.zero.plantory.global.dto.ManagementLevel;
+import com.zero.plantory.global.dto.ManagementNeeds;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

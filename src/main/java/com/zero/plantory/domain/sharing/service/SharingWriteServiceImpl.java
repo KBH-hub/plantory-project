@@ -3,11 +3,14 @@ package com.zero.plantory.domain.sharing.service;
 import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.notice.NoticeMapper;
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
-import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.global.utils.StorageUploader;
-import com.zero.plantory.global.vo.*;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
+import com.zero.plantory.global.dto.NoticeTargetType;
+import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +33,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Transactional
     public Long registerSharing(SharingRequest request, List<MultipartFile> files) throws IOException {
 
-        List<ImageVO> imageList = new ArrayList<>();
+        List<ImageDTO> imageList = new ArrayList<>();
 
         if (request.getTitle() == null || request.getTitle().isBlank()) {
             throw new IllegalArgumentException("제목은 필수입니다.");
@@ -43,7 +46,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
                 String url = storageUploader.uploadFile(file);
 
-                imageList.add(ImageVO.builder()
+                imageList.add(ImageDTO.builder()
                         .memberId(request.getMemberId())
                         .targetType(ImageTargetType.SHARING)
                         .fileUrl(url)
@@ -55,7 +58,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
         sharingMapper.insertSharing(request);
         Long sharingId = request.getSharingId();
 
-        for (ImageVO img : imageList) {
+        for (ImageDTO img : imageList) {
             img.setTargetId(sharingId);
             imageMapper.insertImage(img);
         }
@@ -82,7 +85,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
                 String url = storageUploader.uploadFile(file);
 
-                imageMapper.insertImage(ImageVO.builder()
+                imageMapper.insertImage(ImageDTO.builder()
                         .memberId(request.getMemberId())
                         .targetType(ImageTargetType.SHARING)
                         .targetId(sharingId)
@@ -149,7 +152,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
             if (!writerId.equals(ownerId)) {
 
-                NoticeVO notice = NoticeVO.builder()
+                NoticeDTO notice = NoticeDTO.builder()
                         .receiverId(ownerId)
                         .targetId(sharingId)
                         .targetType(NoticeTargetType.SHARING)

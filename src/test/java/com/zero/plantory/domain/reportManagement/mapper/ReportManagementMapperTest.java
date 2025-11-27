@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.reportManagement.mapper;
 
-import com.zero.plantory.domain.reportManagement.dto.ReportResponse;
 import com.zero.plantory.domain.reportManagement.dto.ReportDetailResponse;
 import com.zero.plantory.domain.reportManagement.dto.ReportManagementSearchResponse;
+import com.zero.plantory.domain.reportManagement.dto.ReportResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

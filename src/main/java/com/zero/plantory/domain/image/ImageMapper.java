@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.image;
 
-import com.zero.plantory.global.vo.ImageVO;
-import com.zero.plantory.global.vo.ImageTargetType;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,11 +11,11 @@ import java.util.List;
 public interface ImageMapper {
 
     // 단건 조회
-    ImageVO selectImageById(@Param("imageId") Long imageId);
+    ImageDTO selectImageById(@Param("imageId") Long imageId);
     // 다건 조회
-    List<ImageVO> selectImagesByTarget(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId);
+    List<ImageDTO> selectImagesByTarget(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId);
 
-    int insertImage(ImageVO imageVO);
+    int insertImage(ImageDTO imageDTO);
     int softDeleteImage(@Param("imageId") Long imageId);
     int softDeleteImagesByTarget(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId);
 }
