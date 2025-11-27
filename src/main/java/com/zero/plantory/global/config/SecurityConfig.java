@@ -79,7 +79,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login-process")
                         .usernameParameter("membername")
-                        .defaultSuccessUrl("/dashboard",true)
+                        .defaultSuccessUrl("/dashboard")
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
