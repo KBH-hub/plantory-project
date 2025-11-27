@@ -1,7 +1,7 @@
 package com.zero.plantory.global.security;
 
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.global.vo.MemberVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,13 +16,13 @@ public class MemberDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MemberVO memberVO = memberMapper.selectByMembername(username);
+        MemberResponse memberResponse = memberMapper.selectByMembername(username);
 
-        if(memberVO == null) {
+        if(memberResponse == null) {
             throw new UsernameNotFoundException("존재하지 않는 사용자입니다: " + username);
         }
 
-        return new MemberDetail(memberVO);
+        return new MemberDetail(memberResponse);
     }
 
 }

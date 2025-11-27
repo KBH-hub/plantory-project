@@ -18,8 +18,8 @@
     </select>
 
     <select id="selectMySharingList"
-            parameterType="com.zero.plantory.domain.member.vo.MySharingHistoryListRequestVO"
-            resultType="com.zero.plantory.domain.member.vo.MySharingHistoryVO">
+            parameterType="com.zero.plantory.domain.member.dto.MySharingHistoryListRequest"
+            resultType="com.zero.plantory.domain.member.dto.MySharingHistoryResponse">
 
         SELECT
         s.sharing_id,

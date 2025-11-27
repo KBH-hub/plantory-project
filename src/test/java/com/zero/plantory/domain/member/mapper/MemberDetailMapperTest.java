@@ -1,16 +1,14 @@
 package com.zero.plantory.domain.member.mapper;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
-import com.zero.plantory.global.vo.MemberVO;
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.global.vo.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 @SpringBootTest
@@ -22,7 +20,7 @@ class MemberDetailMapperTest {
     @Test
     @DisplayName("회원가입 처리")
     void insertMemberTest() {
-        MemberVO member = MemberVO.builder()
+        MemberResponse member = MemberResponse.builder()
                 .membername("testUser")
                 .password("pw1234!")
                 .nickname("테스트유저")

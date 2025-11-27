@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.vo.MySharingHistoryListRequestVO;
-import com.zero.plantory.domain.member.vo.MySharingHistoryVO;
+import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.member.dto.MySharingHistoryResponse;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface MySharingHistoryService {
 
     int getCompletedSharingCount(Long memberId);
 
-    List<MySharingHistoryVO> getMySharingHistoryList(MySharingHistoryListRequestVO request);
+    List<MySharingHistoryResponse> getMySharingHistoryList(MySharingHistoryListRequest request);
 }

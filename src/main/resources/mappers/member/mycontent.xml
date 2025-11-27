@@ -5,8 +5,8 @@
 <mapper namespace="com.zero.plantory.domain.member.mapper.MyContentMapper">
 
     <select id="selectMyWrittenListAll"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse"
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest">
 
         (SELECT
         s.sharing_id AS id,
@@ -45,8 +45,8 @@
     </select>
 
     <select id="selectMyWrittenListSharing"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse"
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest">
 
         SELECT
         s.sharing_id AS id,
@@ -68,8 +68,8 @@
     </select>
 
     <select id="selectMyWrittenListQuestion"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO">
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse"
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest">
 
         SELECT
         q.question_id AS id,
@@ -91,7 +91,7 @@
     </select>
 
     <update id="deleteMyWrittenSharing"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO">
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest">
         UPDATE sharing
         SET del_flag = NOW()
         WHERE sharing_id IN
@@ -103,7 +103,7 @@
     </update>
 
     <update id="deleteMyWrittenQuestion"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO">
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest">
         UPDATE question
         SET del_flag = NOW()
         WHERE question_id IN
@@ -115,8 +115,8 @@
     </update>
 
     <select id="selectMyCommentSearchAll"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest"
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse">
 
         SELECT * FROM (
                           SELECT
@@ -157,8 +157,8 @@
     </select>
 
     <select id="selectMyCommentSearchSharing"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest"
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse">
 
         SELECT
             c.comment_id AS id,
@@ -180,8 +180,8 @@
     </select>
 
     <select id="selectMyCommentSearchQuestion"
-            parameterType="com.zero.plantory.domain.member.vo.MyWrittenListRequestVO"
-            resultType="com.zero.plantory.domain.member.vo.MyWrittenListVO">
+            parameterType="com.zero.plantory.domain.member.dto.MyWrittenListRequest"
+            resultType="com.zero.plantory.domain.member.dto.MyWrittenListResponse">
 
         SELECT
             a.answer_id AS id,

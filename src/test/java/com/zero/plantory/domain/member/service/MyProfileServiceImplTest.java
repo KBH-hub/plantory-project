@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.member.mapper.MyProfileMapper;
-import com.zero.plantory.domain.member.vo.MemberInfoVO;
-import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,13 +26,13 @@ class MyprofileServiceImplTest {
     @DisplayName("내 정보 조회 테스트")
     void getMyInfoTest() {
         Long memberId = 1L;
-        MemberInfoVO myInfo = new MemberInfoVO();
+        MemberInfoResponse myInfo = new MemberInfoResponse();
         myInfo.setMemberId(memberId);
         myInfo.setNickname("테스트닉");
 
         when(myProfileMapper.selectMyInfo(memberId)).thenReturn(myInfo);
 
-        MemberInfoVO result = myProfileService.getMyInfo(memberId);
+        MemberInfoResponse result = myProfileService.getMyInfo(memberId);
 
         assertNotNull(result);
         assertEquals("테스트닉", result.getNickname());
@@ -53,7 +53,7 @@ class MyprofileServiceImplTest {
     @Test
     @DisplayName("회원 정보 수정 테스트")
     void updateMyInfoTest() {
-        MemberUpdateRequestVO request = MemberUpdateRequestVO.builder()
+        MemberUpdateRequest request = MemberUpdateRequest.builder()
                 .memberId(1L)
                 .nickname("새닉네임")
                 .phone("010-1234-5678")

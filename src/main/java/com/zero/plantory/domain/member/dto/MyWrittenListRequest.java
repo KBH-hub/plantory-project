@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.reportManagement.vo;
+package com.zero.plantory.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportManagementSearchVO {
+public class MyWrittenListRequest {
+    private Long memberId;
     private String keyword;
-    private String status;
-    private Integer limit;
-    private Integer offset;
+    private int limit;
+    private int offset;
 }

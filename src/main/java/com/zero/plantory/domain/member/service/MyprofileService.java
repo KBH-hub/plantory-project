@@ -1,15 +1,15 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.vo.MemberInfoVO;
-import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
+import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 
 public interface MyprofileService {
 
-    MemberInfoVO getMyInfo(Long memberId);
+    MemberInfoResponse getMyInfo(Long memberId);
 
     boolean updateNoticeEnabled(Long memberId, int enabled);
 
-    boolean updateMyInfo(MemberUpdateRequestVO request);
+    boolean updateMyInfo(MemberUpdateRequest request);
 
     boolean deleteMember(Long memberId);
 }

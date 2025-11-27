@@ -1,16 +1,13 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
-import com.zero.plantory.global.vo.Role;
+import com.zero.plantory.domain.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.global.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,7 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -135,15 +133,15 @@ class MemberDetailServiceImplTest {
         String password = "12345678";
         String encodedPassword = bCryptPasswordEncoder.encode(password);
 
-        MemberVO memberVO = MemberVO.builder()
+        MemberResponse memberResponse = MemberResponse.builder()
                 .membername("hongTree")
                 .password(encodedPassword)
                 .nickname("홍나무")
                 .build();
 
-        when(memberMapper.selectByMembername("hongTree")).thenReturn(memberVO);
+        when(memberMapper.selectByMembername("hongTree")).thenReturn(memberResponse);
 
-        MemberVO result = memberService.login("hongTree", "12345678");
+        MemberResponse result = memberService.login("hongTree", "12345678");
 
         assertNotNull(result);
     }
@@ -151,7 +149,7 @@ class MemberDetailServiceImplTest {
     @Test
     @DisplayName("로그인 실패 - 정지된 회원")
     void testLoginBlocked() {
-        MemberVO member = new MemberVO();
+        MemberResponse member = new MemberResponse();
         member.setStopDay(LocalDateTime.now().plusDays(5));
 
         when(memberMapper.selectByMembername("aaa")).thenReturn(member);
@@ -167,7 +165,7 @@ class MemberDetailServiceImplTest {
     void testLoginUserNotFound() {
         when(memberMapper.selectByMembername("aaa")).thenReturn(null);
 
-        MemberVO result = memberService.login("aaa", "1234");
+        MemberResponse result = memberService.login("aaa", "1234");
 
         assertNull(result);
     }

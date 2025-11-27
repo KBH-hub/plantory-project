@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.vo;
+package com.zero.plantory.domain.member.dto;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MySharingHistoryVO {
+public class MySharingHistoryResponse {
     private Long sharingId;
     private String title;
     private String status;

@@ -1,21 +1,21 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
+import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
 
 import java.util.List;
 
 public interface MyContentService {
 
-    List<MyWrittenListVO> getMyWrittenListAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> getMyWrittenListSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> getMyWrittenListQuestion(MyWrittenListRequestVO request);
+    List<MyWrittenListResponse> getMyWrittenListAll(MyWrittenListRequest request);
+    List<MyWrittenListResponse> getMyWrittenListSharing(MyWrittenListRequest request);
+    List<MyWrittenListResponse> getMyWrittenListQuestion(MyWrittenListRequest request);
 
-    boolean deleteMyWrittenSharing(MyWrittenDeleteRequestVO request);
-    boolean deleteMyWrittenQuestion(MyWrittenDeleteRequestVO request);
+    boolean deleteMyWrittenSharing(MyWrittenDeleteRequest request);
+    boolean deleteMyWrittenQuestion(MyWrittenDeleteRequest request);
 
-    List<MyWrittenListVO> searchMyCommentAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> searchMyCommentSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> searchMyCommentQuestion(MyWrittenListRequestVO request);
+    List<MyWrittenListResponse> searchMyCommentAll(MyWrittenListRequest request);
+    List<MyWrittenListResponse> searchMyCommentSharing(MyWrittenListRequest request);
+    List<MyWrittenListResponse> searchMyCommentQuestion(MyWrittenListRequest request);
 }
