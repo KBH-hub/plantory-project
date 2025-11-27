@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.dashboard.dto;
+package com.zero.plantory.domain.dashboard.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

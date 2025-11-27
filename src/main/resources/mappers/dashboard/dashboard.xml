@@ -39,7 +39,7 @@
         ]]>
     </select>
 
-    <select id="selectRecommendedSharing" resultType="com.zero.plantory.domain.dashboard.dto.RecommendedSharingDTO">
+    <select id="selectRecommendedSharing" resultType="com.zero.plantory.domain.dashboard.dto.response.RecommendedSharingDTO">
 
     <![CDATA[
         SELECT
@@ -73,7 +73,7 @@
 
     </select>
 
-    <select id="selectTodayWateringByMemberId" resultType="com.zero.plantory.domain.dashboard.dto.TodayWateringDTO">
+    <select id="selectTodayWateringByMemberId" resultType="com.zero.plantory.domain.dashboard.dto.response.TodayWateringDTO">
 
         SELECT DISTINCT
             m.name,
@@ -89,7 +89,7 @@
 
     </select>
 
-    <select id="selectTodayDiaryByMemberId" resultType="com.zero.plantory.domain.dashboard.dto.TodayDiaryDTO">
+    <select id="selectTodayDiaryByMemberId" resultType="com.zero.plantory.domain.dashboard.dto.response.TodayDiaryDTO">
 
         SELECT
             d.diary_id,

@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.dashboard.mapper;
 
-import com.zero.plantory.domain.dashboard.dto.RecommendedSharingDTO;
-import com.zero.plantory.domain.dashboard.dto.TodayDiaryDTO;
-import com.zero.plantory.domain.dashboard.dto.TodayWateringDTO;
+import com.zero.plantory.domain.dashboard.dto.response.RecommendedSharingDTO;
+import com.zero.plantory.domain.dashboard.dto.response.TodayDiaryDTO;
+import com.zero.plantory.domain.dashboard.dto.response.TodayWateringDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

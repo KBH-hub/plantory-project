@@ -1,5 +1,3 @@
-document.addEventListener("DOMContentLoaded", loadDashboardCounts);
-
 async function loadDashboardCounts() {
     const memberId = Number(document.body.dataset.memberId);
 
