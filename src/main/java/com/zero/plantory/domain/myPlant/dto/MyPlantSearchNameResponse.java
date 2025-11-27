@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.myPlant.vo;
+package com.zero.plantory.domain.myPlant.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MyPlantSearchVO {
+public class MyPlantSearchNameResponse {
     private Long myplantId;
     private String name;
     private Date startAt;

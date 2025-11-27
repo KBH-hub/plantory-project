@@ -1,18 +1,15 @@
 package com.zero.plantory.domain.myPlant.service;
 
-import com.zero.plantory.domain.myPlant.dto.MyPlantResponseDTO;
-import com.zero.plantory.domain.myPlant.vo.MyPlantSearchVO;
-import com.zero.plantory.global.vo.MyPlantVO;
+import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
+import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -28,7 +25,7 @@ class MyPlantServiceTest {
         int limit = 10;
         int offset = 0;
 
-        List<MyPlantResponseDTO> result = myPlantService.getMyPlantList(memberId, limit, offset);
+        List<MyPlantResponse> result = myPlantService.getMyPlantList(memberId, limit, offset);
 
         log.info("result={}", result);
     }
@@ -39,7 +36,7 @@ class MyPlantServiceTest {
         Long memberId = 1L;
         String name = "투";
 
-        List<MyPlantResponseDTO> result = myPlantService.getMyPlantByName(memberId, name);
+        List<MyPlantResponse> result = myPlantService.getMyPlantByName(memberId, name);
 
         log.info("result={}", result);
     }
@@ -47,7 +44,7 @@ class MyPlantServiceTest {
     @Test
     @DisplayName("내 식물 등록 처리")
     void registerMyPlantTest() {
-        MyPlantVO myPlantVO  = MyPlantVO.builder()
+        MyPlantRequest request  = MyPlantRequest.builder()
                 .memberId(4L)
                 .name("테스트마이플랜트명")
                 .type("테스트마이플랜트타입")
@@ -57,7 +54,7 @@ class MyPlantServiceTest {
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")
                 .build();
-        int result = myPlantService.registerMyPlant(myPlantVO);
+        int result = myPlantService.registerMyPlant(request);
 
         log.info(String.valueOf(result));
     }
@@ -65,7 +62,7 @@ class MyPlantServiceTest {
     @Test
     @DisplayName("내 식물 등록 필수값 누락 실패 처리")
     void registerMyPlantFailTest() {
-        MyPlantVO myPlantVO  = MyPlantVO.builder()
+        MyPlantRequest request  = MyPlantRequest.builder()
                 .memberId(4L)
                 .name("")
                 .type("테스트마이플랜트타입")
@@ -75,7 +72,15 @@ class MyPlantServiceTest {
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")
                 .build();
-        int result = myPlantService.registerMyPlant(myPlantVO);
+
+        boolean result;
+        try {
+            myPlantService.registerMyPlant(request);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        }
+        Assertions.assertFalse(result);
 
         log.info(String.valueOf(result));
     }
@@ -83,7 +88,7 @@ class MyPlantServiceTest {
     @Test
     @DisplayName("내 식물 수정 처리")
     void updateMyPlantTest() {
-        MyPlantVO myPlantVO  = MyPlantVO.builder()
+        MyPlantRequest request  = MyPlantRequest.builder()
                 .memberId(4L)
                 .myplantId(1L)
                 .name("테스트마이플랜트명수정")
@@ -95,7 +100,7 @@ class MyPlantServiceTest {
                 .temperature("666~999℃")
                 .build();
 
-        int result = myPlantService.updateMyPlant(myPlantVO);
+        int result = myPlantService.updateMyPlant(request);
 
         log.info(String.valueOf(result));
     }

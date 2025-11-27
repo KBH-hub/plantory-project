@@ -1,17 +1,14 @@
 package com.zero.plantory.domain.myPlant.service;
 
-import com.zero.plantory.domain.myPlant.dto.MyPlantResponseDTO;
-import com.zero.plantory.domain.myPlant.vo.MyPlantSearchVO;
-import com.zero.plantory.global.vo.ImageVO;
-import com.zero.plantory.global.vo.MyPlantVO;
-import org.apache.ibatis.annotations.Param;
+import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
+import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 
 import java.util.List;
 
 public interface MyPlantService {
-    List<MyPlantResponseDTO> getMyPlantList(Long memberId, int limit, int offset);
-    List<MyPlantResponseDTO> getMyPlantByName(Long memberId, String name);
-    int registerMyPlant(MyPlantVO vo);
-    int updateMyPlant(MyPlantVO vo);
+    List<MyPlantResponse> getMyPlantList(Long memberId, int limit, int offset);
+    List<MyPlantResponse> getMyPlantByName(Long memberId, String name);
+    int registerMyPlant(MyPlantRequest vo);
+    int updateMyPlant(MyPlantRequest vo);
     int removePlant(Long myplantId);
 }

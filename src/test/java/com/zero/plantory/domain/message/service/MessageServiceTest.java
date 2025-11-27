@@ -25,7 +25,7 @@ class MessageServiceTest {
     @DisplayName("쪽지 리스트 조회")
     void getMessageListTest() {
         MessageSearchRequest request = MessageSearchRequest.builder()
-                .memberId(21L)
+                .memberId(20L)
                 .boxType("RECEIVED")
                 .targetType("SHARING")
                 .title(null)
@@ -43,7 +43,7 @@ class MessageServiceTest {
     @DisplayName("수신자 메시지 삭제 처리")
     void removeMessageTest() {
         List<Long> messageIds = List.of(1L, 2L);
-        Long removerId = 1L;
+        Long removerId = 2L;
 
         int result = messageService.removeMessages(messageIds, removerId);
 

@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.report.vo;
+package com.zero.plantory.domain.plantingCalendar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectNameListVO {
-    private Long memberId;
-    private String nickname;
+public class MyPlantDiaryResponse {
+    private Long myplantId;
+    private String name;
 }
