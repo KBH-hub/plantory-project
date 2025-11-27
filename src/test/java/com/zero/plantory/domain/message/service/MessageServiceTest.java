@@ -3,9 +3,8 @@ package com.zero.plantory.domain.message.service;
 import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
-import com.zero.plantory.domain.message.dto.SearchMessageRequest;
+import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.global.vo.MessageTargetType;
-import com.zero.plantory.global.vo.MessageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +24,7 @@ class MessageServiceTest {
     @Test
     @DisplayName("쪽지 리스트 조회")
     void getMessageListTest() {
-        SearchMessageRequest request = SearchMessageRequest.builder()
+        MessageSearchRequest request = MessageSearchRequest.builder()
                 .memberId(21L)
                 .boxType("RECEIVED")
                 .targetType("SHARING")

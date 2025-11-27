@@ -1,11 +1,10 @@
 package com.zero.plantory.domain.message.controller;
 
 import com.zero.plantory.domain.message.dto.MessageListResponse;
-import com.zero.plantory.domain.message.dto.SearchMessageRequest;
+import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +26,8 @@ public class MessageRestController {
             @RequestParam int offset,
             @RequestParam int limit) {
 
-        SearchMessageRequest req =
-                new SearchMessageRequest(memberId, boxType, targetType, title, offset, limit);
+        MessageSearchRequest req =
+                new MessageSearchRequest(memberId, boxType, targetType, title, offset, limit);
 
         return ResponseEntity.ok(messageService.getMessageList(req));
     }
