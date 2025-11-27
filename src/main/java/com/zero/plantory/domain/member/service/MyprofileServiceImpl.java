@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.member.mapper.MyProfileMapper;
-import com.zero.plantory.domain.member.vo.MemberInfoVO;
-import com.zero.plantory.domain.member.vo.MemberUpdateRequestVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class MyprofileServiceImpl implements MyprofileService {
     private final MyProfileMapper myProfileMapper;
 
     @Override
-    public MemberInfoVO getMyInfo(Long memberId) {
+    public MemberInfoResponse getMyInfo(Long memberId) {
         return myProfileMapper.selectMyInfo(memberId);
     }
 
@@ -28,7 +28,7 @@ public class MyprofileServiceImpl implements MyprofileService {
 
     @Override
     @Transactional
-    public boolean updateMyInfo(MemberUpdateRequestVO request) {
+    public boolean updateMyInfo(MemberUpdateRequest request) {
         return myProfileMapper.updateMyInfo(request) > 0;
     }
 

@@ -1,13 +1,14 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.vo.MySharingHistoryListRequestVO;
+import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Slf4j
@@ -41,7 +42,7 @@ class MySharingHistoryMapperTest {
     @Test
     @DisplayName("나의 나눔 내역 조회")
     void selectMySharingHistoryList() {
-        MySharingHistoryListRequestVO request = new MySharingHistoryListRequestVO();
+        MySharingHistoryListRequest request = new MySharingHistoryListRequest();
         request.setMemberId(1L);
         request.setMyType("MY");
         request.setLimit(10);

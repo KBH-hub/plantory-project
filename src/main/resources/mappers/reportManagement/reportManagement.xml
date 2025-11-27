@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.reportManagement.mapper.ReportManagementMapper">
     <select id="selectReportList"
-            parameterType="com.zero.plantory.domain.reportManagement.vo.ReportManagementSearchVO"
-            resultType="com.zero.plantory.global.vo.ReportVO">
+            parameterType="com.zero.plantory.domain.reportManagement.dto.ReportManagementSearchResponse"
+            resultType="com.zero.plantory.domain.reportManagement.dto.ReportResponse">
         SELECT
         r.report_id,
         r.admin_id,
@@ -39,7 +39,7 @@
         </foreach>
     </update>
     
-    <select id="selectReportDetail" resultType="com.zero.plantory.domain.reportManagement.vo.ReportDetailVO">
+    <select id="selectReportDetail" resultType="com.zero.plantory.domain.reportManagement.dto.ReportDetailResponse">
         SELECT
             r.report_id,
             r.admin_id,

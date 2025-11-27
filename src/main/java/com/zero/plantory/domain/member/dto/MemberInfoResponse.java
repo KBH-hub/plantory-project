@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.vo;
+package com.zero.plantory.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberUpdateRequestVO {
+public class MemberInfoResponse {
     private Long memberId;
+    private String membername;
     private String nickname;
     private String phone;
     private String address;
+    private String role;
+    private Integer noticeEnabled;
+    private String delFlag;
 }
 

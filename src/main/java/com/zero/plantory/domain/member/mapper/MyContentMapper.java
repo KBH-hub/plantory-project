@@ -1,23 +1,23 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
+import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface MyContentMapper {
-    List<MyWrittenListVO> selectMyWrittenListAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyWrittenListSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyWrittenListQuestion(MyWrittenListRequestVO request);
+    List<MyWrittenListResponse> selectMyWrittenListAll(MyWrittenListRequest request);
+    List<MyWrittenListResponse> selectMyWrittenListSharing(MyWrittenListRequest request);
+    List<MyWrittenListResponse> selectMyWrittenListQuestion(MyWrittenListRequest request);
 
-    int deleteMyWrittenSharing(MyWrittenDeleteRequestVO request);
-    int deleteMyWrittenQuestion(MyWrittenDeleteRequestVO request);
+    int deleteMyWrittenSharing(MyWrittenDeleteRequest request);
+    int deleteMyWrittenQuestion(MyWrittenDeleteRequest request);
 
-    List<MyWrittenListVO> selectMyCommentSearchAll(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyCommentSearchSharing(MyWrittenListRequestVO request);
-    List<MyWrittenListVO> selectMyCommentSearchQuestion(MyWrittenListRequestVO request);
+    List<MyWrittenListResponse> selectMyCommentSearchAll(MyWrittenListRequest request);
+    List<MyWrittenListResponse> selectMyCommentSearchSharing(MyWrittenListRequest request);
+    List<MyWrittenListResponse> selectMyCommentSearchQuestion(MyWrittenListRequest request);
 }
 

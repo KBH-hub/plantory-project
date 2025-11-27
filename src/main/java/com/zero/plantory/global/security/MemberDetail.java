@@ -1,9 +1,7 @@
 package com.zero.plantory.global.security;
 
-import com.zero.plantory.global.vo.MemberVO;
-import lombok.AccessLevel;
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,22 +14,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberDetail implements UserDetails {
 
-    private final MemberVO memberVO;
+    private final MemberResponse memberResponse;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + memberVO.getRole().name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + memberResponse.getRole().name()));
     }
 
 
     @Override
     public String getPassword() {
-        return memberVO.getPassword();
+        return memberResponse.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return memberVO.getMembername();
+        return memberResponse.getMembername();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.vo;
+package com.zero.plantory.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MyWrittenDeleteRequestVO {
+public class MyWrittenDeleteRequest {
     private Long memberId;
     private List<Long> sharingIds;
     private List<Long> questionIds;

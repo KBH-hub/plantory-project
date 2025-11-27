@@ -1,9 +1,9 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
 import com.zero.plantory.domain.member.mapper.MyContentMapper;
-import com.zero.plantory.domain.member.vo.MyWrittenDeleteRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListRequestVO;
-import com.zero.plantory.domain.member.vo.MyWrittenListVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,16 +29,16 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("내가 쓴 글 전체 조회 테스트")
     void getMyWrittenListAllTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
 
-        MyWrittenListVO item = new MyWrittenListVO();
+        MyWrittenListResponse item = new MyWrittenListResponse();
         item.setId(1L);
         item.setTitle("전체 글 테스트");
 
         when(myContentMapper.selectMyWrittenListAll(request)).thenReturn(List.of(item));
 
-        List<MyWrittenListVO> result = myContentService.getMyWrittenListAll(request);
+        List<MyWrittenListResponse> result = myContentService.getMyWrittenListAll(request);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -49,16 +49,16 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("내가 올린 나눔글 조회 테스트")
     void getMyWrittenListSharingTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
 
-        MyWrittenListVO item = new MyWrittenListVO();
+        MyWrittenListResponse item = new MyWrittenListResponse();
         item.setId(2L);
         item.setTitle("나눔글 테스트");
 
         when(myContentMapper.selectMyWrittenListSharing(request)).thenReturn(List.of(item));
 
-        List<MyWrittenListVO> result = myContentService.getMyWrittenListSharing(request);
+        List<MyWrittenListResponse> result = myContentService.getMyWrittenListSharing(request);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -69,16 +69,16 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("내가 쓴 질문글 조회 테스트")
     void getMyWrittenListQuestionTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
 
-        MyWrittenListVO item = new MyWrittenListVO();
+        MyWrittenListResponse item = new MyWrittenListResponse();
         item.setId(3L);
         item.setTitle("질문글 테스트");
 
         when(myContentMapper.selectMyWrittenListQuestion(request)).thenReturn(List.of(item));
 
-        List<MyWrittenListVO> result = myContentService.getMyWrittenListQuestion(request);
+        List<MyWrittenListResponse> result = myContentService.getMyWrittenListQuestion(request);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -89,7 +89,7 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("내가 쓴 나눔글 삭제 테스트")
     void deleteMyWrittenSharingTest() {
-        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
+        MyWrittenDeleteRequest request = MyWrittenDeleteRequest.builder()
                 .memberId(1L)
                 .sharingIds(Arrays.asList(1L, 2L))
                 .build();
@@ -105,7 +105,7 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("내가 쓴 질문글 삭제 테스트")
     void deleteMyWrittenQuestionTest() {
-        MyWrittenDeleteRequestVO request = MyWrittenDeleteRequestVO.builder()
+        MyWrittenDeleteRequest request = MyWrittenDeleteRequest.builder()
                 .memberId(1L)
                 .questionIds(Arrays.asList(5L, 6L))
                 .build();
@@ -121,17 +121,17 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("댓글 단 글 전체 검색 테스트")
     void searchMyCommentAllTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
         request.setKeyword("테스트");
 
-        MyWrittenListVO comment = new MyWrittenListVO();
+        MyWrittenListResponse comment = new MyWrittenListResponse();
         comment.setId(10L);
         comment.setTitle("댓글 테스트");
 
         when(myContentMapper.selectMyCommentSearchAll(request)).thenReturn(List.of(comment));
 
-        List<MyWrittenListVO> result = myContentService.searchMyCommentAll(request);
+        List<MyWrittenListResponse> result = myContentService.searchMyCommentAll(request);
 
         assertNotNull(result);
         assertEquals("댓글 테스트", result.get(0).getTitle());
@@ -141,13 +141,13 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("댓글 단 나눔글 검색 테스트")
     void searchMyCommentSharingTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
 
         when(myContentMapper.selectMyCommentSearchSharing(request))
-                .thenReturn(List.of(new MyWrittenListVO()));
+                .thenReturn(List.of(new MyWrittenListResponse()));
 
-        List<MyWrittenListVO> result = myContentService.searchMyCommentSharing(request);
+        List<MyWrittenListResponse> result = myContentService.searchMyCommentSharing(request);
 
         assertEquals(1, result.size());
         verify(myContentMapper, times(1)).selectMyCommentSearchSharing(request);
@@ -156,13 +156,13 @@ class MyContentServiceImplTest {
     @Test
     @DisplayName("댓글 단 질문글 검색 테스트")
     void searchMyCommentQuestionTest() {
-        MyWrittenListRequestVO request = new MyWrittenListRequestVO();
+        MyWrittenListRequest request = new MyWrittenListRequest();
         request.setMemberId(1L);
 
         when(myContentMapper.selectMyCommentSearchQuestion(request))
-                .thenReturn(List.of(new MyWrittenListVO()));
+                .thenReturn(List.of(new MyWrittenListResponse()));
 
-        List<MyWrittenListVO> result = myContentService.searchMyCommentQuestion(request);
+        List<MyWrittenListResponse> result = myContentService.searchMyCommentQuestion(request);
 
         assertEquals(1, result.size());
         verify(myContentMapper, times(1)).selectMyCommentSearchQuestion(request);

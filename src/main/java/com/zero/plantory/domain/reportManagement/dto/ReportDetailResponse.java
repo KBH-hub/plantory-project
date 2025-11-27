@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.reportManagement.vo;
+package com.zero.plantory.domain.reportManagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportDetailVO {
+public class ReportDetailResponse {
     private Long reportId;
     private Long adminId;
     private Long reporterId;

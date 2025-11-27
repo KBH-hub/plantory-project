@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.global.vo.DeleteTargetType;
-import com.zero.plantory.global.vo.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -25,7 +23,7 @@ class MemberDetailManagementTest {
         int limit = 10;
         int offset = 0;
 
-        List<MemberVO> result =  memberManagement.selectMemberList(keyword, limit, offset);
+        List<MemberResponse> result =  memberManagement.selectMemberList(keyword, limit, offset);
 
         log.info("result:{}", result);
     }

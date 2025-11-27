@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.member.dto.MySharingHistoryResponse;
 import com.zero.plantory.domain.member.mapper.MySharingHistoryMapper;
-import com.zero.plantory.domain.member.vo.MySharingHistoryListRequestVO;
-import com.zero.plantory.domain.member.vo.MySharingHistoryVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,16 +50,16 @@ class MySharingHistoryServiceImplTest {
     @Test
     @DisplayName("나의 나눔 내역 리스트 조회 테스트")
     void getMySharingHistoryListTest() {
-        MySharingHistoryListRequestVO request = new MySharingHistoryListRequestVO();
+        MySharingHistoryListRequest request = new MySharingHistoryListRequest();
         request.setMemberId(1L);
 
-        MySharingHistoryVO item = new MySharingHistoryVO();
+        MySharingHistoryResponse item = new MySharingHistoryResponse();
         item.setSharingId(10L);
         item.setTitle("나눔 테스트 제목");
 
         when(mySharingHistoryMapper.selectMySharingList(request)).thenReturn(List.of(item));
 
-        List<MySharingHistoryVO> result = mySharingHistoryService.getMySharingHistoryList(request);
+        List<MySharingHistoryResponse> result = mySharingHistoryService.getMySharingHistoryList(request);
 
         assertNotNull(result);
         assertEquals(1, result.size());

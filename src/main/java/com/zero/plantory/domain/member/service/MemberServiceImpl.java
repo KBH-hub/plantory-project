@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
+import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.global.vo.MemberVO;
 import com.zero.plantory.global.vo.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
 
         log.info(String.valueOf(request));
 
-        MemberVO memberVO = MemberVO.builder()
+        MemberResponse memberResponse = MemberResponse.builder()
                 .membername(request.getMembername())
                 .password(encodedPassword)
                 .nickname(request.getNickname())
@@ -58,21 +58,21 @@ public class MemberServiceImpl implements MemberService {
                 .role(Role.USER)
                 .build();
 
-                 memberMapper.insertMember(memberVO);
+                 memberMapper.insertMember(memberResponse);
     }
 
     @Override
-    public MemberVO login(String membername, String password) {
-        MemberVO memberVO = memberMapper.selectByMembername(membername);
+    public MemberResponse login(String membername, String password) {
+        MemberResponse memberResponse = memberMapper.selectByMembername(membername);
 
-        if (memberVO == null) {
+        if (memberResponse == null) {
             return null;
         }
 
-        if (memberVO.getStopDay() != null) {
+        if (memberResponse.getStopDay() != null) {
 
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime stopDay = memberVO.getStopDay();
+            LocalDateTime stopDay = memberResponse.getStopDay();
 
             if (stopDay.isAfter(now)) {
                 long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
@@ -80,11 +80,11 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 
-        if (!bCryptPasswordEncoder.matches(password, memberVO.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, memberResponse.getPassword())) {
             return null;
         }
 
-        return memberVO;
+        return memberResponse;
     }
 
 

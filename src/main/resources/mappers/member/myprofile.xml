@@ -5,13 +5,13 @@
 <mapper namespace="com.zero.plantory.domain.member.mapper.MyProfileMapper">
 
     <select id="selectMyInfo" parameterType="long"
-            resultType="com.zero.plantory.domain.member.vo.MemberInfoVO">
+            resultType="com.zero.plantory.domain.member.dto.MemberInfoResponse">
         SELECT member_id, membername, nickname, phone, address, role, notice_enabled, del_flag
         FROM member
         WHERE member_id = #{memberId}
     </select>
 
-    <update id="updateMyInfo" parameterType="com.zero.plantory.domain.member.vo.MemberUpdateRequestVO">
+    <update id="updateMyInfo" parameterType="com.zero.plantory.domain.member.dto.MemberUpdateRequest">
         UPDATE member
         SET nickname = #{nickname},
             phone = #{phone},
