@@ -1,12 +1,10 @@
 package com.zero.plantory.domain.message.service;
 
-import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
-import com.zero.plantory.domain.message.dto.SearchMessageRequest;
 import com.zero.plantory.domain.message.mapper.MessageMapper;
-import com.zero.plantory.domain.message.vo.SelectMessageListVO;
-import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
+import com.zero.plantory.domain.message.dto.MessageListResponse;
+import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.global.vo.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,45 +20,16 @@ public class MessageServiceImpl implements MessageService {
     MessageMapper messageMapper;
 
     @Override
-    public List<MessageListResponse> getMessageList(SearchMessageRequest request) {
-        SelectMessageSearchVO vo = SelectMessageSearchVO.builder()
-                .memberId(request.getMemberId())
-                .boxType(request.getBoxType())
-                .targetType(request.getTargetType())
-                .title(request.getTitle())
-                .offset(request.getOffset())
-                .limit(request.getLimit())
-                .build();
-        List<SelectMessageListVO> messageList = messageMapper.selectMessages(vo);
-        List<MessageListResponse> messageListResponse = new ArrayList<>();
-        for (SelectMessageListVO message : messageList) {
-            messageListResponse.add(
-                    MessageListResponse.builder()
-                            .messageId(message.getMessageId())
-                            .senderId(message.getSenderId())
-                            .senderNickname(message.getSenderNickname())
-                            .receiverId(message.getReceiverId())
-                            .receiverNickname(message.getReceiverNickname())
-                            .title(message.getTitle())
-                            .content(message.getContent())
-                            .targetType(message.getTargetType())
-                            .targetId(message.getTargetId())
-                            .createdAt(message.getCreatedAt())
-                            .readFlag(message.getReadFlag())
-                            .delFlag(message.getDelFlag())
-                            .totalCount(message.getTotalCount())
-                            .build()
-            );
-        }
-
-        return messageListResponse;
+    public List<MessageListResponse> getMessageList(MessageSearchRequest request) {
+        List<MessageListResponse> messageList = messageMapper.selectMessages(request);
+        return messageList;
     }
 
     @Override
     public int removeMessages(List<Long> messageIds, Long removerId) {
         List<Long> deletableIds = new ArrayList<>();
         for (Long messageId : messageIds) {
-            MessageVO message = messageMapper.selectMessageDetail(messageId);
+            MessageResponse message = messageMapper.selectMessageDetail(messageId);
             if (message == null) continue;
             if (Objects.equals(removerId, message.getReceiverId())) {
                 deletableIds.add(messageId);
@@ -74,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
     public int removeSenderMessages(List<Long> messageIds, Long removerId) {
         List<Long> deletableIds = new ArrayList<>();
         for (Long messageId : messageIds) {
-            MessageVO message = messageMapper.selectMessageDetail(messageId);
+            MessageResponse message = messageMapper.selectMessageDetail(messageId);
             if (message == null) continue;
             if (Objects.equals(removerId, message.getSenderId())) {
                 deletableIds.add(messageId);
@@ -86,21 +55,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageResponse findMessageWriteInfo(Long senderId, String targetType, Long targetId) {
-        MessageVO message = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
-        MessageResponse response = MessageResponse.builder()
-                .messageId(message.getMessageId())
-                .senderId(message.getSenderId())
-                .receiverId(message.getReceiverId())
-                .title(message.getTitle())
-                .content(message.getContent())
-                .targetType(message.getTargetType())
-                .targetId(message.getTargetId())
-                .createdAt(message.getCreatedAt())
-                .readFlag(message.getReadFlag())
-                .delFlag(message.getDelFlag())
-                .build();
+        MessageResponse message = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
 
-        return response;
+        return message;
     }
 
 
@@ -112,24 +69,12 @@ public class MessageServiceImpl implements MessageService {
         if (request.getContent() == null || "".equals(request.getContent()))
             throw new IllegalArgumentException("메시지 전송 필수값(내용) 누락");
 
-        MessageVO message = MessageVO.builder()
-                .messageId(request.getMessageId())
-                .senderId(request.getSenderId())
-                .receiverId(request.getReceiverId())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .targetType(request.getTargetType())
-                .targetId(request.getTargetId())
-                .createdAt(request.getCreatedAt())
-                .readFlag(request.getReadFlag())
-                .delFlag(request.getDelFlag())
-                .build();
-        return messageMapper.insertMessage(message);
+        return messageMapper.insertMessage(request);
     }
 
     @Override
     public MessageResponse findMessageDetail(Long messageId, Long viewerId) {
-        MessageVO message = messageMapper.selectMessageDetail(messageId);
+        MessageResponse message = messageMapper.selectMessageDetail(messageId);
         MessageResponse response = MessageResponse.builder()
                 .messageId(message.getMessageId())
                 .senderId(message.getSenderId())

@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.message.vo;
+package com.zero.plantory.domain.message.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SelectMessageSearchVO {
+public class MessageSearchRequest {
     private Long memberId;
     private String boxType;
     private String targetType;

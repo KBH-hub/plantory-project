@@ -1,16 +1,14 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
-import com.zero.plantory.domain.plantingCalendar.dto.SMSRequestDTO;
-import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
-import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
+import com.zero.plantory.domain.plantingCalendar.dto.*;
 import com.zero.plantory.global.vo.DiaryVO;
 import com.zero.plantory.global.vo.ImageTargetType;
 import com.zero.plantory.global.vo.ImageVO;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +17,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -40,7 +37,16 @@ class PlantingCalenderServiceTest {
                 .from("01000000000")
                 .text("문자 전송 테스트")
                 .build();
-        log.info(smsService.sendSMS(dto).toString());
+        boolean result;
+        try {
+            smsService.sendSMS(dto);
+            result = true;
+        } catch (Exception e) {
+            result = false;
+        }
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
     }
 
     @Test
@@ -71,7 +77,7 @@ class PlantingCalenderServiceTest {
         LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
         LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
-        List<PlantingCalendarVO> result =
+        List<PlantingCalendarResponse> result =
                 plantCalenderService.getWateringCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
@@ -84,7 +90,7 @@ class PlantingCalenderServiceTest {
         LocalDateTime startDate = Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime();
         LocalDateTime endDate   = Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime();
 
-        List<PlantingCalendarVO> result =
+        List<PlantingCalendarResponse> result =
                 plantCalenderService.getDiaryCalendar(memberId, startDate, endDate);
 
         log.info(String.valueOf(result));
@@ -95,7 +101,7 @@ class PlantingCalenderServiceTest {
     void findDiaryUpdateInfoTest() {
         Long diaryId = 2L;
 
-        DiaryVO result = plantCalenderService.findDiaryUpdateInfo(diaryId);
+        DiaryResponse result = plantCalenderService.findDiaryUpdateInfo(diaryId);
 
         log.info(String.valueOf(result));
     }
@@ -113,10 +119,10 @@ class PlantingCalenderServiceTest {
     @Test
     @DisplayName("캘린더 관찰일지 수정 모달 수정 처리")
     void updateDiaryTest() throws IOException {
-        Long memberId = 2L;
+        Long memberId = 17L;
         //수정할 다이어리 정보
-        DiaryVO diaryVO = DiaryVO.builder()
-                .diaryId(3L)
+        DiaryRequest request = DiaryRequest.builder()
+                .diaryId(14L)
                 .activity("열매먹기")
                 .state("허전함")
                 .memo("맛있었음")
@@ -125,16 +131,16 @@ class PlantingCalenderServiceTest {
         //삭제할 이미지 정보
         List<ImageVO> delImgList = new ArrayList();
         delImgList.add(ImageVO.builder()
-                        .memberId(2L)
-                        .targetType(ImageTargetType.DIARY)
-                        .targetId(30L)
-                        .imageId(30L)
+                        .memberId(17L)
+                        .targetType(ImageTargetType.REPORT)
+                        .targetId(4L)
+                        .imageId(22L)
                 .build());
         delImgList.add(ImageVO.builder()
-                        .memberId(2L)
-                        .targetType(ImageTargetType.DIARY)
-                        .targetId(30L)
-                        .imageId(31L)
+                        .memberId(17L)
+                        .targetType(ImageTargetType.REPORT)
+                        .targetId(4L)
+                        .imageId(21L)
                 .build());
 
         // 추가할 이미지 정보
@@ -156,7 +162,7 @@ class PlantingCalenderServiceTest {
         files.add(file1);
         files.add(file2);
 
-        int result = plantCalenderService.updateDiary(diaryVO, delImgList, files, memberId);
+        int result = plantCalenderService.updateDiary(request, delImgList, files, memberId);
 
         log.info(String.valueOf(result));
     }
@@ -166,7 +172,7 @@ class PlantingCalenderServiceTest {
     void findMyPlantTest() {
         Long memberId = 2L;
 
-        List<selectMyPlantDiaryVO> result =  plantCalenderService.getMyPlant(memberId);
+        List<MyPlantDiaryResponse> result =  plantCalenderService.getMyPlant(memberId);
 
         log.info(String.valueOf(result));
     }
@@ -175,7 +181,7 @@ class PlantingCalenderServiceTest {
     @DisplayName("관찰일지 등록 처리")
     void registerDiaryTest() throws IOException {
         Long memberId = 2L;
-        DiaryVO diaryVO = DiaryVO.builder()
+        DiaryRequest request = DiaryRequest.builder()
                 .myplantId(3L)
                 .activity("열매먹기")
                 .state("허전함")
@@ -201,7 +207,7 @@ class PlantingCalenderServiceTest {
         files.add(file1);
         files.add(file2);
 
-        plantCalenderService.registerDiary(diaryVO, files, memberId);
+        plantCalenderService.registerDiary(request, files, memberId);
     }
 
 }

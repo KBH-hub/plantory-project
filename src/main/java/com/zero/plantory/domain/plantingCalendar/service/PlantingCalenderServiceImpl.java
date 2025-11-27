@@ -1,19 +1,14 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
-import com.zero.plantory.domain.message.service.MessageService;
-import com.zero.plantory.domain.plantingCalendar.dto.SMSRequestDTO;
+import com.zero.plantory.domain.plantingCalendar.dto.*;
 import com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper;
-import com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO;
-import com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO;
-import com.zero.plantory.domain.report.mapper.ReportMapper;
 import com.zero.plantory.global.config.SolapiConfig;
 import com.zero.plantory.global.utils.StorageUploader;
 import com.zero.plantory.global.vo.DiaryVO;
 import com.zero.plantory.global.vo.ImageTargetType;
 import com.zero.plantory.global.vo.ImageVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +18,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,8 +39,8 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     @Override
     @Transactional
     public int removePlantWatering(Long myplantId, Long removerId) {
-        List<selectMyPlantDiaryVO> list = plantingCalendarMapper.selectMyPlant(removerId);
-        for (selectMyPlantDiaryVO myPlant : list) {
+        List<MyPlantDiaryResponse> list = plantingCalendarMapper.selectMyPlant(removerId);
+        for (MyPlantDiaryResponse myPlant : list) {
             if (Objects.equals(myPlant.getMyplantId(), myplantId)) {
                 plantingCalendarMapper.updateMyPlantWatering(myplantId);
                 plantingCalendarMapper.deletePlantWatering(myplantId);
@@ -57,17 +51,17 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     }
 
     @Override
-    public List<PlantingCalendarVO> getWateringCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<PlantingCalendarResponse> getWateringCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
         return plantingCalendarMapper.selectWateringCalendar(memberId, startDate, endDate);
     }
 
     @Override
-    public List<PlantingCalendarVO> getDiaryCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<PlantingCalendarResponse> getDiaryCalendar(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
         return plantingCalendarMapper.selectDiaryCalendar(memberId, startDate, endDate);
     }
 
     @Override
-    public DiaryVO findDiaryUpdateInfo(Long diaryId) {
+    public DiaryResponse findDiaryUpdateInfo(Long diaryId) {
         return plantingCalendarMapper.selectDiaryUpdateInfo(diaryId);
     }
 
@@ -78,9 +72,9 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
 
     @Override
     @Transactional
-    public int updateDiary(DiaryVO diaryVO, List<ImageVO> delImgList, List<MultipartFile> files, Long memberId) throws IOException {
+    public int updateDiary(DiaryRequest request, List<ImageVO> delImgList, List<MultipartFile> files, Long memberId) throws IOException {
         int result = 0;
-        result += plantingCalendarMapper.updateDiary(diaryVO);
+        result += plantingCalendarMapper.updateDiary(request);
 
         for (ImageVO image : delImgList) {
             result += imageMapper.softDeleteImagesByTarget(ImageTargetType.DIARY, image.getImageId());
@@ -92,7 +86,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
             ImageVO image = ImageVO.builder()
                     .memberId(memberId)
                     .targetType(ImageTargetType.DIARY)
-                    .targetId(diaryVO.getDiaryId())
+                    .targetId(request.getDiaryId())
                     .fileUrl(url)
                     .fileName(file.getOriginalFilename())
                     .build();
@@ -107,15 +101,15 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     }
 
     @Override
-    public List<selectMyPlantDiaryVO> getMyPlant(Long memberId) {
+    public List<MyPlantDiaryResponse> getMyPlant(Long memberId) {
         return plantingCalendarMapper.selectMyPlant(memberId);
     }
 
     @Override
     @Transactional
-    public int registerDiary(DiaryVO diaryVO, List<MultipartFile> files, Long memberId) throws IOException {
+    public int registerDiary(DiaryRequest request, List<MultipartFile> files, Long memberId) throws IOException {
         int result = 0;
-        result += plantingCalendarMapper.insertDiary(diaryVO);
+        result += plantingCalendarMapper.insertDiary(request);
 
         for (MultipartFile file : files) {
             String url = storageUploader.uploadFile(file);
@@ -123,7 +117,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
             ImageVO image = ImageVO.builder()
                     .memberId(memberId)
                     .targetType(ImageTargetType.DIARY)
-                    .targetId(diaryVO.getDiaryId())
+                    .targetId(request.getDiaryId())
                     .fileUrl(url)
                     .fileName(file.getOriginalFilename())
                     .build();

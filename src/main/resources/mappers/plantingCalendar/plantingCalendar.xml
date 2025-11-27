@@ -26,7 +26,7 @@
 
     <select id="selectWateringCalendar"
             parameterType="map"
-            resultType="com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO">
+            resultType="com.zero.plantory.domain.plantingCalendar.dto.PlantingCalendarResponse">
         SELECT
             w.watering_id,
             w.myplant_id,
@@ -45,7 +45,7 @@
 
     <select id="selectDiaryCalendar"
             parameterType="map"
-            resultType="com.zero.plantory.domain.plantingCalendar.vo.PlantingCalendarVO">
+            resultType="com.zero.plantory.domain.plantingCalendar.dto.PlantingCalendarResponse">
         SELECT
             d.diary_id,
             d.myplant_id,
@@ -63,7 +63,7 @@
         ORDER BY d.created_at ASC;
     </select>
 
-    <select id="selectDiaryUpdateInfo" resultType="com.zero.plantory.global.vo.DiaryVO">
+    <select id="selectDiaryUpdateInfo" resultType="com.zero.plantory.domain.plantingCalendar.dto.DiaryResponse">
         SELECT diary_id, myplant_id,activity,state,memo,created_at
         FROM diary
         WHERE diary_id = #{diaryId};
@@ -77,14 +77,14 @@
         WHERE diary_id = #{diaryId};
     </update>
 
-    <select id="selectMyPlant" resultType="com.zero.plantory.domain.plantingCalendar.vo.selectMyPlantDiaryVO">
+    <select id="selectMyPlant" resultType="com.zero.plantory.domain.plantingCalendar.dto.MyPlantDiaryResponse">
         SELECT myplant_id,NAME
         FROM myplant
         WHERE member_id = #{memberId};
     </select>
 
     <insert id="insertDiary"
-            parameterType="com.zero.plantory.global.vo.DiaryVO"
+            parameterType="com.zero.plantory.domain.plantingCalendar.dto.DiaryRequest"
             useGeneratedKeys="true"
             keyProperty="diaryId"
             keyColumn="diary_id">
@@ -93,7 +93,7 @@
     </insert>
 
     <select id="selectMyplantsForWindow" parameterType="int"
-            resultType="com.zero.plantory.domain.plantingCalendar.vo.MyplantSlotBaseVO">
+            resultType="com.zero.plantory.domain.plantingCalendar.dto.MyplantSlotBaseResponse">
         SELECT mp.myplant_id,
         mp.start_at,
         mp.end_date,

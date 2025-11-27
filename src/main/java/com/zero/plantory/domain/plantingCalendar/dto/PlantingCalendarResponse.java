@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.plantingCalendar.vo;
+package com.zero.plantory.domain.plantingCalendar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PlantingCalendarVO {
+public class PlantingCalendarResponse {
     private Long wateringId;
     private Long myplantId;
     private Long memberId;

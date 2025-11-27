@@ -10,7 +10,7 @@
             LIMIT #{limit} OFFSET #{offset};
     </select>
 
-    <select id="selectMyPlantByName" resultType="com.zero.plantory.domain.myPlant.vo.MyPlantSearchVO">
+    <select id="selectMyPlantByName" resultType="com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse">
         SELECT myplant_id,NAME,start_at
         FROM myplant
         WHERE del_flag IS NULL

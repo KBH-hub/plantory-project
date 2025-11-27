@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.myPlant.mapper;
 
-import com.zero.plantory.domain.myPlant.vo.MyPlantSearchVO;
+import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
+import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;
 import com.zero.plantory.global.vo.MyPlantVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -37,7 +36,7 @@ class MyPlantMapperTest {
         Long memberId = 2L;
         String name = "다육";
 
-        List<MyPlantSearchVO> result = myPlantMapper.selectMyPlantByName(memberId, name);
+        List<MyPlantSearchNameResponse> result = myPlantMapper.selectMyPlantByName(memberId, name);
 
         log.info(result.toString());
     }
@@ -45,7 +44,7 @@ class MyPlantMapperTest {
     @Test
     @DisplayName("나의 식물 등록 처리")
     void insertMyPlantTest() {
-        MyPlantVO vo  = MyPlantVO.builder()
+        MyPlantRequest vo  = MyPlantRequest.builder()
                 .memberId(4L)
                 .myplantId(1L)
                 .name("테스트마이플랜트명")
@@ -65,7 +64,7 @@ class MyPlantMapperTest {
     @Test
     @DisplayName("나의 식물 수정 처리")
     void updateMyPlantTest() {
-        MyPlantVO vo  = MyPlantVO.builder()
+        MyPlantRequest vo  = MyPlantRequest.builder()
                 .memberId(4L)
                 .myplantId(20L)
                 .name("수정11테스트마이플랜트명")

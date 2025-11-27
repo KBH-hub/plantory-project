@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MyPlantResponseDTO {
+public class MyPlantResponse {
     private Long myplantId;
     private Long memberId;
     private String name;

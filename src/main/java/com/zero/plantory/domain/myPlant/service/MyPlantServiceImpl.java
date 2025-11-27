@@ -1,14 +1,14 @@
 package com.zero.plantory.domain.myPlant.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
-import com.zero.plantory.domain.myPlant.dto.MyPlantResponseDTO;
+import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
+import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
+import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;
 import com.zero.plantory.domain.myPlant.mapper.MyPlantMapper;
-import com.zero.plantory.domain.myPlant.vo.MyPlantSearchVO;
 import com.zero.plantory.global.vo.ImageTargetType;
 import com.zero.plantory.global.vo.ImageVO;
 import com.zero.plantory.global.vo.MyPlantVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +23,13 @@ public class MyPlantServiceImpl implements MyPlantService {
 
 
     @Override
-    public List<MyPlantResponseDTO> getMyPlantList(Long memberId, int limit, int offset) {
-        List<MyPlantResponseDTO> resultList = new ArrayList<>();
+    public List<MyPlantResponse> getMyPlantList(Long memberId, int limit, int offset) {
+        List<MyPlantResponse> resultList = new ArrayList<>();
         List<MyPlantVO> myPlantList = myPlantMapper.selectMyPlantList(memberId, limit, offset);
         for (MyPlantVO myPlantVO : myPlantList) {
             List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, myPlantVO.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
-            MyPlantResponseDTO dto = MyPlantResponseDTO.builder()
+            MyPlantResponse dto = MyPlantResponse.builder()
                     .myplantId(myPlantVO.getMyplantId())
                     .name(myPlantVO.getName())
                     .startAt(myPlantVO.getStartAt())
@@ -41,16 +41,16 @@ public class MyPlantServiceImpl implements MyPlantService {
     }
 
     @Override
-    public List<MyPlantResponseDTO> getMyPlantByName(Long memberId, String name) {
-        List<MyPlantResponseDTO> resultList = new ArrayList<>();
-        List<MyPlantSearchVO> myPlantList = myPlantMapper.selectMyPlantByName(memberId, name);
-        for (MyPlantSearchVO myPlantVO : myPlantList) {
-            List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, myPlantVO.getMyplantId());
+    public List<MyPlantResponse> getMyPlantByName(Long memberId, String name) {
+        List<MyPlantResponse> resultList = new ArrayList<>();
+        List<MyPlantSearchNameResponse> myPlantList = myPlantMapper.selectMyPlantByName(memberId, name);
+        for (MyPlantSearchNameResponse response : myPlantList) {
+            List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
-            MyPlantResponseDTO dto = MyPlantResponseDTO.builder()
-                    .myplantId(myPlantVO.getMyplantId())
-                    .name(myPlantVO.getName())
-                    .startAt(myPlantVO.getStartAt())
+            MyPlantResponse dto = MyPlantResponse.builder()
+                    .myplantId(response.getMyplantId())
+                    .name(response.getName())
+                    .startAt(response.getStartAt())
                     .imageUrl(url)
                     .build();
             resultList.add(dto);
@@ -59,19 +59,19 @@ public class MyPlantServiceImpl implements MyPlantService {
     }
 
     @Override
-    public int registerMyPlant(MyPlantVO vo) {
-        if(vo.getName() == null || vo.getName().equals("")){
+    public int registerMyPlant(MyPlantRequest request) {
+        if(request.getName() == null || request.getName().equals("")){
             throw new IllegalArgumentException("내 식물 등록 필수값(식물 이름) 누락");
         }
-        return myPlantMapper.insertMyPlant(vo);
+        return myPlantMapper.insertMyPlant(request);
     }
 
     @Override
-    public int updateMyPlant(MyPlantVO vo) {
-        if(vo.getName() == null || vo.getName().equals("")){
+    public int updateMyPlant(MyPlantRequest request) {
+        if(request.getName() == null || request.getName().equals("")){
             throw new IllegalArgumentException("내 식물 수정 필수값(식물 이름) 누락");
         }
-        return myPlantMapper.updateMyPlant(vo);
+        return myPlantMapper.updateMyPlant(request);
     }
 
     @Override

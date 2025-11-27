@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.plantingCalendar.vo;
+package com.zero.plantory.domain.plantingCalendar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MyplantSlotBaseVO {
+public class MyplantSlotBaseResponse {
     private Long myplantId;
     private LocalDateTime startAt;
     private LocalDateTime endDate;

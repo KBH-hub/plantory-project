@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.message.mapper.MessageMapper">
     <select id="selectMessages"
-            parameterType="com.zero.plantory.domain.message.vo.SelectMessageSearchVO"
-            resultType="com.zero.plantory.domain.message.vo.SelectMessageListVO">
+            parameterType="com.zero.plantory.domain.message.dto.MessageSearchRequest"
+            resultType="com.zero.plantory.domain.message.dto.MessageListResponse">
         SELECT
         m.message_id,
         m.sender_id,
-        sender.nickname   AS sender_nickname,
+        sender.nickname AS sender_nickname,
         m.receiver_id,
         receiver.nickname AS receiver_nickname,
         m.title,
@@ -35,7 +35,7 @@
         END AS target_title,
         COUNT(*) OVER() AS total_count
         FROM message m
-        JOIN member sender   ON m.sender_id   = sender.member_id
+        JOIN member sender ON m.sender_id = sender.member_id
         JOIN member receiver ON m.receiver_id = receiver.member_id
         <where>
             m.del_flag IS NULL
@@ -81,82 +81,78 @@
     </update>
 
     <select id="selectMessageWriteInfo"
-            resultType="com.zero.plantory.global.vo.MessageVO">
-        SELECT
-            m.message_id,
-            m.sender_id,
-            sender.nickname   AS sender_nickname,
-            m.receiver_id,
-            receiver.nickname AS receiver_nickname,
-            m.title,
-            m.content,
-            m.target_type,
-            m.target_id,
-            m.created_at,
-            m.read_flag,
-            m.del_flag,
-            CASE
-                WHEN m.target_type = 'SHARING' THEN (
-                    SELECT s.title
-                    FROM sharing s
-                    WHERE s.sharing_id = m.target_id
-                      AND s.del_flag IS NULL
-                )
-                WHEN m.target_type = 'QUESTION' THEN (
-                    SELECT q.title
-                    FROM question q
-                    WHERE q.question_id = m.target_id
-                      AND q.del_flag IS NULL
-                )
-                ELSE NULL
-                END AS target_title
-        FROM message m
-                 JOIN member sender   ON m.sender_id   = sender.member_id
+            resultType="com.zero.plantory.domain.message.dto.MessageResponse">
+        SELECT m.message_id,
+               m.sender_id,
+               sender.nickname   AS sender_nickname,
+               m.receiver_id,
+               receiver.nickname AS receiver_nickname,
+               m.title,
+               m.content,
+               m.target_type,
+               m.target_id,
+               m.created_at,
+               m.read_flag,
+               m.del_flag,
+               CASE
+                   WHEN m.target_type = 'SHARING' THEN s.title
+                   WHEN m.target_type = 'QUESTION' THEN q.title
+                   ELSE NULL
+                   END           AS target_title
+        FROM (SELECT m.*,
+                     ROW_NUMBER() OVER (
+               PARTITION BY m.sender_id, m.target_type, m.target_id
+               ORDER BY m.created_at DESC, m.message_id DESC
+             ) AS rn
+              FROM message m
+              WHERE m.sender_id = #{senderId}
+                AND m.del_flag IS NULL
+                AND m.target_type = #{targetType}
+                AND m.target_id = #{targetId}) m
+                 JOIN member sender ON m.sender_id = sender.member_id
                  JOIN member receiver ON m.receiver_id = receiver.member_id
-        WHERE m.sender_id  = #{senderId}
-          AND m.del_flag   IS NULL
-          AND m.target_type = #{targetType}
-          AND m.target_id   = #{targetId}
+                 LEFT JOIN sharing s ON m.target_type = 'SHARING'
+            AND s.sharing_id = m.target_id
+            AND s.del_flag IS NULL
+                 LEFT JOIN question q ON m.target_type = 'QUESTION'
+            AND q.question_id = m.target_id
+            AND q.del_flag IS NULL
+        WHERE m.rn = 1
     </select>
 
+
     <insert id="insertMessage"
-            parameterType="com.zero.plantory.global.vo.MessageVO">
+            parameterType="com.zero.plantory.domain.message.dto.MessageRequest">
         INSERT INTO message
         (sender_id, receiver_id, title, content, target_type, target_id, created_at)
-        VALUES
-            (#{senderId}, #{receiverId}, #{title}, #{content},
-             #{targetType}, #{targetId}, NOW())
+        VALUES (#{senderId}, #{receiverId}, #{title}, #{content},
+                #{targetType}, #{targetId}, NOW())
     </insert>
 
     <select id="selectMessageDetail"
-            resultType="com.zero.plantory.global.vo.MessageVO">
-        SELECT
-            m.message_id,
-            m.sender_id,
-            mem.nickname AS sender_nickname,
-            m.receiver_id,
-            m.title,
-            m.content,
-            m.target_type,
-            m.target_id,
-            m.created_at,
-            m.read_flag,
-            m.del_flag,
-            CASE
-                WHEN m.target_type = 'SHARING' THEN (
-                    SELECT s.title
-                    FROM sharing s
-                    WHERE s.sharing_id = m.target_id
-                      AND s.del_flag IS NULL
-                )
-                WHEN m.target_type = 'QUESTION' THEN (
-                    SELECT q.title
-                    FROM question q
-                    WHERE q.question_id = m.target_id
-                      AND q.del_flag IS NULL
-                )
-                ELSE NULL
-                END AS target_title
+            resultType="com.zero.plantory.domain.message.dto.MessageResponse">
+        SELECT m.message_id,
+               m.sender_id,
+               mem.nickname AS sender_nickname,
+               m.receiver_id,
+               m.title,
+               m.content,
+               m.target_type,
+               m.target_id,
+               m.created_at,
+               m.read_flag,
+               m.del_flag,
+               CASE
+                   WHEN m.target_type = 'SHARING' THEN (SELECT s.title
+                                                        FROM sharing s
+                                                        WHERE s.sharing_id = m.target_id
+                                                          AND s.del_flag IS NULL)
+                   WHEN m.target_type = 'QUESTION' THEN (SELECT q.title
+                                                         FROM question q
+                                                         WHERE q.question_id = m.target_id
+                                                           AND q.del_flag IS NULL)
+                   ELSE NULL
+                   END      AS target_title
         FROM message m
                  JOIN member mem ON m.sender_id = mem.member_id
         WHERE m.message_id = #{messageId}

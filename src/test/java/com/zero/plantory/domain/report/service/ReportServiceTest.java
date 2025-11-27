@@ -1,9 +1,10 @@
 package com.zero.plantory.domain.report.service;
 
-import com.zero.plantory.domain.report.vo.SelectNameListVO;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.domain.report.dto.NameListResponse;
+import com.zero.plantory.domain.report.dto.ReportRequest;
 import com.zero.plantory.global.vo.ReportVO;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -30,7 +29,7 @@ class ReportServiceTest {
         String nickname = "트";
         Long viewerId = 5L;
 
-        List<SelectNameListVO> result = reportService.getUsersIdByNickname(nickname, viewerId);
+        List<NameListResponse> result = reportService.getUsersIdByNickname(nickname, viewerId);
 
         log.info("result={}", result);
     }
@@ -42,7 +41,7 @@ class ReportServiceTest {
         Long reporterId = 2L;
         String content = "테스트 신고 내용";
         
-        ReportVO reportVO = ReportVO.builder()
+        ReportRequest request = ReportRequest.builder()
                 .targetMemberId(targetMemberId)
                 .reporterId(reporterId)
                 .content(content)
@@ -65,7 +64,7 @@ class ReportServiceTest {
         files.add(file1);
         files.add(file2);
 
-        int result = reportService.registerReport(reportVO, files);
+        int result = reportService.registerReport(request, files);
 
         log.info(String.valueOf(result));
     }
@@ -77,7 +76,7 @@ class ReportServiceTest {
         Long reporterId = 3L;
         String content = "";
 
-        ReportVO reportVO = ReportVO.builder()
+        ReportRequest request = ReportRequest.builder()
                 .targetMemberId(targetMemberId)
                 .reporterId(reporterId)
                 .content(content)
@@ -93,7 +92,15 @@ class ReportServiceTest {
         );
         files.add(file1);
 
-        int result = reportService.registerReport(reportVO, files);
+        boolean result;
+        try {
+            reportService.registerReport(request, files);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
+
+        Assertions.assertFalse(result);
 
         log.info(String.valueOf(result));
     }

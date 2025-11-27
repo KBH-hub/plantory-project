@@ -3,9 +3,8 @@ package com.zero.plantory.domain.message.service;
 import com.zero.plantory.domain.message.dto.MessageListResponse;
 import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
-import com.zero.plantory.domain.message.dto.SearchMessageRequest;
+import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.global.vo.MessageTargetType;
-import com.zero.plantory.global.vo.MessageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,8 +24,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("쪽지 리스트 조회")
     void getMessageListTest() {
-        SearchMessageRequest request = SearchMessageRequest.builder()
-                .memberId(21L)
+        MessageSearchRequest request = MessageSearchRequest.builder()
+                .memberId(20L)
                 .boxType("RECEIVED")
                 .targetType("SHARING")
                 .title(null)
@@ -44,7 +43,7 @@ class MessageServiceTest {
     @DisplayName("수신자 메시지 삭제 처리")
     void removeMessageTest() {
         List<Long> messageIds = List.of(1L, 2L);
-        Long removerId = 1L;
+        Long removerId = 2L;
 
         int result = messageService.removeMessages(messageIds, removerId);
 

@@ -2,13 +2,13 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.report.mapper.ReportMapper">
-    <select id="selectUserIdByNickname" resultType="com.zero.plantory.domain.report.vo.SelectNameListVO">
+    <select id="selectUserIdByNickname" resultType="com.zero.plantory.domain.report.dto.NameListResponse">
         SELECT member_id, nickname
         FROM member
         WHERE nickname LIKE CONCAT('%', #{nickname}, '%')
     </select>
 
-    <insert id="insertReport" parameterType="com.zero.plantory.global.vo.ReportVO"
+    <insert id="insertReport" parameterType="com.zero.plantory.domain.report.dto.ReportRequest"
             useGeneratedKeys="true" keyProperty="reportId" keyColumn="report_id">
         INSERT INTO report (reporter_id, target_member_id, content, status, created_at)
         VALUES (#{reporterId}, #{targetMemberId}, #{content}, #{status}, SYSDATE());

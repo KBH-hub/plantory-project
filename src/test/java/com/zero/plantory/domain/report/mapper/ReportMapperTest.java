@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.report.mapper;
 
-import com.zero.plantory.domain.report.vo.SelectNameListVO;
+import com.zero.plantory.domain.report.dto.NameListResponse;
+import com.zero.plantory.domain.report.dto.ReportRequest;
 import com.zero.plantory.global.vo.ReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +23,7 @@ class ReportMapperTest {
     void selectUserIdByNicknameTest() {
         String nickname = "우";
 
-        List<SelectNameListVO> result = reportMapper.selectUserIdByNickname(nickname);
+        List<NameListResponse> result = reportMapper.selectUserIdByNickname(nickname);
 
         log.info(String.valueOf(result));
     }
@@ -30,7 +31,7 @@ class ReportMapperTest {
     @Test
     @DisplayName("신고하기 등록 처리")
     void insertReportTest() {
-        ReportVO reportVO = new ReportVO().builder()
+        ReportRequest reportVO = new ReportRequest().builder()
                 .reporterId(2L)
                 .targetMemberId(3L)
                 .content("반복 게시글 올리던데요")

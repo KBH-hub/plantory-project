@@ -1,9 +1,11 @@
 package com.zero.plantory.domain.message.mapper;
 
-import com.zero.plantory.domain.message.vo.SelectMessageListVO;
+import com.zero.plantory.domain.message.dto.MessageListResponse;
+import com.zero.plantory.domain.message.dto.MessageRequest;
+import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.global.vo.MessageTargetType;
 import com.zero.plantory.global.vo.MessageVO;
-import com.zero.plantory.domain.message.vo.SelectMessageSearchVO;
+import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +25,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
     void selectMessagesTest() {
-        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+        MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(21L) // 받은 사람 아이디
                 .boxType("RECEIVED") // 받은 쪽지함
                 .targetType(null) // 나눔 or 질문 or 모두
@@ -32,7 +34,7 @@ public class MessageMapperTests {
                 .offset(0) // 조회 시작 번호
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
+        List<MessageListResponse> result = messageMapper.selectMessages(dto);
 
         log.info(String.valueOf(result));
     }
@@ -40,7 +42,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 리스트 화면 - 보낸 쪽지함 - 나눔 유형 필터")
     void getMessagesSharingTest() {
-        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+        MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(2L)
                 .boxType("SENT")
                 .targetType("SHARING")
@@ -49,7 +51,7 @@ public class MessageMapperTests {
                 .offset(0)
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
+        List<MessageListResponse> result = messageMapper.selectMessages(dto);
 
         log.info(String.valueOf(result));
     }
@@ -57,7 +59,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("보낸 쪽지함 - 제목 키워드 검색")
     void selectMessagesSearchTest() {
-        SelectMessageSearchVO vo = new SelectMessageSearchVO().builder()
+        MessageSearchRequest dto = new MessageSearchRequest().builder()
                 .memberId(2L)
                 .boxType("SENT")
                 .targetType(null)
@@ -66,7 +68,7 @@ public class MessageMapperTests {
                 .offset(0)
                 .build();
 
-        List<SelectMessageListVO> result = messageMapper.selectMessages(vo);
+        List<MessageListResponse> result = messageMapper.selectMessages(dto);
 
         log.info(String.valueOf(result));
     }
@@ -108,7 +110,7 @@ public class MessageMapperTests {
         String targetType = "QUESTION"; // 나눔 글 기준
         Long targetId = 3L; // 나눔 글 id
 
-        MessageVO result = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
+        MessageResponse result = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
 
         log.info(String.valueOf(result));
     }
@@ -116,7 +118,7 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 등록 - 쪽지 등록 처리")
     void insertMessageTest() {
-        MessageVO vo = new MessageVO().builder()
+        MessageRequest dto = new MessageRequest().builder()
                 .senderId(3L)
                 .receiverId(8L)
                 .title("안녕하세요. 테스트 쪽지 제목입니다.")
@@ -125,7 +127,7 @@ public class MessageMapperTests {
                 .targetId(13L)
                 .build();
 
-        int result = messageMapper.insertMessage(vo);
+        int result = messageMapper.insertMessage(dto);
 
         log.info("inserted rows = " + result);
     }
@@ -135,7 +137,7 @@ public class MessageMapperTests {
     void selectMessageDetailTest() {
         Long messageId = 3L;
 
-        MessageVO result = messageMapper.selectMessageDetail(messageId);
+        MessageResponse result = messageMapper.selectMessageDetail(messageId);
 
         log.info(String.valueOf(result));
     }
