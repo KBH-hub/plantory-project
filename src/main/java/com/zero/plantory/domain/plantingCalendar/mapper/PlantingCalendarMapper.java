@@ -1,7 +1,6 @@
 package com.zero.plantory.domain.plantingCalendar.mapper;
 
 import com.zero.plantory.domain.plantingCalendar.dto.*;
-import com.zero.plantory.global.vo.DiaryVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

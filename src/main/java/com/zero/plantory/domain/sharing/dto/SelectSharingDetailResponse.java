@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.sharing.dto;
 
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +30,6 @@ public class SelectSharingDetailResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private List<ImageVO> images;
+    private List<ImageDTO> images;
 
 }

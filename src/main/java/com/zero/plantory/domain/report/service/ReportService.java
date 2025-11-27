@@ -2,7 +2,6 @@ package com.zero.plantory.domain.report.service;
 
 import com.zero.plantory.domain.report.dto.NameListResponse;
 import com.zero.plantory.domain.report.dto.ReportRequest;
-import com.zero.plantory.global.vo.ReportVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

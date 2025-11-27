@@ -1,13 +1,12 @@
 package com.zero.plantory.domain.report.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.report.dto.NameListResponse;
 import com.zero.plantory.domain.report.dto.ReportRequest;
 import com.zero.plantory.domain.report.mapper.ReportMapper;
-import com.zero.plantory.domain.report.dto.NameListResponse;
 import com.zero.plantory.global.utils.StorageUploader;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
-import com.zero.plantory.global.vo.ReportVO;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +51,7 @@ public class ReportServiceImpl implements ReportService {
         for(MultipartFile file:files){
             String url = storageUploader.uploadFile(file);
 
-            ImageVO image = ImageVO.builder()
+            ImageDTO image = ImageDTO.builder()
                     .memberId(request.getReporterId())
                     .targetType(ImageTargetType.REPORT)
                     .targetId(request.getReportId())

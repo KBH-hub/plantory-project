@@ -5,9 +5,8 @@ import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
 import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;
 import com.zero.plantory.domain.myPlant.mapper.MyPlantMapper;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
-import com.zero.plantory.global.vo.MyPlantVO;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +24,14 @@ public class MyPlantServiceImpl implements MyPlantService {
     @Override
     public List<MyPlantResponse> getMyPlantList(Long memberId, int limit, int offset) {
         List<MyPlantResponse> resultList = new ArrayList<>();
-        List<MyPlantVO> myPlantList = myPlantMapper.selectMyPlantList(memberId, limit, offset);
-        for (MyPlantVO myPlantVO : myPlantList) {
-            List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, myPlantVO.getMyplantId());
+        List<MyPlantResponse> myPlantList = myPlantMapper.selectMyPlantList(memberId, limit, offset);
+        for (MyPlantResponse response : myPlantList) {
+            List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
             MyPlantResponse dto = MyPlantResponse.builder()
-                    .myplantId(myPlantVO.getMyplantId())
-                    .name(myPlantVO.getName())
-                    .startAt(myPlantVO.getStartAt())
+                    .myplantId(response.getMyplantId())
+                    .name(response.getName())
+                    .startAt(response.getStartAt())
                     .imageUrl(url)
                     .build();
             resultList.add(dto);
@@ -45,7 +44,7 @@ public class MyPlantServiceImpl implements MyPlantService {
         List<MyPlantResponse> resultList = new ArrayList<>();
         List<MyPlantSearchNameResponse> myPlantList = myPlantMapper.selectMyPlantByName(memberId, name);
         for (MyPlantSearchNameResponse response : myPlantList) {
-            List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
+            List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
             MyPlantResponse dto = MyPlantResponse.builder()
                     .myplantId(response.getMyplantId())

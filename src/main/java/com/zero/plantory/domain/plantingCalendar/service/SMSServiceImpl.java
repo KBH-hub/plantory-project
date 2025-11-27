@@ -5,7 +5,10 @@ import com.zero.plantory.domain.plantingCalendar.auth.SolapiAuth;
 import com.zero.plantory.domain.plantingCalendar.dto.SMSRequestDTO;
 import com.zero.plantory.global.config.SolapiConfig;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.myPlant.mapper;
 
 import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
+import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;
-import com.zero.plantory.global.vo.MyPlantVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class MyPlantMapperTest {
         int limit = 10;
         int offset = 0;
 
-        List<MyPlantVO> result = myPlantMapper.selectMyPlantList(memberId, limit, offset);
+        List<MyPlantResponse> result = myPlantMapper.selectMyPlantList(memberId, limit, offset);
 
         log.info("result={}", result);
     }

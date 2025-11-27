@@ -3,7 +3,7 @@ package com.zero.plantory.domain.member.service;
 import com.zero.plantory.domain.member.dto.MemberResponse;
 import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
-import com.zero.plantory.global.vo.Role;
+import com.zero.plantory.global.dto.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

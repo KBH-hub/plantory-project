@@ -1,10 +1,10 @@
 package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.notice.NoticeMapper;
-import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
-import com.zero.plantory.global.vo.NoticeTargetType;
-import com.zero.plantory.global.vo.NoticeVO;
+import com.zero.plantory.domain.sharing.mapper.SharingMapper;
+import com.zero.plantory.global.dto.NoticeTargetType;
+import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         sharingMapper.updateSharingComplete(sharingId, targetMemberId);
 
-        NoticeVO notice = NoticeVO.builder()
+        NoticeDTO notice = NoticeDTO.builder()
                 .receiverId(targetMemberId)
                 .targetId(sharingId)
                 .targetType(NoticeTargetType.SHARING)

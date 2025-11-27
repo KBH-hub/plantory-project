@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.dto;
 
-import com.zero.plantory.global.vo.Role;
+import com.zero.plantory.global.dto.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

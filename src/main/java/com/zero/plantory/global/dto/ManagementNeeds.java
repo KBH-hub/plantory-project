@@ -1,4 +1,4 @@
-package com.zero.plantory.global.vo;
+package com.zero.plantory.global.dto;
 
 public enum ManagementNeeds {
     LITTLE_CARE("409001", "약간 돌봄"),

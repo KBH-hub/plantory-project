@@ -17,7 +17,7 @@
 
 
     <!-- 단건 조회 -->
-    <select id="selectImageById" resultType="com.zero.plantory.global.vo.ImageVO">
+    <select id="selectImageById" resultType="com.zero.plantory.global.dto.ImageDTO">
         SELECT
         <include refid="imageColumns"/>
         FROM image
@@ -27,7 +27,7 @@
 
 
     <!-- 다건 조회 -->
-    <select id="selectImagesByTarget" resultType="com.zero.plantory.global.vo.ImageVO">
+    <select id="selectImagesByTarget" resultType="com.zero.plantory.global.dto.ImageDTO">
         SELECT
         <include refid="imageColumns"/>
         FROM image
@@ -39,7 +39,7 @@
 
 
     <!-- 이미지 INSERT (GCS 저장 후 DB 저장) -->
-    <insert id="insertImage" parameterType="com.zero.plantory.global.vo.ImageVO">
+    <insert id="insertImage" parameterType="com.zero.plantory.global.dto.ImageDTO">
         INSERT INTO image (
             member_id,
             target_type,

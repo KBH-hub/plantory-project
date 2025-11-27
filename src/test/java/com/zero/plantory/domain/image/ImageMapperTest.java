@@ -1,14 +1,12 @@
 package com.zero.plantory.domain.image;
 
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @Slf4j
 @SpringBootTest
@@ -32,7 +30,7 @@ class ImageMapperTest {
     @Test
     @DisplayName("이미지 insert")
     void insertImageTest() {
-        ImageVO vo = ImageVO.builder()
+        ImageDTO vo = ImageDTO.builder()
                 .memberId(1L)
                 .targetType(ImageTargetType.QUESTION)
                 .targetId(2L)

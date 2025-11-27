@@ -1,10 +1,10 @@
 package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
-import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.domain.sharing.dto.*;
-import com.zero.plantory.global.vo.ImageTargetType;
-import com.zero.plantory.global.vo.ImageVO;
+import com.zero.plantory.domain.sharing.mapper.SharingMapper;
+import com.zero.plantory.global.dto.ImageTargetType;
+import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class SharingReadServiceImpl implements SharingReadService {
         List<SharingCardListResponse> list = sharingMapper.selectSharingListByAddressAndKeyword(request);
 
         for (SharingCardListResponse item : list) {
-            List<ImageVO> images = imageMapper.selectImagesByTarget(
+            List<ImageDTO> images = imageMapper.selectImagesByTarget(
                     ImageTargetType.SHARING,
                     item.getSharingId()
             );
@@ -49,7 +49,7 @@ public class SharingReadServiceImpl implements SharingReadService {
             return null;
         }
 
-        List<ImageVO> images = imageMapper.selectImagesByTarget(ImageTargetType.SHARING, sharingId);
+        List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.SHARING, sharingId);
         detail.setImages(images);
 
         return detail;

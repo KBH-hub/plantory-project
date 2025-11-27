@@ -2,9 +2,8 @@ package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
-import com.zero.plantory.global.vo.ManagementLevel;
-import com.zero.plantory.global.vo.ManagementNeeds;
-import com.zero.plantory.global.vo.SharingVO;
+import com.zero.plantory.global.dto.ManagementLevel;
+import com.zero.plantory.global.dto.ManagementNeeds;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @SpringBootTest

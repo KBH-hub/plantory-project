@@ -1,4 +1,4 @@
-package com.zero.plantory.global.vo;
+package com.zero.plantory.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ImageVO {
+public class ImageDTO {
 
     private Long imageId;
     private Long memberId;

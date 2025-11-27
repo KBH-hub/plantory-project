@@ -1,10 +1,9 @@
 package com.zero.plantory.domain.question.mapper;
 
 import com.zero.plantory.domain.question.dto.*;
-import com.zero.plantory.global.vo.AnswerVO;
-import com.zero.plantory.global.vo.QuestionVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 @Mapper

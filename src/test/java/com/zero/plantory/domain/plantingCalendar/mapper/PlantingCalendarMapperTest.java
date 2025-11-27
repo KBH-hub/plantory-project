@@ -2,9 +2,8 @@ package com.zero.plantory.domain.plantingCalendar.mapper;
 
 import com.zero.plantory.domain.plantingCalendar.dto.DiaryRequest;
 import com.zero.plantory.domain.plantingCalendar.dto.DiaryResponse;
-import com.zero.plantory.domain.plantingCalendar.dto.PlantingCalendarResponse;
 import com.zero.plantory.domain.plantingCalendar.dto.MyPlantDiaryResponse;
-import com.zero.plantory.global.vo.DiaryVO;
+import com.zero.plantory.domain.plantingCalendar.dto.PlantingCalendarResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

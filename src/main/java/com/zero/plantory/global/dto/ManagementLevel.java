@@ -1,4 +1,4 @@
-package com.zero.plantory.global.vo;
+package com.zero.plantory.global.dto;
 
 public enum ManagementLevel {
     VERY_EASY("408001", "매우 쉬움"),
