@@ -4,8 +4,8 @@
 <mapper namespace="com.zero.plantory.domain.sharing.mapper.SharingMapper">
 
 <select id="selectSharingListByAddressAndKeyword"
-        parameterType="com.zero.plantory.domain.sharing.vo.SharingSearchVO"
-        resultType="com.zero.plantory.domain.sharing.vo.SharingCardListVO">
+        parameterType="com.zero.plantory.domain.sharing.dto.SharingSearchRequest"
+        resultType="com.zero.plantory.domain.sharing.dto.SharingCardListResponse">
 
     SELECT
         s.sharing_id,
@@ -54,7 +54,7 @@
           AND s.del_flag IS NULL
     </select>
 
-    <select id="selectPopularSharingList" resultType="com.zero.plantory.domain.sharing.vo.SharingPopularVO">
+    <select id="selectPopularSharingList" resultType="com.zero.plantory.domain.sharing.dto.SharingPopularResponse">
 
         SELECT
             sharing_id,
@@ -70,7 +70,7 @@
     </select>
 
     <insert id="insertSharing"
-            parameterType="com.zero.plantory.global.vo.SharingVO"
+            parameterType="com.zero.plantory.domain.sharing.dto.SharingRequest"
             useGeneratedKeys="true"
             keyProperty="sharingId">
 
@@ -91,7 +91,7 @@
              NOW())
     </insert>
 
-    <select id="selectSharingDetail" resultType="com.zero.plantory.domain.sharing.vo.SelectSharingDetailVO">
+    <select id="selectSharingDetail" resultType="com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse">
         SELECT
             s.sharing_id,
             s.member_id,
@@ -116,7 +116,7 @@
 
     <select id="selectSharingComments"
             parameterType="long"
-            resultType="com.zero.plantory.domain.sharing.vo.SelectCommentListVO">
+            resultType="com.zero.plantory.domain.sharing.dto.SelectCommentListResponse">
 
         SELECT
             c.comment_id,
@@ -194,7 +194,7 @@
           AND del_flag IS NULL
     </update>
 
-    <update id="deleteComment" parameterType="com.zero.plantory.global.vo.CommentVO">
+    <update id="deleteComment" parameterType="com.zero.plantory.domain.sharing.dto.CommentRequest">
         UPDATE comment
         SET del_flag = NOW()
         WHERE comment_id = #{commentId}
@@ -212,7 +212,7 @@
     </select>
 
     <update id="updateSharing"
-            parameterType="com.zero.plantory.global.vo.SharingVO">
+            parameterType="com.zero.plantory.domain.sharing.dto.SharingRequest">
         UPDATE sharing
         SET title            = #{title},
             content          = #{content},
@@ -233,7 +233,7 @@
 
     <select id="selectSharingMessagePartners"
             parameterType="map"
-            resultType="com.zero.plantory.domain.sharing.vo.SharingPartnerVO">
+            resultType="com.zero.plantory.domain.sharing.dto.SharingPartnerResponse">
         SELECT DISTINCT mb.member_id, mb.nickname
         FROM message m
                  JOIN member mb ON m.sender_id = mb.member_id
@@ -254,7 +254,7 @@
         WHERE sharing_id = #{sharingId}
     </update>
 
-    <select id="selectMySharingGiven" resultType="com.zero.plantory.domain.sharing.vo.SharingHistoryVO">
+    <select id="selectMySharingGiven" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
 
         SELECT
             s.sharing_id     AS sharingId,
@@ -273,7 +273,7 @@
     </select>
 
 
-    <select id="selectMySharingReceived" resultType="com.zero.plantory.domain.sharing.vo.SharingHistoryVO">
+    <select id="selectMySharingReceived" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
 
         SELECT
             s.sharing_id     AS sharingId,

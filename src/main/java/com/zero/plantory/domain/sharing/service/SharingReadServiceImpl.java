@@ -2,7 +2,7 @@ package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.image.ImageMapper;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
-import com.zero.plantory.domain.sharing.vo.*;
+import com.zero.plantory.domain.sharing.dto.*;
 import com.zero.plantory.global.vo.ImageTargetType;
 import com.zero.plantory.global.vo.ImageVO;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class SharingReadServiceImpl implements SharingReadService {
     private final ImageMapper imageMapper;
 
     @Override
-    public List<SharingCardListVO> getSharingList(SharingSearchVO vo) {
-        List<SharingCardListVO> list = sharingMapper.selectSharingListByAddressAndKeyword(vo);
+    public List<SharingCardListResponse> getSharingList(SharingSearchRequest request) {
+        List<SharingCardListResponse> list = sharingMapper.selectSharingListByAddressAndKeyword(request);
 
-        for (SharingCardListVO item : list) {
+        for (SharingCardListResponse item : list) {
             List<ImageVO> images = imageMapper.selectImagesByTarget(
                     ImageTargetType.SHARING,
                     item.getSharingId()
@@ -37,13 +37,13 @@ public class SharingReadServiceImpl implements SharingReadService {
     }
 
     @Override
-    public List<SharingPopularVO> getPopularSharingList() {
+    public List<SharingPopularResponse> getPopularSharingList() {
         return sharingMapper.selectPopularSharingList();
     }
 
     @Override
-    public SelectSharingDetailVO getSharingDetail(Long sharingId) {
-        SelectSharingDetailVO detail = sharingMapper.selectSharingDetail(sharingId);
+    public SelectSharingDetailResponse getSharingDetail(Long sharingId) {
+        SelectSharingDetailResponse detail = sharingMapper.selectSharingDetail(sharingId);
 
         if (detail == null) {
             return null;
@@ -56,22 +56,22 @@ public class SharingReadServiceImpl implements SharingReadService {
     }
 
     @Override
-    public List<SelectCommentListVO> getSharingComments(Long sharingId) {
+    public List<SelectCommentListResponse> getSharingComments(Long sharingId) {
         return sharingMapper.selectSharingComments(sharingId);
     }
 
     @Override
-    public List<SharingPartnerVO> getMessagePartners(Long receiverId, Long sharingId) {
+    public List<SharingPartnerResponse> getMessagePartners(Long receiverId, Long sharingId) {
         return sharingMapper.selectSharingMessagePartners(receiverId, sharingId);
     }
 
     @Override
-    public List<SharingHistoryVO> getMySharingGiven(Long memberId) {
+    public List<SharingHistoryResponse> getMySharingGiven(Long memberId) {
         return sharingMapper.selectMySharingGiven(memberId);
     }
 
     @Override
-    public List<SharingHistoryVO> getMySharingReceived(Long memberId) {
+    public List<SharingHistoryResponse> getMySharingReceived(Long memberId) {
         return sharingMapper.selectMySharingReceived(memberId);
     }
 

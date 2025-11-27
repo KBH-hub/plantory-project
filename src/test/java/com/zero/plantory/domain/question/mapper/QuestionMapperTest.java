@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.question.mapper;
 
-import com.zero.plantory.domain.question.vo.SelectQuestionDetailVO;
+import com.zero.plantory.domain.question.dto.AnswerRequest;
+import com.zero.plantory.domain.question.dto.QuestionRequest;
 import com.zero.plantory.global.vo.AnswerVO;
 import com.zero.plantory.global.vo.QuestionVO;
 import lombok.extern.slf4j.Slf4j;
@@ -26,39 +27,39 @@ public class QuestionMapperTest {
     @DisplayName("질문 수정 권한 체크")
     void countMyQuestionTest() {
 
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .questionId(21L)
                 .memberId(1L)
                 .build();
 
-        log.info("수정 권한 체크 count = {}", mapper.countMyQuestion(vo));
+        log.info("수정 권한 체크 count = {}", mapper.countMyQuestion(request));
     }
 
     @Test
     @DisplayName("질문 수정")
     void updateQuestionTest() {
 
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .questionId(21L)
                 .memberId(1L)
                 .title("테스트")
                 .content("질문수정테스트")
                 .build();
 
-        log.info("질문 수정 결과 = {}", mapper.updateQuestion(vo));
+        log.info("질문 수정 결과 = {}", mapper.updateQuestion(request));
     }
 
     @Test
     @DisplayName("답글 수정 및 삭제 권한 체크")
     void countMyAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .answerId(1L)
                 .questionId(21L)
                 .writerId(1L)
                 .build();
 
-        log.info("권한 체크 결과 count = {}", mapper.countMyAnswer(vo));
+        log.info("권한 체크 결과 count = {}", mapper.countMyAnswer(request));
     }
 
 
@@ -66,14 +67,14 @@ public class QuestionMapperTest {
     @DisplayName("답글 수정 처리")
     void updateAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .answerId(1L)
                 .questionId(21L)
                 .writerId(1L)
                 .content("수정 테스트.")
                 .build();
 
-        log.info("답글 수정 결과 = {}", mapper.updateAnswerById(vo));
+        log.info("답글 수정 결과 = {}", mapper.updateAnswerById(request));
     }
 
 
@@ -81,26 +82,26 @@ public class QuestionMapperTest {
     @DisplayName("답글 삭제 처리")
     void deleteAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .answerId(1L)
                 .questionId(21L)
                 .writerId(1L)
                 .build();
 
-        log.info("답글 삭제 결과 = {}", mapper.deleteAnswer(vo));
+        log.info("답글 삭제 결과 = {}", mapper.deleteAnswer(request));
     }
 
     @Test
     @DisplayName("답글 등록")
     void insertAnswerTest() {
 
-        AnswerVO vo = AnswerVO.builder()
+        AnswerRequest request = AnswerRequest.builder()
                 .questionId(21L)
                 .writerId(1L)
                 .content("답글 등록 테스트")
                 .build();
 
-        log.info("답글 등록 결과 = {}", mapper.insertAnswer(vo));  // 1 → 성공
+        log.info("답글 등록 결과 = {}", mapper.insertAnswer(request));  // 1 → 성공
     }
 
     @Test
@@ -118,13 +119,13 @@ public class QuestionMapperTest {
     @Test
     @DisplayName("질문 등록")
     void insertQuestionTest() {
-        QuestionVO vo = QuestionVO.builder()
+        QuestionRequest request = QuestionRequest.builder()
                 .memberId(1L)
                 .title("금전수 잎 끝이 노래져요")
                 .content("최근에 금전수 잎 끝이 조금씩 노래지는데 물주기나 햇빛량을 어떻게 조절해야 할지 궁금합니다.")
                 .build();
 
-        log.info("질문 등록 결과 = {}", mapper.insertQuestion(vo));
+        log.info("질문 등록 결과 = {}", mapper.insertQuestion(request));
     }
 
     @Test

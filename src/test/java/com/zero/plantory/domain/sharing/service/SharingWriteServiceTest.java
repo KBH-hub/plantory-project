@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.sharing.service;
 
-import com.zero.plantory.global.vo.CommentVO;
+import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.global.vo.ManagementLevel;
 import com.zero.plantory.global.vo.ManagementNeeds;
 import com.zero.plantory.global.vo.SharingVO;
@@ -44,7 +45,7 @@ public class SharingWriteServiceTest {
 
         List<MultipartFile> fileList = List.of(file1, file2);
 
-        SharingVO vo = SharingVO.builder()
+        SharingRequest request = SharingRequest.builder()
                 .memberId(1L)
                 .title("테스트 글")
                 .content("테스트 내용")
@@ -53,7 +54,7 @@ public class SharingWriteServiceTest {
                 .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .build();
 
-        Long id = sharingWriteService.registerSharing(vo, fileList);
+        Long id = sharingWriteService.registerSharing(request, fileList);
         log.info("등록된 글 ID = {}", id);
     }
 
@@ -70,7 +71,7 @@ public class SharingWriteServiceTest {
                 "updated image".getBytes()
         );
 
-        SharingVO vo = SharingVO.builder()
+        SharingRequest request = SharingRequest.builder()
                 .sharingId(17L)
                 .memberId(18L)
                 .title("수정된 제목")
@@ -81,7 +82,7 @@ public class SharingWriteServiceTest {
                 .managementNeeds(ManagementNeeds.LITTLE_CARE)
                 .build();
 
-        boolean result = sharingWriteService.updateSharing(vo, List.of(newMockFile));
+        boolean result = sharingWriteService.updateSharing(request, List.of(newMockFile));
 
         log.info("수정 결과 = {}", result);
     }
@@ -91,7 +92,7 @@ public class SharingWriteServiceTest {
     @Order(3)
     @DisplayName("나눔글 삭제")
     void deleteSharingTest() {
-        log.info("삭제 결과 = {}", sharingWriteService.deleteSharing(25L, 1L));
+        log.info("삭제 결과 = {}", sharingWriteService.deleteSharing(30L, 1L));
     }
 
     /** 4. 관심 등록 */
@@ -115,7 +116,7 @@ public class SharingWriteServiceTest {
     @Order(6)
     @DisplayName("댓글 등록")
     void addCommentTest() {
-        log.info("댓글 등록 결과 = {}", sharingWriteService.addComment(12L, 1L, "댓글 내용"));
+        log.info("댓글 등록 결과 = {}", sharingWriteService.addComment(29L, 1L, "댓글 내용"));
     }
 
     /** 7. 댓글 수정 */
@@ -123,14 +124,14 @@ public class SharingWriteServiceTest {
     @Order(7)
     @DisplayName("댓글 수정")
     void updateCommentTest() {
-        CommentVO vo = CommentVO.builder()
-                .commentId(22L)
-                .sharingId(12L)
-                .writerId(1L)
+        CommentRequest request = CommentRequest.builder()
+                .commentId(19L)
+                .sharingId(17L)
+                .writerId(14L)
                 .content("수정된 댓글")
                 .build();
 
-        log.info("댓글 수정 결과 = {}", sharingWriteService.updateComment(vo));
+        log.info("댓글 수정 결과 = {}", sharingWriteService.updateComment(request));
     }
 
     /** 8. 댓글 삭제 */
@@ -138,13 +139,13 @@ public class SharingWriteServiceTest {
     @Order(8)
     @DisplayName("댓글 삭제")
     void deleteCommentTest() {
-        CommentVO vo = CommentVO.builder()
-                .commentId(22L)
-                .sharingId(12L)
-                .writerId(1L)
+        CommentRequest request = CommentRequest.builder()
+                .commentId(19L)
+                .sharingId(17L)
+                .writerId(14L)
                 .build();
 
-        log.info("댓글 삭제 결과 = {}", sharingWriteService.deleteComment(vo));
+        log.info("댓글 삭제 결과 = {}", sharingWriteService.deleteComment(request));
     }
 
 }

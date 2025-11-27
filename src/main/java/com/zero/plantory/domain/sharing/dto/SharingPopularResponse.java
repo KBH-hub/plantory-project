@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.sharing.vo;
+package com.zero.plantory.domain.sharing.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SharingPopularVO {
+public class SharingPopularResponse {
     private Long sharingId;
     private String title;
     private Integer interestNum;

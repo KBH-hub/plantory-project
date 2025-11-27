@@ -20,21 +20,21 @@ public class DashBoardMapperTest {
     @DisplayName("오늘의 관찰일지 확인")
     void selectTodayDiaryByMemberIdTest() {
         mapper.selectTodayDiaryByMemberId(1L)
-                .forEach(vo -> log.info(vo.toString()));
+                .forEach(response -> log.info(response.toString()));
     }
 
     @Test
     @DisplayName("오늘의 급수 필요 식물 확인")
     void selectTodayWateringByMemberIdTest() {
         mapper.selectTodayWateringByMemberId(1L)
-                .forEach(vo -> log.info(vo.toString()));
+                .forEach(response -> log.info(response.toString()));
     }
 
     @Test
     @DisplayName("추천 나눔 글 확인")
     void selectRecommendedSharingTest() {
         mapper.selectRecommendedSharing()
-                .forEach(vo -> log.info(vo.toString()));
+                .forEach(response -> log.info(response.toString()));
     }
 
     @Test

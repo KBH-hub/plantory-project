@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.sharing.vo;
+package com.zero.plantory.domain.sharing.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SharingSearchVO {
+public class SharingSearchRequest {
     private String userAddress;
     private String keyword;
     private int limit;

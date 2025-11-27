@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodayDiaryResponseDTO {
+public class TodayDiaryResponse {
     private Long diaryId;
     private Long myplantId;
     private String myplantName;
