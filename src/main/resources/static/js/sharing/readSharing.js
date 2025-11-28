@@ -56,7 +56,7 @@ function renderComments(list) {
                     <div class="fw-semibold small">${c.nickname}</div>
                     <div class="small">${c.content}</div>
                 </div>
-                <div class="text-muted small">${timeAgo(c.createdAt)}</div>
+                <div class="text-muted small">${formatDate(c.createdAt)}</div>
             </li>
         `);
     });
