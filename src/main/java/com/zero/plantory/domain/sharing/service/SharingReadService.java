@@ -11,10 +11,8 @@ public interface SharingReadService {
 
     List<SharingPopularResponse> getPopularSharingList();
 
-    /** 나눔글 상세 조회 */
     SelectSharingDetailResponse getSharingDetail(Long sharingId);
 
-    /** 상세 댓글 조회 */
     List<SelectCommentListResponse> getSharingComments(Long sharingId);
 
     /** 메시지 상대 목록 조회 */

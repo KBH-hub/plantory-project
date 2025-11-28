@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SharingWriteService {
-    /** 나눔글 등록 */
     Long registerSharing(SharingRequest request, List<MultipartFile> files) throws IOException;
 
     /** 나눔글 수정 */
