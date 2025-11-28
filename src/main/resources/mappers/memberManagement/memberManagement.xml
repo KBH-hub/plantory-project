@@ -2,7 +2,7 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.memberManagement.mapper.MemberManagement">
-    <select id="selectMemberList" resultType="com.zero.plantory.domain.member.dto.MemberResponse">
+    <select id="selectMemberList" resultType="com.zero.plantory.domain.myProfile.dto.MemberResponse">
         SELECT
         member_id,
         membername,

@@ -1,6 +1,6 @@
 package com.zero.plantory.global.security;
 
-import com.zero.plantory.domain.member.dto.MemberResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

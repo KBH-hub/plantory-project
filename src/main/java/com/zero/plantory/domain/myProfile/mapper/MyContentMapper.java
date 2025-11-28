@@ -1,8 +1,8 @@
-package com.zero.plantory.domain.member.mapper;
+package com.zero.plantory.domain.myProfile.mapper;
 
-import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

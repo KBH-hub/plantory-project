@@ -1,7 +1,7 @@
-package com.zero.plantory.domain.member.controller;
+package com.zero.plantory.domain.myProfile.controller;
 
-import com.zero.plantory.domain.member.dto.MyInfoResponse;
-import com.zero.plantory.domain.member.service.MyProfileService;
+import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
+import com.zero.plantory.domain.myProfile.service.MyProfileService;
 import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

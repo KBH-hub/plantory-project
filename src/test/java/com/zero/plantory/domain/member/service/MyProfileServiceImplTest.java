@@ -1,8 +1,9 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MyInfoResponse;
-import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
-import com.zero.plantory.domain.member.mapper.MyProfileMapper;
+import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.myProfile.mapper.MyProfileMapper;
+import com.zero.plantory.domain.myProfile.service.MyProfileServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

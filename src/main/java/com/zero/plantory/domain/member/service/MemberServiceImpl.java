@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MemberResponse;
-import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
+import com.zero.plantory.domain.myProfile.dto.MemberResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
 import com.zero.plantory.global.dto.Role;
 import lombok.RequiredArgsConstructor;

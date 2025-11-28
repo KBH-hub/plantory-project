@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.myProfile.mapper.MySharingHistoryMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
