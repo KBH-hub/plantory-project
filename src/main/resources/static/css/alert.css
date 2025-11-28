@@ -3,6 +3,15 @@
     user-select: none;
 }
 
+.modal.no-overlay {
+    background: transparent !important;
+    pointer-events: none;
+}
+
+.modal.no-overlay .modal-content {
+    pointer-events: auto;
+}
+
 .modal {
     display: none;
     position: fixed;

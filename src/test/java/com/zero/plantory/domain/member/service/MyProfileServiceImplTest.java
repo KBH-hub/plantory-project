@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MyInfoResponse;
 import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.member.mapper.MyProfileMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -20,19 +20,19 @@ class MyProfileServiceImplTest {
     private MyProfileMapper myProfileMapper;
 
     @InjectMocks
-    private MyprofileServiceImpl myProfileService;
+    private MyProfileServiceImpl myProfileService;
 
     @Test
     @DisplayName("내 정보 조회 테스트")
     void getMyInfoTest() {
         Long memberId = 1L;
-        MemberInfoResponse myInfo = new MemberInfoResponse();
+        MyInfoResponse myInfo = new MyInfoResponse();
         myInfo.setMemberId(memberId);
         myInfo.setNickname("테스트닉");
 
         when(myProfileMapper.selectMyInfo(memberId)).thenReturn(myInfo);
 
-        MemberInfoResponse result = myProfileService.getMyInfo(memberId);
+        MyInfoResponse result = myProfileService.getMyInfo(memberId);
 
         assertNotNull(result);
         assertEquals("테스트닉", result.getNickname());

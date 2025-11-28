@@ -1,11 +1,11 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MyInfoResponse;
 import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 
-public interface MyprofileService {
+public interface MyProfileService {
 
-    MemberInfoResponse getMyInfo(Long memberId);
+    MyInfoResponse getMyInfo(Long memberId);
 
     boolean updateNoticeEnabled(Long memberId, int enabled);
 

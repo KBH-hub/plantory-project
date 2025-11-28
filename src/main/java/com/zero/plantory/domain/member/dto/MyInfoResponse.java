@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberInfoResponse {
+public class MyInfoResponse {
     private Long memberId;
     private String membername;
     private String nickname;
@@ -17,6 +17,7 @@ public class MemberInfoResponse {
     private String address;
     private String role;
     private Integer noticeEnabled;
+    private Integer sharingRate;
     private String delFlag;
 }
 

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MySharingHistoryResponse {
+public class MySharingHistoryListResponse {
     private Long sharingId;
     private String title;
     private String status;
@@ -19,4 +19,5 @@ public class MySharingHistoryResponse {
     private LocalDateTime reviewFlag;
     private Integer commentCount;
     private String thumbnail;
+    private  int totalCount;
 }
