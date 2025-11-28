@@ -140,37 +140,36 @@
     <select id="selectMessageDetail"
             resultType="com.zero.plantory.domain.message.dto.MessageResponse">
         SELECT
-            m.message_id,
-            m.sender_id,
-            mem.nickname AS sender_nickname,
-            m.receiver_id,
-            m.title,
-            m.content,
-            m.target_type,
-            m.target_id,
-            m.created_at,
-            m.read_flag,
-            m.del_flag,
-            m.sender_del_flag,
-            CASE
-                WHEN m.target_type = 'SHARING' THEN (
-                    SELECT s.title
-                    FROM sharing s
-                    WHERE s.sharing_id = m.target_id
-                      AND s.del_flag  IS NULL
-                )
-                WHEN m.target_type = 'QUESTION' THEN (
-                    SELECT q.title
-                    FROM question q
-                    WHERE q.question_id = m.target_id
-                      AND q.del_flag   IS NULL
-                )
-                ELSE NULL
-                END AS target_title
+        m.message_id,
+        m.sender_id,
+        mem.nickname AS sender_nickname,
+        m.receiver_id,
+        m.title,
+        m.content,
+        m.target_type,
+        m.target_id,
+        m.created_at,
+        m.read_flag,
+        m.del_flag,
+        m.sender_del_flag,
+        CASE
+        WHEN m.target_type = 'SHARING' THEN (
+        SELECT s.title
+        FROM sharing s
+        WHERE s.sharing_id = m.target_id
+        AND s.del_flag IS NULL
+        )
+        WHEN m.target_type = 'QUESTION' THEN (
+        SELECT q.title
+        FROM question q
+        WHERE q.question_id = m.target_id
+        AND q.del_flag IS NULL
+        )
+        ELSE NULL
+        END AS target_title
         FROM message m
-                 JOIN member mem ON m.sender_id = mem.member_id
+        JOIN member mem ON m.sender_id = mem.member_id
         WHERE m.message_id = #{messageId}
-          AND m.del_flag   IS NULL
     </select>
 
 </mapper>
