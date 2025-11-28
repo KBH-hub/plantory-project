@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Plantory - 나눔 게시글 상세</title>
+    <title>나눔 게시글 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/css/readSharing.css}">
 </head>
-<body class="bg-light" th:data-sharing-id="${sharingId}" th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}">
+<body class="bg-light" th:data-sharing-id="${sharingId}" th:data-member-id="${#authentication.principal.MemberResponse.memberId}" th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
@@ -55,21 +55,28 @@
             </div>
 
             <div class="my-3">
-                <div class="d-flex align-items-center">
-                    <!--  사용자 myProfile 연동 필요 -->
-                    <div class="me-3">
-                        <div class="bg-secondary rounded-circle" style="width:48px;height:48px;"></div>
-                    </div>
+                <div class="d-flex align-items-center justify-content-between">
 
-                    <div class="flex-grow-1">
-                        <span id="writerNickname" class="fw-semibold"></span>
-                    </div>
+                    <a th:href="@{/myProfile}"
+                       class="d-flex align-items-center text-decoration-none"
+                       style="color: inherit; cursor: pointer;">
 
-                    <div class="d-flex gap-2">
+                        <div class="me-3">
+                            <div class="bg-secondary rounded-circle"
+                                 style="width:48px;height:48px;"></div>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <span id="writerNickname" class="fw-semibold"></span>
+                        </div>
+                    </a>
+
+                    <div class="d-flex gap-2 ms-3">
                         <a id="btnUpdate" href="#" class="btn btn-primary px-4">수정</a>
                         <button id="btnDelete" class="btn btn-danger px-4">삭제</button>
                         <button id="btnComplete" class="btn btn-success px-4">나눔 완료</button>
                     </div>
+
                 </div>
 
                 <hr class="my-3">

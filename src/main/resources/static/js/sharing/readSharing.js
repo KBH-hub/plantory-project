@@ -39,6 +39,10 @@ function renderDetail(detail) {
     document.getElementById("writerNickname").innerText = detail.nickname;
 
     document.getElementById("btnUpdate").href = `/updateSharing/${sharingId}`;
+
+    document.body.dataset.writerId = detail.memberId;
+    document.body.dataset.sharingStatus = detail.status;
+
 }
 
 function renderComments(list) {
@@ -83,6 +87,31 @@ function bindActionButtons() {
         .addEventListener("click", completeSharing);
 }
 
+function updateActionButtons() {
+    const loginId = Number(document.body.dataset.memberId);
+    const writerId = Number(document.body.dataset.writerId);
+    const status = document.body.dataset.sharingStatus;
+
+    const btnUpdate = document.getElementById("btnUpdate");
+    const btnDelete = document.getElementById("btnDelete");
+    const btnComplete = document.getElementById("btnComplete");
+
+    btnUpdate.style.display = "none";
+    btnDelete.style.display = "none";
+    btnComplete.style.display = "none";
+
+    if (loginId === writerId) {
+
+        btnUpdate.style.display = "block";
+        btnDelete.style.display = "block";
+
+        if (status === "false") {
+            btnComplete.style.display = "block";
+        }
+    }
+}
+
+
 function bindLoginUserNickname() {
     const nickname = document.body.dataset.memberNickname;
     document.getElementById("loginUserNickname").innerText = nickname
@@ -97,6 +126,7 @@ async function loadSharingDetail() {
         renderDetail(data);
         renderCarousel(data.images);
         bindCarouselEvents();
+        updateActionButtons();
 
     } catch (err) {
         console.error("load detail error:", err);
