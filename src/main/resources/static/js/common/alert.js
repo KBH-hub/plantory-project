@@ -20,6 +20,12 @@
     window.showAlert = (message, callback) => {
         messageElem.textContent = message;
 
+        if (noOverlay) {
+            modal.classList.add("no-overlay");
+        } else {
+            modal.classList.remove("no-overlay");
+        }
+
         modal.style.display = "flex";
         requestAnimationFrame(() => {
             modal.style.opacity = "1";
