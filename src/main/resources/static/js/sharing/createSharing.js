@@ -29,9 +29,6 @@ function renderImagePreview() {
     imgCount.textContent = selectedFiles.length;
 }
 
-async function loadInitialData() {
-    // 필요 시 초기 데이터 불러오기
-}
 
 function bindImageUploader() {
     const fileInput = document.querySelector("#plantImages");
@@ -44,7 +41,7 @@ function bindImageUploader() {
         const files = Array.from(e.target.files);
 
         if (selectedFiles.length + files.length > MAX_IMAGES) {
-            alert("최대 5장까지만 업로드할 수 있습니다.");
+            showAlert("최대 5장까지만 업로드할 수 있습니다.");
             return;
         }
 
@@ -54,12 +51,29 @@ function bindImageUploader() {
 
     previewList.addEventListener("click", (e) => {
         const idx = e.target.closest("button")?.dataset.idx;
-        if (idx === undefined) return;
+        if (!idx) return;
 
         selectedFiles.splice(parseInt(idx), 1);
         renderImagePreview();
     });
 }
+
+function bindPlantSelect() {
+    document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".plant-select-btn");
+        if (!btn) return;
+
+        // 1) 사용자 보여줄 값
+        document.querySelector("#plantNameInput").value = btn.dataset.plantName;
+        document.querySelector("#managementLevel").value = btn.dataset.levelLabel;
+        document.querySelector("#managementNeeds").value = btn.dataset.needsLabel;
+
+        // 2) 서버로 전송할 ENUM NAME 저장 (dataset.enum)
+        document.querySelector("#managementLevel").dataset.enum = btn.dataset.levelEnum;
+        document.querySelector("#managementNeeds").dataset.enum = btn.dataset.needsEnum;
+    });
+}
+
 
 function bindSubmit() {
     const form = document.querySelector("form");
@@ -72,12 +86,14 @@ function bindSubmit() {
 
         formData.append("memberId", memberId);
         formData.append("title", document.querySelector("input[placeholder='제목을 입력해 주세요.']").value);
-        formData.append("content", document.querySelector("textarea").value);
+        formData.append("content", document.querySelector("#contentInput").value);
         formData.append("plantType", document.querySelector("#plantNameInput").value);
-        formData.append("managementLevel", document.querySelector("#plantConditionInput").value);
-        formData.append("managementNeeds", document.querySelector("#plantDifficultyInput").value);
-        formData.append("targetMemberId", null);
 
+        const managementLevel = document.querySelector("#plantConditionInput").dataset.enum;
+        const managementNeeds = document.querySelector("#plantDifficultyInput").dataset.enum;
+
+        formData.append("managementLevel", managementLevel);
+        formData.append("managementNeeds", managementNeeds);
 
         selectedFiles.forEach(file => formData.append("files", file));
 
@@ -89,19 +105,24 @@ function bindSubmit() {
             });
 
             const sharingId = res.data;
-            alert("등록 완료!");
-            window.location.href = `/sharing/${sharingId}`;
+            showAlert("등록 완료되었습니다.");
+            window.location.href = `/readSharing/${sharingId}`;
 
         } catch (err) {
             console.error(err);
-            alert("등록 중 오류가 발생했습니다.");
+            showAlert("등록 중 오류가 발생했습니다.");
         }
     });
+}
+
+async function loadInitialData() {
+    // 필요 시 초기 데이터 불러오기
 }
 
 async function initCreateSharing() {
     renderImagePreview();
     bindImageUploader();
+    bindPlantSelect();
     bindSubmit();
     await loadInitialData();
 }
