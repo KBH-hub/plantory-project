@@ -17,6 +17,7 @@ public class MemberInfoResponse {
     private String address;
     private String role;
     private Integer noticeEnabled;
+    private Integer sharingRate;
     private String delFlag;
 }
 
