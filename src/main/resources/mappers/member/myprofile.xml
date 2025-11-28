@@ -5,8 +5,8 @@
 <mapper namespace="com.zero.plantory.domain.member.mapper.MyProfileMapper">
 
     <select id="selectMyInfo" parameterType="long"
-            resultType="com.zero.plantory.domain.member.dto.MemberInfoResponse">
-        SELECT member_id, membername, nickname, phone, address, role, notice_enabled, del_flag
+            resultType="com.zero.plantory.domain.member.dto.MyInfoResponse">
+        SELECT member_id, membername, nickname, phone, address, role, notice_enabled,sharing_rate, del_flag
         FROM member
         WHERE member_id = #{memberId}
     </select>

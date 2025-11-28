@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MemberInfoResponse;
+import com.zero.plantory.domain.member.dto.MyInfoResponse;
 import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.member.mapper.MyProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MyprofileServiceImpl implements MyprofileService {
+public class MyProfileServiceImpl implements MyProfileService {
 
     private final MyProfileMapper myProfileMapper;
 
     @Override
-    public MemberInfoResponse getMyInfo(Long memberId) {
-        return myProfileMapper.selectMyInfo(memberId);
+    public MyInfoResponse getMyInfo(Long memberId) {
+        MyInfoResponse myInfoResult = myProfileMapper.selectMyInfo(memberId);
+
+        if (myInfoResult.getSharingRate() == null) {
+            myInfoResult.setSharingRate(0);
+        }
+
+        return myInfoResult;
     }
 
     @Override

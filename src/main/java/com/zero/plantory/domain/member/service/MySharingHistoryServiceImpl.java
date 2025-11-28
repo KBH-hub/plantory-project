@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryResponse;
+import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
 import com.zero.plantory.domain.member.mapper.MySharingHistoryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class MySharingHistoryServiceImpl implements MySharingHistoryService {
     }
 
     @Override
-    public List<MySharingHistoryResponse> getMySharingHistoryList(MySharingHistoryListRequest request) {
+    public List<MySharingHistoryListResponse> getMySharingHistoryList(MySharingHistoryListRequest request) {
         return mySharingHistoryMapper.selectMySharingList(request);
     }
 }

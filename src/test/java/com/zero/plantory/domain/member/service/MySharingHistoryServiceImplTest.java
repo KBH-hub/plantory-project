@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryResponse;
+import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
 import com.zero.plantory.domain.member.mapper.MySharingHistoryMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,13 +53,13 @@ class MySharingHistoryServiceImplTest {
         MySharingHistoryListRequest request = new MySharingHistoryListRequest();
         request.setMemberId(1L);
 
-        MySharingHistoryResponse item = new MySharingHistoryResponse();
+        MySharingHistoryListResponse item = new MySharingHistoryListResponse();
         item.setSharingId(10L);
         item.setTitle("나눔 테스트 제목");
 
         when(mySharingHistoryMapper.selectMySharingList(request)).thenReturn(List.of(item));
 
-        List<MySharingHistoryResponse> result = mySharingHistoryService.getMySharingHistoryList(request);
+        List<MySharingHistoryListResponse> result = mySharingHistoryService.getMySharingHistoryList(request);
 
         assertNotNull(result);
         assertEquals(1, result.size());

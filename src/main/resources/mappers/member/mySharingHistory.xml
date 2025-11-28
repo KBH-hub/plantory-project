@@ -19,7 +19,7 @@
 
     <select id="selectMySharingList"
             parameterType="com.zero.plantory.domain.member.dto.MySharingHistoryListRequest"
-            resultType="com.zero.plantory.domain.member.dto.MySharingHistoryResponse">
+            resultType="com.zero.plantory.domain.member.dto.MySharingHistoryListResponse">
 
         SELECT
         s.sharing_id,
@@ -38,6 +38,7 @@
         ORDER BY i.image_id ASC
         LIMIT 1
         ) AS thumbnail
+        COUNT(*) OVER() AS total_count
         FROM sharing s
         LEFT JOIN (
         SELECT sharing_id, COUNT(*) AS comment_count

@@ -17,10 +17,20 @@
     const messageElem = document.getElementById("alertMessage");
     const btnOk = document.getElementById("alertOk");
 
-    window.showAlert = (message, callback) => {
+    window.showAlert = (message, callback = null, noOverlay = false) => {
         messageElem.textContent = message;
 
+        if (noOverlay) {
+            modal.classList.add("no-overlay");
+        } else {
+            modal.classList.remove("no-overlay");
+        }
+
         modal.style.display = "flex";
+        requestAnimationFrame(() => {
+            modal.style.opacity = "1";
+        });
+
         requestAnimationFrame(() => {
             modal.style.opacity = "1";
         });
