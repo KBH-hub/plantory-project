@@ -1,10 +1,10 @@
 (() => {
     if (!document.getElementById("confirmModal")) {
         const modalHTML = `
-            <div id="confirmModal" class="modal" style="display:none; opacity:0;">
-                <div class="modal-content">
+            <div id="confirmModal" class="custom-modal" style="display:none; opacity:0;">
+                <div class="custom-modal-content">
                     <p id="confirmMessage">정말 진행하시겠습니까?</p>
-                    <div class="modal-buttons">
+                    <div class="custom-modal-buttons">
                         <button id="confirmYes">예</button>
                         <button id="confirmNo">아니오</button>
                     </div>
@@ -48,5 +48,5 @@
         }, 180);
     }
 })();
-document.querySelectorAll(".modal, .modal *")
+document.querySelectorAll(".custom-alert-modal, .custom-alert-modal *")
     .forEach(el => el.setAttribute("draggable", "false"));

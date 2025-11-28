@@ -1,18 +1,10 @@
-.modal,
-.modal * {
+.custom-alert-modal,
+.custom-alert-modal * {
     user-select: none;
 }
 
-.modal.no-overlay {
-    background: transparent !important;
-    pointer-events: none;
-}
 
-.modal.no-overlay .modal-content {
-    pointer-events: auto;
-}
-
-.modal {
+.custom-alert-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -25,7 +17,7 @@
     z-index: 9999;
 }
 
-.modal-content {
+.custom-alert-modal-content {
     background: white;
     padding: 20px 30px;
     border-radius: 8px;
@@ -34,11 +26,11 @@
     max-width: 300px;
 }
 
-.modal-buttons {
+.custom-alert-modal-buttons {
     margin-top: 20px;
 }
 
-.modal-buttons button {
+.custom-alert-modal-buttons button {
     margin: 0 10px;
     padding: 6px 12px;
     border: none;
@@ -47,6 +39,6 @@
     color:white;
     cursor:pointer;
 }
-.modal-buttons button:hover {
+.custom-alert-modal-buttons button:hover {
     background-color: #555555;
 }
