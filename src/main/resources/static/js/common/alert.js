@@ -31,6 +31,10 @@
             modal.style.opacity = "1";
         });
 
+        requestAnimationFrame(() => {
+            modal.style.opacity = "1";
+        });
+
         const handleOk = () => {
             closeModal();
             if (callback) callback();
