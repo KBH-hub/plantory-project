@@ -5,13 +5,12 @@
     <meta charset="UTF-8">
     <title>Plantory Header</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 
-<body>
+<body th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 
 <th:block th:fragment="headerBar">
     <nav class="bg-white px-4 shadow-sm d-flex align-items-center sticky-top" style="height:80px; min-width:1470px;">
@@ -121,6 +120,7 @@
                         <input type="text" class="form-control" id="reportTargetInput" readonly placeholder="회원검색을 통해 선택하세요">
                         <button type="button" class="btn btn-dark" onclick="openMemberSearchModal()" style="min-width:90px;">회원검색</button>
                     </div>
+                    <input type="hidden" id="reportTargetId" name="targetMemberId">
                     <label class="fw-bold">내용 *</label>
                     <textarea class="form-control mb-3" id="reportContent" rows="4" placeholder="신고 내용을 입력하세요."></textarea>
                     <label class="fw-bold d-block">근거사진 *</label>

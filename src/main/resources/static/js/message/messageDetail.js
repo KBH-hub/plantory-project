@@ -51,11 +51,11 @@
         viewerIdNum = Number.isFinite(viewerId) ? viewerId : null;
 
         if (!Number.isFinite(messageId)) {
-            alert('유효하지 않은 messageId 입니다.');
+            showAlert('유효하지 않은 messageId 입니다.');
             return;
         }
         if (!Number.isFinite(viewerId)) {
-            alert('viewerId가 없습니다.');
+            showAlert('viewerId가 없습니다.');
             return;
         }
 
@@ -95,8 +95,8 @@
         } catch (e) {
             console.error(e);
             const status = e?.response?.status;
-            if (status === 404) alert('쪽지를 찾을 수 없습니다.');
-            else alert(`상세 조회 실패: ${e?.response?.data?.message || e.message}`);
+            if (status === 404) showAlert('쪽지를 찾을 수 없습니다.');
+            else showAlert(`상세 조회 실패: ${e?.response?.data?.message || e.message}`);
             history.back();
         }
     }
@@ -138,11 +138,11 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!detail) {
-                alert('원문 정보를 불러오지 못했습니다.');
+                showAlert('원문 정보를 불러오지 못했습니다.');
                 return;
             }
             if (viewerIdNum == null) {
-                alert('viewerId가 없습니다.');
+                showAlert('viewerId가 없습니다.');
                 return;
             }
 
@@ -156,19 +156,19 @@
             };
 
             if (!payload.receiverId) {
-                alert('수신자 정보가 없습니다.');
+                showAlert('수신자 정보가 없습니다.');
                 return;
             }
             if (!payload.title) {
-                alert('제목을 입력하세요.');
+                showAlert('제목을 입력하세요.');
                 return;
             }
             if (!payload.content) {
-                alert('내용을 입력하세요.');
+                showAlert('내용을 입력하세요.');
                 return;
             }
             if (!['SHARING', 'QUESTION'].includes(payload.targetType)) {
-                alert('유효하지 않은 대상 유형입니다.');
+                showAlert('유효하지 않은 대상 유형입니다.');
                 return;
             }
 
@@ -184,12 +184,12 @@
 
                 const bs = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                 bs.hide();
-                alert('쪽지를 보냈습니다.');
+                showAlert('쪽지를 보냈습니다.');
 
             } catch (err) {
                 console.error(err);
                 const msg = err?.response?.data?.message || err?.response?.statusText || err.message;
-                alert(`전송 실패: ${msg}`);
+                showAlert(`전송 실패: ${msg}`);
             } finally {
                 btnSend?.removeAttribute('disabled');
             }

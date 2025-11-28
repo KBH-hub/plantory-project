@@ -207,7 +207,7 @@
 
     async function deleteSelected() {
         const ids = getSelectedMessageIds();
-        if (ids.length === 0) { alert('삭제할 쪽지를 선택하세요.'); return; }
+        if (ids.length === 0) { showAlert('삭제할 쪽지를 선택하세요.'); return; }
         const endpoint = (state.boxType === 'SENT') ? '/api/message/deleteSenderMessages' : '/api/message/deleteMessages';
 
         showModal(`선택한 ${ids.length}건을 삭제하시겠습니까?`, async (result) => {
@@ -217,7 +217,7 @@
                 await afterDeleteRefresh(ids.length);
             } catch (e) {
                 console.error(e);
-                alert(`삭제 실패: ${e?.response?.status || e.message}`);
+                showAlert(`삭제 실패: ${e?.response?.status || e.message}`);
             }
         });
     }
@@ -304,7 +304,7 @@
             state.memberId = resolveMemberId();
         } catch (e) {
             console.error(e);
-            alert(e.message);
+            showAlert(e.message);
             return;
         }
         bindEvents();
@@ -313,7 +313,7 @@
             console.error(e);
             renderRows([]);
             renderPager(goPage);
-            alert(`목록 요청 실패: ${e?.response?.status || e.message}`);
+            showAlert(`목록 요청 실패: ${e?.response?.status || e.message}`);
         });
     }
 

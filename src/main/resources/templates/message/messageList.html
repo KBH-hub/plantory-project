@@ -7,6 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/alert.css}" />
+
 
     <!-- 로그인 사용자 ID 주입 -->
     <meta name="current-member-id" th:content="${loginMemberId}">
@@ -84,5 +86,6 @@
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/message/messageList.js}"></script>
 <script th:src="@{/js/common/modal.js}"></script>
+<script th:src="@{/js/common/alert.js}"></script>
 </body>
 </html>

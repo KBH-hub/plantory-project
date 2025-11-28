@@ -30,7 +30,7 @@ public class ReportRestController {
             @RequestParam("files") List<MultipartFile> files       // key 이름: files
     ) throws IOException {
         int saved = reportService.registerReport(request, files);
-        int expected = (files == null ? 0 : files.size()) + 1;     // report 1건 + 이미지 N건
+        int expected = (files == null ? 0 : files.size()) + 1;     // report 1건 + 이미지 N건 = 총 등록 건수
         if (saved == expected) {
             return ResponseEntity.ok(Map.of("message", "registry report success"));
         }
