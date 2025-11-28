@@ -1,10 +1,10 @@
 (() => {
     if (!document.getElementById("alertModal")) {
         const modalHTML = `
-            <div id="alertModal" class="modal" style="display:none; opacity:0;">
-                <div class="modal-content">
+            <div id="alertModal" class="custom-alert-modal" style="display:none; opacity:0;">
+                <div class="custom-alert-modal-content">
                     <p id="alertMessage">알림 메시지 내용</p>
-                    <div class="modal-buttons">
+                    <div class="custom-alert-modal-buttons">
                         <button id="alertOk">확인</button>
                     </div>
                 </div>
@@ -13,26 +13,16 @@
         document.body.insertAdjacentHTML("beforeend", modalHTML);
     }
 
-    const modal = document.getElementById("alertModal");
+    const customAlertModal = document.getElementById("alertModal");
     const messageElem = document.getElementById("alertMessage");
     const btnOk = document.getElementById("alertOk");
 
     window.showAlert = (message, callback = null, noOverlay = false) => {
         messageElem.textContent = message;
 
-        if (noOverlay) {
-            modal.classList.add("no-overlay");
-        } else {
-            modal.classList.remove("no-overlay");
-        }
-
-        modal.style.display = "flex";
+        customAlertModal.style.display = "flex";
         requestAnimationFrame(() => {
-            modal.style.opacity = "1";
-        });
-
-        requestAnimationFrame(() => {
-            modal.style.opacity = "1";
+            customAlertModal.style.opacity = "1";
         });
 
         const handleOk = () => {
@@ -44,9 +34,9 @@
     };
 
     function closeModal() {
-        modal.style.opacity = "0";
+        customAlertModal.style.opacity = "0";
         setTimeout(() => {
-            modal.style.display = "none";
+            customAlertModal.style.display = "none";
         }, 180);
     }
 })();
