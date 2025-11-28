@@ -5,7 +5,7 @@ export async function loadRecommendedSharings(containerId) {
 
         const container = document.getElementById(containerId);
         if (!container) {
-            console.warn(`[loadRecommendedSharings] container ${containerId} 없음`);
+            console.log(`[loadRecommendedSharings] container ${containerId} 없음`);
             return;
         }
 
