@@ -1,9 +1,9 @@
-.modal,
-.modal * {
+.custom-modal,
+.custom-modal * {
     user-select: none;
 }
 
-.modal {
+.custom-modal {
     display:none;
     position:fixed;
     top:0;
@@ -15,7 +15,7 @@
     align-items:center;
     z-index:9999;
 }
-.modal-content {
+.custom-modal-content {
     background:white;
     padding:20px 30px;
     border-radius:8px;
@@ -23,10 +23,10 @@
     margin:auto;
     width:400px;
 }
-.modal-buttons {
+.custom-modal-buttons {
     margin-top:20px;
 }
-.modal-buttons button {
+.custom-modal-buttons button {
     margin:0 10px;
     padding:6px 12px;
     border:none;
@@ -35,6 +35,6 @@
     color:white;
     cursor:pointer;
 }
-.modal-buttons button:hover {
+.custom-modal-buttons button:hover {
     background-color: #555555;
 }

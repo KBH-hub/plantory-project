@@ -117,7 +117,7 @@
         const content = contentEl?.value?.trim() || "";
         const files = fileEl?.files || [];
         if (!targetMemberId) {
-            alert("피신고자 선택은 필수입니다.");
+            showAlert("피신고자 선택은 필수입니다.");
             return;
         }
         if (!content) {
