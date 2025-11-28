@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberInfoResponse {
+public class MyInfoResponse {
     private Long memberId;
     private String membername;
     private String nickname;

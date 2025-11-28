@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.mapper;
 
 import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryResponse;
+import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,6 +11,6 @@ import java.util.List;
 public interface MySharingHistoryMapper {
     int countByInterestCount(@Param("memberId") Long memberId);
     int countByCompletedSharingCount(@Param("memberId") Long memberId);
-    List<MySharingHistoryResponse> selectMySharingList(MySharingHistoryListRequest request);
+    List<MySharingHistoryListResponse> selectMySharingList(MySharingHistoryListRequest request);
 }
 
