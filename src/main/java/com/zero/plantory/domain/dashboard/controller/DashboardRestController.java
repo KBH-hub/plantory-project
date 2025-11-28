@@ -33,18 +33,18 @@ public class DashboardRestController {
         return dashboardService.countCareNeededPlants(memberId);
     }
 
-    @GetMapping("/recommended")
-    public List<RecommendedSharingResponse> recommended() {
+    @GetMapping("/recommendeds")
+    public List<RecommendedSharingResponse> getRecommendeds() {
         return dashboardService.getRecommendedSharingList();
     }
 
-    @GetMapping("/watering")
-    public List<TodayWateringResponse> watering(@RequestParam Long memberId) {
+    @GetMapping("/waterings")
+    public List<TodayWateringResponse> getWaterings(@RequestParam Long memberId) {
         return dashboardService.getTodayWatering(memberId);
     }
 
-    @GetMapping("/diary")
-    public List<TodayDiaryResponse> diary(@RequestParam Long memberId) {
+    @GetMapping("/diaries")
+    public List<TodayDiaryResponse> getDiaries(@RequestParam Long memberId) {
         return dashboardService.getTodayDiary(memberId);
     }
 }

@@ -5,10 +5,10 @@ import com.zero.plantory.domain.sharing.dto.*;
 import java.util.List;
 
 public interface SharingReadService {
-    /** 나눔 게시글 메인 리스트 조회 */
     List<SharingCardListResponse> getSharingList(SharingSearchRequest request);
 
-    /** 인기 나눔글 조회 */
+    int countInterest(Long memberId);
+
     List<SharingPopularResponse> getPopularSharingList();
 
     /** 나눔글 상세 조회 */
