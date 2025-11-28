@@ -47,6 +47,8 @@ function renderSharingList(list) {
     });
 }
 
+import { loadRecommendedSharings } from "/js/sharing/recommends.js";
+
 
 async function loadSharingList(append = false) {
     const keyword = document.getElementById("keyword").value;
@@ -139,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadSharingList(false);
     loadPopularList();
     loadMyInterestCount();
+    loadRecommendedSharings("recommendedContainer");
 
     document.getElementById("btnSearch").addEventListener("click", () => {
         offset = 0;

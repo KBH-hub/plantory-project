@@ -191,7 +191,7 @@ public class SharingMapperTests {
     @Test
     @DisplayName("나눔 게시글 상세조회")
     void selectSharingDetailTest() {
-        log.info("sharingDetail.css = {}", mapper.selectSharingDetail(2L));
+        log.info("readSharingDetail = {}", mapper.selectSharingDetail(2L));
 
     }
 
