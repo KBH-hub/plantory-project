@@ -92,8 +92,7 @@
             const readText = item.readFlag ? '읽음' : '안읽음';
             const category = labelTargetType(item.targetType);
             const relatedUrl = buildTargetUrl(item.targetType, item.targetId);
-            const relatedText = esc(item.targetTitle || '(삭제된 글)');
-            console.log(item);
+            const relatedText = esc(item.targetTitle || '(삭제된 쪽지)');
             return `
         <tr data-id="${item.messageId}" class="${rowClass}">
           <td class="text-center" style="width:44px;">

@@ -2,6 +2,13 @@
 (function () {
     const apiBase = '/api/message';
 
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('closeBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            history.back();
+        });
+    });
+
     // 쿼리 파라미터
     const qs = (k) => {
         const v = new URLSearchParams(location.search).get(k);
@@ -52,6 +59,7 @@
             if (!res.ok) {
                 if (res.status === 404) alert('쪽지를 찾을 수 없습니다.');
                 else alert(`상세 조회 실패: ${res.status}`);
+                history.back();
                 return;
             }
             const data = await res.json();
