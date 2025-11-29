@@ -31,5 +31,6 @@ public class SelectSharingDetailResponse {
     private LocalDateTime updatedAt;
 
     private List<ImageDTO> images;
+    private boolean isInterested;
 
 }

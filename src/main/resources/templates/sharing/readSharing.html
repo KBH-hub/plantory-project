@@ -210,6 +210,45 @@
     </div>
 </div>
 
+<!-- 쪽지 보내기 모달 -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content" id="messageForm">
+            <div class="modal-header">
+                <h5 class="modal-title">쪽지 보내기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label small text-muted">받는 사람</label>
+                    <input type="text" class="form-control" id="msgTo" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small text-muted">관련 글</label>
+                    <input type="text" class="form-control" id="msgPost" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small">제목*</label>
+                    <input type="text" class="form-control" id="msgTitle" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small">내용*</label>
+                    <textarea class="form-control" id="msgContent" rows="6" required></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="submit" class="btn btn-success">쪽지 보내기</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
