@@ -108,11 +108,6 @@ public class CmdController {
         return "sharing/readSharing";
     }
 
-    @GetMapping("/readSharing-other")
-    public String readSharingOther(){
-        return "sharing/readSharing-other";
-    }
-
     @RequestMapping("/profileSharingHistory")
     public String profileSharingHistory(){return "profile/profileSharingHistory";}
 
