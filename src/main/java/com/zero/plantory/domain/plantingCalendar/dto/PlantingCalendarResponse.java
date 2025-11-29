@@ -14,10 +14,13 @@ import java.util.Date;
 public class PlantingCalendarResponse {
     private Long wateringId;
     private Long myplantId;
+    private Long diaryId;
     private Long memberId;
     private String name;
     private String content;
+    private String memo;
     private String type;
     private Date createdAt;
     private Date checkFlag;
+    private Date dateAt;
 }

@@ -152,4 +152,12 @@ class PlantingCalendarMapperTest {
         log.info(String.valueOf(result));
     }
 
+    @Test
+    void deleteDiary() {
+        Long diaryId = 1L;
+
+        int result = plantingCalendarMapper.deleteDiary(diaryId);
+
+        log.info(String.valueOf(result));
+    }
 }
