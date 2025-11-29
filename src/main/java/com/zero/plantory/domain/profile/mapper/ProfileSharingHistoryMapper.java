@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface MySharingHistoryMapper {
+public interface ProfileSharingHistoryMapper {
     int countByInterestCount(@Param("memberId") Long memberId);
     int countByCompletedSharingCount(@Param("memberId") Long memberId);
-    List<ProfileSharingHistoryListResponse> selectMySharingList(ProfileSharingHistoryListRequest request);
+    List<ProfileSharingHistoryListResponse> selectProfileSharingList(ProfileSharingHistoryListRequest request);
 }
 

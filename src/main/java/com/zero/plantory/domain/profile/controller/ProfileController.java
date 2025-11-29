@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/profileInfo")
+@RequestMapping("/profile")
 public class ProfileController {
 
     @GetMapping("/me")

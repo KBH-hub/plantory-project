@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.zero.plantory.domain.profile.mapper.MySharingHistoryMapper">
+<mapper namespace="com.zero.plantory.domain.profile.mapper.ProfileSharingHistoryMapper">
 
     <select id="countByInterestCount" resultType="int" parameterType="Long">
         SELECT COUNT(interest_id)
@@ -17,7 +17,7 @@
           AND (member_id = #{memberId} OR target_member_id = #{memberId})
     </select>
 
-    <select id="selectMySharingList"
+    <select id="selectProfileSharingList"
             parameterType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListRequest"
             resultType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse">
 
