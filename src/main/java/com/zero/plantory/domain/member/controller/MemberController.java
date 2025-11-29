@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.controller;
 
-import com.zero.plantory.domain.myProfile.dto.MemberSignUpRequest;
+import com.zero.plantory.domain.profile.dto.MemberSignUpRequest;
 import com.zero.plantory.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.myProfile.dto.MemberResponse;
+import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.global.dto.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

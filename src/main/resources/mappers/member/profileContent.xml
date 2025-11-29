@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zero.plantory.domain.profile.mapper.ProfileContentMapper">
+
+    <select id="selectProfileWrittenListAll"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest">
+
+        (SELECT
+        s.sharing_id AS id,
+        s.member_id AS writerId,
+        m.nickname AS writerNickname,
+        s.title,
+        s.created_at,
+        'SHARING' AS type
+        FROM sharing s
+        JOIN member m ON s.member_id = m.member_id
+        WHERE s.member_id = #{memberId}
+        AND s.del_flag IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND s.title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        )
+        UNION ALL
+        (SELECT
+        q.question_id AS id,
+        q.member_id AS writerId,
+        m.nickname AS writerNickname,
+        q.title,
+        q.created_at,
+        'QUESTION' AS type
+        FROM question q
+        JOIN member m ON q.member_id = m.member_id
+        WHERE q.member_id = #{memberId}
+        AND q.del_flag IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND q.title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        )
+        ORDER BY created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <select id="selectProfileWrittenListSharing"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest">
+
+        SELECT
+        s.sharing_id AS id,
+        s.member_id AS writerId,
+        m.nickname AS writerNickname,
+        s.title,
+        s.created_at,
+        'SHARING' AS type
+        FROM sharing s
+        JOIN member m ON s.member_id = m.member_id
+        WHERE s.member_id = #{memberId}
+        AND s.del_flag IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND s.title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY s.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <select id="selectProfileWrittenListQuestion"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest">
+
+        SELECT
+        q.question_id AS id,
+        q.member_id AS writerId,
+        m.nickname AS writerNickname,
+        q.title,
+        q.created_at,
+        'QUESTION' AS type
+        FROM question q
+        JOIN member m ON q.member_id = m.member_id
+        WHERE q.member_id = #{memberId}
+        AND q.del_flag IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND q.title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY q.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <update id="deleteProfileWrittenSharing"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenDeleteRequest">
+        UPDATE sharing
+        SET del_flag = NOW()
+        WHERE sharing_id IN
+        <foreach collection="sharingIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND member_id = #{memberId}
+        AND del_flag IS NULL
+    </update>
+
+    <update id="deleteProfileWrittenQuestion"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenDeleteRequest">
+        UPDATE question
+        SET del_flag = NOW()
+        WHERE question_id IN
+        <foreach collection="questionIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND member_id = #{memberId}
+        AND del_flag IS NULL
+    </update>
+
+    <select id="selectProfileCommentSearchAll"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse">
+
+        SELECT * FROM (
+                          SELECT
+                              c.comment_id AS id,
+                              c.sharing_id AS target_id,
+                              c.writer_id,
+                              c.created_at,
+                              s.title AS title,
+                              m.nickname AS writer_nickname,
+                              'SHARING' AS type
+                          FROM comment c
+                                   JOIN sharing s ON c.sharing_id = s.sharing_id
+                                   JOIN member m ON s.member_id = m.member_id
+                          WHERE c.writer_id = #{memberId}
+                            AND c.del_flag IS NULL
+                            AND s.title LIKE CONCAT('%', #{keyword}, '%')
+
+                          UNION ALL
+
+                          SELECT
+                              a.answer_id AS id,
+                              a.question_id AS target_id,
+                              a.writer_id,
+                              a.created_at,
+                              q.title AS title,
+                              m.nickname AS writer_nickname,
+                              'QUESTION' AS type
+                          FROM answer a
+                                   JOIN question q ON a.question_id = q.question_id
+                                   JOIN member m ON q.member_id = m.member_id
+                          WHERE a.writer_id = #{memberId}
+                            AND a.del_flag IS NULL
+                            AND q.title LIKE CONCAT('%', #{keyword}, '%')
+                      ) t
+        ORDER BY created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <select id="selectProfileCommentSearchSharing"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse">
+
+        SELECT
+            c.comment_id AS id,
+            c.sharing_id AS target_id,
+            c.writer_id,
+            c.created_at,
+            s.title AS title,
+            m.nickname AS writer_nickname,
+            'SHARING' AS type
+        FROM comment c
+                 JOIN sharing s ON c.sharing_id = s.sharing_id
+                 JOIN member m ON s.member_id = m.member_id
+        WHERE c.writer_id = #{memberId}
+          AND c.del_flag IS NULL
+          AND s.title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY c.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+    <select id="selectProfileCommentSearchQuestion"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest"
+            resultType="com.zero.plantory.domain.profile.dto.ProfileWrittenListResponse">
+
+        SELECT
+            a.answer_id AS id,
+            a.question_id AS target_id,
+            a.writer_id,
+            a.created_at,
+            q.title AS title,
+            m.nickname AS writer_nickname,
+            'QUESTION' AS type
+        FROM answer a
+                 JOIN question q ON a.question_id = q.question_id
+                 JOIN member m ON q.member_id = m.member_id
+        WHERE a.writer_id = #{memberId}
+          AND a.del_flag IS NULL
+          AND q.title LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY a.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+
+    </select>
+
+</mapper>

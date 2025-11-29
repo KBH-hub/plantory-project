@@ -25,12 +25,12 @@ public interface SharingMapper {
     int decreaseInterestNum(Long sharingId);
 
     int insertComment(@Param("sharingId") Long sharingId, @Param("writerId") Long writerId, @Param("content") String content);
-    int countMyComment(@Param("commentId") Long commentId, @Param("sharingId") Long sharingId, @Param("writerId") Long writerId);
+    int countProfileComment(@Param("commentId") Long commentId, @Param("sharingId") Long sharingId, @Param("writerId") Long writerId);
     int updateCommentById(CommentRequest request);
     int deleteComment(CommentRequest request);
 
     /**update sharing*/
-    int countMySharing(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
+    int countProfileSharing(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
     int updateSharing(SharingRequest request);
 
     int deleteSharing(@Param("sharingId") Long sharingId);
@@ -39,8 +39,8 @@ public interface SharingMapper {
     int updateSharingComplete(@Param("sharingId") Long sharingId, @Param("targetMemberId") Long targetMemberId);
 
     /** Sharing review*/
-    List<SharingHistoryResponse> selectMySharingGiven(@Param("memberId") Long memberId);
-    List<SharingHistoryResponse> selectMySharingReceived(@Param("memberId") Long memberId);
+    List<SharingHistoryResponse> selectProfileSharingGiven(@Param("memberId") Long memberId);
+    List<SharingHistoryResponse> selectProfileSharingReceived(@Param("memberId") Long memberId);
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
 
 }
