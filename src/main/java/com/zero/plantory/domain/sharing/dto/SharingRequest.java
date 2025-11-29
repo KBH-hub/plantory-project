@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -28,4 +29,7 @@ public class SharingRequest {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime delFlag;
+
+    private String deletedImageIds;
+    private List<Long> deletedImageIdList;
 }

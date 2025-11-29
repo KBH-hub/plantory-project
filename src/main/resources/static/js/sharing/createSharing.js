@@ -1,14 +1,39 @@
-let selectedFiles = [];
-const MAX_IMAGES = 5;
+let existingImages = [];
+let newImages = [];
+let deletedImageIds = [];
 
-function renderImagePreview() {
-    const previewList = document.querySelector("#previewList");
-    const imgCount = document.querySelector("#imgCount");
+const MAX_IMAGES = 5;
+const sharingId = document.body.dataset.sharingId;
+
+function uuid() {
+    return 'temp_' + Math.random().toString(36).substring(2, 11);
+}
+
+function renderImages() {
+    const previewList = document.getElementById("previewList");
+    const imgCount = document.getElementById("imgCount");
 
     previewList.innerHTML = "";
 
-    selectedFiles.forEach((file, idx) => {
-        const url = URL.createObjectURL(file);
+    existingImages.forEach((img) => {
+        const box = document.createElement("div");
+        box.className = "position-relative";
+        box.style.width = "120px";
+        box.style.height = "120px";
+
+        box.innerHTML = `
+            <img src="${img.fileUrl}" class="rounded border"
+                 style="width:120px;height:120px;object-fit:cover;">
+            <button class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                    data-type="existing" data-id="${img.imageId}">
+                <i class="bi bi-x-lg small"></i>
+            </button>
+        `;
+        previewList.appendChild(box);
+    });
+
+    newImages.forEach((img) => {
+        const url = URL.createObjectURL(img.file);
 
         const box = document.createElement("div");
         box.className = "position-relative";
@@ -16,45 +41,59 @@ function renderImagePreview() {
         box.style.height = "120px";
 
         box.innerHTML = `
-            <img src="${url}" class="rounded border" 
+            <img src="${url}" class="rounded border"
                  style="width:120px;height:120px;object-fit:cover;">
-            <button class="btn btn-sm btn-danger position-absolute top-0 end-0" 
-                    data-idx="${idx}">
+            <button class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                    data-type="new" data-id="${img.key}">
                 <i class="bi bi-x-lg small"></i>
             </button>
         `;
         previewList.appendChild(box);
     });
 
-    imgCount.textContent = selectedFiles.length;
+    imgCount.textContent = existingImages.length + newImages.length;
 }
-
 
 function bindImageUploader() {
     const fileInput = document.querySelector("#plantImages");
     const addTile = document.querySelector("#addTile");
-    const previewList = document.querySelector("#previewList");
+    const previewList = document.getElementById("previewList");
 
     addTile.addEventListener("click", () => fileInput.click());
 
     fileInput.addEventListener("change", (e) => {
         const files = Array.from(e.target.files);
 
-        if (selectedFiles.length + files.length > MAX_IMAGES) {
+        if (existingImages.length + newImages.length + files.length > MAX_IMAGES) {
             showAlert("최대 5장까지만 업로드할 수 있습니다.");
             return;
         }
 
-        selectedFiles = [...selectedFiles, ...files];
-        renderImagePreview();
+        files.forEach((file) => {
+            newImages.push({
+                key: uuid(),
+                file: file
+            });
+        });
+
+        renderImages();
     });
 
     previewList.addEventListener("click", (e) => {
-        const idx = e.target.closest("button")?.dataset.idx;
-        if (!idx) return;
+        const btn = e.target.closest("button");
+        if (!btn) return;
 
-        selectedFiles.splice(parseInt(idx), 1);
-        renderImagePreview();
+        const type = btn.dataset.type;
+        const id = btn.dataset.id;
+
+        if (type === "existing") {
+            deletedImageIds.push(Number(id));
+            existingImages = existingImages.filter(img => img.imageId !== Number(id));
+        } else {
+            newImages = newImages.filter(img => img.key !== id);
+        }
+
+        renderImages();
     });
 }
 
@@ -63,17 +102,14 @@ function bindPlantSelect() {
         const btn = e.target.closest(".plant-select-btn");
         if (!btn) return;
 
-        // 1) 사용자 보여줄 값
         document.querySelector("#plantNameInput").value = btn.dataset.plantName;
         document.querySelector("#managementLevel").value = btn.dataset.levelLabel;
         document.querySelector("#managementNeeds").value = btn.dataset.needsLabel;
 
-        // 2) 서버로 전송할 ENUM NAME 저장 (dataset.enum)
         document.querySelector("#managementLevel").dataset.enum = btn.dataset.levelEnum;
         document.querySelector("#managementNeeds").dataset.enum = btn.dataset.needsEnum;
     });
 }
-
 
 function bindSubmit() {
     const form = document.querySelector("form");
@@ -85,38 +121,48 @@ function bindSubmit() {
         const memberId = document.body.dataset.memberId;
 
         formData.append("memberId", memberId);
-        formData.append("title", document.querySelector("input[placeholder='제목을 입력해 주세요.']").value);
+        formData.append("title", document.querySelector("#titleInput").value);
         formData.append("content", document.querySelector("#contentInput").value);
         formData.append("plantType", document.querySelector("#plantNameInput").value);
 
-        const managementLevel = document.querySelector("#managementLevel").dataset.enum;
-        const managementNeeds = document.querySelector("#managementNeeds").dataset.enum;
+        formData.append("managementLevel",
+            document.querySelector("#managementLevel").dataset.enum);
+        formData.append("managementNeeds",
+            document.querySelector("#managementNeeds").dataset.enum);
 
-        formData.append("managementLevel", managementLevel);
-        formData.append("managementNeeds", managementNeeds);
+        formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
 
-        selectedFiles.forEach(file => formData.append("files", file));
+        newImages.forEach(img => {
+            formData.append("files", img.file);
+        });
 
         try {
+            if (sharingId) {
+                await axios.put(`/api/sharing/${sharingId}`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+
+                showAlert("수정 완료되었습니다.");
+                window.location.href = `/readSharing/${sharingId}`;
+                return;
+            }
+
             const res = await axios.post("/api/sharing", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
-            const sharingId = res.data;
+            const savedId = res.data;
             showAlert("등록 완료되었습니다.");
-            window.location.href = `/readSharing/${sharingId}`;
+            window.location.href = `/readSharing/${savedId}`;
 
         } catch (err) {
             console.error(err);
-            showAlert("등록 중 오류가 발생했습니다.");
+            showAlert("저장 중 오류가 발생했습니다.");
         }
     });
 }
 
 async function loadUpdateSharing() {
-    const sharingId = extractFromURL();
     const res = await axios.get(`/api/sharing/${sharingId}`);
     const data = res.data;
 
@@ -130,16 +176,24 @@ async function loadUpdateSharing() {
     document.querySelector("#managementLevel").dataset.enum = data.managementLevel;
     document.querySelector("#managementNeeds").dataset.enum = data.managementNeeds;
 
-    renderExistingImages(data.images);
+    existingImages = data.images; // [{imageId, fileUrl}, ...]
+    renderImages();
 }
 
-
 async function initCreateSharing() {
-    renderImagePreview();
+    // renderImages();
     bindImageUploader();
     bindPlantSelect();
     bindSubmit();
-    await loadInitialData();
+
+    if (sharingId) {
+        document.getElementById("pageTitle").innerText = "나눔글 수정";
+        document.getElementById("submitBtn").innerText = "수정";
+        await loadUpdateSharing();
+    } else {
+        document.getElementById("pageTitle").innerText = "나눔글 등록";
+        document.getElementById("submitBtn").innerText = "등록";
+    }
 }
 
 document.addEventListener("DOMContentLoaded", initCreateSharing);

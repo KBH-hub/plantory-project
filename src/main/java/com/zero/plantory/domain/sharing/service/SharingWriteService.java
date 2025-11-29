@@ -10,7 +10,6 @@ import java.util.List;
 public interface SharingWriteService {
     Long registerSharing(SharingRequest request, List<MultipartFile> files) throws IOException;
 
-    /** 나눔글 수정 */
     boolean updateSharing(SharingRequest request, List<MultipartFile> images) throws IOException;
 
     /** 나눔글 삭제 */

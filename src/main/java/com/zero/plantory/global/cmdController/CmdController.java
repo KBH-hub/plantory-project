@@ -121,11 +121,6 @@ public class CmdController {
         return "sharing/sharingList";
     }
 
-    @GetMapping("/sharingUpdate")
-    public String sharingUpdate(){
-        return "sharing/sharingUpdate";
-    }
-
     @GetMapping("/termsOfService")
     public String termsOfService(){
         return "member/termsOfService";

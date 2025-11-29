@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.sharing.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
@@ -8,6 +10,7 @@ import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,16 +34,41 @@ public class SharingWriteRestController {
         return ResponseEntity.ok(sharingId);
     }
 
-    @PutMapping("/{sharingId}")
-    public ResponseEntity<?> updateSharing(
-            @PathVariable Long sharingId,
-            @ModelAttribute SharingRequest request,
-            @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException {
+//    @PutMapping("/{sharingId}")
+//    public ResponseEntity<?> updateSharing(
+//            @PathVariable Long sharingId,
+//            @ModelAttribute SharingRequest request,
+//            @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException {
+//
+//        request.setSharingId(sharingId);
+//        boolean result = sharingWriteService.updateSharing(request, files);
+//        return ResponseEntity.ok(result);
+//    }
+@PutMapping("/{sharingId}")
+public ResponseEntity<?> updateSharing(
+        @PathVariable Long sharingId,
+        @ModelAttribute SharingRequest request,
+        @RequestParam(value = "files", required = false) List<MultipartFile> files
+) throws IOException {
 
-        request.setSharingId(sharingId);
-        boolean result = sharingWriteService.updateSharing(request, files);
-        return ResponseEntity.ok(result);
+    request.setSharingId(sharingId);
+
+    // JSON 문자열 → List<Long>
+    if (request.getDeletedImageIds() != null && !request.getDeletedImageIds().isBlank()) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<Long> ids = mapper.readValue(
+                request.getDeletedImageIds(),
+                new TypeReference<List<Long>>() {}
+        );
+
+        request.setDeletedImageIdList(ids);  // 변환된 리스트 저장
     }
+
+    boolean result = sharingWriteService.updateSharing(request, files);
+    return ResponseEntity.ok(result);
+}
+
 
     @DeleteMapping("/{sharingId}")
     public ResponseEntity<?> deleteSharing(

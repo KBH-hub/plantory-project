@@ -199,7 +199,7 @@
           AND del_flag IS NULL
     </update>
 
-    <select id="countMySharing" resultType="int">
+    <select id="countProfileSharing" resultType="int">
         SELECT COUNT(*)
         FROM sharing
         WHERE sharing_id = #{sharingId}
