@@ -48,6 +48,15 @@ public class PlantingCalenderRestController {
         return ResponseEntity.status(200).body(Map.of("message", "check success"));
     }
 
+    @DeleteMapping("/watering")
+    public ResponseEntity<Map<String, String>> deleteWateringFlag(@RequestParam Long myplantId, @RequestParam Long memberId) {
+        int result = plantingCalenderService.removePlantWatering(myplantId, memberId);
+        if(result == 1) {
+            return ResponseEntity.status(200).body(Map.of("message", "watering delete success"));
+        }
+        return ResponseEntity.status(400).body(Map.of("message", "watering check fail"));
+    }
+
     @GetMapping("/diaryInfo/{diaryId}")
     public ResponseEntity<?> getDiaryUpdateModalInfo(@PathVariable Long diaryId) {
 
