@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.plantingCalendar.controller;
 
+import com.zero.plantory.domain.plantingCalendar.dto.DiaryRequest;
 import com.zero.plantory.domain.plantingCalendar.dto.DiaryResponse;
+import com.zero.plantory.domain.plantingCalendar.dto.MyPlantDiaryResponse;
 import com.zero.plantory.domain.plantingCalendar.dto.PlantingCalendarResponse;
 import com.zero.plantory.domain.plantingCalendar.service.PlantingCalenderService;
 import com.zero.plantory.global.dto.ImageDTO;
@@ -9,7 +11,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +72,23 @@ public class PlantingCalenderRestController {
 
     @DeleteMapping("/diary/{diaryId}")
     public ResponseEntity<Map<String, String>> deleteDiary(@PathVariable Long diaryId) {
-        if(plantingCalenderService.removeDiary(diaryId) == 0)
+        if (plantingCalenderService.removeDiary(diaryId) == 0)
             return ResponseEntity.status(400).body(Map.of("message", "diary delete fail"));
         return ResponseEntity.status(200).body(Map.of("message", "diary delete success"));
+    }
+
+    @PostMapping("/diary")
+    public ResponseEntity<Map<String, String>> createDiary(@ModelAttribute DiaryRequest request,
+                                                           @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                                           @RequestParam Long memberId) throws IOException {
+        if (plantingCalenderService.registerDiary(request, files, memberId) == 0)
+            return ResponseEntity.status(400).body(Map.of("message", "diary register fail"));
+        return ResponseEntity.status(200).body(Map.of("message", "diary create success"));
+    }
+
+    @GetMapping("/diary/myplant")
+    public List<MyPlantDiaryResponse> getMyPlant(@RequestParam Long memberId){
+        return plantingCalenderService.getMyPlant(memberId);
     }
 
 

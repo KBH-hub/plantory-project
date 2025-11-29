@@ -83,45 +83,66 @@
                     </div>
                 </div>
 
+                <!-- 관찰일지 등록 모달  -->
                 <div class="modal fade" id="diaryModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
-                            <div class="modal-header bg-warning text-white border-0">
-                                <h5 class="modal-title fw-bold">관찰일지 등록</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <label class="fw-bold">식물 선택 <span class="text-danger">*</span></label>
-                                <select id="plantSelect" class="form-select mb-3">
-                                    <option value="방울토마토">방울토마토</option>
-                                    <option value="상추">상추</option>
-                                    <option value="양상추">양상추</option>
-                                    <option value="츄츄">츄츄</option>
-                                </select>
-
-                                <label class="fw-bold">활동</label>
-                                <input id="activityInput" type="text" class="form-control mb-3" placeholder="예: 물주기">
-
-                                <label class="fw-bold">식물 상태</label>
-                                <input id="conditionInput" type="text" class="form-control mb-3" placeholder="예: 좋음">
-
-                                <label class="fw-bold">사진</label>
-                                <div id="photoList" class="d-flex gap-3 align-items-center mb-3">
-                                    <div id="addPhotoBtn" class="d-flex justify-content-center align-items-center border rounded" style="width:110px;height:110px;background:#efefef;cursor:pointer;">
-                                        <span class="fs-1">+</span>
-                                    </div>
+                            <form id="diaryForm" class="modal-form" enctype="multipart/form-data">
+                                <div class="modal-header bg-warning text-white border-0">
+                                    <h5 class="modal-title fw-bold">관찰일지 등록</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="닫기"></button>
                                 </div>
 
-                                <label class="fw-bold">메모 <span class="text-danger">*</span></label>
-                                <textarea id="memoInput" class="form-control" rows="4" placeholder="내용을 입력하세요"></textarea>
-                            </div>
-                            <div class="modal-footer border-0">
-                                <button id="saveDiaryBtn" class="btn btn-success w-50 mx-auto">일지 저장</button>
-                            </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="memberId" name="memberId" value="1" />
+
+                                    <label class="fw-bold">사진</label>
+                                    <div id="photoList" class="d-flex gap-3 align-items-center mb-3 flex-wrap">
+                                        <button type="button" id="addPhotoBtn"
+                                                class="d-flex justify-content-center align-items-center border rounded bg-light"
+                                                style="width:110px;height:110px;cursor:pointer;">
+                                            <span class="fs-1">+</span>
+                                        </button>
+                                    </div>
+
+                                    <label class="fw-bold">식물 선택 <span class="text-danger">*</span></label>
+                                    <select id="plantSelect" name="myplantId" class="form-select mb-3" required>
+                                        <option value="" hidden>선택하세요</option>
+                                        <option value="101">방울토마토 (ID:101)</option>
+                                        <option value="102">상추 (ID:102)</option>
+                                        <option value="103">양상추 (ID:103)</option>
+                                        <option value="104">츄츄 (ID:104)</option>
+                                    </select>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="fw-bold">활동 <span class="text-danger">*</span></label>
+                                            <input id="activityInput" name="activity" type="text"
+                                                   class="form-control" placeholder="예: WATERING" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="fw-bold">식물 상태 <span class="text-danger">*</span></label>
+                                            <input id="conditionInput" name="state" type="text"
+                                                   class="form-control" placeholder="예: GOOD" required>
+                                        </div>
+                                    </div>
+
+                                    <label class="fw-bold mt-3">메모 <span class="text-danger">*</span></label>
+                                    <textarea id="memoInput" name="memo" class="form-control" rows="4"
+                                              placeholder="내용을 입력하세요" required></textarea>
+
+                                </div>
+
+                                <div class="modal-footer border-0">
+                                    <button id="saveDiaryBtn" type="submit" class="btn btn-success w-50 mx-auto">일지 저장</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
+                <!-- 사진 추가 모달 -->
                 <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -129,10 +150,12 @@
                                 <h5 class="modal-title">사진 추가</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
+
                             <div class="modal-body">
                                 <img id="previewImage" class="img-fluid rounded d-none mb-3" style="max-height:300px;object-fit:cover;">
-                                <input type="file" id="imageInput" class="form-control" accept="image/*">
+                                <input type="file" id="imageInput" class="form-control" accept="image/*" />
                             </div>
+
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                 <button id="saveImageBtn" class="btn btn-primary">추가</button>

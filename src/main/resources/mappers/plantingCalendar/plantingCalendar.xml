@@ -88,9 +88,10 @@
     </update>
 
     <select id="selectMyPlant" resultType="com.zero.plantory.domain.plantingCalendar.dto.MyPlantDiaryResponse">
-        SELECT myplant_id,NAME
+        SELECT myplant_id, NAME
         FROM myplant
-        WHERE member_id = #{memberId};
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
     </select>
 
     <insert id="insertDiary"
@@ -130,4 +131,5 @@
         INSERT IGNORE INTO watering (myplant_id, date_at)
         VALUES (#{myplantId}, #{dateAt})
     </insert>
+
 </mapper>

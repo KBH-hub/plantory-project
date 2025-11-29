@@ -23,29 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastRequestedYmd = null;
     let isRendering = false;
 
-    calendarGrid.addEventListener("click", (e) => {
-        const cell = e.target.closest(".calendar-cell[data-date]");
-        if (!cell || !calendarGrid.contains(cell) || cell.classList.contains("empty")) return;
-        const ymd = cell.dataset.date;
-        selectedDate = ymd;
-        calendarGrid.querySelectorAll(".calendar-cell.selected").forEach(el => el.classList.remove("selected"));
-        cell.classList.add("selected");
-        renderDayPanels(ymd);
-    });
-
     const pad2 = (n) => String(n).padStart(2, "0");
 
     function ymdFromDate(d) {
         return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
     }
 
-    function selectDate(ymd, {focus = false, scroll = false} = {}) {
+    function selectDate(ymd, { focus = false, scroll = false } = {}) {
         calendarGrid.querySelectorAll(".calendar-cell.selected").forEach(el => el.classList.remove("selected"));
         const cell = calendarGrid.querySelector(`.calendar-cell[data-date="${ymd}"]`);
         if (!cell) return false;
         cell.classList.add("selected");
         if (focus) cell.focus?.();
-        if (scroll) cell.scrollIntoView?.({block: "nearest"});
+        if (scroll) cell.scrollIntoView?.({ block: "nearest" });
         selectedDate = ymd;
         return true;
     }
@@ -55,11 +45,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const nextMonth = month === 12 ? 1 : month + 1;
         const nextYear = month === 12 ? year + 1 : year;
         const end = `${nextYear}-${pad2(nextMonth)}-01T00:00:00`;
-        return {start, end};
+        return { start, end };
     }
 
     function buildDayRangeISO(ymd) {
-        return {start: `${ymd}T00:00:00`, end: `${ymd}T23:59:59`};
+        return { start: `${ymd}T00:00:00`, end: `${ymd}T23:59:59` };
     }
 
     function toLocalYmd(iso) {
@@ -81,6 +71,98 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${hh}:${mm}`;
     }
 
+    // =========================
+    // 등록 모달 관련 유틸/로딩
+    // =========================
+    function toLocalIsoSeconds(dtValue) {
+        if (!dtValue) return "";
+        const d = new Date(dtValue);
+        const p = (n) => String(n).padStart(2, "0");
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+    }
+
+    function resetDiaryForm() {
+        const actEl = document.getElementById("activityInput");
+        if (actEl) actEl.value = "";
+
+        const condEl = document.getElementById("conditionInput");
+        if (condEl) condEl.value = "";
+
+        const memoEl = document.getElementById("memoInput");
+        if (memoEl) memoEl.value = "";
+
+        // 사진 초기화
+        photoFiles = [];
+        renderPhotoList();
+    }
+
+    async function loadMyplants(memberId) {
+        const selectEl = document.getElementById("plantSelect");
+        if (!selectEl) return;
+        selectEl.disabled = true;
+        const ph = selectEl.querySelector('option[value=""]');
+        if (ph) ph.textContent = "불러오는 중...";
+
+        try {
+            const { data } = await axios.get("/api/plantingCalender/diary/myplant", {
+                params: { memberId },
+                headers: { Accept: "application/json" }
+            });
+            selectEl.innerHTML = '<option value="" hidden>선택하세요</option>';
+            const arr = Array.isArray(data) ? data : [];
+            arr.forEach(it => {
+                const id = it.myplantId ?? it.id ?? it.myplant_id ?? it.myPlantId;
+                const name = it.name ?? it.plantName ?? it.myplantName ?? it.myPlantName;
+                if (id != null && name) {
+                    const opt = document.createElement("option");
+                    opt.value = String(id);
+                    opt.textContent = `${name} (ID:${id})`;
+                    selectEl.appendChild(opt);
+                }
+            });
+            selectEl.disabled = false;
+        } catch (e) {
+            console.error(e);
+            selectEl.innerHTML = '<option value="" disabled>목록 불러오기 실패</option>';
+        }
+    }
+
+    async function openDiaryModal() {
+        const diaryModalEl = document.getElementById("diaryModal");
+        console.log("123");
+        if (!diaryModalEl) return;
+        resetDiaryForm();
+        const memberId = Number(document.body.dataset.memberId || document.getElementById("memberId")?.value || 0);
+        if (memberId) await loadMyplants(memberId);
+        const modal = bootstrap.Modal.getInstance(diaryModalEl) || new bootstrap.Modal(diaryModalEl);
+        modal.show();
+    }
+
+    // 원하는 버튼에 연결
+    document.getElementById("openDiaryBtn")?.addEventListener("click", openDiaryModal);
+
+    // 날짜 셀 더블클릭 시 등록 모달 오픈
+    calendarGrid?.addEventListener("dblclick", (e) => {
+        const cell = e.target.closest(".calendar-cell[data-date]");
+        if (!cell) return;
+        selectedDate = cell.dataset.date;
+        selectDate(selectedDate, { focus: true });
+        openDiaryModal();
+    });
+
+    // =========================
+    // 캘린더/데이터 렌더링
+    // =========================
+    calendarGrid.addEventListener("click", (e) => {
+        const cell = e.target.closest(".calendar-cell[data-date]");
+        if (!cell || !calendarGrid.contains(cell) || cell.classList.contains("empty")) return;
+        const ymd = cell.dataset.date;
+        selectedDate = ymd;
+        calendarGrid.querySelectorAll(".calendar-cell.selected").forEach(el => el.classList.remove("selected"));
+        cell.classList.add("selected");
+        renderDayPanels(ymd);
+    });
+
     async function renderCalendar(year, month) {
         calendarGrid.innerHTML = "";
         const firstDay = new Date(year, month - 1, 1).getDay();
@@ -96,8 +178,8 @@ document.addEventListener("DOMContentLoaded", function () {
             calendarGrid.insertAdjacentHTML(
                 "beforeend",
                 `<div class="calendar-cell" data-date="${ymd}" role="button" tabindex="0" aria-label="${ymd}">
-           <span>${day}</span>
-         </div>`
+          <span>${day}</span>
+        </div>`
             );
         }
 
@@ -106,18 +188,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function loadAndMark(year, month) {
         try {
-            const {start, end} = buildMonthRangeISO(year, month);
+            const { start, end } = buildMonthRangeISO(year, month);
             const memberId = Number(document.body.dataset.memberId || 0);
             if (!memberId) console.warn("memberId가 유효하지 않습니다:", document.body.dataset.memberId);
 
             const [resDiary, resWater] = await Promise.all([
                 axios.get("/api/plantingCalender/diary", {
-                    params: {memberId, startDate: start, endDate: end},
-                    headers: {Accept: "application/json"}
+                    params: { memberId, startDate: start, endDate: end },
+                    headers: { Accept: "application/json" }
                 }),
                 axios.get("/api/plantingCalender/watering", {
-                    params: {memberId, startDate: start, endDate: end},
-                    headers: {Accept: "application/json"}
+                    params: { memberId, startDate: start, endDate: end },
+                    headers: { Accept: "application/json" }
                 })
             ]);
 
@@ -173,15 +255,15 @@ document.addEventListener("DOMContentLoaded", function () {
     async function fetchDayData(ymd) {
         const memberId = Number(document.body.dataset.memberId || 0);
         if (!memberId) throw new Error("memberId 누락");
-        const {start, end} = buildDayRangeISO(ymd);
+        const { start, end } = buildDayRangeISO(ymd);
         const [resDiary, resWater] = await Promise.all([
             axios.get("/api/plantingCalender/diary", {
-                params: {memberId, startDate: start, endDate: end},
-                headers: {Accept: "application/json"}
+                params: { memberId, startDate: start, endDate: end },
+                headers: { Accept: "application/json" }
             }),
             axios.get("/api/plantingCalender/watering", {
-                params: {memberId, startDate: start, endDate: end},
-                headers: {Accept: "application/json"}
+                params: { memberId, startDate: start, endDate: end },
+                headers: { Accept: "application/json" }
             })
         ]);
         return {
@@ -239,16 +321,16 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("div");
             row.className = "d-flex align-items-center justify-content-between py-1 border-bottom";
             row.innerHTML = `
-      <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-droplet"></i>
-        <label class="m-0">${displayName}</label>
-      </div>
-      <input type="checkbox"
-             class="form-check-input watering-check"
-             data-watering-id="${wateringId}"
-             aria-label="물주기 완료"
-             ${checkedAttr} ${disabledAttr} ${disableAttr}>
-    `;
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-droplet"></i>
+          <label class="m-0">${displayName}</label>
+        </div>
+        <input type="checkbox"
+               class="form-check-input watering-check"
+               data-watering-id="${wateringId}"
+               aria-label="물주기 완료"
+               ${checkedAttr} ${disabledAttr} ${disableAttr}>
+      `;
             wrap.appendChild(row);
         });
     }
@@ -256,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
     async function renderDayPanels(ymd) {
         try {
             lastRequestedYmd = ymd;
-            const {diaries, waters} = await fetchDayData(ymd);
+            const { diaries, waters } = await fetchDayData(ymd);
             if (lastRequestedYmd !== ymd) return;
             renderDiaryListFromAPI(diaries);
             renderWateringList(waters, ymd);
@@ -327,26 +409,61 @@ document.addEventListener("DOMContentLoaded", function () {
         if (imageModalEl) bootstrap.Modal.getInstance(imageModalEl)?.hide();
     });
 
-    saveDiaryBtnEl?.addEventListener("click", () => {
+    // 저장: 서버로 멀티파트 전송
+    document.getElementById("diaryForm")?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
         const plantSel = document.getElementById("plantSelect");
         const activityInput = document.getElementById("activityInput");
         const conditionInput = document.getElementById("conditionInput");
         const memoInput = document.getElementById("memoInput");
+        const createdAtInput = document.getElementById("createdAtInput");
         const diaryModalEl = document.getElementById("diaryModal");
 
-        const data = {
-            plant: plantSel ? plantSel.value : "",
-            activity: activityInput ? activityInput.value : "",
-            condition: conditionInput ? conditionInput.value : "",
-            memo: memoInput ? memoInput.value : "",
-            photos: [...photoFiles],
-            date: new Date().toISOString().split("T")[0]
-        };
+        if (!plantSel?.value) return showAlert?.("식물을 선택하세요.");
+        if (!activityInput?.value.trim()) return showAlert?.("활동을 입력하세요.");
+        if (!conditionInput?.value.trim()) return showAlert?.("식물 상태를 입력하세요.");
+        if (!memoInput?.value.trim()) return showAlert?.("메모를 입력하세요.");
 
-        appendDiaryCard(data);
-        photoFiles = [];
-        renderPhotoList();
-        if (diaryModalEl) bootstrap.Modal.getInstance(diaryModalEl)?.hide();
+        const fd = new FormData();
+        fd.append("myplantId", plantSel.value);
+        fd.append("activity", activityInput.value.trim());
+        fd.append("state", conditionInput.value.trim());
+        fd.append("memo", memoInput.value.trim());
+
+        const memberId = document.getElementById("memberId")?.value || document.body.dataset.memberId || "0";
+        fd.append("memberId", String(memberId));
+
+        for (const f of photoFiles) fd.append("files", f);
+
+        const saveBtn = saveDiaryBtnEl;
+        saveBtn && (saveBtn.disabled = true);
+
+        try {
+            const { data, status } = await axios.post(
+                "/api/plantingCalender/diary",
+                fd,
+                { headers: { Accept: "application/json" } }
+            );
+
+            if (status === 200) {
+                if (diaryModalEl) bootstrap.Modal.getInstance(diaryModalEl)?.hide();
+                const ymd = selectedDate || ymdFromDate(new Date());
+                await renderDayPanels(ymd);
+                const [yy, mm] = ymd.split("-").map(Number);
+                await loadAndMark(yy, mm);
+                resetDiaryForm();
+                showAlert?.(data?.message || "등록되었습니다.");
+            } else {
+                showAlert?.("등록 실패");
+            }
+        } catch (err) {
+            console.error(err);
+            const msg = err?.response?.data?.message || err?.message || "에러";
+            showAlert?.("등록 실패: " + msg);
+        } finally {
+            saveBtn && (saveBtn.disabled = false);
+        }
     });
 
     function appendDiaryCard(diary) {
@@ -366,13 +483,13 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="fw-bold">${diary.plant || "-"}</div>
         </div>
         <div class="ms-auto d-flex align-items-center gap-3">
-          <span class="badge bg-warning text-dark">${diary.date}</span>
+          <span class="badge bg-warning text-dark">${diary.date || ""}</span>
           <button type="button"
-                class="btn btn-link text-secondary p-0 remove-btn"
-                data-diary-id="${diary.diaryId}"
-                aria-label="이 관찰일지 삭제">
-          <i class="fa-solid fa-xmark fs-5"></i>
-        </button>
+                  class="btn btn-link text-secondary p-0 remove-btn"
+                  data-diary-id="${diary.diaryId}"
+                  aria-label="이 관찰일지 삭제">
+            <i class="fa-solid fa-xmark fs-5"></i>
+          </button>
         </div>
       </div>
       <div class="mt-2 ps-1 bg-light rounded-1 p-1">
@@ -421,18 +538,17 @@ document.addEventListener("DOMContentLoaded", function () {
         await safeRender(currentYear, currentMonth);
     })();
 
+    // 삭제 및 상세 보기
     diaryListContainerEl?.addEventListener("click", async (e) => {
         const removeBtn = e.target.closest(".remove-btn");
         if (removeBtn) {
-            e.stopPropagation(); // 상세 모달 열림 방지
+            e.stopPropagation();
 
             const card = removeBtn.closest(".diary-card[data-diary-id]");
             if (!card) return;
             const diaryId = card.dataset.diaryId;
             if (!diaryId) {
                 showAlert("서버에 저장되지 않은 항목입니다.");
-                // 로컬 카드만 제거하고 끝내려면 아래 주석 해제
-                // card.parentElement?.remove();
                 return;
             }
 
@@ -450,7 +566,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     container.remove();
 
-                    // 선택된 날짜 패널과 월 배지 갱신
                     const ymd = selectedDate || ymdFromDate(new Date());
                     await renderDayPanels(ymd);
                     const [yy, mm] = ymd.split("-").map(Number);
@@ -464,34 +579,30 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             return;
         }
+
         const card = e.target.closest(".diary-card[data-diary-id]");
         if (!card || !diaryListContainerEl.contains(card)) return;
 
         const diaryId = card.dataset.diaryId;
         try {
-            const {data} = await axios.get(`/api/plantingCalender/diaryInfo/${encodeURIComponent(diaryId)}`, {
-                headers: {Accept: "application/json"}
+            const { data } = await axios.get(`/api/plantingCalender/diaryInfo/${encodeURIComponent(diaryId)}`, {
+                headers: { Accept: "application/json" }
             });
 
-            function openDiaryUpdateModal(resp) {
+            function openDiaryDetailModal(resp) {
                 const el = document.getElementById("diaryDetailModal");
                 if (!el) return showAlert("상세 모달이 없습니다.");
-
-                // 부트스트랩 모달 인스턴스 확보
                 const modal = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
 
-                // 응답 정규화
                 const d = resp?.diary ?? {};
                 const photos = Array.isArray(resp?.images) ? resp.images.map(it => it.fileUrl).filter(Boolean) : [];
 
-                // 필드 매핑: state -> condition, createdAt -> date
-                document.getElementById("detailPlant").value = d.name || d.plant || "-"; // 서버에서 식물명이 없으면 "-"로
+                document.getElementById("detailPlant").value = d.name || d.plant || "-";
                 document.getElementById("detailActivity").value = d.activity || "";
-                document.getElementById("detailCondition").value = d.state || "";        // 여기!
+                document.getElementById("detailCondition").value = d.state || "";
                 document.getElementById("detailMemo").value = d.memo || "";
                 document.getElementById("detailDate").textContent = (d.createdAt || "").toString().slice(0, 10);
 
-                // 사진 렌더
                 const wrap = document.getElementById("detailPhotos");
                 wrap.innerHTML = "";
                 if (photos.length === 0) {
@@ -509,14 +620,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 modal.show();
             }
 
-
-
-            openDiaryUpdateModal(data);
+            openDiaryDetailModal(data);
         } catch (err) {
             console.error("다이어리 상세 조회 실패:", err);
         }
     });
 
+    // 물주기 체크 변경
     document.getElementById("wateringListContainer")?.addEventListener("change", (e) => {
         const cb = e.target.closest(".watering-check");
         if (!cb) return;
@@ -526,14 +636,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("물주기 체크 변경:", wateringId, checked);
 
-        axios.put("/api/plantingCalender/watering", null,
-            {
-                params: {wateringId},
-                headers: {Accept: "application/json"}
-            });
+        axios.put("/api/plantingCalender/watering", null, {
+            params: { wateringId },
+            headers: { Accept: "application/json" }
+        });
 
         window.location.reload();
     });
+
+    document.getElementById("diaryModal")?.addEventListener("shown.bs.modal", async () => {
+        try {
+            // memberId 취득 (Thymeleaf 바인딩 또는 hidden input)
+            const memberId =
+                Number(document.body.dataset.memberId || document.getElementById("memberId")?.value || 0);
+
+            console.log("[DIARY] shown.bs.modal -> loadMyplants start", { memberId });
+
+            // memberId가 0이어도 호출하여 원인 분리(서버가 400을 주면 로그로 확인)
+            await loadMyplants(memberId || 1);
+
+            console.log("[DIARY] loadMyplants done");
+        } catch (e) {
+            console.error("[DIARY] shown.bs.modal hook error", e);
+        }
+    });
 });
-
-
