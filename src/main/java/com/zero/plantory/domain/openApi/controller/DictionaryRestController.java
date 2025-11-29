@@ -29,14 +29,14 @@ public class DictionaryRestController {
     }
 
     @GetMapping("/dry")
-    public JsonNode getDryDetail(@RequestParam(defaultValue = "1") String pageNo,
+    public JsonNode getDryGarden(@RequestParam(defaultValue = "1") String pageNo,
                                  @RequestParam(defaultValue = "10") String numOfRows,
                                  @RequestParam(defaultValue = "") String sClCode) {
         return dryGardenApiService.getDryGardenList(pageNo, numOfRows, sClCode);
     }
 
     @GetMapping("/dry/{cntntsNo}")
-    public JsonNode getDryDetail(@PathVariable String cntntsNo) {
+    public JsonNode getDryGardenDetail(@PathVariable String cntntsNo) {
         return dryGardenApiService.getDryGardenDetail(cntntsNo);
     }
 
