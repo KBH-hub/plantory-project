@@ -1,18 +1,19 @@
-package com.zero.plantory.domain.member.dto;
+package com.zero.plantory.domain.myProfile.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberUpdateRequest {
+public class MyWrittenDeleteRequest {
     private Long memberId;
-    private String nickname;
-    private String phone;
-    private String address;
+    private List<Long> sharingIds;
+    private List<Long> questionIds;
 }
 

@@ -1,7 +1,7 @@
-package com.zero.plantory.domain.member.service;
+package com.zero.plantory.domain.myProfile.service;
 
-import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListResponse;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package com.zero.plantory.domain.member.service;
+package com.zero.plantory.domain.myProfile.service;
 
-import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListResponse;
 
 import java.util.List;
 

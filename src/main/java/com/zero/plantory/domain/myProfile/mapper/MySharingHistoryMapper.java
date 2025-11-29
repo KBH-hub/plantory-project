@@ -1,7 +1,7 @@
-package com.zero.plantory.domain.member.mapper;
+package com.zero.plantory.domain.myProfile.mapper;
 
-import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
