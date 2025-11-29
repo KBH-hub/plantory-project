@@ -2,143 +2,215 @@ document.addEventListener('DOMContentLoaded', () => {
     let pageNo = 1;
     const numOfRows = 10;
 
-    // 최초 로딩
+    const api = axios.create({ baseURL: '/' });
+
+    const state = { q: '', mode: 'server' };
+    let allCache = [];
+
+    // 초기 렌더
     loadList(pageNo, numOfRows);
 
-    // 검색 버튼 클릭시(필요 시 필터값 수집 후 전달)
+    // 검색 UI
+    const $q = document.getElementById('qName');
+    const $btnSearch = document.getElementById('btnSearch');
+    $btnSearch && $btnSearch.addEventListener('click', onSearch);
+    $q && $q.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
+
+    // 초기화(전체보기)
     document.querySelector('button.btn.btn-secondary')?.addEventListener('click', () => {
-        pageNo = 1;
+        if ($q) $q.value = '';
+        state.q = ''; state.mode = 'server'; pageNo = 1;
         loadList(pageNo, numOfRows);
     });
 
-    async function loadList(pageNo, numOfRows) {
-        const url = new URL('/api/dictionary/list', window.location.origin);
-        url.searchParams.set('pageNo', String(pageNo));
-        url.searchParams.set('numOfRows', String(numOfRows));
-        // 예: 채광(lightCode) 같은 필터를 지원한다면 여기서 추가
-        // url.searchParams.set('lightCode', selectedLightCode || '');
+    // 서버 페이징 목록 (엔드포인트: /api/dictionary/dry)
+    async function loadList(p, rows) {
+        try {
+            const res = await api.get('/api/dictionary/dry', {
+                params: { pageNo: String(p), numOfRows: String(rows) },
+            });
+            const body       = res.data?.body;
+            const items      = body?.items?.item || [];
+            const totalCount = Number(body?.items?.totalCount || 0);
+            const current    = Number(body?.items?.pageNo || p);
+            const size       = Number(body?.items?.numOfRows || rows);
 
-        const res = await fetch(url, { headers: { 'Accept': 'application/json' }});
-        if (!res.ok) {
-            console.error('API error', res.status, await res.text());
-            renderError('데이터를 불러오지 못했습니다.');
-            return;
+            renderList(asArray(items));
+            renderPager({
+                current,
+                totalPages: Math.max(1, Math.ceil(totalCount / size)),
+                onMove: (next) => { pageNo = next; loadList(pageNo, size); },
+            });
+        } catch (e) {
+            console.error(e);
+            renderList([]);
+            renderPager({ current: 1, totalPages: 1, onMove: () => {} });
         }
-        const data = await res.json();
-        const body = data?.body;
-        const items = body?.items?.item || [];
-        const totalCount = Number(body?.items?.totalCount || 0);
-        const current = Number(body?.items?.pageNo || pageNo);
-        const rows = Number(body?.items?.numOfRows || numOfRows);
-
-        renderList(items);
-        renderPaging(current, rows, totalCount);
-        attachPagingHandlers(rows, totalCount);
     }
 
+    // 검색(프론트 필터)
+    async function onSearch() {
+        state.q = ($q?.value || '').trim();
+        pageNo = 1;
+        if (!state.q) {
+            state.mode = 'server';
+            return loadList(pageNo, numOfRows);
+        }
+        state.mode = 'client';
+        await collectAll(); // 단순 전페이지 수집
+        renderClientSearch();
+    }
+
+    // 전체 페이지 수집 (엔드포인트: /api/dictionary/dry)
+    async function collectAll() {
+        allCache = [];
+        // 1페이지로 전체 페이지 계산
+        const first = await api.get('/api/dictionary/dry', {
+            params: { pageNo: '1', numOfRows: String(numOfRows) },
+        });
+        const firstBody  = first.data?.body;
+        const firstItems = asArray(firstBody?.items?.item || []);
+        const totalCount = Number(firstBody?.items?.totalCount || 0);
+        const size       = Number(firstBody?.items?.numOfRows || numOfRows);
+        const totalPages = Math.max(1, Math.ceil(totalCount / size));
+        allCache.push(...firstItems);
+
+        for (let p = 2; p <= totalPages; p++) {
+            const res = await api.get('/api/dictionary/dry', {
+                params: { pageNo: String(p), numOfRows: String(size) },
+            });
+            const pageItems = asArray(res.data?.body?.items?.item || []);
+            allCache.push(...pageItems);
+        }
+    }
+
+    function renderClientSearch() {
+        const q = normalize(state.q);
+        const filtered = allCache.filter((it) => {
+            const title   = normalize(it?.cntntsSj);
+            const clNm    = normalize(it?.clNm);
+            const scnm    = normalize(stripHtml(it?.scnm));
+            return title.includes(q) || clNm.includes(q) || scnm.includes(q);
+        });
+
+        const totalCount = filtered.length;
+        const size = numOfRows;
+        const totalPages = Math.max(1, Math.ceil(totalCount / size));
+        const current = Math.min(Math.max(1, pageNo), totalPages);
+        const from = (current - 1) * size;
+        const to   = Math.min(from + size, totalCount);
+
+        renderList(filtered.slice(from, to));
+        renderPager({
+            current,
+            totalPages,
+            onMove: (next) => { pageNo = next; renderClientSearch(); },
+        });
+    }
+
+    // 렌더
     function renderList(items) {
         const container = document.getElementById('resultList');
         if (!container) return;
-
         if (!items.length) {
-            container.innerHTML = `<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>`;
+            container.innerHTML = '<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>';
             return;
         }
-
         container.innerHTML = items.map(toCardHtml).join('');
     }
 
     function toCardHtml(item) {
-        // pipe 필드를 배열로
-        const thumbUrls = splitPipes(item.rtnThumbFileUrl);
-        const imgCodes  = splitPipes(item.rtnImgSeCode);
-        const imgUrls   = splitPipes(item.rtnFileUrl);
+        const title    = sanitize(item?.cntntsSj || '');
+        const clNm     = sanitize(item?.clNm || '');
+        const scnmHtml = String(item?.scnm || '');
 
-        // 대표 이미지 인덱스: 코드 209006(대표) 우선, 없으면 0
-        let idx = imgCodes.findIndex(c => c === '209006');
-        if (idx < 0) idx = 0;
+        // 대표 이미지 선택: thumbImgUrl1 > thumbImgUrl2 > imgUrl1 > imgUrl2
+        const thumb = firstTruthy(item?.thumbImgUrl1, item?.thumbImgUrl2, item?.imgUrl1, item?.imgUrl2) || '';
+        const full  = firstTruthy(item?.imgUrl1, item?.imgUrl2, item?.thumbImgUrl1, item?.thumbImgUrl2) || '';
 
-        const thumb = thumbUrls[idx] || thumbUrls[0] || 'https://via.placeholder.com/150';
-        const full  = imgUrls[idx]   || imgUrls[0]   || thumb;
+        const hasImg = !!thumb;
 
-        const title = sanitize(item.cntntsSj);
-        const id    = sanitize(item.cntntsNo);
+        const cntntsNoRaw = String(item?.cntntsNo ?? '').trim();
+        const detailUrl = `/readDryDictionary?cntntsNo=${encodeURIComponent(cntntsNoRaw)}`;
 
         return `
-        <div class="row mb-4 p-3 bg-white border rounded">
-          <div class="col-3">
-            <a href="${full}" target="_blank" rel="noopener">
-              <img src="${thumb}" class="img-fluid border" alt="${title}">
-            </a>
-          </div>
-          <div class="col-9 d-flex flex-column justify-content-center">
-            <a href="/plants/${id}" class="fw-bold fs-5 text-dark text-decoration-none">
-              ${title}
-            </a>
-            <!-- 필요하면 부가 정보 필드 추가 표시 -->
+      <div class="row mb-3 p-3 bg-white border rounded align-items-center">
+        <div class="col-auto pe-3">
+          <div class="border rounded overflow-hidden" style="width:120px;height:90px;">
+            ${
+            hasImg
+                ? `<a href="${full}" target="_blank" rel="noopener">
+                     <img src="${thumb}" alt="${title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+                   </a>`
+                : `<div class="bg-light d-flex align-items-center justify-content-center text-secondary" style="width:100%;height:100%;">🖼</div>`
+        }
           </div>
         </div>
-      `;
+        <div class="col">
+          <a href="${detailUrl}" class="fw-bold text-dark text-decoration-none">${title}</a>
+        </div>
+      </div>
+    `;
     }
 
-    function renderPaging(pageNo, numOfRows, totalCount) {
-        const totalPages = Math.max(1, Math.ceil(totalCount / numOfRows));
+    // 단일 페이저
+    function renderPager({ current, totalPages, onMove }) {
         const ul = document.getElementById('paging');
         if (!ul) return;
 
-        const max = totalPages;
-        const curr = pageNo;
+        const makeItem = (label, target, { disabled = false, active = false } = {}) => {
+            const li = document.createElement('li');
+            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = label;
+            a.addEventListener('click', (ev) => { ev.preventDefault(); if (!disabled && !active) onMove(target); });
+            li.appendChild(a);
+            return li;
+        };
 
-        // 부트스트랩 기본 형태
-        const pages = [];
-        pages.push(pageItem('이전', Math.max(1, curr - 1), curr === 1, 'prev'));
-        // 간단히 1~N 전부, 필요 시 구간 페이지로 개선
-        for (let p = 1; p <= max; p++) {
-            pages.push(pageItem(String(p), p, false, 'page', p === curr));
+        const win = 5;
+        const blockStart = Math.floor((current - 1) / win) * win + 1;
+        const blockEnd   = Math.min(blockStart + win - 1, totalPages);
+
+        ul.innerHTML = '';
+        ul.appendChild(makeItem('«', 1,           { disabled: current === 1 }));
+        ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1 }));
+        for (let p = blockStart; p <= blockEnd; p++) {
+            ul.appendChild(makeItem(String(p), p,   { active: p === current }));
         }
-        pages.push(pageItem('다음', Math.min(max, curr + 1), curr === max, 'next'));
-
-        ul.innerHTML = pages.join('');
+        const isLast = current >= totalPages;
+        ul.appendChild(makeItem('›', current + 1, { disabled: isLast }));
+        ul.appendChild(makeItem('»', totalPages,  { disabled: isLast }));
     }
 
-    function pageItem(label, go, disabled, role, active = false) {
-        const disabledCls = disabled ? ' disabled' : '';
-        const activeCls = active ? ' active' : '';
-        return `
-        <li class="page-item${disabledCls}${activeCls}">
-          <a class="page-link" href="#" data-page="${go}" data-role="${role}">${label}</a>
-        </li>
-      `;
+    // 유틸
+    function asArray(maybeArray) {
+        if (Array.isArray(maybeArray)) return maybeArray;
+        if (maybeArray == null) return [];
+        return [maybeArray];
     }
-
-    function attachPagingHandlers(numOfRows, totalCount) {
-        const ul = document.getElementById('paging');
-        if (!ul) return;
-        ul.querySelectorAll('a.page-link').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                const p = Number(a.dataset.page || '1');
-                loadList(p, numOfRows);
-            });
-        });
+    function firstTruthy(...args) {
+        for (const x of args) {
+            if (x != null && String(x).trim() !== '') return String(x).trim();
+        }
+        return '';
     }
-
-    function splitPipes(s) {
-        if (!s || typeof s !== 'string') return [];
-        return s.split('|').map(x => x.trim()).filter(Boolean);
-    }
-
     function sanitize(s) {
         s = s == null ? '' : String(s);
-        return s.replaceAll('&','&amp;')
-            .replaceAll('<','&lt;')
-            .replaceAll('>','&gt;')
-            .replaceAll('"','&quot;')
-            .replaceAll("'",'&#39;');
+        return s
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
     }
-
-    function renderError(msg) {
-        const container = document.getElementById('resultList');
-        if (container) container.innerHTML = `<div class="alert alert-danger">${sanitize(msg)}</div>`;
+    function stripHtml(s) {
+        if (s == null) return '';
+        return String(s).replace(/<[^>]*>/g, '');
+    }
+    function normalize(s) {
+        return stripHtml(s).toLowerCase().trim();
     }
 });

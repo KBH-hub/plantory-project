@@ -21,125 +21,10 @@
         <tbody>
 
         <tr>
-            <th class="w-25 align-middle">과명</th>
+            <th class="w-25 align-middle">식물명</th>
             <td>
-                <select class="form-select w-25 d-inline-block">
-                    <option selected>식물명</option>
-                    <option>다육이</option>
-                </select>
-
-                <select class="form-select w-25 d-inline-block ms-2">
-                    <option selected>세덤(Sedum)</option>
-                </select>
-
-                <button class="btn btn-secondary ms-2">
-                    검색
-                </button>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">형태분류</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">포도송이형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">군생형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">관목형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">포복형</label>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">뿌리형태</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">세근 뿌리</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">굵은 뿌리</label>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">생장속도</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">느림</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">보통</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">빠름</label>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">관리난이도</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">매우 쉬움</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">쉬움</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">보통</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">어려움</label>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">관리요구도</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">약간 돌봄</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">잘 견딤</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">필요함</label>
-                </div>
+                <input id="qName" type="text" class="form-control d-inline-block w-25" placeholder="식물명(표준·유통명)"/>
+                <button id="btnSearch" class="btn btn-secondary ms-2">검색</button>
             </td>
         </tr>
 
@@ -148,10 +33,8 @@
 
     <div class="mt-4">
 
-        <!-- 결과 리스트 -->
         <div id="resultList" class="mt-4"></div>
 
-        <!-- 페이지네이션 -->
         <nav class="d-flex justify-content-center mt-3" aria-label="page">
             <ul id="paging" class="pagination"></ul>
         </nav>
