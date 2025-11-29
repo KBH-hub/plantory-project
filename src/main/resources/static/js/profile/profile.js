@@ -8,10 +8,11 @@ let posts = [];
 let comments = [];
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    initProfileInfo();
+document.addEventListener("DOMContentLoaded", async () => {
+    await initProfileInfo();
     initTabs();
     initSearchFilter();
+    initButtons();
 });
 
 
@@ -38,7 +39,6 @@ async function initProfileInfo() {
     }
 }
 
-
 function renderMyProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname;
     document.getElementById("profileAddress").textContent = data.address;
@@ -49,6 +49,18 @@ function renderPublicProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname;
     document.getElementById("profileAddress").textContent = data.address ?? "비공개";
     document.getElementById("sharingRate").textContent = "나눔지수: " + data.sharingRate + "%";
+}
+
+function initButtons() {
+    const updateBtn = document.getElementById("updateMyInfoBtn");
+
+    if (updateBtn) {
+        updateBtn.addEventListener("click", () => {
+            if (IS_ME) {
+                window.location.href = `/profile/update/${PROFILE_ID}`;
+            }
+        });
+    }
 }
 
 function hideMyButtons() {

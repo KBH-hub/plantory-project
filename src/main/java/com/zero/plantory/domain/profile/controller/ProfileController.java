@@ -36,6 +36,23 @@ public class ProfileController {
 
         return "profile/profileInfo";
     }
+
+    @GetMapping("update/{memberId}")
+    public String updateProfile(
+            @PathVariable Long memberId,
+            @AuthenticationPrincipal MemberDetail memberDetail,
+            Model model) {
+
+        Long loginMemberId = memberDetail.getMemberResponse().getMemberId();
+        boolean isMe = loginMemberId.equals(memberId);
+
+        model.addAttribute("profileInfo", Map.of(
+                "isMe", isMe,
+                "profileId", memberId
+        ));
+
+        return "profile/updateProfileInfo";
+    }
 }
 
 
