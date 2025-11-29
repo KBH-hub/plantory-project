@@ -89,8 +89,8 @@ function bindSubmit() {
         formData.append("content", document.querySelector("#contentInput").value);
         formData.append("plantType", document.querySelector("#plantNameInput").value);
 
-        const managementLevel = document.querySelector("#plantConditionInput").dataset.enum;
-        const managementNeeds = document.querySelector("#plantDifficultyInput").dataset.enum;
+        const managementLevel = document.querySelector("#managementLevel").dataset.enum;
+        const managementNeeds = document.querySelector("#managementNeeds").dataset.enum;
 
         formData.append("managementLevel", managementLevel);
         formData.append("managementNeeds", managementNeeds);
