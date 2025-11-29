@@ -250,7 +250,7 @@
         WHERE sharing_id = #{sharingId}
     </update>
 
-    <select id="selectMySharingGiven" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
+    <select id="selectProfileSharingGiven" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
 
         SELECT
             s.sharing_id     AS sharingId,
@@ -269,7 +269,7 @@
     </select>
 
 
-    <select id="selectMySharingReceived" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
+    <select id="selectProfileSharingReceived" resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
 
         SELECT
             s.sharing_id     AS sharingId,
@@ -292,6 +292,44 @@
         SET sharing_rate = COALESCE(sharing_rate, 0) + #{score}
         WHERE member_id = #{memberId}
     </update>
+
+
+    <select id="selectReviewInfoForGiver"
+            resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
+
+        SELECT
+            s.sharing_id AS sharingId,
+            s.title AS title,
+            s.created_at AS createdAt,
+            mb.member_id AS partnerId,
+            mb.nickname AS partnerNickname
+        FROM sharing s
+                 JOIN member mb ON mb.member_id = s.target_member_id
+        WHERE s.sharing_id = #{sharingId}
+          AND s.status = 'true'
+          AND s.member_id = #{memberId}
+          AND s.del_flag IS NULL
+          AND mb.del_flag IS NULL;
+    </select>
+
+    <select id="selectReviewInfoForReceiver"
+            resultType="com.zero.plantory.domain.sharing.dto.SharingHistoryResponse">
+
+        SELECT
+            s.sharing_id AS sharingId,
+            s.title AS title,
+            s.created_at AS createdAt,
+            mb.member_id AS partnerId,
+            mb.nickname AS partnerNickname
+        FROM sharing s
+                 JOIN member mb ON mb.member_id = s.member_id
+        WHERE s.sharing_id = #{sharingId}
+          AND s.target_member_id = #{memberId}
+          AND s.status = 'true'
+          AND s.del_flag IS NULL
+          AND mb.del_flag IS NULL;
+
+    </select>
 
 
 

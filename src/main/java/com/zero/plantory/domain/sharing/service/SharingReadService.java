@@ -22,4 +22,8 @@ public interface SharingReadService {
 
     /** 내가 받은 나눔 내역 조회 */
     List<SharingHistoryResponse> getMySharingReceived(Long memberId);
+
+    SharingHistoryResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId);
+
+    SharingHistoryResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId);
 }
