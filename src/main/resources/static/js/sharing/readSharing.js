@@ -93,23 +93,24 @@ function updateActionButtons() {
     const writerId = Number(document.body.dataset.writerId);
     const status = document.body.dataset.sharingStatus;
 
-    const btnUpdate = document.getElementById("btnUpdate");
-    const btnDelete = document.getElementById("btnDelete");
-    const btnComplete = document.getElementById("btnComplete");
+    const myActions = document.getElementById("myActions");
+    const otherActions = document.getElementById("otherActions");
 
-    btnUpdate.style.display = "none";
-    btnDelete.style.display = "none";
-    btnComplete.style.display = "none";
+    myActions.style.display = "none";
+    otherActions.style.display = "none"
 
     if (loginId === writerId) {
+        myActions.style.display = "flex";
 
-        btnUpdate.style.display = "block";
-        btnDelete.style.display = "block";
+        const btnComplete = document.getElementById("btnComplete");
+        btnComplete.style.display = status === "false" ? "block" : "none";
 
-        if (status === "false") {
-            btnComplete.style.display = "block";
-        }
+    } else {
+        otherActions.style.display = "flex";
     }
+    console.log("loginId:", loginId, typeof loginId);
+    console.log("writerId:", writerId, typeof writerId);
+
 }
 
 
@@ -207,6 +208,7 @@ async function completeSharing() {
 
 
 function init() {
+
     bindLoginUserNickname();
     bindActionButtons();
 
