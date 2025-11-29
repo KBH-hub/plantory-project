@@ -17,7 +17,9 @@ public class PlantingCalendarResponse {
     private Long memberId;
     private String name;
     private String content;
+    private String memo;
     private String type;
     private Date createdAt;
     private Date checkFlag;
+    private Date dateAt;
 }

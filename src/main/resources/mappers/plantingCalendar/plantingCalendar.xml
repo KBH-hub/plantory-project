@@ -33,6 +33,7 @@
             p.member_id,
             p.name,
             w.date_at,
+            w.check_flag,
             'WATERING' type
         FROM watering w
         JOIN myplant p ON w.myplant_id = p.myplant_id

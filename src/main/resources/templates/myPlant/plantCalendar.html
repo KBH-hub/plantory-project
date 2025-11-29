@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,32 +11,24 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/plantCalendar.css}">
 </head>
-
-<body class="bg-light">
-
+<body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px;">
-
     <div class="container-fluid text-center my-4">
         <div class="row">
-
             <div class="col-lg-8 order-lg-1">
                 <h3 class="fw-bold mb-3">식물 캘린더</h3>
 
-
                 <div class="card shadow-sm">
                     <div class="bg-dark" style="height:30px; margin-bottom:6px;"></div>
-
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <button id="prevMonth" class="btn btn-outline-secondary btn-sm">
+                            <button id="prevMonth" type="button" class="btn btn-outline-secondary btn-sm">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </button>
-
                             <h5 id="monthLabel" class="mb-0 fs-2">로딩중...</h5>
-
-                            <button id="nextMonth" class="btn btn-outline-secondary btn-sm">
+                            <button id="nextMonth" type="button" class="btn btn-outline-secondary btn-sm">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </div>
@@ -58,9 +49,7 @@
             </div>
 
             <div class="col-lg-4 order-lg-2">
-
                 <div class="plant-section-wrapper shadow">
-
                     <div class="section-title-bar">
                         <div class="bg-dark d-flex align-items-center" style="height:30px;padding-left:10px;">
                             <h5 class="m-0 fw-bold text-white">오늘의 식물 관리</h5>
@@ -68,16 +57,14 @@
                     </div>
 
                     <div class="section-content">
-
                         <div class="card shadow-sm mb-2 card-half">
-                            <div
-                                class="card-header bg-primary p-2 text-white d-flex justify-content-between align-items-center">
-                                <i class="bi bi-droplet me-2"></i>
-                                <span class="fw-semibold small">물주기</span>
+                            <div class="card-header bg-primary p-2 text-white d-flex align-items-center">
+                                <div style="width:24px;"><i class="bi bi-droplet"></i></div>
+                                <div class="flex-grow-1 text-center"><span class="fw-semibold">물주기</span></div>
+                                <div style="width:24px;"></div>
                             </div>
-                            <div class="card-body" id="wateringListContainer">
-                            </div>
-                            <div class="text-muted small">오늘 물 줄 식물이 없습니다.</div>
+                            <div class="card-body" id="wateringListContainer"></div>
+                            <div class="p-3" id="wateringEmpty" hidden>오늘 물 줄 식물이 없습니다.</div>
                         </div>
 
                         <div class="divider-line"></div>
@@ -85,31 +72,23 @@
                         <div class="card shadow-sm card-half">
                             <div class="card-header bg-warning p-2 d-flex justify-content-between align-items-center">
                                 <i class="bi bi-journal-text me-2"></i>
-                                <span class="fw-semibold small">관찰일지</span>
-                                <button class="btn btn-dark btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#diaryModal">+추가</button>
+                                <span class="fw-semibold">관찰일지</span>
+                                <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#diaryModal">+추가</button>
                             </div>
                             <div class="card-body" id="diaryListContainer"></div>
-                            <div class="text-muted small">최근 작성된 관찰일지가 없습니다.</div>
+                            <div class="p-3" id="diaryEmpty" hidden>최근 작성된 관찰일지가 없습니다.</div>
                         </div>
-
                     </div>
                 </div>
-
-
 
                 <div class="modal fade" id="diaryModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
-
                             <div class="modal-header bg-warning text-white border-0">
                                 <h5 class="modal-title fw-bold">관찰일지 등록</h5>
-                                <button type="button" class="btn-close btn-close-white"
-                                    data-bs-dismiss="modal"></button>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
-
                             <div class="modal-body">
-
                                 <label class="fw-bold">식물 선택 <span class="text-danger">*</span></label>
                                 <select id="plantSelect" class="form-select mb-3">
                                     <option value="방울토마토">방울토마토</option>
@@ -126,23 +105,17 @@
 
                                 <label class="fw-bold">사진</label>
                                 <div id="photoList" class="d-flex gap-3 align-items-center mb-3">
-                                    <div id="addPhotoBtn"
-                                        class="d-flex justify-content-center align-items-center border rounded"
-                                        style="width:110px;height:110px;background:#efefef;cursor:pointer;">
+                                    <div id="addPhotoBtn" class="d-flex justify-content-center align-items-center border rounded" style="width:110px;height:110px;background:#efefef;cursor:pointer;">
                                         <span class="fs-1">+</span>
                                     </div>
                                 </div>
 
                                 <label class="fw-bold">메모 <span class="text-danger">*</span></label>
-                                <textarea id="memoInput" class="form-control" rows="4"
-                                    placeholder="내용을 입력하세요"></textarea>
-
+                                <textarea id="memoInput" class="form-control" rows="4" placeholder="내용을 입력하세요"></textarea>
                             </div>
-
                             <div class="modal-footer border-0">
                                 <button id="saveDiaryBtn" class="btn btn-success w-50 mx-auto">일지 저장</button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -154,13 +127,10 @@
                                 <h5 class="modal-title">사진 추가</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-
                             <div class="modal-body">
-                                <img id="previewImage" class="img-fluid rounded d-none mb-3"
-                                    style="max-height:300px;object-fit:cover;">
+                                <img id="previewImage" class="img-fluid rounded d-none mb-3" style="max-height:300px;object-fit:cover;">
                                 <input type="file" id="imageInput" class="form-control" accept="image/*">
                             </div>
-
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                 <button id="saveImageBtn" class="btn btn-primary">추가</button>
@@ -168,12 +138,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
+            </div> <!-- /.col-lg-4 -->
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/myPlant/plantCalendar.js}"></script>
 </body>
-
 </html>
