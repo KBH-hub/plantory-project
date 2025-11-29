@@ -12,12 +12,15 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/css/readSharing.css}">
 </head>
-<body class="bg-light" th:data-sharing-id="${sharingId}" th:data-member-id="${#authentication.principal.MemberResponse.memberId}" th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}">
+<body class="bg-light" th:data-sharing-id="${sharingId}"
+      th:data-member-id="${#authentication.principal.MemberResponse.memberId}"
+      th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
     <div class="card">
         <div class="card-body">
+
             <div class="row g-3">
                 <div class="col-md-4">
                     <div id="shareCarousel" class="carousel slide share-image-wrap" data-bs-ride="false">
@@ -36,6 +39,7 @@
                         <div id="shareCarouselIndicators" class="carousel-indicators m-0"></div>
                     </div>
                 </div>
+
                 <div class="col-md-7">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 id="shareTitle" class="fw-bold mb-1"></h5>
@@ -55,6 +59,7 @@
                     <div id="contentBox" class="p-2 bg-white"></div>
                 </div>
             </div>
+
 
             <div class="my-3">
                 <div class="d-flex align-items-center justify-content-between">
@@ -90,38 +95,31 @@
                         </div>
 
                     </div>
-
                 </div>
-
             </div>
 
                 <hr class="my-3">
 
                 <div class="mb-2 text-muted small">댓글</div>
+                 <!-- 댓글 리스트 -->
                 <ul id="commentList" class="list-group mt-3"></ul>
 
                 <!-- 댓글 입력 영역 -->
                 <div class="d-flex align-items-center mt-3">
-
                     <div class="me-3 d-flex align-items-center" style="width:40px;">
                         <span id="loginUserNickname" class="ms-2 fw-semibold small"></span>
                     </div>
 
                     <div class="input-group">
                         <input id="commentInput" type="text" class="form-control" placeholder="댓글을 입력하세요.">
-                        <button id="btnCommentSubmit" class="btn btn-secondary">
-                            등록
-                        </button>
+                        <button id="btnCommentSubmit" class="btn btn-secondary">등록</button>
                     </div>
-
                 </div>
 
-            </div>
+
         </div>
     </div>
 </div>
-
-
 
 
 <!-- 2) 모달 1: 나눔 완료 상대 선택 -->
@@ -256,6 +254,7 @@
 <script th:src="@{/js/common/modal.js}"></script>
 <script th:src="@{/js/common/alert.js}"></script>
 <script th:src="@{/js/common/timeAgo.js}"></script>
-<script th:src="@{/js/sharing/readSharing.js}"></script>
+<script type="module" th:src="@{/js/sharing/readSharing.js}"></script>
+<script type="module" th:src="@{/js/sharing/readSharing.comment.js}"></script>
 </body>
 </html>

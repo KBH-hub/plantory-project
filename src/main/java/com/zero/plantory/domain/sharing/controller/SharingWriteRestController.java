@@ -95,13 +95,17 @@ public class SharingWriteRestController {
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(
             @PathVariable Long commentId,
-            @RequestParam Long memberId) {
+            @RequestParam Long memberId,
+            @RequestParam Long sharingId
+    ) {
 
         CommentRequest request = new CommentRequest();
         request.setCommentId(commentId);
         request.setWriterId(memberId);
+        request.setSharingId(sharingId);
 
         boolean result = sharingWriteService.deleteComment(request);
         return ResponseEntity.ok(result);
     }
+
 }
