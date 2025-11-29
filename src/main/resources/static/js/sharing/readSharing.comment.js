@@ -144,11 +144,10 @@ export async function submitComment(sharingId) {
 
 export async function submitEditComment(commentId, newText) {
     await axios.put(`/api/sharing/comments/${commentId}`, {
-        commentId,
-        sharingId: Number(document.body.dataset.sharingId),
-        writerId: Number(document.body.dataset.memberId),
-        content: newText
+        content: newText,
+        sharingId: Number(document.body.dataset.sharingId)
     });
+
 
     return true;
 }
@@ -161,11 +160,9 @@ export async function deleteComment(commentId) {
         if (!confirm) return;
 
         await axios.delete(`/api/sharing/comments/${commentId}`, {
-            params: {
-                memberId,
-                sharingId
-            }
+            params: { sharingId }
         });
+
 
         document.dispatchEvent(new CustomEvent("comments:changed"));
     });
