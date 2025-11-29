@@ -36,6 +36,16 @@ function renderDetail(detail) {
 
     document.getElementById("interestCount").innerText = `(${detail.interestNum})`;
     document.getElementById("sharingRate").innerHTML =  `🌿 나눔 지수 ${detail.sharingRate}% `;
+
+    let timeText;
+
+    if (detail.updatedAt) {
+        timeText = timeAgo(detail.updatedAt) + " (수정됨)";
+    } else {
+        timeText = timeAgo(detail.createdAt);
+    }
+
+    document.getElementById("shareCreated").innerText = timeText;
 }
 
 function renderCarousel(images) {

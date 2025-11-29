@@ -34,40 +34,28 @@ public class SharingWriteRestController {
         return ResponseEntity.ok(sharingId);
     }
 
-//    @PutMapping("/{sharingId}")
-//    public ResponseEntity<?> updateSharing(
-//            @PathVariable Long sharingId,
-//            @ModelAttribute SharingRequest request,
-//            @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException {
-//
-//        request.setSharingId(sharingId);
-//        boolean result = sharingWriteService.updateSharing(request, files);
-//        return ResponseEntity.ok(result);
-//    }
-@PutMapping("/{sharingId}")
-public ResponseEntity<?> updateSharing(
-        @PathVariable Long sharingId,
-        @ModelAttribute SharingRequest request,
-        @RequestParam(value = "files", required = false) List<MultipartFile> files
-) throws IOException {
+    @PutMapping("/{sharingId}")
+    public ResponseEntity<?> updateSharing(
+            @PathVariable Long sharingId,
+            @ModelAttribute SharingRequest request,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
-    request.setSharingId(sharingId);
+        request.setSharingId(sharingId);
 
-    // JSON 문자열 → List<Long>
-    if (request.getDeletedImageIds() != null && !request.getDeletedImageIds().isBlank()) {
-        ObjectMapper mapper = new ObjectMapper();
+        if (request.getDeletedImageIds() != null && !request.getDeletedImageIds().isBlank()) {
+            ObjectMapper mapper = new ObjectMapper();
 
-        List<Long> ids = mapper.readValue(
-                request.getDeletedImageIds(),
-                new TypeReference<List<Long>>() {}
-        );
+            List<Long> ids = mapper.readValue(
+                    request.getDeletedImageIds(),
+                    new TypeReference<List<Long>>() {}
+            );
 
-        request.setDeletedImageIdList(ids);  // 변환된 리스트 저장
+            request.setDeletedImageIdList(ids);
+        }
+
+        boolean result = sharingWriteService.updateSharing(request, files);
+        return ResponseEntity.ok(result);
     }
-
-    boolean result = sharingWriteService.updateSharing(request, files);
-    return ResponseEntity.ok(result);
-}
 
 
     @DeleteMapping("/{sharingId}")

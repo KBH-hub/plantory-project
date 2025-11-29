@@ -67,36 +67,6 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     }
 
 
-//    @Override
-//    @Transactional
-//    public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
-//
-//        if (sharingMapper.countProfileSharing(request.getSharingId(), request.getMemberId()) == 0) {
-//            throw new IllegalStateException("본인 글만 수정 가능");
-//        }
-//
-//        Long sharingId = request.getSharingId();
-//
-//        if (newImages != null && !newImages.isEmpty()) {
-//
-//            imageMapper.softDeleteImagesByTarget(ImageTargetType.SHARING, sharingId);
-//
-//            for (MultipartFile file : newImages) {
-//
-//                String url = storageUploader.uploadFile(file);
-//
-//                imageMapper.insertImage(ImageDTO.builder()
-//                        .memberId(request.getMemberId())
-//                        .targetType(ImageTargetType.SHARING)
-//                        .targetId(sharingId)
-//                        .fileUrl(url)
-//                        .fileName(file.getOriginalFilename())
-//                        .build());
-//            }
-//        }
-//
-//        return sharingMapper.updateSharing(request) > 0;
-//    }
 @Override
 @Transactional
 public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
@@ -107,15 +77,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
 
     Long sharingId = request.getSharingId();
 
-    // 0) 수정된 본문 저장
     sharingMapper.updateSharing(request);
-
-    // 1) 삭제 요청된 기존 이미지만 soft delete
-//    if (request.getDeletedImageIds() != null && !request.getDeletedImageIds().isEmpty()) {
-//        for (Long imageId : request.getDeletedImageIds()) {
-//            imageMapper.softDeleteImage(imageId);
-//        }
-//    }
 
     if (request.getDeletedImageIdList() != null) {
         for (Long id : request.getDeletedImageIdList()) {
@@ -123,7 +85,6 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
         }
     }
 
-    // 2) 새로 추가된 이미지만 insert
     if (newImages != null && !newImages.isEmpty()) {
         for (MultipartFile file : newImages) {
             if (file.isEmpty()) continue;
