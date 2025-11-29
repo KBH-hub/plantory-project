@@ -63,7 +63,7 @@ public class SecurityConfig {
                                 "/sharing/**",
                                 "/dashboard",
                                 "/my/**",
-                                "/myProfile"
+                                "/profile"
                         ).authenticated()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")

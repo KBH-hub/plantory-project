@@ -55,8 +55,8 @@ public class CmdController {
     @RequestMapping("/myPlantManagement")
     public String myPlantManagement(){return "myPlant/myPlantManagement";}
 
-    @RequestMapping("/myProfile")
-    public String myProfile(){return "myProfile/myProfile";}
+    @RequestMapping("/profileInfo")
+    public String profile(){return "profile/profileInfo";}
 
     @GetMapping("/plantCalendar")
     public String plantCalendar(){
@@ -104,7 +104,7 @@ public class CmdController {
     }
 
     @RequestMapping("/mySharingHistory")
-    public String mySharingHistory(){return "myProfile/mySharingHistory";}
+    public String mySharingHistory(){return "profile/mySharingHistory";}
 
     @GetMapping("/sharingList")
     public String sharingList(){
@@ -122,7 +122,7 @@ public class CmdController {
     }
 
     @RequestMapping("/updateMyInfo")
-    public String updateMyInfo(){return "myProfile/updateMyInfo";}
+    public String updateMyInfo(){return "profile/updateProfileInfo";}
 
     @RequestMapping("/updateReview")
     public String updateReview(){ return "sharing/updateReview"; }

@@ -71,7 +71,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Transactional
     public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
 
-        if (sharingMapper.countMySharing(request.getSharingId(), request.getMemberId()) == 0) {
+        if (sharingMapper.countProfileSharing(request.getSharingId(), request.getMemberId()) == 0) {
             throw new IllegalStateException("본인 글만 수정 가능");
         }
 
@@ -103,7 +103,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Transactional
     public boolean deleteSharing(Long sharingId, Long memberId) {
 
-        int isMine = sharingMapper.countMySharing(sharingId, memberId);
+        int isMine = sharingMapper.countProfileSharing(sharingId, memberId);
         if (isMine == 0) {
             throw new IllegalStateException("본인 글만 삭제 가능");
         }
@@ -170,7 +170,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Transactional
     public boolean updateComment(CommentRequest request) {
 
-        int isMine = sharingMapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
+        int isMine = sharingMapper.countProfileComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         if (isMine == 0) {
             throw new IllegalStateException("본인 댓글만 수정 가능");
         }
@@ -182,7 +182,7 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     @Transactional
     public boolean deleteComment(CommentRequest request) {
 
-        int isMine = sharingMapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
+        int isMine = sharingMapper.countProfileComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         if (isMine == 0) {
             throw new IllegalStateException("본인 댓글만 삭제 가능");
         }
