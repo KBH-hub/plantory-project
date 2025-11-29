@@ -43,6 +43,7 @@ function renderDetail(detail) {
     document.body.dataset.writerId = detail.memberId;
     document.body.dataset.sharingStatus = detail.status;
 
+    document.getElementById("writerLink").href = `/profile/${detail.memberId}`;
 }
 
 function renderComments(list) {
