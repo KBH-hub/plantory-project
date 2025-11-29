@@ -1,4 +1,4 @@
-
+/* 레이아웃 컨테이너 */
 .container-fluid {
     max-width: 1400px;
 }
@@ -8,29 +8,74 @@
     align-items: stretch;
 }
 
-
-
+/* 캘린더 그리드 */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
 }
 
+/* 캘린더 셀 */
 .calendar-cell {
+    position: relative;
     min-height: 75px;
     border: 1px solid #ddd;
     border-radius: 3px;
-    padding: 4px;
+    padding: 6px 8px 8px 8px;
     font-size: 15px;
+    background: #fff;
 }
 
-.calendar-cell span {
+.calendar-cell > span {
     font-weight: bold;
 }
 
 .calendar-cell.empty {
     background: #ffffff;
     border-style: dashed;
+}
+
+.calendar-cell .badge-wrap {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+}
+
+.calendar-cell .badge-diary,
+.calendar-cell .badge-watering {
+    position: static;
+    min-height: 18px;
+    padding: 0 6px;
+    font-size: 11px;
+    line-height: 18px;
+    border-radius: 999px;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.calendar-cell .badge-diary { background: #f0ad4e; color: #111; }
+.calendar-cell .badge-watering { background: #0d6dfb; color: #fff; }
+
+.calendar-cell.has-diary { border-top: 4px solid #fdbf07; }
+.calendar-cell.has-watering { border-top: 4px solid #0d6dfb; }
+
+.calendar-cell.has-diary.has-watering {
+    border-top: none;
+    background:
+            linear-gradient(to right, #fdbf07 0 50%, #0d6dfb 50% 100%) top / 100% 4px no-repeat,
+            #fff;
+}
+
+.calendar-cell.selected {
+    outline: 2px solid #198754; /* 또는 원하는 색상 */
+    outline-offset: -2px;
+    box-shadow: inset 0 0 0 2px rgba(25,135,84,.2);
 }
 
 .plant-section-wrapper {
@@ -46,6 +91,9 @@
 .card-half {
     width: 100% !important;
     margin: 0 auto 10px auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-header {
@@ -54,6 +102,8 @@
 
 .card-body {
     padding: 10px 12px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .section-title-bar .bg-dark {
@@ -65,16 +115,4 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-
-.card-half {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-half .card-body {
-    flex: 1;
-    overflow-y: auto;
 }

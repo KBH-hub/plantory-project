@@ -14,7 +14,7 @@ public class SharingController {
     }
 
     @GetMapping("/updateSharing/{sharingId}")
-    public String editSharing(@PathVariable Long sharingId, Model model){
+    public String updateSharing(@PathVariable Long sharingId, Model model){
         model.addAttribute("sharingId", sharingId);
         return "sharing/createSharing";
     }

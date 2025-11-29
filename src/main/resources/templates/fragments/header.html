@@ -95,7 +95,7 @@
                     <div class="dropdown ph-profile">
                         <a class="d-flex align-items-center text-dark text-decoration-none ph-profile-btn" href="#" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle fs-3"></i>
-                            <span class="ms-2">닉네임님</span>
+                            <span class="ms-2" th:text="${#authentication.principal.memberResponse.nickname}"></span>님
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end ph-profile-menu">
                             <li><a class="dropdown-item" th:href="@{/profile}">내 프로필</a></li>

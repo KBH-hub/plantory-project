@@ -210,6 +210,7 @@
             try {
                 await axios.delete(endpoint, { data: ids });
                 await afterDeleteRefresh(ids.length);
+                showAlert("삭제되었습니다.");
             } catch (e) {
                 console.error(e);
                 showAlert(`삭제 실패: ${e?.response?.status || e.message}`);

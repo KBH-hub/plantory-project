@@ -106,27 +106,46 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
 
     @Override
     @Transactional
-    public int registerDiary(DiaryRequest request, List<MultipartFile> files, Long memberId) throws IOException {
-        int result = 0;
-        result += plantingCalendarMapper.insertDiary(request);
+    public int registerDiary(DiaryRequest request,
+                             List<MultipartFile> files,
+                             Long memberId) throws IOException {
 
-        for (MultipartFile file : files) {
+        List<MultipartFile> safeFiles = (files == null) ? List.of()
+                : files.stream().filter(f -> f != null && !f.isEmpty()).toList();
+
+        int insertedDiary = plantingCalendarMapper.insertDiary(request);
+        if (insertedDiary != 1) {
+            throw new IllegalStateException("관찰일지 저장 실패");
+        }
+        Long diaryId = request.getDiaryId();
+        if (diaryId == null) {
+            throw new IllegalStateException("diaryId 미할당: 매퍼의 useGeneratedKeys 설정 확인 필요");
+        }
+
+        int insertedImages = 0;
+        for (MultipartFile file : safeFiles) {
             String url = storageUploader.uploadFile(file);
 
             ImageDTO image = ImageDTO.builder()
                     .memberId(memberId)
                     .targetType(ImageTargetType.DIARY)
-                    .targetId(request.getDiaryId())
+                    .targetId(diaryId)
                     .fileUrl(url)
                     .fileName(file.getOriginalFilename())
                     .build();
-            result += imageMapper.insertImage(image);
 
+            insertedImages += imageMapper.insertImage(image);
         }
-        if (result == files.size() + 1) {
-            return result;
+
+        if (insertedDiary == 1 && insertedImages == safeFiles.size()) {
+            return 1;
         }
-        throw new IllegalStateException("관찰일지 등록 실패(업데이트 누락)");
+        throw new IllegalStateException("관찰일지 등록 실패(이미지 반영 수 불일치)");
+    }
+
+    @Override
+    public int removeDiary(Long diaryId) {
+        return plantingCalendarMapper.deleteDiary(diaryId);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.sharing.mapper;
 
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
+import com.zero.plantory.domain.sharing.dto.SharingHistoryResponse;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
 import com.zero.plantory.global.dto.ManagementLevel;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
 @SpringBootTest
@@ -238,6 +241,25 @@ public class SharingMapperTests {
         mapper.selectSharingListByAddressAndKeyword(vo)
                 .forEach(item -> log.info(item.toString()));
 
+    }
+
+    @Test
+    @DisplayName("분양자 리뷰정보 조회")
+    void selectReviewInfoForGiverTest() {
+        Long sharingId = 1L;
+        Long loginMemberId = 10L;
+
+        log.info("selectReviewInfoForGive = {}", mapper.selectReviewInfoForGiver(sharingId, loginMemberId));
+
+    }
+
+    @Test
+    @DisplayName("피분양자 리뷰정보 조회")
+    void selectReviewInfoForReceiverTest() {
+        Long sharingId = 1L;
+        Long loginMemberId = 20L;
+
+        log.info("selectReviewInfoForReceiver = {}", mapper.selectReviewInfoForReceiver(sharingId, loginMemberId));
     }
 
 

@@ -68,4 +68,31 @@ public class SharingReadServiceImpl implements SharingReadService {
 
 
 
+    @Override
+    public SharingHistoryResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId) {
+
+        SharingHistoryResponse result =
+                sharingMapper.selectReviewInfoForGiver(sharingId, loginMemberId);
+
+        if (result == null) {
+            throw new IllegalArgumentException("후기 작성 권한이 없습니다(분양자).");
+        }
+
+        return result;
+    }
+
+    @Override
+    public SharingHistoryResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId) {
+
+        SharingHistoryResponse result =
+                sharingMapper.selectReviewInfoForReceiver(sharingId, loginMemberId);
+
+        if (result == null) {
+            throw new IllegalArgumentException("후기 작성 권한이 없습니다(피분양자).");
+        }
+
+        return result;
+    }
+
+
 }

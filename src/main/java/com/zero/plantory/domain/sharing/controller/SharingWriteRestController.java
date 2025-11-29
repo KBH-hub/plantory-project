@@ -1,5 +1,7 @@
 package com.zero.plantory.domain.sharing.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
@@ -8,6 +10,7 @@ import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,9 +41,22 @@ public class SharingWriteRestController {
             @RequestParam(value = "files", required = false) List<MultipartFile> files) throws IOException {
 
         request.setSharingId(sharingId);
+
+        if (request.getDeletedImageIds() != null && !request.getDeletedImageIds().isBlank()) {
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<Long> ids = mapper.readValue(
+                    request.getDeletedImageIds(),
+                    new TypeReference<List<Long>>() {}
+            );
+
+            request.setDeletedImageIdList(ids);
+        }
+
         boolean result = sharingWriteService.updateSharing(request, files);
         return ResponseEntity.ok(result);
     }
+
 
     @DeleteMapping("/{sharingId}")
     public ResponseEntity<?> deleteSharing(
@@ -64,8 +80,8 @@ public class SharingWriteRestController {
     @DeleteMapping("/{sharingId}/interest")
     public ResponseEntity<?> removeInterest(
             @PathVariable Long sharingId,
-            @RequestParam Long memberId) {
-
+            @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
         boolean result = sharingWriteService.removeInterest(memberId, sharingId);
         return ResponseEntity.ok(result);
     }

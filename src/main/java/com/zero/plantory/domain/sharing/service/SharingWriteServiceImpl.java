@@ -67,36 +67,42 @@ public class SharingWriteServiceImpl implements SharingWriteService {
     }
 
 
-    @Override
-    @Transactional
-    public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
+@Override
+@Transactional
+public boolean updateSharing(SharingRequest request, List<MultipartFile> newImages) throws IOException {
 
-        if (sharingMapper.countProfileSharing(request.getSharingId(), request.getMemberId()) == 0) {
-            throw new IllegalStateException("본인 글만 수정 가능");
-        }
-
-        Long sharingId = request.getSharingId();
-
-        if (newImages != null && !newImages.isEmpty()) {
-
-            imageMapper.softDeleteImagesByTarget(ImageTargetType.SHARING, sharingId);
-
-            for (MultipartFile file : newImages) {
-
-                String url = storageUploader.uploadFile(file);
-
-                imageMapper.insertImage(ImageDTO.builder()
-                        .memberId(request.getMemberId())
-                        .targetType(ImageTargetType.SHARING)
-                        .targetId(sharingId)
-                        .fileUrl(url)
-                        .fileName(file.getOriginalFilename())
-                        .build());
-            }
-        }
-
-        return sharingMapper.updateSharing(request) > 0;
+    if (sharingMapper.countProfileSharing(request.getSharingId(), request.getMemberId()) == 0) {
+        throw new IllegalStateException("본인 글만 수정 가능");
     }
+
+    Long sharingId = request.getSharingId();
+
+    sharingMapper.updateSharing(request);
+
+    if (request.getDeletedImageIdList() != null) {
+        for (Long id : request.getDeletedImageIdList()) {
+            imageMapper.softDeleteImage(id);
+        }
+    }
+
+    if (newImages != null && !newImages.isEmpty()) {
+        for (MultipartFile file : newImages) {
+            if (file.isEmpty()) continue;
+
+            String url = storageUploader.uploadFile(file);
+
+            imageMapper.insertImage(ImageDTO.builder()
+                    .memberId(request.getMemberId())
+                    .targetType(ImageTargetType.SHARING)
+                    .targetId(sharingId)
+                    .fileUrl(url)
+                    .fileName(file.getOriginalFilename())
+                    .build());
+        }
+    }
+
+    return sharingMapper.updateSharing(request) > 0;
+}
 
 
     @Override

@@ -19,7 +19,6 @@ function setLoginUserNickname() {
 
 function renderDetail(detail) {
     document.getElementById("shareTitle").innerText = detail.title;
-    document.getElementById("shareCreated").innerText = timeAgo(detail.createdAt);
 
     document.getElementById("plantType").innerText = detail.plantType;
     document.getElementById("managementLevel").innerText = detail.managementLevel;
@@ -35,6 +34,16 @@ function renderDetail(detail) {
     document.getElementById("writerProfileLink").href = `/profile/${detail.memberId}`;
 
     document.getElementById("interestCount").innerText = `(${detail.interestNum})`;
+    document.getElementById("sharingRate").innerHTML =  `🌿 나눔 지수 ${detail.sharingRate}% `;
+
+    let timeText;
+
+    if (detail.updatedAt) {
+        timeText = timeAgo(detail.updatedAt) + " (수정됨)";
+    } else {
+        timeText = timeAgo(detail.createdAt);
+    }
+    document.getElementById("shareCreated").innerText = timeText;
 }
 
 function renderCarousel(images) {
@@ -103,6 +112,133 @@ function updateInterestButton(active, count) {
     countEl.textContent = `(${count})`;
 }
 
+
+// sharing complete
+function bindCompleteButton() {
+    const btn = document.getElementById("btnComplete");
+    if (!btn) return;
+
+    btn.addEventListener("click", async () => {
+        const sharingId = document.body.dataset.sharingId;
+        const receiverId = document.body.dataset.memberId;
+
+        try {
+            const res = await axios.get(`/api/sharing/${sharingId}/partners`, {
+                params: { receiverId }
+            });
+
+            renderCompleteTargetList(res.data);
+
+            const modal = new bootstrap.Modal(document.getElementById("modalSelectCounterpart"));
+            modal.show();
+
+        } catch (err) {
+            console.error(err);
+            showAlert("대화 상대를 불러오지 못했습니다.");
+        }
+    });
+}
+
+document.addEventListener("change", (e) => {
+    if (e.target.classList.contains("done-target-radio")) {
+        document.getElementById("btnSelectComplete").disabled = false;
+    }
+});
+
+document.getElementById("btnSelectComplete").addEventListener("click", () => {
+    const selected = document.querySelector(".done-target-radio:checked");
+
+    if (!selected) return;
+
+    const nickname = selected.nextElementSibling.innerText;
+    document.getElementById("confirmName").innerText = nickname;
+
+    // 1) 모달1 닫기
+    const modal1 = bootstrap.Modal.getInstance(document.getElementById("modalSelectCounterpart"));
+    modal1.hide();
+
+    // 2) 모달2 열기
+    new bootstrap.Modal(document.getElementById("modalConfirmComplete")).show();
+
+    // 모달2 - 취소하면 다시 모달1 열기
+    document.getElementById("btnCompleteCancel")?.addEventListener("click", () => {
+
+        // 1) 모달2 닫기
+        const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
+        modal2.hide();
+
+        // 2) 모달1 다시 열기
+        const modal1 = new bootstrap.Modal(document.getElementById("modalSelectCounterpart"));
+        modal1.show();
+    });
+
+});
+
+// modal 3
+document.getElementById("btnCompleteConfirm")?.addEventListener("click", async () => {
+    const sharingId = Number(document.body.dataset.sharingId);
+    const selected = document.querySelector(".done-target-radio:checked");
+
+    if (!selected) {
+        showAlert("대상을 선택하세요.");
+        return;
+    }
+
+    const targetMemberId = selected.value;
+    const nickname = selected.nextElementSibling.innerText;
+
+    try {
+        await axios.post(`/api/sharing/${sharingId}/complete`, null, {
+            params: { targetMemberId }
+        });
+
+        // 모달2 닫기
+        const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
+        modal2.hide();
+
+        // 후기 유도 모달(모달3)에 이름 세팅
+        document.getElementById("resultName").innerText = nickname;
+
+        // 모달3 열기
+        new bootstrap.Modal(document.getElementById("modalCompleteResult")).show();
+
+    } catch (err) {
+        console.error(err);
+        showAlert("나눔 완료 처리 중 오류가 발생했습니다.");
+    }
+});
+
+
+
+function renderCompleteTargetList(partners) {
+    const modalEl = document.getElementById("modalSelectCounterpart");
+    const body = modalEl.querySelector(".modal-body");
+
+    body.innerHTML = `
+        <div class="small text-muted mb-2">이 글에 대해 쪽지를 나눈 상대</div>
+    `;
+
+    if (partners.length === 0) {
+        body.innerHTML += `<div class="text-muted small">쪽지 기록이 없습니다.</div>`;
+        return;
+    }
+
+    partners.forEach((p, i) => {
+        body.innerHTML += `
+            <div class="form-check">
+                <input class="form-check-input done-target-radio"
+                       type="radio" name="doneTarget"
+                       id="done${i}" value="${p.memberId}">
+                <label class="form-check-label" for="done${i}">
+                    ${p.nickname}
+                </label>
+            </div>
+        `;
+    });
+}
+
+
+
 async function toggleInterest() {
     const btn = document.getElementById("btnInterest");
     const countEl = document.getElementById("interestCount");
@@ -124,9 +260,7 @@ async function toggleInterest() {
             }
 
         } else {
-            const res = await axios.delete(`/api/sharing/${sharingId}/interest`, {
-                params: { memberId }
-            });
+            const res = await axios.delete(`/api/sharing/${sharingId}/interest`);
             const success = res.data === true;
 
             if (success) {
@@ -187,14 +321,6 @@ async function deleteSharing() {
     });
 }
 
-async function completeSharing() {
-    if (!confirm("나눔을 완료 처리하시겠습니까?")) return;
-
-    await axios.put(`/api/sharing/${sharingId}/complete`);
-    showAlert("나눔 완료 처리되었습니다!");
-    loadSharingDetail();
-}
-
 async function loadComments() {
     const res = await axios.get(`/api/sharing/${sharingId}/comments`);
     renderComments(res.data);
@@ -220,9 +346,10 @@ function init() {
     setLoginUserNickname();
     document.getElementById("btnInterest").addEventListener("click", toggleInterest);
     document.getElementById("btnDelete").addEventListener("click", deleteSharing);
-    document.getElementById("btnComplete").addEventListener("click", completeSharing);
+    // document.getElementById("btnComplete").addEventListener("click", completeSharing);
     bindMessageButton();
     bindCommentSubmitEvent();
+    bindCompleteButton();
 
     document.addEventListener("comments:changed", loadComments);
 
