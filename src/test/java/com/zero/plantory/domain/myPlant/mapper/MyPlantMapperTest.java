@@ -22,10 +22,11 @@ class MyPlantMapperTest {
     @DisplayName("나의 식물 관리 화면")
     void selectMyPlantListTest() {
         Long memberId = 20L;
+        String name = "";
         int limit = 10;
         int offset = 0;
 
-        List<MyPlantResponse> result = myPlantMapper.selectMyPlantList(memberId, limit, offset);
+        List<MyPlantResponse> result = myPlantMapper.selectMyPlantList(memberId, name, limit, offset);
 
         log.info("result={}", result);
     }

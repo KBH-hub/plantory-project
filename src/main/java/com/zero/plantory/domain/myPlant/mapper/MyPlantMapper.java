@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface MyPlantMapper {
 
-    List<MyPlantResponse> selectMyPlantList(@Param("memberId") Long memberId, @Param("limit") int limit, @Param("offset") int offset);
+    List<MyPlantResponse> selectMyPlantList(@Param("memberId") Long memberId, @Param("name") String name, @Param("limit") int limit, @Param("offset") int offset);
     List<MyPlantSearchNameResponse> selectMyPlantByName(@Param("memberId") Long memberId, @Param("name") String name);
     int insertMyPlant(MyPlantRequest vo);
     int updateMyPlant(MyPlantRequest vo);

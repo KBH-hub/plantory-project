@@ -21,11 +21,12 @@ class MyPlantServiceTest {
     @Test
     @DisplayName("내 식물 리스트 조회")
     void getMyPlantListTest() {
-        Long memberId = 1L;
+        Long memberId = 4L;
+        String name = "";
         int limit = 10;
         int offset = 0;
 
-        List<MyPlantResponse> result = myPlantService.getMyPlantList(memberId, limit, offset);
+        List<MyPlantResponse> result = myPlantService.getMyPlantList(memberId, name, limit, offset);
 
         log.info("result={}", result);
     }

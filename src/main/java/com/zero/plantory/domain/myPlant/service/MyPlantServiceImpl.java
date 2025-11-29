@@ -22,9 +22,9 @@ public class MyPlantServiceImpl implements MyPlantService {
 
 
     @Override
-    public List<MyPlantResponse> getMyPlantList(Long memberId, int limit, int offset) {
+    public List<MyPlantResponse> getMyPlantList(Long memberId,String name, int limit, int offset) {
         List<MyPlantResponse> resultList = new ArrayList<>();
-        List<MyPlantResponse> myPlantList = myPlantMapper.selectMyPlantList(memberId, limit, offset);
+        List<MyPlantResponse> myPlantList = myPlantMapper.selectMyPlantList(memberId, name, limit, offset);
         for (MyPlantResponse response : myPlantList) {
             List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
