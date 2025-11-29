@@ -1,8 +1,8 @@
 package com.zero.plantory.domain.member.service;
 
 
-import com.zero.plantory.domain.member.dto.MemberResponse;
-import com.zero.plantory.domain.member.dto.MemberSignUpRequest;
+import com.zero.plantory.domain.profile.dto.MemberResponse;
+import com.zero.plantory.domain.profile.dto.MemberSignUpRequest;
 
 public interface MemberService {
     boolean isDuplicateMembername(String membername);

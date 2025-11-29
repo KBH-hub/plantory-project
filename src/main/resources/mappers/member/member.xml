@@ -18,7 +18,7 @@
           AND del_flag IS NULL
     </select>
 
-    <insert id="insertMember" parameterType="com.zero.plantory.domain.member.dto.MemberResponse">
+    <insert id="insertMember" parameterType="com.zero.plantory.domain.profile.dto.MemberResponse">
         INSERT INTO member (
             membername, password, nickname, phone, address,
             sharing_rate, skill_rate, management_rate,
@@ -33,7 +33,7 @@
                )
     </insert>
 
-    <select id="selectByMembername" resultType="com.zero.plantory.domain.member.dto.MemberResponse">
+    <select id="selectByMembername" resultType="com.zero.plantory.domain.profile.dto.MemberResponse">
         SELECT member_id, membername, password, nickname, phone, address,
                sharing_rate, skill_rate, management_rate,
                role, stop_day, del_flag

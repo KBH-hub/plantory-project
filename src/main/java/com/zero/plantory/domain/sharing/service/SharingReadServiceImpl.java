@@ -58,12 +58,12 @@ public class SharingReadServiceImpl implements SharingReadService {
 
     @Override
     public List<SharingHistoryResponse> getMySharingGiven(Long memberId) {
-        return sharingMapper.selectMySharingGiven(memberId);
+        return sharingMapper.selectProfileSharingGiven(memberId);
     }
 
     @Override
     public List<SharingHistoryResponse> getMySharingReceived(Long memberId) {
-        return sharingMapper.selectMySharingReceived(memberId);
+        return sharingMapper.selectProfileSharingReceived(memberId);
     }
 
 
