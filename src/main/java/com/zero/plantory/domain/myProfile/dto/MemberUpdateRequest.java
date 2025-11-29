@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.dto;
+package com.zero.plantory.domain.myProfile.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MyWrittenListRequest {
+public class MemberUpdateRequest {
     private Long memberId;
-    private String keyword;
-    private int limit;
-    private int offset;
+    private String nickname;
+    private String phone;
+    private String address;
 }
+

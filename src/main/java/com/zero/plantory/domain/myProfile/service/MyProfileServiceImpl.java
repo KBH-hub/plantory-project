@@ -1,8 +1,8 @@
-package com.zero.plantory.domain.member.service;
+package com.zero.plantory.domain.myProfile.service;
 
-import com.zero.plantory.domain.member.dto.MyInfoResponse;
-import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
-import com.zero.plantory.domain.member.mapper.MyProfileMapper;
+import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.myProfile.mapper.MyProfileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
-import com.zero.plantory.domain.member.dto.MemberResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberResponse;
 import com.zero.plantory.global.dto.DeleteTargetType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

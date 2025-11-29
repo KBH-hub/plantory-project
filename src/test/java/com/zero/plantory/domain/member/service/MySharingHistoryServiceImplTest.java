@@ -1,8 +1,9 @@
 package com.zero.plantory.domain.member.service;
 
-import com.zero.plantory.domain.member.dto.MySharingHistoryListRequest;
-import com.zero.plantory.domain.member.dto.MySharingHistoryListResponse;
-import com.zero.plantory.domain.member.mapper.MySharingHistoryMapper;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListRequest;
+import com.zero.plantory.domain.myProfile.dto.MySharingHistoryListResponse;
+import com.zero.plantory.domain.myProfile.mapper.MySharingHistoryMapper;
+import com.zero.plantory.domain.myProfile.service.MySharingHistoryServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

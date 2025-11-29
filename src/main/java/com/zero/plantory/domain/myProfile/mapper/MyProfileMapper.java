@@ -1,7 +1,7 @@
-package com.zero.plantory.domain.member.mapper;
+package com.zero.plantory.domain.myProfile.mapper;
 
-import com.zero.plantory.domain.member.dto.MyInfoResponse;
-import com.zero.plantory.domain.member.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

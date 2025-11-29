@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.member.dto;
+package com.zero.plantory.domain.myProfile.dto;
 
 import lombok.*;
 

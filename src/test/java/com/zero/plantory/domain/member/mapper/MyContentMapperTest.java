@@ -1,8 +1,9 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.member.dto.MyWrittenDeleteRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListRequest;
-import com.zero.plantory.domain.member.dto.MyWrittenListResponse;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenDeleteRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListRequest;
+import com.zero.plantory.domain.myProfile.dto.MyWrittenListResponse;
+import com.zero.plantory.domain.myProfile.mapper.MyContentMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

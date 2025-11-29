@@ -1,6 +1,6 @@
 package com.zero.plantory.global.security;
 
-import com.zero.plantory.domain.member.dto.MemberResponse;
+import com.zero.plantory.domain.myProfile.dto.MemberResponse;
 import com.zero.plantory.domain.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
