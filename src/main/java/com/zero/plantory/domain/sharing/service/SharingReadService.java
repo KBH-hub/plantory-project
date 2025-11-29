@@ -15,7 +15,6 @@ public interface SharingReadService {
 
     List<SelectCommentListResponse> getSharingComments(Long sharingId);
 
-    /** 메시지 상대 목록 조회 */
     List<SharingPartnerResponse> getMessagePartners(Long receiverId, Long sharingId);
 
     /** 내가 나눔한 내역 조회 */

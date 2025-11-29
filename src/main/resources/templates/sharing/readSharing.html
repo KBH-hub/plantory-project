@@ -135,17 +135,11 @@
             <div class="modal-body">
                 <div class="small text-muted mb-2">이 글에 대해 마지막으로 나눈 상대</div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="doneTarget" id="opt1" value="식물왕이">
-                    <label class="form-check-label" for="opt1">식물왕이</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="doneTarget" id="opt2" value="나눠나나">
-                    <label class="form-check-label" for="opt2">나눠나나</label>
                 </div>
             </div>
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
-                <button id="btnSelectDone" class="btn btn-success"
+                <button id="btnSelectComplete" class="btn btn-success"
                         data-next="#modalConfirmDone"
                         data-current="#modalSelectCounterpart" disabled>선택 완료</button>
 
@@ -155,7 +149,7 @@
 </div>
 
 <!-- 3) 모달 2: 완료 확인 -->
-<div class="modal fade modal-fixed" id="modalConfirmDone" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade modal-fixed" id="modalConfirmComplete" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0 pb-0">
@@ -163,15 +157,17 @@
             </div>
             <div class="modal-body">
                 <p class="mb-0">
-                    <strong id="confirmName" class="text-success"></strong>님과의 나눔을 종료하시겠습니까?
+                    <strong id="confirmName" class="text-success"></strong>님과의 나눔을 완료하시겠습니까?
                 </p>
                 <small class="text-muted">(나눔 완료 후, 취소는 불가능합니다)</small>
             </div>
             <div class="modal-footer border-0 pt-0">
-                <button class="btn btn-secondary"
+                <button id="btnCompleteCancel"
+                        class="btn btn-secondary"
                         data-back="#modalSelectCounterpart"
                         data-current="#modalConfirmDone">취소</button>
-                <button class="btn btn-success"
+                <button id="btnCompleteConfirm"
+                        class="btn btn-success"
                         data-next="#modalDoneResult"
                         data-current="#modalConfirmDone">나눔 완료</button>
             </div>
@@ -180,11 +176,11 @@
 </div>
 
 <!-- 4) 모달 3: 완료 안내 + 후기 유도 -->
-<div class="modal fade modal-fixed" id="modalDoneResult" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade modal-fixed" id="modalCompleteResult" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0 pb-0">
-                <h6 class="modal-title fw-semibold">나눔 완료 확인!</h6>
+                <h6 class="modal-title fw-semibold">나눔 완료 확인</h6>
             </div>
             <div class="modal-body">
                 <p class="mb-0"><strong id="resultName" class="text-success"></strong>님과의 나눔이 완료되었습니다.</p>
@@ -192,7 +188,7 @@
             </div>
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
-                <a id="goReview" href="/review/write" class="btn btn-success">후기 작성하러 가기</a>
+                <a id="goReview" href="/updateReview" class="btn btn-success">후기 작성하러 가기</a>
             </div>
         </div>
     </div>
