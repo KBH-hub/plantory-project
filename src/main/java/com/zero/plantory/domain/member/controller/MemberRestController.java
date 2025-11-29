@@ -43,7 +43,5 @@ public class MemberRestController {
                 "message", "사용 가능합니다."
         ));
     }
-
-
-
+    
 }

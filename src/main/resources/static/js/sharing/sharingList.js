@@ -20,8 +20,8 @@ function renderSharingList(list) {
                 <div class="card-body px-2 py-2">
 
                     <div class="d-flex justify-content-between">
-                        <span class="badge ${item.status === 'true' ? 'bg-success' : 'bg-secondary'} small">
-                            ${item.status === 'true' ? '나눔 중' : '나눔완료'}
+                        <span class="badge ${item.status === 'true' ? 'bg-secondary' : 'bg-success'} small">
+                            ${item.status === 'true' ? '나눔완료' : '나눔 중'}
                         </span>
                     </div>
 

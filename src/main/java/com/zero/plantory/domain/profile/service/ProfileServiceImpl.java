@@ -1,11 +1,14 @@
 package com.zero.plantory.domain.profile.service;
 
+import com.zero.plantory.domain.member.mapper.MemberMapper;
+import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
 import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
 import com.zero.plantory.domain.profile.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileMapper profileMapper;
+    private final MemberMapper memberMapper;
+    private final BCryptPasswordEncoder  bCryptPasswordEncoder;
 
     @Override
     public ProfileInfoResponse getProfileInfo(Long memberId) {
@@ -49,5 +54,21 @@ public class ProfileServiceImpl implements ProfileService {
     public PublicProfileResponse getPublicProfile(Long memberId) {
         return profileMapper.selectPublicProfile(memberId);
     }
+
+    @Transactional
+    @Override
+    public boolean changePassword(Long memberId, String oldPassword, String newPassword) {
+        MemberResponse member = memberMapper.selectByMemberId(memberId);
+
+        if (!bCryptPasswordEncoder.matches(oldPassword, member.getPassword())) {
+            return false;
+        }
+
+        member.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        memberMapper.updatePassword(member.getPassword(),member.getMemberId());
+
+        return true;
+    }
+
 }
 

@@ -36,9 +36,9 @@
 
             <input type="text" class="form-control d-none ." value="장명훈">
 
-            <div class="mt-2 d-flex flex-column align-items-center gap-2">
-                <button id="updateMyInfoBtn" class="btn btn-outline-primary btn-sm w-100">수정</button>
-                <button id="deleteProfileWrittenBtn" class="btn btn-outline-danger btn-sm w-100">삭제</button>
+            <div id="myButtons" class="mt-2 d-flex flex-column align-items-center gap-2">
+                <button id="updateMyInfoBtn" class="btn btn-outline-primary btn-sm w-100">내 정보 변경</button>
+                <button id="deleteProfileWrittenBtn" class="btn btn-outline-danger btn-sm w-100">내가 쓴 글 삭제</button>
             </div>
 
 
@@ -54,7 +54,7 @@
         </div>
 
         <div class="mt-4 border-bottom pb-2" id="tabs">
-            <span class="me-4 tab-active cursor-pointer" data-tab="profilePosts">내가 쓴 글</span>
+            <span class="me-4 tab-active cursor-pointer" data-tab="profilePosts">쓴 글</span>
             <span class="cursor-pointer text-secondary" data-tab="profileComments">댓글 단 글</span>
         </div>
 
@@ -98,12 +98,13 @@
         </nav>
 
     </div>
-
+<script th:inline="javascript">
+    const ProfileData = /*[[${profileInfo}]]*/ {};
+</script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/profile/profile.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/common/alert.js}"></script>
 </body>
-
 </html>
