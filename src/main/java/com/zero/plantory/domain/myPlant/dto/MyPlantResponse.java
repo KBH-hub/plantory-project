@@ -24,4 +24,5 @@ public class MyPlantResponse {
     private String imageUrl;
     private Date createdAt;
     private Date delFlag;
+    private int totalCount;
 }
