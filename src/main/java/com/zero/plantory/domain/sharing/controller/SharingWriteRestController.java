@@ -2,6 +2,7 @@ package com.zero.plantory.domain.sharing.controller;
 
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
+import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.domain.sharing.service.SharingWriteService;
 import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SharingWriteRestController {
 
     private final SharingWriteService sharingWriteService;
+    private final SharingMapper sharingMapper;
 
     @PostMapping
     public ResponseEntity<?> createSharing(
@@ -67,6 +69,8 @@ public class SharingWriteRestController {
         boolean result = sharingWriteService.removeInterest(memberId, sharingId);
         return ResponseEntity.ok(result);
     }
+
+
 
     @PostMapping("/{sharingId}/comments")
     public ResponseEntity<?> addComment(

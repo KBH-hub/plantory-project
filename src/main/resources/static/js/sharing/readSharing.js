@@ -44,6 +44,8 @@ function renderDetail(detail) {
     document.body.dataset.sharingStatus = detail.status;
 
     document.getElementById("writerProfileLink").href = `/profile/${detail.memberId}`;
+    document.getElementById("interestCount").innerText = `(${detail.interestNum})`;
+
 }
 
 function renderComments(list) {
@@ -86,6 +88,10 @@ function bindActionButtons() {
 
     document.getElementById("btnComplete")
         .addEventListener("click", completeSharing);
+
+    document.getElementById("btnInterest")
+        .addEventListener("click", toggleInterest);
+
 }
 
 function updateActionButtons() {
@@ -112,6 +118,28 @@ function updateActionButtons() {
     console.log("writerId:", writerId, typeof writerId);
 
 }
+
+
+function updateInterestButton(isInterested, currentCount) {
+    const btn = document.getElementById("btnInterest");
+    const icon = document.getElementById("interestIcon");
+    const count = document.getElementById("interestCount");
+
+    if (isInterested) {
+        btn.classList.remove("btn-outline-secondary");
+        btn.classList.add("btn-danger");
+        icon.textContent = "관심❤";
+    } else {
+        btn.classList.remove("btn-danger");
+        btn.classList.add("btn-outline-secondary");
+        icon.textContent = "관심♡";
+    }
+
+    count.textContent = `(${currentCount})`;
+}
+
+
+
 
 
 function bindLoginUserNickname() {
@@ -145,6 +173,54 @@ async function loadComments() {
     }
 }
 
+async function toggleInterest() {
+
+    const btn = document.getElementById("btnInterest");
+    const icon = document.getElementById("interestIcon");
+    const countEl = document.getElementById("interestCount");
+
+    let currentCount = Number(countEl.textContent.replace(/[^0-9]/g, ""));
+
+    const isCurrentlyInterested = btn.classList.contains("btn-danger");
+
+    try {
+        if (!isCurrentlyInterested) {
+            const res = await axios.post(`/api/sharing/${sharingId}/interest`);
+            if (res.data === true) {
+                currentCount += 1;
+            }
+
+            btn.classList.remove("btn-outline-secondary");
+            btn.classList.add("btn-danger");
+            icon.textContent = "관심❤";
+
+        } else {
+            const memberId = Number(document.body.dataset.memberId);
+            const res = await axios.delete(`/api/sharing/${sharingId}/interest`, {
+                params: { memberId }
+            });
+
+            if (res.data === true) {
+                currentCount -= 1;
+            }
+
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-outline-secondary");
+            icon.textContent = "관심♡";
+        }
+
+        countEl.textContent = `(${currentCount})`;
+
+    } catch (err) {
+        console.error("interest toggle error:", err);
+        showAlert("관심 처리 중 오류가 발생했습니다.");
+    }
+}
+
+
+
+
+/// 댓글
 
 async function submitComment() {
     const content = document.getElementById("commentInput").value.trim();
@@ -214,6 +290,10 @@ function init() {
 
     loadSharingDetail();
     loadComments();
+
+    document.getElementById("btnInterest")
+        .addEventListener("click", toggleInterest);
+
 }
 
 document.addEventListener("DOMContentLoaded", init);
