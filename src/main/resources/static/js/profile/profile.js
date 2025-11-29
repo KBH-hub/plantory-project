@@ -16,27 +16,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 
-async function initProfileInfo() {
+async function fetchProfileData() {
     try {
-        let response;
-
         if (IS_ME) {
-            response = await axios.get("/api/profile/me");
-            renderMyProfile(response.data);
+            const res = await axios.get("/api/profile/me");
+            return res.data;
         } else {
-            response = await axios.get(`/api/profile/publicProfile/${PROFILE_ID}`);
-            renderPublicProfile(response.data);
-
-            hideMyButtons();
+            const res = await axios.get(`/api/profile/publicProfile/${PROFILE_ID}`);
+            return res.data;
         }
-
-        await loadProfilePosts();
-        initPagination();
-
-    } catch (error) {
-        console.error(error);
+    } catch (e) {
+        console.error(e);
         showAlert("프로필 정보를 불러오지 못했습니다.");
+        return null;
     }
+}
+
+window.fetchProfileData = fetchProfileData;
+
+async function initProfileInfo() {
+    const data = await fetchProfileData();
+    if (!data) return;
+
+    if (IS_ME) {
+        renderMyProfile(data);
+    } else {
+        renderPublicProfile(data);
+        hideMyButtons();
+    }
+
+    await loadProfilePosts();
+    initPagination();
 }
 
 function renderMyProfile(data) {

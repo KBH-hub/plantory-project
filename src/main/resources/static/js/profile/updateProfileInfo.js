@@ -1,90 +1,201 @@
-let isNickNameChecked = false;
+document.addEventListener("DOMContentLoaded", async () => {
+    const data = await axios.get("/api/profile/me");
+    const profile = data.data;
 
-document.getElementById("pwConfirmBtn").addEventListener("click", function () {
+    // korean.js 옵션 로딩 완료될 때까지 대기
+    await window.koreaDataLoaded;
 
-    const oldPw = document.getElementById("oldPw").value.trim();
-    const newPw = document.getElementById("newPw").value.trim();
-    const newPwCheck = document.getElementById("newPwCheck").value.trim();
+    applyAddress(profile.address);
+    initEvents();
 
-    const oldPwMsg = document.getElementById("oldPwMsg");
-    const newPwMsg = document.getElementById("newPwMsg");
-    const newPwCheckMsg = document.getElementById("newPwCheckMsg");
-
-    const currentPassword = "1234";
-    let valid = true;
-
-    if (oldPw === "") {
-        oldPwMsg.textContent = "*비밀번호를 입력해주세요.";
-        oldPwMsg.classList.remove("d-none");
-        valid = false;
-    } else if (oldPw !== currentPassword) {
-        oldPwMsg.textContent = "*일치하지 않습니다.";
-        oldPwMsg.classList.remove("d-none");
-        valid = false;
-    } else {
-        oldPwMsg.classList.add("d-none");
-    }
-
-    if (newPw === "") {
-        newPwMsg.textContent = "*새 비밀번호를 입력해주세요.";
-        newPwMsg.classList.remove("d-none");
-        valid = false;
-    } else if (newPw === currentPassword) {
-        newPwMsg.textContent = "*기존 비밀번호와 같습니다.";
-        newPwMsg.classList.remove("d-none");
-        valid = false;
-    } else {
-        newPwMsg.classList.add("d-none");
-    }
-
-    if (newPwCheck === "") {
-        newPwCheckMsg.textContent = "*비밀번호 확인을 입력해주세요.";
-        newPwCheckMsg.classList.remove("d-none");
-        valid = false;
-    } else if (newPwCheck !== newPw) {
-        newPwCheckMsg.textContent = "*일치하지 않습니다.";
-        newPwCheckMsg.classList.remove("d-none");
-        valid = false;
-    } else {
-        newPwCheckMsg.classList.add("d-none");
-    }
-
-    if (valid) {
-        alert("비밀번호가 성공적으로 변경되었습니다!");
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById("changePwModal"));
-        modal.hide();
-
-        document.getElementById("oldPw").value = "";
-        document.getElementById("newPw").value = "";
-        document.getElementById("newPwCheck").value = "";
-
-        oldPwMsg.classList.add("d-none");
-        newPwMsg.classList.add("d-none");
-        newPwCheckMsg.classList.add("d-none");
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-    const agreeChk = document.getElementById("agreeWithdraw");
-    const withdrawBtn = document.getElementById("withdrawBtn");
-    const withdrawMsg = document.getElementById("withdrawMsg");
-
-    agreeChk.addEventListener("change", () => {
-        withdrawBtn.disabled = !agreeChk.checked;
-        withdrawMsg.classList.toggle("d-none", agreeChk.checked);
-    });
-
-    withdrawBtn.addEventListener("click", () => {
-        alert("회원 탈퇴가 완료되었습니다.");
-
-        agreeChk.checked = false;
-        withdrawBtn.disabled = true;
-        withdrawMsg.classList.add("d-none");
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById("withdrawModal"));
-        modal.hide();
-    });
+    await initUpdateProfileInfo();
 });
 
-});
+function applyAddress(address) {
+    if (!address) return;
+
+    const [sido, sigungu] = address.split(" ");
+
+    const sidoSelect = document.getElementById("sido");
+    const sigunguSelect = document.getElementById("sigungu");
+
+    sidoSelect.value = sido;
+
+    sidoSelect.dispatchEvent(new Event("change"));
+
+    setTimeout(() => {
+        sigunguSelect.value = sigungu;
+    }, 10);
+}
+
+
+
+
+async function initUpdateProfileInfo() {
+    try {
+        const res = await axios.get("/api/profile/me");
+        const data = res.data;
+
+        console.log(data);
+
+        document.getElementById("nicknameInput").value = data.nickname;
+        document.getElementById("phoneInput").value = data.phone;
+        document.getElementById("noticeToggle").checked = data.noticeEnabled === 1;
+
+        applyAddress(data.address);
+
+    } catch (e) {
+        console.error(e);
+        showAlert("프로필 정보를 불러오지 못했습니다.");
+    }
+}
+
+
+function initEvents() {
+    document.getElementById("checkNicknameBtn").addEventListener("click", checkNickname);
+    document.getElementById("submitProfileBtn").addEventListener("click", submitProfile);
+    document.getElementById("cancelBtn").addEventListener("click", goBack);
+
+    document.getElementById("pwConfirmBtn").addEventListener("click", changePassword);
+    document.getElementById("agreeWithdrawCheck").addEventListener("change", toggleWithdrawBtn);
+    document.getElementById("withdrawBtn").addEventListener("click", withdrawMember);
+}
+
+async function checkNickname() {
+    const nickname = document.getElementById("nicknameInput").value.trim();
+    if (!nickname) return showAlert("닉네임을 입력해주세요.");
+
+    try {
+        const res = await axios.get(`/api/members/nickname-exists?nickname=${nickname}`);
+
+        if (res.data.exists) {
+            showAlert("이미 사용 중인 닉네임입니다.");
+        } else {
+            showSuccess("사용 가능한 닉네임입니다.");
+        }
+    } catch (err) {
+        console.log(err);
+        showAlert("닉네임 확인에 실패했습니다.");
+    }
+}
+
+async function submitProfile(event) {
+    event.preventDefault();
+
+    const nickname = document.getElementById("nicknameInput").value.trim();
+    const phone = document.getElementById("phoneInput").value.trim();
+    const sido = document.getElementById("sidoSelect").value;
+    const sigungu = document.getElementById("sigunguSelect").value;
+    const address = `${sido} ${sigungu}`;
+    const noticeEnabled = document.getElementById("noticeToggle").checked ? 1 : 0;
+
+    const req = {
+        nickname,
+        phone,
+        address,
+        noticeEnabled
+    };
+
+    try {
+        const res = await axios.put("/api/profile/update", req);
+        showSuccess("프로필이 수정되었습니다.");
+    } catch (err) {
+        console.log(err);
+        showAlert("프로필 수정에 실패했습니다.");
+    }
+}
+
+async function changePassword() {
+    const oldPw = document.getElementById("oldPwInput").value.trim();
+    const newPw = document.getElementById("newPwInput").value.trim();
+    const newPwCheck = document.getElementById("newPwCheckInput").value.trim();
+
+    hidePwErrorMsgs();
+
+    if (!oldPw || !newPw || !newPwCheck) {
+        return showAlert("모든 비밀번호를 입력해주세요.");
+    }
+
+    if (newPw === oldPw) {
+        document.getElementById("newPwMsg").classList.remove("d-none");
+        return;
+    }
+
+    if (newPw !== newPwCheck) {
+        document.getElementById("newPwCheckMsg").classList.remove("d-none");
+        return;
+    }
+
+    try {
+        const req = { oldPw, newPw };
+        const res = await axios.put("/api/profile/change-password", req);
+
+        if (res.data.success) {
+            showSuccess("비밀번호가 변경되었습니다.");
+            bootstrap.Modal.getInstance(document.getElementById("changePwModal")).hide();
+        } else {
+            document.getElementById("oldPwMsg").classList.remove("d-none");
+        }
+    } catch (err) {
+        console.log(err);
+        showAlert("비밀번호 변경에 실패했습니다.");
+    }
+}
+
+function hidePwErrorMsgs() {
+    document.getElementById("oldPwMsg").classList.add("d-none");
+    document.getElementById("newPwMsg").classList.add("d-none");
+    document.getElementById("newPwCheckMsg").classList.add("d-none");
+}
+
+function toggleWithdrawBtn() {
+    const checked = document.getElementById("agreeWithdrawCheck").checked;
+    const btn = document.getElementById("withdrawBtn");
+    const msg = document.getElementById("withdrawMsg");
+
+    if (checked) {
+        btn.disabled = false;
+        msg.classList.add("d-none");
+    } else {
+        btn.disabled = true;
+        msg.classList.remove("d-none");
+    }
+}
+
+async function withdrawMember() {
+    try {
+        const res = await axios.delete("/api/profile/withdraw");
+
+        if (res.data.success) {
+            showSuccess("회원탈퇴가 완료되었습니다.");
+            setTimeout(() => {
+                window.location.href = "/logout";
+            }, 1200);
+        } else {
+            showAlert("회원탈퇴에 실패했습니다.");
+        }
+    } catch (err) {
+        console.log(err);
+        showAlert("회원탈퇴 중 오류가 발생했습니다.");
+    }
+}
+
+function goBack() {
+    history.back();
+}
+
+function showAlert(message) {
+    if (window.showAlertModal) {
+        window.showAlertModal(message);
+    } else {
+        alert(message);
+    }
+}
+
+function showSuccess(message) {
+    if (window.showSuccessModal) {
+        window.showSuccessModal(message);
+    } else {
+        alert(message);
+    }
+}

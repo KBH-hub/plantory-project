@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.profile.controller;
 
 import com.zero.plantory.global.security.MemberDetail;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/profile")
+@Slf4j
 public class ProfileController {
 
     @GetMapping
@@ -45,6 +47,8 @@ public class ProfileController {
 
         Long loginMemberId = memberDetail.getMemberResponse().getMemberId();
         boolean isMe = loginMemberId.equals(memberId);
+
+        log.info("updateProfile loginMemberId={} isMe={}", loginMemberId, isMe);
 
         model.addAttribute("profileInfo", Map.of(
                 "isMe", isMe,
