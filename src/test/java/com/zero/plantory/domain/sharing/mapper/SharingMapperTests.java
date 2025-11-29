@@ -27,8 +27,8 @@ public class SharingMapperTests {
 
     @Test
     @DisplayName("후기작성 - 내가 나눔한 기록 조회")
-    void selectMySharingGivenTest() {
-        mapper.selectMySharingGiven(1L)
+    void selectProfileSharingGivenTest() {
+        mapper.selectProfileSharingGiven(1L)
                 .forEach(item ->
                 log.info("나눔한 기록 → id={}, 상대={}, 제목={}",
                         item.getSharingId(),
@@ -39,8 +39,8 @@ public class SharingMapperTests {
 
     @Test
     @DisplayName("후기 작성 - 내가 나눔받은 기록 조회")
-    void selectMySharingReceivedTest() {
-        mapper.selectMySharingReceived(1L)
+    void selectProfileSharingReceivedTest() {
+        mapper.selectProfileSharingReceived(1L)
                 .forEach(item ->
                 log.info("나눔받은 기록 → id={}, 상대={}, 제목={}",
                         item.getSharingId(),
@@ -73,13 +73,13 @@ public class SharingMapperTests {
     @DisplayName("나눔 게시글 삭제")
     void deleteSharingTest() {
         log.info("삭제 결과 = {}", mapper.deleteSharing(12L));
-        log.info("삭제 후 존재 여부(0이면 삭제됨) = {}", mapper.countMySharing(12L, 1L));
+        log.info("삭제 후 존재 여부(0이면 삭제됨) = {}", mapper.countProfileSharing(12L, 1L));
     }
 
     @Test
     @DisplayName("나눔글 수정 권한 체크")
-    void countMySharingTest() {
-        int count = mapper.countMySharing(12L, 1L);
+    void countProfileSharingTest() {
+        int count = mapper.countProfileSharing(12L, 1L);
         log.info("수정 권한 여부 = {}", count);
     }
 
@@ -110,7 +110,7 @@ public class SharingMapperTests {
                 .writerId(1L)
                 .build();
 
-        int count = mapper.countMyComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
+        int count = mapper.countProfileComment(request.getCommentId(), request.getSharingId(), request.getWriterId());
         log.info("삭제 권한 여부 = {}", count);
 
         if (count == 1) {
@@ -133,7 +133,7 @@ public class SharingMapperTests {
 
         Long commentId = 1L;
 
-        int count = mapper.countMyComment(commentId, sharingId, writerId);
+        int count = mapper.countProfileComment(commentId, sharingId, writerId);
         log.info("수정 권한 여부 = {}", count);
 
         if (count == 1) {

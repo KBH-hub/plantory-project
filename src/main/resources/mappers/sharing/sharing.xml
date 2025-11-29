@@ -170,7 +170,7 @@
             (#{sharingId}, #{writerId}, #{content}, NOW(), NULL, NULL)
     </insert>
 
-    <select id="countMyComment" resultType="int">
+    <select id="countProfileComment" resultType="int">
         SELECT COUNT(*)
         FROM comment
         WHERE comment_id = #{commentId}
