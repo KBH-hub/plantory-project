@@ -35,6 +35,7 @@ function renderDetail(detail) {
     document.getElementById("writerProfileLink").href = `/profile/${detail.memberId}`;
 
     document.getElementById("interestCount").innerText = `(${detail.interestNum})`;
+    document.getElementById("sharingRate").innerHTML =  `🌿 나눔 지수 ${detail.sharingRate}% `;
 }
 
 function renderCarousel(images) {
@@ -124,9 +125,7 @@ async function toggleInterest() {
             }
 
         } else {
-            const res = await axios.delete(`/api/sharing/${sharingId}/interest`, {
-                params: { memberId }
-            });
+            const res = await axios.delete(`/api/sharing/${sharingId}/interest`);
             const success = res.data === true;
 
             if (success) {

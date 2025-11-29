@@ -64,8 +64,8 @@ public class SharingWriteRestController {
     @DeleteMapping("/{sharingId}/interest")
     public ResponseEntity<?> removeInterest(
             @PathVariable Long sharingId,
-            @RequestParam Long memberId) {
-
+            @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
         boolean result = sharingWriteService.removeInterest(memberId, sharingId);
         return ResponseEntity.ok(result);
     }
