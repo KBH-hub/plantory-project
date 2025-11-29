@@ -32,6 +32,11 @@ public class CmdController {
         return "dictionary/plantDictionary";
     }
 
+    @RequestMapping("/dryPlantDictionary")
+    public String dryPlantDictionary(){
+        return "dictionary/dryPlantDictionary";
+    }
+
     @GetMapping("/login")
     public String login(){
         return "member/login";
@@ -76,6 +81,11 @@ public class CmdController {
     @RequestMapping("/readDictionary")
     public String readDictionary(){
         return "dictionary/readDictionary";
+    }
+
+    @RequestMapping("/readDryDictionary")
+    public String readDryDictionary(){
+        return "dictionary/readDryDictionary";
     }
 
     @GetMapping("/readQuestion")

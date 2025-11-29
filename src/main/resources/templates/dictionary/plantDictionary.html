@@ -15,7 +15,7 @@
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
 
-    <h4 class="fw-bold mb-4">건조에 강한 실내식물</h4>
+    <h4 class="fw-bold mb-4">실내 정원용 식물</h4>
 
     <table class="table table-bordered bg-white">
         <tbody>
@@ -23,77 +23,24 @@
         <tr>
             <th class="w-25 align-middle">과명</th>
             <td>
-                <select class="form-select w-25 d-inline-block">
-                    <option selected>식물명</option>
-                    <option>다육이</option>
-                </select>
-
-                <select class="form-select w-25 d-inline-block ms-2">
-                    <option selected>세덤(Sedum)</option>
-                </select>
-
-                <button class="btn btn-secondary ms-2">
-                    검색
-                </button>
+                <input id="qName" type="text" class="form-control d-inline-block w-25" placeholder="식물명(표준·유통명)" />
+                <button id="btnSearch" class="btn btn-secondary ms-2">검색</button>
             </td>
         </tr>
-
-        <tr>
-            <th class="align-middle">형태분류</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">포도송이형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">군생형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">관목형</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">포복형</label>
-                </div>
-            </td>
-        </tr>
-
-        <tr>
-            <th class="align-middle">뿌리형태</th>
-            <td>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">세근 뿌리</label>
-                </div>
-
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">굵은 뿌리</label>
-                </div>
-            </td>
-        </tr>
-
         <tr>
             <th class="align-middle">생장속도</th>
             <td>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">느림</label>
+                    <input id="speed-slow" class="form-check-input" type="radio" name="speed" value="느림">
+                    <label for="speed-slow" class="form-check-label">느림</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">보통</label>
+                    <input id="speed-mid" class="form-check-input" type="radio" name="speed" value="보통">
+                    <label for="speed-mid" class="form-check-label">보통</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="speed">
-                    <label class="form-check-label">빠름</label>
+                    <input id="speed-fast" class="form-check-input" type="radio" name="speed" value="빠름">
+                    <label for="speed-fast" class="form-check-label">빠름</label>
                 </div>
             </td>
         </tr>
@@ -102,23 +49,20 @@
             <th class="align-middle">관리난이도</th>
             <td>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">매우 쉬움</label>
+                    <input id="diff-veryeasy" class="form-check-input" type="radio" name="difficulty" value="매우 쉬움">
+                    <label for="diff-veryeasy" class="form-check-label">매우 쉬움</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">쉬움</label>
+                    <input id="diff-easy" class="form-check-input" type="radio" name="difficulty" value="쉬움">
+                    <label for="diff-easy" class="form-check-label">쉬움</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">보통</label>
+                    <input id="diff-normal" class="form-check-input" type="radio" name="difficulty" value="보통">
+                    <label for="diff-normal" class="form-check-label">보통</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="difficulty">
-                    <label class="form-check-label">어려움</label>
+                    <input id="diff-hard" class="form-check-input" type="radio" name="difficulty" value="어려움">
+                    <label for="diff-hard" class="form-check-label">어려움</label>
                 </div>
             </td>
         </tr>
@@ -127,18 +71,16 @@
             <th class="align-middle">관리요구도</th>
             <td>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">약간 돌봄</label>
+                    <input id="demand-some" class="form-check-input" type="checkbox" name="demand" value="약간 돌봄">
+                    <label for="demand-some" class="form-check-label">약간 돌봄</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">잘 견딤</label>
+                    <input id="demand-tough" class="form-check-input" type="checkbox" name="demand" value="잘 견딤">
+                    <label for="demand-tough" class="form-check-label">잘 견딤</label>
                 </div>
-
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox">
-                    <label class="form-check-label">필요함</label>
+                    <input id="demand-need" class="form-check-input" type="checkbox" name="demand" value="필요함">
+                    <label for="demand-need" class="form-check-label">필요함</label>
                 </div>
             </td>
         </tr>
@@ -148,35 +90,19 @@
 
     <div class="mt-4">
 
-        <div class="row mb-4 p-3 bg-white border rounded">
-            <div class="col-3">
-                <img src="https://via.placeholder.com/150" class="img-fluid border">
-            </div>
+        <div id="resultList" class="mt-4"></div>
 
-            <div class="col-9 d-flex flex-column justify-content-center">
-                <a href="#" class="fw-bold fs-5 text-dark text-decoration-none">
-                    홍옥 / Sedum rubrotinctum / 세덤(Sedum)속
-                </a>
-            </div>
-        </div>
-
-        <div class="row mb-4 p-3 bg-white border rounded">
-            <div class="col-3">
-                <img src="https://via.placeholder.com/150" class="img-fluid border">
-            </div>
-
-            <div class="col-9 d-flex flex-column justify-content-center">
-                <a href="#" class="fw-bold fs-5 text-dark text-decoration-none">
-                    옥녀심 / Sedum pachyphyllum / 세덤(Sedum)속
-                </a>
-            </div>
-        </div>
+        <nav class="d-flex justify-content-center mt-3" aria-label="page">
+            <ul id="paging" class="pagination"></ul>
+        </nav>
 
     </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/dictionary/plantDictionary.js}"></script>
 </body>
 </html>
