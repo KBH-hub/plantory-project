@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>식물사전</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+
+<body class="bg-light" style="overflow-x: auto;">
+
+<th:block th:replace="~{fragments/header :: headerBar}"></th:block>
+
+<div class="mx-auto" style="width:1470px; padding:16px;">
+
+    <h4 class="fw-bold mb-4">건조에 강한 실내식물</h4>
+
+    <table class="table table-bordered bg-white">
+        <tbody>
+
+        <tr>
+            <th class="w-25 align-middle">과명</th>
+            <td>
+                <select class="form-select w-25 d-inline-block">
+                    <option selected>식물명</option>
+                    <option>다육이</option>
+                </select>
+
+                <select class="form-select w-25 d-inline-block ms-2">
+                    <option selected>세덤(Sedum)</option>
+                </select>
+
+                <button class="btn btn-secondary ms-2">
+                    검색
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-middle">형태분류</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">포도송이형</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">군생형</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">관목형</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">포복형</label>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-middle">뿌리형태</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">세근 뿌리</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">굵은 뿌리</label>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-middle">생장속도</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="speed">
+                    <label class="form-check-label">느림</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="speed">
+                    <label class="form-check-label">보통</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="speed">
+                    <label class="form-check-label">빠름</label>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-middle">관리난이도</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty">
+                    <label class="form-check-label">매우 쉬움</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty">
+                    <label class="form-check-label">쉬움</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty">
+                    <label class="form-check-label">보통</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="difficulty">
+                    <label class="form-check-label">어려움</label>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="align-middle">관리요구도</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">약간 돌봄</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">잘 견딤</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">필요함</label>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+
+        <!-- 결과 리스트 -->
+        <div id="resultList" class="mt-4"></div>
+
+        <!-- 페이지네이션 -->
+        <nav class="d-flex justify-content-center mt-3" aria-label="page">
+            <ul id="paging" class="pagination"></ul>
+        </nav>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/dictionary/dryPlantDictionary.js}"></script>
+</body>
+</html>

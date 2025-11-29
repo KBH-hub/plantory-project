@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.openApi.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zero.plantory.global.utils.NongsaroApiClient;
 import com.zero.plantory.global.utils.XmlToJsonConverter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ public class GardenApiService {
 
     private final NongsaroApiClient apiClient;
     private final XmlToJsonConverter converter;
+    private final ObjectMapper objectMapper;
 
     private static final String BASE_URL = "/service/garden";
 
@@ -105,5 +108,16 @@ public class GardenApiService {
         Map<String, String> params = Map.of("cntntsNo", cntntsNo);
         String xml = apiClient.get(BASE_URL, "/gardenFileList", params);
         return converter.convert(xml);
+    }
+
+    /** 상세 + 파일 묶음 */
+    public ObjectNode getGardenDetail(String cntntsNo) {
+        JsonNode files  = getGardenFileList(cntntsNo);
+        JsonNode detail = getGardenDtl(cntntsNo);
+
+        ObjectNode root = objectMapper.createObjectNode();
+        root.set("files",  files);
+        root.set("detail", detail);
+        return root;
     }
 }
