@@ -12,6 +12,7 @@
           option.textContent = sido;
           sidoSelect.appendChild(option);
         });
+        document.dispatchEvent(new Event("koreaOptionsLoaded"));
 
         sidoSelect.addEventListener("change", function () {
           const selected = this.value;
