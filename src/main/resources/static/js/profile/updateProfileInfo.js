@@ -1,8 +1,11 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    const data = await axios.get("/api/profile/me");
-    const profile = data.data;
+let originalNickname = "";
 
-    // korean.js 옵션 로딩 완료될 때까지 대기
+document.addEventListener("DOMContentLoaded", async () => {
+    const res = await axios.get("/api/profile/me");
+    const profile = res.data;
+
+    originalNickname = profile.nickname;
+
     await window.koreaDataLoaded;
 
     applyAddress(profile.address);
@@ -50,7 +53,6 @@ async function initUpdateProfileInfo() {
     }
 }
 
-
 function initEvents() {
     document.getElementById("checkNicknameBtn").addEventListener("click", checkNickname);
     document.getElementById("submitProfileBtn").addEventListener("click", submitProfile);
@@ -61,23 +63,30 @@ function initEvents() {
     document.getElementById("withdrawBtn").addEventListener("click", withdrawMember);
 }
 
+
 async function checkNickname() {
-    const nickname = document.getElementById("nicknameInput").value.trim();
-    if (!nickname) return showAlert("닉네임을 입력해주세요.");
+    const nicknameInput = document.getElementById("nicknameInput").value.trim();
+
+    if (!nicknameInput) return showAlert("닉네임을 입력해주세요.");
+
+    if (nicknameInput === originalNickname) {
+        return showAlert("닉네임이 기존과 동일합니다.");
+    }
 
     try {
-        const res = await axios.get(`/api/members/nickname-exists?nickname=${nickname}`);
-
-        if (res.data.exists) {
-            showAlert("이미 사용 중인 닉네임입니다.");
-        } else {
-            showSuccess("사용 가능한 닉네임입니다.");
-        }
+        await axios.get(`/api/members/exists?nickname=${nicknameInput}`);
+        showAlert("사용 가능한 닉네임입니다.");
     } catch (err) {
         console.log(err);
-        showAlert("닉네임 확인에 실패했습니다.");
+
+        if (err.code === "DUPLICATE_NICKNAME") {
+            return showAlert("이미 사용 중인 닉네임입니다.");
+        }
+
+        showAlert("닉네임 확인 중 오류가 발생했습니다.");
     }
 }
+
 
 async function submitProfile(event) {
     event.preventDefault();
@@ -106,41 +115,39 @@ async function submitProfile(event) {
 }
 
 async function changePassword() {
-    const oldPw = document.getElementById("oldPwInput").value.trim();
-    const newPw = document.getElementById("newPwInput").value.trim();
-    const newPwCheck = document.getElementById("newPwCheckInput").value.trim();
+    const oldPwInput = document.getElementById("oldPwInput").value.trim();
+    const newPwInput = document.getElementById("newPwInput").value.trim();
+    const newPwCheckInput = document.getElementById("newPwCheckInput").value.trim();
 
     hidePwErrorMsgs();
 
-    if (!oldPw || !newPw || !newPwCheck) {
+    if (!oldPwInput || !newPwInput || !newPwCheckInput) {
         return showAlert("모든 비밀번호를 입력해주세요.");
     }
 
-    if (newPw === oldPw) {
-        document.getElementById("newPwMsg").classList.remove("d-none");
-        return;
-    }
-
-    if (newPw !== newPwCheck) {
+    if (newPwInput !== newPwCheckInput) {
         document.getElementById("newPwCheckMsg").classList.remove("d-none");
         return;
     }
 
     try {
-        const req = { oldPw, newPw };
-        const res = await axios.put("/api/profile/change-password", req);
+        const res = await axios.put("/api/profile/changePassword", {
+            oldPassword: oldPwInput,
+            newPassword: newPwInput
+        });
 
         if (res.data.success) {
-            showSuccess("비밀번호가 변경되었습니다.");
+            showAlert("비밀번호가 변경되었습니다.");
             bootstrap.Modal.getInstance(document.getElementById("changePwModal")).hide();
         } else {
             document.getElementById("oldPwMsg").classList.remove("d-none");
         }
     } catch (err) {
-        console.log(err);
-        showAlert("비밀번호 변경에 실패했습니다.");
+        console.error(err);
+        showAlert("비밀번호 변경 중 오류가 발생했습니다.");
     }
 }
+
 
 function hidePwErrorMsgs() {
     document.getElementById("oldPwMsg").classList.add("d-none");

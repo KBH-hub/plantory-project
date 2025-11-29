@@ -122,15 +122,16 @@
                 <input id="newPwInput" type="password" class="form-control mb-4">
 
                 <label class="fw-bold">새 비밀번호 확인
-                    <span id="newPwCheckMsg" class="text-danger d-none">*일치하지 않습니다.</span>
+                    <span id="newPwCheckMsg" class="text-danger d-none">*비밀번호가 일치하지 않습니다.</span>
                 </label>
                 <input id="newPwCheckInput" type="password" class="form-control mb-4">
             </div>
 
             <div class="modal-footer border-0 d-flex justify-content-center gap-5">
                 <button id="pwCancelBtn" type="button" class="btn btn-secondary btn-lg px-5" data-bs-dismiss="modal">취소</button>
-                <button id="pwConfirmBtn" type="button" class="btn btn-success btn-lg px-5">확인</button>
+                <button id="pwConfirmBtn" type="button" class="btn btn-success btn-lg px-5">변경</button>
             </div>
+
 
         </div>
     </div>
@@ -174,6 +175,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/common/apiCode.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/common/korean.js}"></script>
 
