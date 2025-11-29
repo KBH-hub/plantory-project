@@ -2,6 +2,7 @@ package com.zero.plantory.domain.myProfile.service;
 
 import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
 import com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.myProfile.dto.PublicProfileResponse;
 import com.zero.plantory.domain.myProfile.mapper.MyProfileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,11 @@ public class MyProfileServiceImpl implements MyProfileService {
     @Transactional
     public boolean deleteMember(Long memberId) {
         return myProfileMapper.deleteMember(memberId) > 0;
+    }
+
+    @Override
+    public PublicProfileResponse getPublicProfile(Long memberId) {
+        return myProfileMapper.selectPublicProfile(memberId);
     }
 }
 

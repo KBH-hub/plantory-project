@@ -2,6 +2,7 @@ package com.zero.plantory.domain.myProfile.service;
 
 import com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest;
 import com.zero.plantory.domain.myProfile.dto.MyInfoResponse;
+import com.zero.plantory.domain.myProfile.dto.PublicProfileResponse;
 
 public interface MyProfileService {
 
@@ -12,4 +13,6 @@ public interface MyProfileService {
     boolean updateMyInfo(MemberUpdateRequest request);
 
     boolean deleteMember(Long memberId);
+
+    PublicProfileResponse getPublicProfile(Long memberId);
 }

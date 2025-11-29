@@ -4,11 +4,19 @@
 
 <mapper namespace="com.zero.plantory.domain.myProfile.mapper.MyProfileMapper">
 
-    <select id="selectMyInfo" parameterType="long"
-            resultType="com.zero.plantory.domain.myProfile.dto.MyInfoResponse">
-        SELECT member_id, membername, nickname, phone, address, role, notice_enabled,sharing_rate, del_flag
+    <select id="selectPublicProfile" resultType="com.zero.plantory.domain.myProfile.dto.PublicProfileResponse">
+        SELECT member_id, nickname, sharing_rate
         FROM member
         WHERE member_id = #{memberId}
+        AND del_flag IS NULL
+    </select>
+
+    <select id="selectMyInfo" parameterType="long"
+            resultType="com.zero.plantory.domain.myProfile.dto.MyInfoResponse">
+        SELECT member_id, membername, nickname, phone, address, role, notice_enabled,sharing_rate
+        FROM member
+        WHERE member_id = #{memberId}
+        AND del_flag IS NULL
     </select>
 
     <update id="updateMyInfo" parameterType="com.zero.plantory.domain.myProfile.dto.MemberUpdateRequest">
