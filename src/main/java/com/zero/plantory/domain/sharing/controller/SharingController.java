@@ -13,4 +13,10 @@ public class SharingController {
         return "sharing/readSharing";
     }
 
+    @GetMapping("/updateSharing/{sharingId}")
+    public String editSharing(@PathVariable Long sharingId, Model model){
+        model.addAttribute("sharingId", sharingId);
+        return "sharing/createSharing";
+    }
+
 }

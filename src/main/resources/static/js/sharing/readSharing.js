@@ -171,17 +171,21 @@ async function submitComment() {
 
 
 async function deleteSharing() {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
+    showModal("정말 삭제하시겠습니까?", async (confirm) => {
+        if (!confirm) return;
 
-    try {
-        await axios.delete(`/api/sharing/${sharingId}`);
-        alert("삭제되었습니다.");
-        location.href = "/sharingList";
+        try {
+            await axios.delete(`/api/sharing/${sharingId}`);
 
-    } catch (err) {
-        console.error("delete error:", err);
-        alert("삭제에 실패했습니다.");
-    }
+            showAlert("삭제되었습니다.", () => {
+                window.location.href = "/sharingList";
+            });
+
+        } catch (err) {
+            console.error("delete error:", err);
+            showAlert("삭제에 실패했습니다.");
+        }
+    });
 }
 
 

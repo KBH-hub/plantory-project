@@ -115,9 +115,24 @@ function bindSubmit() {
     });
 }
 
-async function loadInitialData() {
-    // 필요 시 초기 데이터 불러오기
+async function loadUpdateSharing() {
+    const sharingId = extractFromURL();
+    const res = await axios.get(`/api/sharing/${sharingId}`);
+    const data = res.data;
+
+    document.querySelector("#plantNameInput").value = data.plantType;
+    document.querySelector("#titleInput").value = data.title;
+    document.querySelector("#contentInput").value = data.content;
+
+    document.querySelector("#managementLevel").value = data.managementLevelLabel;
+    document.querySelector("#managementNeeds").value = data.managementNeedsLabel;
+
+    document.querySelector("#managementLevel").dataset.enum = data.managementLevel;
+    document.querySelector("#managementNeeds").dataset.enum = data.managementNeeds;
+
+    renderExistingImages(data.images);
 }
+
 
 async function initCreateSharing() {
     renderImagePreview();

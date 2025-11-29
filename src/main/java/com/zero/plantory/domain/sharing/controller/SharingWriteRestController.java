@@ -3,8 +3,10 @@ package com.zero.plantory.domain.sharing.controller;
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.service.SharingWriteService;
+import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,8 +43,8 @@ public class SharingWriteRestController {
     @DeleteMapping("/{sharingId}")
     public ResponseEntity<?> deleteSharing(
             @PathVariable Long sharingId,
-            @RequestParam Long memberId) {
-
+            @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
         boolean result = sharingWriteService.deleteSharing(sharingId, memberId);
         return ResponseEntity.ok(result);
     }
@@ -51,8 +53,8 @@ public class SharingWriteRestController {
     @PostMapping("/{sharingId}/interest")
     public ResponseEntity<?> addInterest(
             @PathVariable Long sharingId,
-            @RequestParam Long memberId) {
-
+            @AuthenticationPrincipal MemberDetail memberDetail) throws IOException {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
         boolean result = sharingWriteService.addInterest(memberId, sharingId);
         return ResponseEntity.ok(result);
     }
