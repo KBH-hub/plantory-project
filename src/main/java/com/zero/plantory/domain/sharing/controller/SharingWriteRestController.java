@@ -85,27 +85,31 @@ public class SharingWriteRestController {
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<?> updateComment(
             @PathVariable Long commentId,
-            @RequestBody CommentRequest request) {
-
+            @AuthenticationPrincipal MemberDetail memberDetail,
+            @RequestBody CommentRequest request
+    ) {
         request.setCommentId(commentId);
+        request.setWriterId(memberDetail.getMemberResponse().getMemberId());
+
         boolean result = sharingWriteService.updateComment(request);
         return ResponseEntity.ok(result);
     }
 
+
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<?> deleteComment(
             @PathVariable Long commentId,
-            @RequestParam Long memberId,
+            @AuthenticationPrincipal MemberDetail memberDetail,
             @RequestParam Long sharingId
     ) {
-
         CommentRequest request = new CommentRequest();
         request.setCommentId(commentId);
-        request.setWriterId(memberId);
+        request.setWriterId(memberDetail.getMemberResponse().getMemberId());
         request.setSharingId(sharingId);
 
         boolean result = sharingWriteService.deleteComment(request);
         return ResponseEntity.ok(result);
     }
+
 
 }
