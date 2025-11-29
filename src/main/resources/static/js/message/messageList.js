@@ -117,52 +117,47 @@
         if (!ul) return;
 
         const { offset, limit, total, items } = state;
-        let totalPages = null;
-        if (typeof total === 'number' && total >= 0) totalPages = Math.max(1, Math.ceil(total / limit));
         const current = Math.floor(offset / limit) + 1;
+        const totalPages =
+            (typeof total === 'number' && total >= 0)
+                ? Math.max(1, Math.ceil(total / limit))
+                : null; // total을 모르면 null
 
-        const li = (disabledOrActive, label, clickHandler, aria, isNumber = false) => {
-            const liEl = document.createElement('li');
-            liEl.className = `page-item${disabledOrActive ? ' disabled' : ''}${isNumber && disabledOrActive ? ' active' : ''}`;
+        const makeItem = (label, onClick, { disabled = false, active = false, aria = null } = {}) => {
+            const li = document.createElement('li');
+            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
             const a = document.createElement('a');
             a.className = 'page-link';
             a.href = '#';
             if (aria) a.setAttribute('aria-label', aria);
             a.textContent = label;
-            if (!disabledOrActive) {
-                a.addEventListener('click', ev => {
-                    ev.preventDefault();
-                    clickHandler && clickHandler();
-                });
-            } else if (isNumber && disabledOrActive) {
-                a.addEventListener('click', ev => ev.preventDefault());
+            if (!disabled && !active && typeof onClick === 'function') {
+                a.addEventListener('click', (ev) => { ev.preventDefault(); onClick(); });
+            } else {
+                a.addEventListener('click', (ev) => ev.preventDefault());
             }
-            liEl.appendChild(a);
-            return liEl;
+            li.appendChild(a);
+            return li;
         };
 
-        const isLast = totalPages === null ? (items.length < limit) : (current >= totalPages);
-        let start = 1, end = 1;
-        if (totalPages !== null) {
-            const windowSize = 5;
-            start = Math.max(1, current - Math.floor(windowSize / 2));
-            end = Math.min(totalPages, start + windowSize - 1);
-            start = Math.max(1, end - windowSize + 1);
-        } else {
-            start = current; end = current;
+        ul.innerHTML = '';
+
+        ul.appendChild(makeItem('«', () => goPage(1), { disabled: current === 1, aria: '처음' }));
+        ul.appendChild(makeItem('‹', () => goPage(current - 1), { disabled: current === 1, aria: '이전' }));
+
+        const windowSize = 5;
+        const blockStart = Math.floor((current - 1) / windowSize) * windowSize + 1; // 1,6,11...
+        const blockEnd = Math.min(blockStart + windowSize - 1, totalPages);        // 5,10,15...
+
+        for (let p = blockStart; p <= blockEnd; p++) {
+            ul.appendChild(makeItem(String(p), () => goPage(p), { active: p === current }));
         }
 
-        ul.innerHTML = '';
-        ul.appendChild(li(current === 1, '«', () => goPage(1), '처음'));
-        ul.appendChild(li(current === 1, '‹', () => goPage(current - 1), '이전'));
-        for (let p = start; p <= end; p++) {
-            const isActive = p === current;
-            ul.appendChild(li(isActive, String(p), () => goPage(p), null, true));
-        }
-        ul.appendChild(li(isLast, '›', () => goPage(current + 1), '다음'));
-        if (totalPages !== null) ul.appendChild(li(isLast, '»', () => goPage(totalPages), '마지막'));
-        else ul.appendChild(li(true, '»', null, '마지막'));
+        const isLast = current >= totalPages;
+        ul.appendChild(makeItem('›', () => goPage(current + 1), { disabled: isLast, aria: '다음' }));
+        ul.appendChild(makeItem('»', () => goPage(totalPages), { disabled: isLast, aria: '마지막' }));
     }
+
 
     // ---------- selection & actions ----------
     function wireCheckEvents() {
