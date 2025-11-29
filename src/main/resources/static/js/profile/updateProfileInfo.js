@@ -1,3 +1,5 @@
+let isNickNameChecked = false;
+
 document.getElementById("pwConfirmBtn").addEventListener("click", function () {
 
     const oldPw = document.getElementById("oldPw").value.trim();
