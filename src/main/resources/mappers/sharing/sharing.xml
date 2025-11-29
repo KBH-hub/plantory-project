@@ -134,6 +134,7 @@
         FROM interest
         WHERE member_id = #{memberId}
           AND sharing_id = #{sharingId}
+        FOR UPDATE
     </select>
 
 
