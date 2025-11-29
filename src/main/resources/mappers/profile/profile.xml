@@ -34,11 +34,31 @@
           AND del_flag IS NULL
     </update>
 
-    <update id="deleteMember" parameterType="long">
+    <update id="deleteMemberById" parameterType="long">
         UPDATE member
         SET del_flag = NOW()
         WHERE member_id = #{memberId}
           AND del_flag IS NULL
+    </update>
+
+    <delete id="deleteMember" parameterType="long">
+        DELETE FROM member
+        WHERE member_id = #{memberId}
+    </delete>
+
+    <select id="selectByMemberId" parameterType="long" resultType="com.zero.plantory.domain.profile.dto.MemberResponse">
+        SELECT member_id, membername, password, nickname, phone, address,
+               sharing_rate, skill_rate, management_rate,
+               role, stop_day, del_flag
+        FROM member
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
+    </select>
+
+    <update id="updatePassword">
+        UPDATE member
+        SET password = #{password}
+        WHERE member_id = #{memberId}
     </update>
 
 </mapper>

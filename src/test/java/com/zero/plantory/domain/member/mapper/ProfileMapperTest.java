@@ -49,8 +49,8 @@ class ProfileMapperTest {
     }
 
     @Test
-    void deleteMemberTest() {
-        int result = profileMapper.deleteMember(1L);
+    void deleteMemberByIdTest() {
+        int result = profileMapper.deleteMemberById(1L);
         assertTrue(result > 0);
         log.info(String.valueOf(result));
     }

@@ -70,12 +70,12 @@ class ProfileServiceImplTest {
 
     @Test
     @DisplayName("회원 탈퇴 테스트")
-    void deleteMemberTest() {
-        when(profileMapper.deleteMember(1L)).thenReturn(1);
+    void deleteMemberByIdTest() {
+        when(profileMapper.deleteMemberById(1L)).thenReturn(1);
 
-        boolean result = profileService.deleteMember(1L);
+        boolean result = profileService.deleteMemberById(1L);
 
         assertTrue(result);
-        verify(profileMapper, times(1)).deleteMember(1L);
+        verify(profileMapper, times(1)).deleteMemberById(1L);
     }
 }
