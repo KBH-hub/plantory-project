@@ -35,7 +35,6 @@
     border-style: dashed;
 }
 
-/* 배지 래퍼: 우하단 고정, 세로 스택 */
 .calendar-cell .badge-wrap {
     position: absolute;
     right: 6px;
@@ -43,10 +42,9 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    align-items: flex-end; /* 숫자 길이에 따라 우측 정렬 */
+    align-items: flex-end;
 }
 
-/* 배지(겹침 방지: static) */
 .calendar-cell .badge-diary,
 .calendar-cell .badge-watering {
     position: static;
@@ -64,11 +62,9 @@
 .calendar-cell .badge-diary { background: #f0ad4e; color: #111; }
 .calendar-cell .badge-watering { background: #0d6dfb; color: #fff; }
 
-/* 상단 상태 바 */
 .calendar-cell.has-diary { border-top: 4px solid #fdbf07; }
 .calendar-cell.has-watering { border-top: 4px solid #0d6dfb; }
 
-/* 둘 다 있을 때는 2색 상단 바 */
 .calendar-cell.has-diary.has-watering {
     border-top: none;
     background:

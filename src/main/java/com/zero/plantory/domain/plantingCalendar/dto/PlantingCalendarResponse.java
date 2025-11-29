@@ -14,6 +14,7 @@ import java.util.Date;
 public class PlantingCalendarResponse {
     private Long wateringId;
     private Long myplantId;
+    private Long diaryId;
     private Long memberId;
     private String name;
     private String content;

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/alert.css}" />
     <link rel="stylesheet" th:href="@{/css/plantCalendar.css}">
 </head>
 <body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
@@ -139,13 +141,58 @@
                     </div>
                 </div>
 
-            </div> <!-- /.col-lg-4 -->
+                <!-- 상세조회 모달: 등록 모달과 동일한 형태/톤 -->
+                <div class="modal fade" id="diaryDetailModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <!-- 헤더 톤/구성 동일 -->
+                            <div class="modal-header bg-warning text-white border-0">
+                                <h5 class="modal-title fw-bold">관찰일지 상세</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="닫기"></button>
+                            </div>
+
+                            <!-- 본문 여백/라벨/컨트롤 간격 동일 -->
+                            <div class="modal-body">
+                                <label class="fw-bold">사진</label>
+                                <div id="detailPhotos"
+                                     class="d-grid mb-3"
+                                     style="grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: .5rem;">
+                                    <!-- JS에서 썸네일 주입 -->
+                                </div>
+
+                                <label class="fw-bold">식물</label>
+                                <input id="detailPlant" class="form-control mb-3" readonly>
+
+                                <label class="fw-bold">활동</label>
+                                <input id="detailActivity" class="form-control mb-3" readonly>
+
+                                <label class="fw-bold">식물 상태</label>
+                                <input id="detailCondition" class="form-control mb-3" readonly>
+
+                                <label class="fw-bold">메모</label>
+                                <textarea id="detailMemo" class="form-control" rows="4" readonly></textarea>
+
+                                <div class="mt-2">
+                                    <small class="text-muted">작성일: <span id="detailDate"></span></small>
+                                </div>
+                            </div>
+
+                            <!-- 푸터 톤/여백 동일 -->
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-secondary w-50 mx-auto" data-bs-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/common/modal.js}"></script>
+<script th:src="@{/js/common/alert.js}"></script>
 <script th:src="@{/js/myPlant/plantCalendar.js}"></script>
 </body>
 </html>

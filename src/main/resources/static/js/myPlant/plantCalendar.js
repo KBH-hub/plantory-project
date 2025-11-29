@@ -205,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         diaries.forEach(d => {
             const data = {
+                diaryId: d.diaryId,
                 plant: d.name || d.plant || "-",
                 activity: d.activity || "",
                 condition: d.condition || "",
@@ -229,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const isToday = dayYmd === ymdFromDate(new Date());
 
         items.forEach(item => {
-            console.log(item);
             const displayName = item.name || item.plant || "-";
             const checkedAttr = item.checkFlag ? "checked" : "";
             const wateringId = item.wateringId ?? "";
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
         addBtn.innerHTML = `<span class="fs-1">+</span>`;
         addBtn.addEventListener("click", () => {
             if (photoFiles.length >= 5) {
-                alert("사진은 최대 5장까지 업로드 가능합니다.");
+                showAlert("사진은 최대 5장까지 업로드 가능합니다.");
                 return;
             }
             if (imageModalEl) new bootstrap.Modal(imageModalEl).show();
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addPhotoBtnEl?.addEventListener("click", () => {
         if (photoFiles.length >= 5) {
-            alert("사진은 최대 5장까지 업로드 가능합니다.");
+            showAlert("사진은 최대 5장까지 업로드 가능합니다.");
             return;
         }
         if (imageInputEl) imageInputEl.value = "";
@@ -360,14 +360,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const card = document.createElement("div");
         card.className = "d-flex flex-column bg-warning bg-opacity-10 rounded-2 border-start border-4 border-warning p-3 mb-3";
         card.innerHTML = `
-      <div class="d-flex align-items-start">
+      <div class="d-flex align-items-start diary-card" data-diary-id="${diary.diaryId}">
         <div class="d-flex align-items-center">
           ${photoHtml}
           <div class="fw-bold">${diary.plant || "-"}</div>
         </div>
         <div class="ms-auto d-flex align-items-center gap-3">
           <span class="badge bg-warning text-dark">${diary.date}</span>
-          <i class="fa-solid fa-xmark text-secondary fs-5 remove-btn"></i>
+          <button type="button"
+                class="btn btn-link text-secondary p-0 remove-btn"
+                data-diary-id="${diary.diaryId}"
+                aria-label="이 관찰일지 삭제">
+          <i class="fa-solid fa-xmark fs-5"></i>
+        </button>
         </div>
       </div>
       <div class="mt-2 ps-1 bg-light rounded-1 p-1">
@@ -415,21 +420,120 @@ document.addEventListener("DOMContentLoaded", function () {
     (async () => {
         await safeRender(currentYear, currentMonth);
     })();
-});
-document.getElementById("wateringListContainer")?.addEventListener("change", (e) => {
-    const cb = e.target.closest(".watering-check");
-    if (!cb) return;
 
-    const wateringId = cb.dataset.wateringId;
-    const checked = cb.checked;
+    diaryListContainerEl?.addEventListener("click", async (e) => {
+        const removeBtn = e.target.closest(".remove-btn");
+        if (removeBtn) {
+            e.stopPropagation(); // 상세 모달 열림 방지
 
-    console.log("물주기 체크 변경:", wateringId, checked);
+            const card = removeBtn.closest(".diary-card[data-diary-id]");
+            if (!card) return;
+            const diaryId = card.dataset.diaryId;
+            if (!diaryId) {
+                showAlert("서버에 저장되지 않은 항목입니다.");
+                // 로컬 카드만 제거하고 끝내려면 아래 주석 해제
+                // card.parentElement?.remove();
+                return;
+            }
 
-    axios.put("/api/plantingCalender/watering",null,
-    {
-        params: {wateringId},
-        headers: { Accept: "application/json" }
+            showModal("이 관찰일지를 삭제할까요?", async (ok) => {
+                if (!ok) return;
+
+                const container = card.parentElement;
+                const backupHTML = container.outerHTML;
+                container.style.opacity = "0.5";
+
+                try {
+                    await axios.delete(`/api/plantingCalender/diary/${encodeURIComponent(diaryId)}`, {
+                        headers: { Accept: "application/json" }
+                    });
+
+                    container.remove();
+
+                    // 선택된 날짜 패널과 월 배지 갱신
+                    const ymd = selectedDate || ymdFromDate(new Date());
+                    await renderDayPanels(ymd);
+                    const [yy, mm] = ymd.split("-").map(Number);
+                    await loadAndMark(yy, mm);
+                } catch (err) {
+                    console.error("다이어리 삭제 실패:", err);
+                    container.insertAdjacentHTML("afterend", backupHTML);
+                    container.remove();
+                    showAlert("삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+                }
+            });
+            return;
+        }
+        const card = e.target.closest(".diary-card[data-diary-id]");
+        if (!card || !diaryListContainerEl.contains(card)) return;
+
+        const diaryId = card.dataset.diaryId;
+        try {
+            const {data} = await axios.get(`/api/plantingCalender/diaryInfo/${encodeURIComponent(diaryId)}`, {
+                headers: {Accept: "application/json"}
+            });
+
+            function openDiaryUpdateModal(resp) {
+                const el = document.getElementById("diaryDetailModal");
+                if (!el) return showAlert("상세 모달이 없습니다.");
+
+                // 부트스트랩 모달 인스턴스 확보
+                const modal = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+
+                // 응답 정규화
+                const d = resp?.diary ?? {};
+                const photos = Array.isArray(resp?.images) ? resp.images.map(it => it.fileUrl).filter(Boolean) : [];
+
+                // 필드 매핑: state -> condition, createdAt -> date
+                document.getElementById("detailPlant").value = d.name || d.plant || "-"; // 서버에서 식물명이 없으면 "-"로
+                document.getElementById("detailActivity").value = d.activity || "";
+                document.getElementById("detailCondition").value = d.state || "";        // 여기!
+                document.getElementById("detailMemo").value = d.memo || "";
+                document.getElementById("detailDate").textContent = (d.createdAt || "").toString().slice(0, 10);
+
+                // 사진 렌더
+                const wrap = document.getElementById("detailPhotos");
+                wrap.innerHTML = "";
+                if (photos.length === 0) {
+                    wrap.innerHTML = `<div class="text-muted small">사진이 없습니다.</div>`;
+                } else {
+                    photos.forEach(url => {
+                        const box = document.createElement("div");
+                        box.className = "rounded border";
+                        box.style.cssText = "width:100%;aspect-ratio:1/1;overflow:hidden;";
+                        box.innerHTML = `<img src="${url}" alt="관찰일지 사진" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+                        wrap.appendChild(box);
+                    });
+                }
+
+                modal.show();
+            }
+
+
+
+            openDiaryUpdateModal(data);
+        } catch (err) {
+            console.error("다이어리 상세 조회 실패:", err);
+        }
     });
 
-    window.location.reload();
+    document.getElementById("wateringListContainer")?.addEventListener("change", (e) => {
+        const cb = e.target.closest(".watering-check");
+        if (!cb) return;
+
+        const wateringId = cb.dataset.wateringId;
+        const checked = cb.checked;
+
+        console.log("물주기 체크 변경:", wateringId, checked);
+
+        axios.put("/api/plantingCalender/watering", null,
+            {
+                params: {wateringId},
+                headers: {Accept: "application/json"}
+            });
+
+        window.location.reload();
+    });
 });
+
+

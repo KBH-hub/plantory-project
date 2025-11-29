@@ -98,7 +98,7 @@ class PlantingCalenderServiceTest {
     @Test
     @DisplayName("캘린더 관찰일지 수정 모달 정보 조회")
     void findDiaryUpdateInfoTest() {
-        Long diaryId = 2L;
+        Long diaryId = 21L;
 
         DiaryResponse result = plantCalenderService.findDiaryUpdateInfo(diaryId);
 
@@ -108,7 +108,7 @@ class PlantingCalenderServiceTest {
     @Test
     @DisplayName("캘린더 관찰일지 수정 모달 이미지 조회")
     void findDiaryUpdateImageInfoTest() {
-        Long diaryId = 30L;
+        Long diaryId = 21L;
 
         List<ImageDTO> result = plantCalenderService.findDiaryUpdateImageInfo(diaryId);
 
@@ -206,7 +206,15 @@ class PlantingCalenderServiceTest {
         files.add(file1);
         files.add(file2);
 
-        plantCalenderService.registerDiary(request, files, memberId);
+        log.info(String.valueOf(plantCalenderService.registerDiary(request, files, memberId)));
     }
 
+    @Test
+    void removeDiary() {
+        Long diaryId = 2L;
+
+        plantCalenderService.removeDiary(diaryId);
+
+        log.info(String.valueOf(diaryId));
+    }
 }

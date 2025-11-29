@@ -65,9 +65,18 @@
     </select>
 
     <select id="selectDiaryUpdateInfo" resultType="com.zero.plantory.domain.plantingCalendar.dto.DiaryResponse">
-        SELECT diary_id, myplant_id,activity,state,memo,created_at
-        FROM diary
-        WHERE diary_id = #{diaryId};
+        SELECT
+            d.diary_id,
+            d.myplant_id,
+            mp.name,
+            d.activity,
+            d.state,
+            d.memo,
+            d.created_at
+        FROM diary d
+                 JOIN myplant mp
+                      ON mp.myplant_id = d.myplant_id
+        WHERE d.diary_id = #{diaryId}
     </select>
 
     <update id="updateDiary">
@@ -92,6 +101,11 @@
         INSERT INTO diary (myplant_id,activity, state, memo, created_at)
         VALUES (#{myplantId},#{activity}, #{state}, #{memo},NOW());
     </insert>
+
+    <delete id="deleteDiary">
+        DELETE FROM DIARY
+        WHERE diary_id = #{diaryId}
+    </delete>
 
     <select id="selectMyplantsForWindow" parameterType="int"
             resultType="com.zero.plantory.domain.plantingCalendar.dto.MyplantSlotBaseResponse">

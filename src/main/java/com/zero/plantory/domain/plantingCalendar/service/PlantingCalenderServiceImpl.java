@@ -130,6 +130,11 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     }
 
     @Override
+    public int removeDiary(Long diaryId) {
+        return plantingCalendarMapper.deleteDiary(diaryId);
+    }
+
+    @Override
     @Transactional
     public int processOnce(int batchSize) {
         var bases = plantingCalendarMapper.selectMyplantsForWindow(batchSize);

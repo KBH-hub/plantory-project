@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class DiaryResponse {
     Long diaryId;
     Long myplantId;
+    String name;
     String activity;
     String state;
     String memo;
