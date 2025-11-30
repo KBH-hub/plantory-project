@@ -20,4 +20,6 @@ public interface ProfileContentService {
     List<ProfileWrittenListResponse> searchProfileCommentQuestion(ProfileWrittenListRequest request);
 
     ProfileWrittenPageResult getProfileWrittenList(ProfileWrittenListRequest request, String category);
+
+    void deleteWritten(ProfileWrittenDeleteRequest dto);
 }

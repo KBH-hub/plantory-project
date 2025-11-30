@@ -107,4 +107,17 @@ public class ProfileContentServiceImpl implements ProfileContentService {
         return new ProfileWrittenPageResult(total, list);
     }
 
+    @Override
+    public void deleteWritten(ProfileWrittenDeleteRequest req) {
+
+        if (req.getSharingIds() != null && !req.getSharingIds().isEmpty()) {
+            profileContentMapper.deleteProfileWrittenSharing(req);
+        }
+
+        if (req.getQuestionIds() != null && !req.getQuestionIds().isEmpty()) {
+            profileContentMapper.deleteProfileWrittenQuestion(req);
+        }
+    }
+
+
 }

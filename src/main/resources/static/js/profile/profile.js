@@ -56,6 +56,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateTableVisibility();
 });
 
+document.addEventListener("change", (e) => {
+    if (e.target.id === "checkAll") {
+        const checked = e.target.checked;
+        document.querySelectorAll(".row-check").forEach(chk => {
+            chk.checked = checked;
+        });
+    }
+});
+
+async function handleDeleteWritten() {
+    if (currentTab !== "profilePosts") {
+        showAlert("댓글에서는 삭제할 수 없습니다.");
+        return;
+    }
+
+    const selected = Array.from(document.querySelectorAll(".row-check:checked"));
+
+    const sharingIds = [];
+    const questionIds = [];
+
+    selected.forEach(chk => {
+        const id = Number(chk.dataset.id);
+        const category = chk.dataset.category;
+
+        if (category === "SHARING") sharingIds.push(id);
+        if (category === "QUESTION") questionIds.push(id);
+    });
+
+    if (sharingIds.length === 0 && questionIds.length === 0) {
+        showAlert("삭제할 글이 없습니다.");
+        return;
+    }
+
+    const payload = {
+        memberId: PROFILE_ID,
+        sharingIds,
+        questionIds
+    };
+
+    console.log("삭제 요청:", payload);
+
+    await axios.post("/api/profileWritten/softDelete", payload);
+
+    showAlert("삭제되었습니다.");
+    loadProfileWritten();
+}
+
+
+
+
 async function fetchProfileData() {
     try {
         if (IS_ME) {
@@ -108,6 +158,7 @@ function hideMyButtons() {
 
 function initButtons() {
     const updateBtn = document.getElementById("updateMyInfoBtn");
+    const deleteBtn = document.getElementById("deleteProfileWrittenBtn");
 
     if (updateBtn) {
         updateBtn.addEventListener("click", () => {
@@ -115,6 +166,10 @@ function initButtons() {
                 window.location.href = `/profile/update/${PROFILE_ID}`;
             }
         });
+    }
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", handleDeleteWritten);
     }
 }
 
@@ -157,12 +212,17 @@ function renderTable() {
     content.forEach(item => {
         tbody.innerHTML += `
             <tr>
+                <td>
+                       ${currentTab === "profilePosts" ? `<input type="checkbox" class="row-check" data-id="${item.id}" data-category="${item.category}">` : ``}
+                </td>
                 <td>${item.nickname}</td>
                 <td>${categoryMap[item.category] || item.category}</td>
                 <td>${item.title}</td>
                 <td>${item.createdAt}</td>
             </tr>
         `;
+        // console.log(item.id)
+        console.log(item.category)
     });
 }
 

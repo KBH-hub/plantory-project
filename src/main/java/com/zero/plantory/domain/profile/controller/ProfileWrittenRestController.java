@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.profile.controller;
 
+import com.zero.plantory.domain.profile.dto.ProfileWrittenDeleteRequest;
 import com.zero.plantory.domain.profile.dto.ProfileWrittenListRequest;
 import com.zero.plantory.domain.profile.mapper.ProfileContentMapper;
 import com.zero.plantory.domain.profile.service.ProfileContentService;
@@ -42,4 +43,11 @@ public class ProfileWrittenRestController {
                 profileContentService.getProfileWrittenList(profileContentServiceProfileWrittenList, category)
         );
     }
+
+    @PostMapping("/softDelete")
+    public ResponseEntity<?> deleteWritten(@RequestBody ProfileWrittenDeleteRequest request) {
+        profileContentService.deleteWritten(request);
+        return ResponseEntity.ok().build();
+    }
+
 }

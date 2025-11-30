@@ -297,4 +297,32 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <update id="deleteProfileWrittenSharing"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenDeleteRequest">
+
+        UPDATE sharing
+        SET del_flag = NOW()
+        WHERE member_id = #{memberId}
+        AND sharing_id IN
+        <foreach collection="sharingIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </update>
+
+
+    <update id="deleteProfileWrittenQuestion"
+            parameterType="com.zero.plantory.domain.profile.dto.ProfileWrittenDeleteRequest">
+
+        UPDATE question
+        SET del_flag = NOW()
+        WHERE member_id = #{memberId}
+        AND question_id IN
+        <foreach collection="questionIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </update>
+
+
 </mapper>
