@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.profile.service;
 
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
 
@@ -10,7 +10,7 @@ public interface ProfileService {
 
     boolean updateNoticeEnabled(Long memberId, int enabled);
 
-    boolean updateMyInfo(MemberUpdateRequest request);
+    boolean updateProfileInfo(ProfileUpdateRequest request);
 
     boolean deleteMemberById(Long memberId);
 

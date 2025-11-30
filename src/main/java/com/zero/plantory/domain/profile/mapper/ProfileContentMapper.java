@@ -10,14 +10,34 @@ import java.util.List;
 @Mapper
 public interface ProfileContentMapper {
     List<ProfileWrittenListResponse> selectProfileWrittenListAll(ProfileWrittenListRequest request);
+
     List<ProfileWrittenListResponse> selectProfileWrittenListSharing(ProfileWrittenListRequest request);
+
     List<ProfileWrittenListResponse> selectProfileWrittenListQuestion(ProfileWrittenListRequest request);
 
+    int countProfileWrittenAll(ProfileWrittenListRequest request);
+
+    int countProfileCommentAll(ProfileWrittenListRequest request);
+
     int deleteProfileWrittenSharing(ProfileWrittenDeleteRequest request);
+
     int deleteProfileWrittenQuestion(ProfileWrittenDeleteRequest request);
 
     List<ProfileWrittenListResponse> selectProfileCommentSearchAll(ProfileWrittenListRequest request);
-    List<ProfileWrittenListResponse> selectProfileCommentSearchSharing(ProfileWrittenListRequest request);
-    List<ProfileWrittenListResponse> selectProfileCommentSearchQuestion(ProfileWrittenListRequest request);
-}
 
+    List<ProfileWrittenListResponse> selectProfileCommentSearchSharing(ProfileWrittenListRequest request);
+
+    List<ProfileWrittenListResponse> selectProfileCommentSearchQuestion(ProfileWrittenListRequest request);
+
+    int countProfileWrittenQuestion(ProfileWrittenListRequest req);
+
+    int countProfileWrittenSharing(ProfileWrittenListRequest req);
+
+    int countProfileWrittenALL(ProfileWrittenListRequest req);
+
+    int countProfileCommentAlLL(ProfileWrittenListRequest req);
+
+    int countProfileCommentSharing(ProfileWrittenListRequest req);
+
+    int countProfileCommentQuestion(ProfileWrittenListRequest req);
+}

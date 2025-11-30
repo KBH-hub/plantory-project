@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.mapper.ProfileMapper;
 import com.zero.plantory.domain.profile.service.ProfileServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -53,8 +53,8 @@ class ProfileServiceImplTest {
 
     @Test
     @DisplayName("회원 정보 수정 테스트")
-    void updateMyInfoTest() {
-        MemberUpdateRequest request = MemberUpdateRequest.builder()
+    void updateProfileInfoTest() {
+        ProfileUpdateRequest request = ProfileUpdateRequest.builder()
                 .memberId(1L)
                 .nickname("새닉네임")
                 .phone("010-1234-5678")
@@ -62,7 +62,7 @@ class ProfileServiceImplTest {
 
         when(profileMapper.updateProfileInfo(request)).thenReturn(1);
 
-        boolean result = profileService.updateMyInfo(request);
+        boolean result = profileService.updateProfileInfo(request);
 
         assertTrue(result);
         verify(profileMapper, times(1)).updateProfileInfo(request);

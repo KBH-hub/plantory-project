@@ -1,6 +1,8 @@
 package com.zero.plantory.domain.profile.controller;
 
+import com.zero.plantory.domain.profile.dto.PasswordChangeRequest;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
 import com.zero.plantory.domain.profile.service.ProfileService;
 import com.zero.plantory.global.security.MemberDetail;
@@ -44,6 +46,31 @@ public class ProfileRestController {
 
         return ResponseEntity.ok(Map.of("success", success));
     }
+
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> softWithdraw(
+            @AuthenticationPrincipal MemberDetail memberDetail) {
+
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        profileService.deleteMemberById(memberId);
+
+        return ResponseEntity.ok("회원 탈퇴 완료");
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProfile(
+            @AuthenticationPrincipal MemberDetail memberDetail,
+            @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        profileUpdateRequest.setMemberId(memberId);
+
+        profileService.updateProfileInfo(profileUpdateRequest);
+
+        return ResponseEntity.ok("success");
+    }
+
+
 
 
 

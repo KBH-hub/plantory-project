@@ -1,20 +1,60 @@
 let currentTab = "profilePosts";
 let currentPage = 1;
 const rowsPerPage = 10;
+
 const IS_ME = ProfileData.isMe;
 const PROFILE_ID = ProfileData.profileId;
 
-let posts = [];
-let comments = [];
+let content = [];
 
+const categoryMap = {
+    SHARING: "나눔",
+    QUESTION: "질문",
+    COMMENT: "나눔댓글",
+    ANSWER: "질문답글"
+};
+
+const writtenOptions = `
+    <option value="ALL">전체</option>
+    <option value="SHARING">나눔</option>
+    <option value="QUESTION">질문</option>
+`;
+
+const commentOptions = `
+    <option value="COMMENT_ALL">전체댓글</option>
+    <option value="COMMENT">나눔댓글</option>
+    <option value="ANSWER">질문답글</option>
+`;
+
+function updateTableVisibility() {
+    const writtenTbody = document.getElementById("profileWrittenTbody");
+    const commentTbody = document.getElementById("profileCommentTbody");
+
+    if (!writtenTbody || !commentTbody) return;
+
+    writtenTbody.classList.add("d-none");
+    commentTbody.classList.add("d-none");
+
+    if (currentTab === "profilePosts") {
+        writtenTbody.classList.remove("d-none");
+    } else {
+        commentTbody.classList.remove("d-none");
+    }
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
+    const categorySelect = document.getElementById("categorySelect");
+
+    categorySelect.innerHTML = writtenOptions;
+    categorySelect.value = "ALL";
+
     await initProfileInfo();
     initTabs();
     initSearchFilter();
     initButtons();
-});
 
+    updateTableVisibility();
+});
 
 async function fetchProfileData() {
     try {
@@ -45,20 +85,25 @@ async function initProfileInfo() {
         hideMyButtons();
     }
 
-    await loadProfilePosts();
+    await loadProfileWritten();
     initPagination();
 }
 
 function renderMyProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname;
     document.getElementById("profileAddress").textContent = data.address;
-    document.getElementById("sharingRate").textContent = "나눔지수: " + data.sharingRate + "%";
+    document.getElementById("sharingRate").textContent = `나눔지수: ${data.sharingRate}%`;
 }
 
 function renderPublicProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname;
     document.getElementById("profileAddress").textContent = data.address ?? "비공개";
-    document.getElementById("sharingRate").textContent = "나눔지수: " + data.sharingRate + "%";
+    document.getElementById("sharingRate").textContent = `나눔지수: ${data.sharingRate}%`;
+}
+
+function hideMyButtons() {
+    const btnBox = document.getElementById("myButtons");
+    if (btnBox) btnBox.classList.add("d-none");
 }
 
 function initButtons() {
@@ -73,35 +118,57 @@ function initButtons() {
     }
 }
 
-function hideMyButtons() {
-    const btnBox = document.getElementById("myButtons") || null;
-    if (btnBox) btnBox.classList.add("d-none");
+function getKeyword() {
+    return document.querySelector(".input-group input").value.trim();
 }
 
-
-async function loadProfilePosts() {
-    try {
-        const response = await axios.get(`/api/posts/profile/${PROFILE_ID}`);
-        posts = response.data;
-        renderTable();
-    } catch (e) {
-        console.error(e);
-    }
+function getCategory() {
+    return document.querySelector(".form-select").value;
 }
 
-async function loadProfileComments() {
-    try {
-        const response = await axios.get(`/api/comments/profile/${PROFILE_ID}`);
-        comments = response.data;
-        renderTable();
-    } catch (e) {
-        console.error(e);
-    }
+async function loadProfileWritten(category = getCategory()) {
+    const response = await axios.get(`/api/profileWritten/${PROFILE_ID}`, {
+        params: {
+            keyword: getKeyword(),
+            category: category,
+            limit: rowsPerPage,
+            offset: (currentPage - 1) * rowsPerPage
+        }
+    });
+
+    const { total, list } = response.data;
+
+    content = list || [];
+
+    renderTable();
+    renderPagination(total);
 }
 
+function renderTable() {
+    const tbody =
+        currentTab === "profilePosts"
+            ? document.getElementById("profileWrittenTbody")
+            : document.getElementById("profileCommentTbody");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    content.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${item.nickname}</td>
+                <td>${categoryMap[item.category] || item.category}</td>
+                <td>${item.title}</td>
+                <td>${item.createdAt}</td>
+            </tr>
+        `;
+    });
+}
 
 function initTabs() {
     const tabs = document.querySelectorAll("#tabs span");
+    const categorySelect = document.getElementById("categorySelect");
 
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
@@ -114,99 +181,112 @@ function initTabs() {
             currentTab = tab.dataset.tab;
             currentPage = 1;
 
+            updateTableVisibility();
+
             if (currentTab === "profilePosts") {
-                loadProfilePosts();
+                categorySelect.innerHTML = writtenOptions;
+                categorySelect.value = "ALL";
+                loadProfileWritten("ALL");
             } else {
-                loadProfileComments();
+                categorySelect.innerHTML = commentOptions;
+                categorySelect.value = "COMMENT_ALL";
+                loadProfileWritten("COMMENT_ALL");
             }
         });
     });
 }
 
-
 function initSearchFilter() {
     const searchInput = document.querySelector(".input-group input");
-    const categorySelect = document.querySelector(".form-select");
+    const categorySelect = document.getElementById("categorySelect");
 
     searchInput.addEventListener("input", () => {
         currentPage = 1;
-        renderTable();
+        loadProfileWritten(categorySelect.value);
     });
 
-    categorySelect.addEventListener("change", () => {
+    categorySelect.addEventListener("change", (e) => {
         currentPage = 1;
-        renderTable();
+        loadProfileWritten(e.target.value);
     });
 }
-
-function getCurrentData() {
-    return currentTab === "profilePosts" ? posts : comments;
-}
-
-function filterData() {
-    const searchInput = document.querySelector(".input-group input");
-    const categorySelect = document.querySelector(".form-select");
-
-    const keyword = searchInput.value.trim().toLowerCase();
-    const category = categorySelect.value;
-
-    return getCurrentData().filter(p =>
-        (category === "전체" || p.category === category) &&
-        p.title.toLowerCase().includes(keyword)
-    );
-}
-
-function renderTable() {
-    const tableBody = document.querySelector("tbody");
-    tableBody.innerHTML = "";
-
-    const data = filterData();
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const sliced = data.slice(start, end);
-
-    sliced.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.writer}</td>
-            <td>${item.category}</td>
-            <td class="text-start">${item.title}</td>
-            <td>${item.date}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-
-    renderPagination(data.length);
-}
-
-
 
 function initPagination() {
-    document.querySelector(".pagination").addEventListener("click", (e) => {
-        if (!e.target.closest(".page-item") || e.target.classList.contains("disabled")) return;
+    const paginationContainer = document.querySelector(".pagination");
+    if (!paginationContainer) return;
 
-        const btn = e.target.closest(".page-item");
+    paginationContainer.addEventListener("click", (e) => {
+        const pageItem = e.target.closest(".page-item");
+        if (!pageItem) return;
 
-        if (btn.dataset.page === "prev" && currentPage > 1) currentPage--;
-        if (btn.dataset.page === "next") currentPage++;
+        const page = pageItem.dataset.page;
+        if (!page) return;
 
-        renderTable();
+        if (page === "prev" && currentPage > 1) {
+            currentPage--;
+        } else if (page === "next") {
+            currentPage++;
+        } else {
+            currentPage = Number(page);
+        }
+
+        loadProfileWritten();
+    });
+}
+
+function bindPaginationClick() {
+    document.querySelectorAll("#pagination .page-link").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const page = Number(e.target.dataset.page);
+            if (page < 1) return;
+
+            currentPage = page;
+            loadProfileWritten();
+        });
     });
 }
 
 function renderPagination(totalCount) {
-    const pagination = document.querySelector(".pagination");
+    const pagination = document.getElementById("pagination");
+    if (!pagination) return;
+
     const totalPages = Math.ceil(totalCount / rowsPerPage);
 
-    pagination.innerHTML = `
-        <li class="page-item ${currentPage === 1 ? "disabled" : ""}" data-page="prev">
-            <a class="page-link">&laquo;</a>
-        </li>
-        <li class="page-item disabled">
-            <a class="page-link">${currentPage} / ${totalPages || 1}</a>
-        </li>
-        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}" data-page="next">
-            <a class="page-link">&raquo;</a>
+    pagination.innerHTML = "";
+
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+            <a class="page-link" data-page="1">«</a>
         </li>
     `;
+
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+            <a class="page-link" data-page="${currentPage - 1}">‹</a>
+        </li>
+    `;
+
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <li class="page-item ${currentPage === i ? "active" : ""}">
+                <a class="page-link" data-page="${i}">${i}</a>
+            </li>
+        `;
+    }
+
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+            <a class="page-link" data-page="${currentPage + 1}">›</a>
+        </li>
+    `;
+
+    pagination.innerHTML += `
+        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+            <a class="page-link" data-page="${totalPages}">»</a>
+        </li>
+    `;
+
+    bindPaginationClick();
 }

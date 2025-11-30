@@ -2,7 +2,7 @@ package com.zero.plantory.domain.profile.service;
 
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
 import com.zero.plantory.domain.profile.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +38,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public boolean updateMyInfo(MemberUpdateRequest request) {
-        return profileMapper.updateProfileInfo(request) > 0;
+    public boolean updateProfileInfo(ProfileUpdateRequest request) {
+            return profileMapper.updateProfileInfo(request) > 0;
     }
+
 
     @Override
     @Transactional

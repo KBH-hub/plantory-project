@@ -18,4 +18,6 @@ public interface ProfileContentService {
     List<ProfileWrittenListResponse> searchProfileCommentAll(ProfileWrittenListRequest request);
     List<ProfileWrittenListResponse> searchProfileCommentSharing(ProfileWrittenListRequest request);
     List<ProfileWrittenListResponse> searchProfileCommentQuestion(ProfileWrittenListRequest request);
+
+    ProfileWrittenPageResult getProfileWrittenList(ProfileWrittenListRequest request, String category);
 }
