@@ -2,6 +2,43 @@ let originalNickname = "";
 let isNicknameChecked = false;
 
 const phoneInput = document.getElementById("phoneInput");
+const changeBtn = document.getElementById("changeProfileImgBtn");
+const fileInput = document.getElementById("profileImgInput");
+const previewImg = document.getElementById("profilePreview");
+
+let selectedFile = null; // 서버로 보낼 최종 파일
+
+changeBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        fileInput.value = "";
+        return;
+    }
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = function() {
+        const MAX_SIZE = 300;
+
+        if (img.width > MAX_SIZE || img.height > MAX_SIZE) {
+            showAlert(`이미지 크기는 ${MAX_SIZE}x${MAX_SIZE} 이하만 업로드할 수 있습니다.`);
+            fileInput.value = "";
+            return;
+        }
+
+        previewImg.src = this.src;
+
+        selectedFile = file;
+    };
+});
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -117,6 +154,14 @@ async function submitProfile(event) {
         return showAlert("닉네임 중복 확인을 먼저 해주세요.");
     }
 
+    if (!selectedFile) {
+        alert("프로필 사진을 선택해주세요.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("profileImage", selectedFile);
+
     const nickname = document.getElementById("nicknameInput").value.trim();
     const phone = document.getElementById("phoneInput").value.trim();
     const sido = document.getElementById("sido").value;
@@ -132,7 +177,10 @@ async function submitProfile(event) {
     };
 
     try {
-        const res = await axios.put("/api/profile/update", req);
+        await axios.put("/api/profile", req);
+        await axios.post("/api/profile/picture", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
         showAlert("프로필이 수정되었습니다.", () => {
             history.back();
         });

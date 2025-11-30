@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.image;
+package com.zero.plantory.domain.image.mapper;
 
 import com.zero.plantory.global.dto.ImageTargetType;
 import com.zero.plantory.global.dto.ImageDTO;
@@ -18,4 +18,12 @@ public interface ImageMapper {
     int insertImage(ImageDTO imageDTO);
     int softDeleteImage(@Param("imageId") Long imageId);
     int softDeleteImagesByTarget(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId);
+
+    // 단건 조회 + 최신에 업데이트된 사진 하나만 객체
+    ImageDTO selectLatestProfileImage(@Param("targetType") ImageTargetType targetType,
+                                      @Param("memberId") Long memberId);
+
+    // 단건 조회 + 최신에 업데이트된 사진 하나의 URL주소만 리턴
+    String getProfileImageUrl(Long memberId);
+
 }

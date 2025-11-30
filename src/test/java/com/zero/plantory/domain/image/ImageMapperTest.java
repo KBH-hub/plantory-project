@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.image;
 
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.global.dto.ImageTargetType;
 import com.zero.plantory.global.dto.ImageDTO;
 import lombok.extern.slf4j.Slf4j;

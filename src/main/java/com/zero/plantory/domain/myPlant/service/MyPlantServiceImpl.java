@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.myPlant.service;
 
-import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
 import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;

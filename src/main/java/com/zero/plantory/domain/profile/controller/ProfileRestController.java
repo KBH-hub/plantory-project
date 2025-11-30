@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.profile.controller;
 
+import com.zero.plantory.domain.image.service.ImageService;
 import com.zero.plantory.domain.profile.dto.PasswordChangeRequest;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
 import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
@@ -11,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -20,6 +24,7 @@ import java.util.Map;
 @RequestMapping("/api/profile")
 public class ProfileRestController {
     private final ProfileService profileService;
+    private final ImageService imageService;
 
     @GetMapping("/me")
     public ResponseEntity<ProfileInfoResponse> getProfile(@AuthenticationPrincipal MemberDetail memberDetail) {
@@ -57,7 +62,7 @@ public class ProfileRestController {
         return ResponseEntity.ok("회원 탈퇴 완료");
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<?> updateProfile(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @RequestBody ProfileUpdateRequest profileUpdateRequest) {
@@ -70,7 +75,30 @@ public class ProfileRestController {
         return ResponseEntity.ok("success");
     }
 
+    @PostMapping("/picture")
+    public Map<String, Object> uploadProfile(@AuthenticationPrincipal MemberDetail memberDetail ,@RequestParam("profileImage") MultipartFile file) throws IOException {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        String imageUrl = imageService.uploadProfileImage(memberId, file);
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("imageUrl", imageUrl);
+
+        return response;
+    }
+
+    @GetMapping("/picture")
+    public Map<String, Object> getProfileImage(@AuthenticationPrincipal MemberDetail user) {
+
+        Long memberId = user.getMemberResponse().getMemberId();
+        String imageUrl = imageService.getProfileImageUrl(memberId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("imageUrl", imageUrl);
+
+        return response;
+    }
 
 
 

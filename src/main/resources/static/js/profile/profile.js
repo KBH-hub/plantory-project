@@ -65,6 +65,23 @@ document.addEventListener("change", (e) => {
     }
 });
 
+async function loadProfile() {
+    const res = await axios.get("/api/profile/picture");
+
+    const profileImg = document.getElementById("profilePreview");
+    const defaultIcon = document.getElementById("profileDefaultIcon");
+
+    if (res.data.imageUrl) {
+        profileImg.src = res.data.imageUrl;
+        profileImg.style.display = "block";
+        defaultIcon.style.display = "none";
+    } else {
+        profileImg.style.display = "none";
+        defaultIcon.style.display = "block";
+    }
+}
+
+
 async function handleDeleteWritten() {
     if (currentTab !== "profilePosts") {
         showAlert("댓글에서는 삭제할 수 없습니다.");
@@ -102,7 +119,6 @@ async function handleDeleteWritten() {
     showAlert("삭제되었습니다.");
     loadProfileWritten();
 }
-
 
 
 
@@ -349,4 +365,5 @@ function renderPagination(totalCount) {
     `;
 
     bindPaginationClick();
+    loadProfile()
 }

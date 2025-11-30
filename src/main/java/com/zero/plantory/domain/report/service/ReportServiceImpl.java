@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.report.service;
 
-import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.domain.report.dto.NameListResponse;
 import com.zero.plantory.domain.report.dto.ReportRequest;
 import com.zero.plantory.domain.report.mapper.ReportMapper;
