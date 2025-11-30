@@ -64,27 +64,17 @@ public class SharingReadRestController {
         return sharingReadService.getMySharingReceived(memberId);
     }
 
-    @GetMapping("/giver")
-    public ResponseEntity<SharingHistoryResponse> getReviewInfoForGiver(
-            @RequestParam Long sharingId,
+    @GetMapping("/{sharingId}/reviewInfo")
+    public ResponseEntity<ReviewInfoResponse> getReviewInfo(
+            @PathVariable Long sharingId,
             @AuthenticationPrincipal MemberDetail memberDetail
     ) {
         Long memberId = memberDetail.getMemberResponse().getMemberId();
-        SharingHistoryResponse result = sharingReadService.getReviewInfoForGiver(sharingId, memberId);
+        ReviewInfoResponse result = sharingReadService.getReviewInfo(sharingId, memberId);
 
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/receiver")
-    public ResponseEntity<SharingHistoryResponse> getReviewInfoForReceiver(
-            @RequestParam Long sharingId,
-            @AuthenticationPrincipal MemberDetail memberDetail
-    ) {
-        Long memberId = memberDetail.getMemberResponse().getMemberId();
-        SharingHistoryResponse result = sharingReadService.getReviewInfoForReceiver(sharingId, memberId);
-
-        return ResponseEntity.ok(result);
-    }
 
 }
 

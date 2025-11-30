@@ -21,7 +21,9 @@ public interface SharingReadService {
 
     List<SharingHistoryResponse> getMySharingReceived(Long memberId);
 
-    SharingHistoryResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId);
+//    ReviewInfoResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId);
+//
+//    ReviewInfoResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId);
 
-    SharingHistoryResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId);
+    ReviewInfoResponse getReviewInfo(Long sharingId, Long memberId);
 }

@@ -1,12 +1,9 @@
 package com.zero.plantory.domain.sharing.controller;
 
-import jakarta.websocket.server.PathParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SharingController {
@@ -22,10 +19,10 @@ public class SharingController {
         return "sharing/createSharing";
     }
 
-    @GetMapping("/updateReview/{sharingId}")
+    @GetMapping("/sharing/{sharingId}/review")
     public String updateReview(@PathVariable Long sharingId, Model model) {
         model.addAttribute("sharingId", sharingId);
-        return "sharing/updateReview";
+        return "sharing/updateReviewForGiver";
     }
 
 
