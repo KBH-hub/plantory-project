@@ -239,6 +239,24 @@ function renderTable() {
         `;
         // console.log(item.id)
         console.log(item.category)
+        bindRowClick();
+    });
+}
+function bindRowClick() {
+    document.querySelectorAll("#profileWrittenTbody tr").forEach(row => {
+        row.addEventListener("click", (e) => {
+            const checkbox = row.querySelector(".row-check");
+            if (!checkbox) return;
+
+            const id = checkbox.dataset.id;
+            const category = checkbox.dataset.category;
+
+            if (category === "SHARING") {
+                window.location.href = `/readSharing/${id}`;
+            } else if (category === "QUESTION") {
+                window.location.href = `/readSharing/${id}`;
+            }
+        });
     });
 }
 
