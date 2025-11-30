@@ -1,6 +1,3 @@
-document.addEventListener("DOMContentLoaded", loadReviewInfo);
-
-
 async function loadReviewInfo() {
     const sharingId = document.body.dataset.sharingId;
 
@@ -14,6 +11,13 @@ async function loadReviewInfo() {
         document.getElementById("createdAt").innerText = formatDate(data.createdAt);
 
         document.body.dataset.partnerId = data.partnerId;
+
+        if (data.reviewerType === "RECEIVER") {
+            document.getElementById("receiverOnly").style.display = "block";
+        } else {
+            document.getElementById("receiverOnly").style.display = "none";
+        }
+
 
     } catch (err) {
         console.error(err);
@@ -32,7 +36,7 @@ function bindSubmitReview() {
         const satisfaction = getSelectedValue("satisfaction");
 
         if (!manner || !reShare) {
-            alert("필수 항목을 선택해주세요.");
+            showAlert("필수 항목을 선택해주세요.");
             return;
         }
 
@@ -43,12 +47,12 @@ function bindSubmitReview() {
                 satisfaction: satisfaction ? Number(satisfaction) : null
             });
 
-            alert("후기가 등록되었습니다.");
+            showAlert("후기가 등록되었습니다.");
             location.href = `/dashboard`;
 
         } catch (err) {
             console.error(err);
-            alert("후기 등록 중 오류가 발생했습니다.");
+            showAlert("후기 등록 중 오류가 발생했습니다.");
         }
     });
 }
@@ -58,3 +62,8 @@ function getSelectedValue(name) {
     return selected ? selected.id.replace(/\D/g, "") : null;
 }
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadReviewInfo();
+    bindSubmitReview();
+});

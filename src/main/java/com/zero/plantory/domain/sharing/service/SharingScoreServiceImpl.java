@@ -67,24 +67,22 @@ public class SharingScoreServiceImpl implements SharingScoreService {
             throw new IllegalArgumentException("후기 작성 권한이 없습니다.");
         }
 
-        int score = calculateReviewScore(reviewerType, manner, reShare, satisfaction);
-
-        Long targetMemberId =
-                reviewerType == ReviewerType.GIVER
-                        ? sharing.getTargetMemberId()        // 분양자가 후기 → 피분양자가 점수 증가
-                        : sharing.getMemberId();             // 피분양자가 후기 → 분양자가 점수 증가
-
-        sharingMapper.updateSharingRate(targetMemberId, score);
-    }
+        // Integer임
+        Integer baseRateInt = sharing.getSharingRate();
+        double baseRate = (baseRateInt == null) ? 1.0 : baseRateInt.doubleValue();
 
 
-    private void validateRange(Integer value, String fieldName) {
-        if (value == null) {
-            throw new IllegalArgumentException(fieldName + " cannot be null");
-        }
-        if (value < 0 || value > 3) {
-            throw new IllegalArgumentException(fieldName + " must be between 0 and 3");
-        }
+        double score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
+
+        double finalScore = score + 0.2; // 가산
+
+        // 정규화
+        if (finalScore > 100) finalScore = 100;
+        if (finalScore < 0) finalScore = 0;
+
+        Long targetMemberId = reviewerType == ReviewerType.GIVER ? sharing.getTargetMemberId() : sharing.getMemberId();
+
+        sharingMapper.updateSharingRate(targetMemberId, finalScore);
     }
 
 
@@ -100,37 +98,77 @@ public class SharingScoreServiceImpl implements SharingScoreService {
      *   - reShare(0 or 1)
      *   - satisfaction(1~3)
      */
-    private int calculateReviewScore(ReviewerType reviewerType,
-                                     int manner,
-                                     int reShare,
-                                     Integer satisfaction) {
-
-        // 1) 공통 항목 검증
-        validateRange(manner, "manner");
-
-        if (reShare != 0 && reShare != 1) {
-            throw new IllegalArgumentException("reShare must be 0 or 1");
-        }
-
-        int score = 0;
-
-        // manner + reShare 는 공통
-        score += manner;
-        score += reShare;
-
-
-        // 2) 피분양자(RECEIVER)일 때만 satisfaction 추가
-        if (reviewerType == ReviewerType.RECEIVER) {
-            if (satisfaction == null) {
-                throw new IllegalArgumentException("satisfaction is required when reviewer is RECEIVER.");
-            }
-
-            validateRange(satisfaction, "satisfaction");
-            score += satisfaction;
-        }
-
-        return score;
+    private double getMannerWeight(int manner) {
+        return switch (manner) {
+            case 1 -> 1.05;   // 만족
+            case 2 -> 1.00;   // 보통
+            case 3 -> 0.95;   // 불만족
+            default -> 1.00;
+        };
     }
+
+    private double getReShareWeight(int reShare) {
+        return reShare == 1 ? 1.03 : 0.97;
+    }
+
+    private double getSatisfactionWeight(Integer sat) {
+        return switch (sat) {
+            case 1 -> 1.05;
+            case 2 -> 1.00;
+            case 3 -> 0.95;
+            default -> 1.00;
+        };
+    }
+
+    // 최종
+    private double calculateRate(double baseRate, ReviewerType reviewerType,
+                                 int manner, int reShare, Integer satisfaction) {
+
+        double result = baseRate;
+
+        result *= getMannerWeight(manner);
+        result *= getReShareWeight(reShare);
+
+        if (reviewerType == ReviewerType.RECEIVER) {
+            result *= getSatisfactionWeight(satisfaction);
+        }
+
+        // 정규화
+        if (result > 100) result = 100;
+        if (result < 0) result = 0;
+
+        return result;
+    }
+
+
+//        private int calculateReviewScore(ReviewerType reviewerType, int manner, int reShare, Integer satisfaction) {
+//
+//        // 1) 공통 항목 검증
+//        validateRange(manner, "manner");
+//
+//        if (reShare != 0 && reShare != 1) {
+//            throw new IllegalArgumentException("reShare must be 0 or 1");
+//        }
+//
+//        int score = 0;
+//
+//        // manner + reShare 는 공통
+//        score += manner;
+//        score += reShare;
+//
+//
+//        // 2) 피분양자(RECEIVER)일 때만 satisfaction 추가
+//        if (reviewerType == ReviewerType.RECEIVER) {
+//            if (satisfaction == null) {
+//                throw new IllegalArgumentException("satisfaction is required when reviewer is RECEIVER.");
+//            }
+//
+//            validateRange(satisfaction, "satisfaction");
+//            score += satisfaction;
+//        }
+//
+//        return score;
+//    }
 
 
 }
