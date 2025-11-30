@@ -78,7 +78,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         // 정규화
         if (finalScore > 100) finalScore = 100;
-        if (finalScore < 0) finalScore = 0;
+        if (finalScore < 1) finalScore = 1;
 
         Long targetMemberId = reviewerType == ReviewerType.GIVER ? sharing.getTargetMemberId() : sharing.getMemberId();
 
@@ -135,7 +135,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         // 정규화
         if (result > 100) result = 100;
-        if (result < 0) result = 0;
+        if (result < 1) result = 1;
 
         return result;
     }
