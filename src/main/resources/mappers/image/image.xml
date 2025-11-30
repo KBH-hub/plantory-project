@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zero.plantory.domain.image.ImageMapper">
+<mapper namespace="com.zero.plantory.domain.image.mapper.ImageMapper">
 
     <!-- 공통 컬럼 -->
     <sql id="imageColumns">
@@ -78,5 +78,41 @@
           AND target_id = #{targetId}
           AND del_flag IS NULL
     </update>
+
+    <insert id="insertProfileImage"
+            parameterType="com.zero.plantory.global.dto.ImageDTO"
+            useGeneratedKeys="true"
+            keyProperty="imageId">
+        INSERT INTO image (
+            member_id,
+            target_type,
+            target_id,
+            file_url,
+            file_name,
+            created_at,
+            del_flag
+        )
+        VALUES (
+                   #{memberId},
+                   #{targetType},
+                   #{targetId},
+                   #{fileUrl},
+                   #{fileName},
+                   NOW(),
+                   NULL
+               )
+    </insert>
+
+    <select id="selectLatestProfileImage" resultType="com.zero.plantory.global.dto.ImageDTO">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM image
+        WHERE target_type = #{targetType}
+        AND member_id = #{memberId}
+        AND del_flag IS NULL
+        ORDER BY image_id DESC
+        LIMIT 1
+    </select>
+
 
 </mapper>

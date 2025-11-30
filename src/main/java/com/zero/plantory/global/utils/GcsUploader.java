@@ -2,6 +2,7 @@ package com.zero.plantory.global.utils;
 
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import com.zero.plantory.domain.image.dto.UploadResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

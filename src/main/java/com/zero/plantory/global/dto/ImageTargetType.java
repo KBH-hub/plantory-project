@@ -6,4 +6,5 @@ public enum ImageTargetType {
     REPORT,
     MYPLANT,
     DIARY,
+    PROFILE
 }

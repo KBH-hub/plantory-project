@@ -4,12 +4,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
 public class ProfileSharingHistoryListResponse {
     private Long sharingId;
     private String title;
@@ -19,5 +17,4 @@ public class ProfileSharingHistoryListResponse {
     private LocalDateTime reviewFlag;
     private Integer commentCount;
     private String thumbnail;
-    private  int totalCount;
 }

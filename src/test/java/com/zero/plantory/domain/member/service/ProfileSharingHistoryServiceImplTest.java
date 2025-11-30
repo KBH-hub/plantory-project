@@ -60,7 +60,7 @@ class ProfileSharingHistoryServiceImplTest {
 
         when(profileSharingHistoryMapper.selectProfileSharingList(request)).thenReturn(List.of(item));
 
-        List<ProfileSharingHistoryListResponse> result = profileSharingHistoryService.getProfileSharingHistoryList(request);
+        List<ProfileSharingHistoryListResponse> result = profileSharingHistoryService.getProfileSharingHistoryList(request).getList();
 
         assertNotNull(result);
         assertEquals(1, result.size());

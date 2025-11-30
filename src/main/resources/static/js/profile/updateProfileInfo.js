@@ -1,4 +1,45 @@
 let originalNickname = "";
+let isNicknameChecked = false;
+
+const phoneInput = document.getElementById("phoneInput");
+const changeBtn = document.getElementById("changeProfileImgBtn");
+const fileInput = document.getElementById("profileImgInput");
+const previewImg = document.getElementById("profilePreview");
+
+let selectedFile = null; // 서버로 보낼 최종 파일
+
+changeBtn.addEventListener("click", () => {
+    fileInput.click();
+});
+
+fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        fileInput.value = "";
+        return;
+    }
+
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = function() {
+        const MAX_SIZE = 300;
+
+        if (img.width > MAX_SIZE || img.height > MAX_SIZE) {
+            showAlert(`이미지 크기는 ${MAX_SIZE}x${MAX_SIZE} 이하만 업로드할 수 있습니다.`);
+            fileInput.value = "";
+            return;
+        }
+
+        previewImg.src = this.src;
+
+        selectedFile = file;
+    };
+});
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     const res = await axios.get("/api/profile/me");
@@ -9,9 +50,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     await window.koreaDataLoaded;
 
     applyAddress(profile.address);
-    initEvents();
 
     await initUpdateProfileInfo();
+    initEvents();
+});
+
+phoneInput.addEventListener("input", function (e) {
+    let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+
+    if (value.length > 11) {
+        value = value.slice(0, 11);
+    }
+
+    if (value.length <= 3) {
+        e.target.value = value;
+    } else if (value.length <= 7) {
+        e.target.value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+    } else {
+        e.target.value = value.replace(/(\d{3})(\d{4})(\d{1,4})/, "$1-$2-$3");
+    }
 });
 
 function applyAddress(address) {
@@ -30,9 +87,6 @@ function applyAddress(address) {
         sigunguSelect.value = sigungu;
     }, 10);
 }
-
-
-
 
 async function initUpdateProfileInfo() {
     try {
@@ -65,24 +119,29 @@ function initEvents() {
 
 
 async function checkNickname() {
-    const nicknameInput = document.getElementById("nicknameInput").value.trim();
+    const nickname = document.getElementById("nicknameInput").value.trim();
+    if (!nickname) return showAlert("닉네임을 입력해주세요.");
 
-    if (!nicknameInput) return showAlert("닉네임을 입력해주세요.");
-
-    if (nicknameInput === originalNickname) {
+    if (nickname === originalNickname) {
+        isNicknameChecked = true;
         return showAlert("닉네임이 기존과 동일합니다.");
     }
 
     try {
-        await axios.get(`/api/members/exists?nickname=${nicknameInput}`);
-        showAlert("사용 가능한 닉네임입니다.");
-    } catch (err) {
-        console.log(err);
+        const res = await axios.get(`/api/members/checkNickname`, {
+            params: { nickname }
+        });
 
-        if (err.code === "DUPLICATE_NICKNAME") {
+        if (res.data.exists) {
+            isNicknameChecked = false;
             return showAlert("이미 사용 중인 닉네임입니다.");
         }
 
+        isNicknameChecked = true;
+        showAlert("사용 가능한 닉네임입니다.");
+
+    } catch (err) {
+        console.error(err);
         showAlert("닉네임 확인 중 오류가 발생했습니다.");
     }
 }
@@ -91,10 +150,22 @@ async function checkNickname() {
 async function submitProfile(event) {
     event.preventDefault();
 
+    if (!isNicknameChecked) {
+        return showAlert("닉네임 중복 확인을 먼저 해주세요.");
+    }
+
+    if (!selectedFile) {
+        alert("프로필 사진을 선택해주세요.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("profileImage", selectedFile);
+
     const nickname = document.getElementById("nicknameInput").value.trim();
     const phone = document.getElementById("phoneInput").value.trim();
-    const sido = document.getElementById("sidoSelect").value;
-    const sigungu = document.getElementById("sigunguSelect").value;
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
     const address = `${sido} ${sigungu}`;
     const noticeEnabled = document.getElementById("noticeToggle").checked ? 1 : 0;
 
@@ -106,8 +177,13 @@ async function submitProfile(event) {
     };
 
     try {
-        const res = await axios.put("/api/profile/update", req);
-        showSuccess("프로필이 수정되었습니다.");
+        await axios.put("/api/profile", req);
+        await axios.post("/api/profile/picture", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+        showAlert("프로필이 수정되었습니다.", () => {
+            history.back();
+        });
     } catch (err) {
         console.log(err);
         showAlert("프로필 수정에 실패했습니다.");
@@ -171,10 +247,10 @@ function toggleWithdrawBtn() {
 
 async function withdrawMember() {
     try {
-        const res = await axios.delete("/api/profile/withdraw");
+        const res = await axios.update("/api/profile/withdraw");
 
         if (res.data.success) {
-            showSuccess("회원탈퇴가 완료되었습니다.");
+            showAlert("회원탈퇴가 완료되었습니다.");
             setTimeout(() => {
                 window.location.href = "/logout";
             }, 1200);
@@ -189,20 +265,4 @@ async function withdrawMember() {
 
 function goBack() {
     history.back();
-}
-
-function showAlert(message) {
-    if (window.showAlertModal) {
-        window.showAlertModal(message);
-    } else {
-        alert(message);
-    }
-}
-
-function showSuccess(message) {
-    if (window.showSuccessModal) {
-        window.showSuccessModal(message);
-    } else {
-        alert(message);
-    }
 }

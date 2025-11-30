@@ -4,6 +4,83 @@
 
 <mapper namespace="com.zero.plantory.domain.profile.mapper.ProfileSharingHistoryMapper">
 
+    <select id="countMySharing" resultType="int">
+        SELECT COUNT(*)
+        FROM sharing
+        WHERE member_id = #{memberId}
+          AND del_flag IS NULL
+    </select>
+
+    <select id="countReceivedSharing" resultType="int">
+        SELECT COUNT(*)
+        FROM sharing
+        WHERE target_member_id = #{memberId}
+          AND del_flag IS NULL
+    </select>
+
+
+    <select id="selectMySharingList" resultType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse">
+        SELECT
+            s.sharing_id      AS sharingId,
+            s.title,
+            s.status,
+            s.interest_num    AS interestNum,
+            s.created_at      AS createdAt,
+            s.review_flag     AS reviewFlag,
+
+            (SELECT COUNT(*)
+             FROM comment c
+             WHERE c.sharing_id = s.sharing_id
+               AND c.del_flag IS NULL) AS commentCount,
+
+            (SELECT file_url
+             FROM image i
+             WHERE i.target_type = 'SHARING'
+               AND i.target_id = s.sharing_id
+               AND i.del_flag IS NULL
+             ORDER BY i.image_id ASC LIMIT 1) AS thumbnail
+
+        FROM sharing s
+        WHERE s.member_id = #{memberId}
+          AND (#{keyword} IS NULL OR s.title LIKE CONCAT('%', #{keyword}, '%'))
+          AND (#{status} = '전체' OR s.status = #{status})
+          AND s.del_flag IS NULL
+        ORDER BY s.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+
+    <select id="selectReceivedSharingList" resultType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse">
+        SELECT
+            s.sharing_id      AS sharingId,
+            s.title,
+            s.status,
+            s.interest_num    AS interestNum,
+            s.created_at      AS createdAt,
+            s.review_flag     AS reviewFlag,
+
+            (SELECT COUNT(*)
+             FROM comment c
+             WHERE c.sharing_id = s.sharing_id
+               AND c.del_flag IS NULL) AS commentCount,
+
+            (SELECT file_url
+             FROM image i
+             WHERE i.target_type = 'SHARING'
+               AND i.target_id = s.sharing_id
+               AND i.del_flag IS NULL
+             ORDER BY i.image_id ASC LIMIT 1) AS thumbnail
+        FROM sharing s
+        WHERE s.target_member_id = #{memberId}
+          AND (#{keyword} IS NULL OR s.title LIKE CONCAT('%', #{keyword}, '%'))
+          AND (#{status} = '전체' OR s.status = #{status})
+          AND s.del_flag IS NULL
+        ORDER BY s.created_at DESC
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+
+
     <select id="countByInterestCount" resultType="int" parameterType="Long">
         SELECT COUNT(interest_id)
         FROM interest

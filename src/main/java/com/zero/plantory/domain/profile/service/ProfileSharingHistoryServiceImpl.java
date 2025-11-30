@@ -2,12 +2,14 @@ package com.zero.plantory.domain.profile.service;
 
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListRequest;
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse;
+import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryPageResponse;
 import com.zero.plantory.domain.profile.mapper.ProfileSharingHistoryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -27,7 +29,24 @@ public class ProfileSharingHistoryServiceImpl implements ProfileSharingHistorySe
     }
 
     @Override
-    public List<ProfileSharingHistoryListResponse> getProfileSharingHistoryList(ProfileSharingHistoryListRequest request) {
-        return profileSharingHistoryMapper.selectProfileSharingList(request);
+    public ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req) {
+
+        List<ProfileSharingHistoryListResponse> list;
+        int totalCount;
+
+        if ("MY".equals(req.getMyType())) {
+            list = profileSharingHistoryMapper.selectMySharingList(req);
+            totalCount = profileSharingHistoryMapper.countMySharing(req);
+        } else {
+            list = profileSharingHistoryMapper.selectReceivedSharingList(req);
+            totalCount = profileSharingHistoryMapper.countReceivedSharing(req);
+        }
+
+        ProfileSharingHistoryPageResponse response = new ProfileSharingHistoryPageResponse();
+        response.setList(list);
+        response.setTotalCount(totalCount);
+
+        return response;
     }
+
 }

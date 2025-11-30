@@ -17,31 +17,20 @@ public class MemberRestController {
 
     private final MemberService memberService;
 
-    @GetMapping("/exists")
-    public ResponseEntity<Map<String, Object>> checkExists(
-            @RequestParam(required = false) String membername,
-            @RequestParam(required = false) String nickname) {
+    @GetMapping("/checkMembername")
+    public ResponseEntity<Map<String, Boolean>> checkMembername(
+            @RequestParam String membername) {
 
-        if (membername != null && memberService.isDuplicateMembername(membername)) {
-            return ResponseEntity.ok(Map.of(
-                    "code", "DUPLICATE_MEMBERNAME",
-                    "target", "membername",
-                    "message", "이미 사용 중인 아이디입니다."
-            ));
-        }
-
-        if (nickname != null && memberService.isDuplicateNickname(nickname)) {
-            return ResponseEntity.ok(Map.of(
-                    "code", "DUPLICATE_NICKNAME",
-                    "target", "nickname",
-                    "message", "이미 사용 중인 닉네임입니다."
-            ));
-        }
-
-        return ResponseEntity.ok(Map.of(
-                "code", "OK",
-                "message", "사용 가능합니다."
-        ));
+        boolean isDuplicate = memberService.isDuplicateMembername(membername);
+        return ResponseEntity.ok(Map.of("exists", isDuplicate));
     }
-    
+
+    @GetMapping("/checkNickname")
+    public ResponseEntity<Map<String, Boolean>> checkNickname(
+            @RequestParam String nickname) {
+
+        boolean isDuplicate = memberService.isDuplicateNickname(nickname);
+        return ResponseEntity.ok(Map.of("exists", isDuplicate));
+    }
 }
+

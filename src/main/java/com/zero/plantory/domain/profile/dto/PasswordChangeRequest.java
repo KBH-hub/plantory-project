@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.profile.controller;
+package com.zero.plantory.domain.profile.dto;
 
 import lombok.Data;
 
