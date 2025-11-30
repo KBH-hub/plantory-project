@@ -78,15 +78,30 @@ function updateActionButtons() {
 
     const myActions = document.getElementById("myActions");
     const otherActions = document.getElementById("otherActions");
+    const btnComplete = document.getElementById("btnComplete");
+    const btnWriteReview = document.getElementById("btnWriteReview");
 
     if (loginId === writerId) {
         myActions.style.display = "flex";
-        document.getElementById("btnComplete").style.display =
-            status === "false" ? "block" : "none";
+
+        if (status === "false") {
+            btnComplete.style.display = "block";   // 나눔 전
+            btnWriteReview.style.display = "none";
+        } else {
+            btnComplete.style.display = "none";    // 나눔 완료
+            btnWriteReview.style.display = "block";
+        }
+
+        const reviewed = localStorage.getItem(`review_done_${sharingId}_${loginId}`);
+        if (reviewed === "true") {
+            btnWriteReview.style.display = "none";
+        }
+
     } else {
         otherActions.style.display = "flex";
     }
 }
+
 
 function getInterestCount() {
     return Number(
@@ -195,6 +210,12 @@ document.getElementById("btnCompleteConfirm")?.addEventListener("click", async (
         // 모달2 닫기
         const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
         modal2.hide();
+
+        document.getElementById("btnComplete").style.display = "none";        // 나눔완료 버튼 숨기기
+        document.getElementById("btnWriteReview").style.display = "block";    // 후기작성 버튼 보이기
+        document.getElementById("btnWriteReview").onclick = () => {
+            location.href = `/sharing/${sharingId}/review`;
+        };
 
         document.getElementById("resultName").innerText = nickname;
         document.getElementById("goReview").href = `/sharing/${sharingId}/review`;
@@ -344,9 +365,16 @@ async function loadSharingDetail() {
 
 function init() {
     setLoginUserNickname();
+
+    const reviewBtn = document.getElementById("btnWriteReview");
+    if (reviewBtn) {
+        reviewBtn.addEventListener("click", () => {
+            location.href = `/sharing/${sharingId}/review`;
+        });
+    }
+
     document.getElementById("btnInterest").addEventListener("click", toggleInterest);
     document.getElementById("btnDelete").addEventListener("click", deleteSharing);
-    // document.getElementById("btnComplete").addEventListener("click", completeSharing);
     bindMessageButton();
     bindCommentSubmitEvent();
     bindCompleteButton();

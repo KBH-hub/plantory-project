@@ -1,6 +1,7 @@
-async function loadReviewInfo() {
-    const sharingId = document.body.dataset.sharingId;
+const memberId = document.body.dataset.memberId;
+const sharingId = document.body.dataset.sharingId;
 
+async function loadReviewInfo() {
     try {
         const res = await axios.get(`/api/sharing/${sharingId}/reviewInfo`);
 
@@ -25,7 +26,6 @@ async function loadReviewInfo() {
     }
 }
 
-// 2) 후기 제출하기
 function bindSubmitReview() {
     document.getElementById("btnSubmitReview").addEventListener("click", async () => {
 
@@ -46,6 +46,7 @@ function bindSubmitReview() {
                 reShare: Number(reShare),
                 satisfaction: satisfaction ? Number(satisfaction) : null
             });
+            localStorage.setItem(`review_done_${sharingId}_${memberId}`, "true");
 
             showAlert("후기가 등록되었습니다.");
             location.href = `/dashboard`;

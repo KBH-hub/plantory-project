@@ -12,7 +12,8 @@
 </head>
 
 <body class="bg-light" style="overflow-x:auto; font-family: 'Noto Sans KR', sans-serif;"
-      th:data-sharing-id="${sharingId}">
+      th:data-sharing-id="${sharingId}"
+      th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
