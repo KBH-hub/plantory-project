@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SharingController {
@@ -18,5 +20,13 @@ public class SharingController {
         model.addAttribute("sharingId", sharingId);
         return "sharing/createSharing";
     }
+
+    @GetMapping("/updateReview")
+    public String updateReview(@RequestParam Long sharingId, Model model) {
+        model.addAttribute("sharingId", sharingId);
+        return "sharing/updateReview";
+    }
+
+
 
 }

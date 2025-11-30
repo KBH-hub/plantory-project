@@ -4,7 +4,10 @@ import com.zero.plantory.domain.sharing.dto.*;
 import com.zero.plantory.domain.sharing.dto.SharingHistoryResponse;
 import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
 import com.zero.plantory.domain.sharing.service.SharingReadService;
+import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,5 +63,28 @@ public class SharingReadRestController {
     public List<SharingHistoryResponse> getMySharingReceived(@RequestParam Long memberId) {
         return sharingReadService.getMySharingReceived(memberId);
     }
+
+    @GetMapping("/giver")
+    public ResponseEntity<SharingHistoryResponse> getReviewInfoForGiver(
+            @RequestParam Long sharingId,
+            @AuthenticationPrincipal MemberDetail memberDetail
+    ) {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        SharingHistoryResponse result = sharingReadService.getReviewInfoForGiver(sharingId, memberId);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/receiver")
+    public ResponseEntity<SharingHistoryResponse> getReviewInfoForReceiver(
+            @RequestParam Long sharingId,
+            @AuthenticationPrincipal MemberDetail memberDetail
+    ) {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        SharingHistoryResponse result = sharingReadService.getReviewInfoForReceiver(sharingId, memberId);
+
+        return ResponseEntity.ok(result);
+    }
+
 }
 

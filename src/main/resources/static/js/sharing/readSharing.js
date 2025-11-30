@@ -196,8 +196,8 @@ document.getElementById("btnCompleteConfirm")?.addEventListener("click", async (
         const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
         modal2.hide();
 
-        // 후기 유도 모달(모달3)에 이름 세팅
         document.getElementById("resultName").innerText = nickname;
+        document.getElementById("goReview").href = `/updateReview?sharingId=${sharingId}`;
 
         // 모달3 열기
         new bootstrap.Modal(document.getElementById("modalCompleteResult")).show();
