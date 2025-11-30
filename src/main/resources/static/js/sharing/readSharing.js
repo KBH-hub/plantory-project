@@ -197,7 +197,7 @@ document.getElementById("btnCompleteConfirm")?.addEventListener("click", async (
         modal2.hide();
 
         document.getElementById("resultName").innerText = nickname;
-        document.getElementById("goReview").href = `/updateReview?sharingId=${sharingId}`;
+        document.getElementById("goReview").href = `/updateReview/${sharingId}`;
 
         // 모달3 열기
         new bootstrap.Modal(document.getElementById("modalCompleteResult")).show();
