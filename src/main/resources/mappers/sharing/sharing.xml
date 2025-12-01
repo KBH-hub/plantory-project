@@ -293,6 +293,19 @@
         WHERE member_id = #{memberId}
     </update>
 
+    <update id="updateReviewFlag">
+        UPDATE sharing
+        SET review_flag = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+    <update id="updateReceiverReviewFlag">
+        UPDATE sharing
+        SET target_member_review_flag = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+
 
     <select id="selectReviewInfoForGiver"
             resultType="com.zero.plantory.domain.sharing.dto.ReviewInfoResponse">

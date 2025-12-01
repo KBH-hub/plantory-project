@@ -83,6 +83,13 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         Long targetMemberId = reviewerType == ReviewerType.GIVER ? sharing.getTargetMemberId() : sharing.getMemberId();
 
         sharingMapper.updateSharingRate(targetMemberId, finalScore);
+
+        // review flag
+        if (reviewerType == ReviewerType.GIVER) {
+            sharingMapper.updateReviewFlag(sharingId);
+        } else {
+            sharingMapper.updateReceiverReviewFlag(sharingId);
+        }
     }
 
 
