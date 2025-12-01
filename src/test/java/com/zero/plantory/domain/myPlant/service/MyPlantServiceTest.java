@@ -63,25 +63,16 @@ class MyPlantServiceTest {
                 .temperature("666~999℃")
                 .build();
 
-        List<MultipartFile> files = new ArrayList<>();
-        MockMultipartFile file1 = new MockMultipartFile(
+        MockMultipartFile file = new MockMultipartFile(
                 "file",
                 "img1.png",
                 "image/png",
                 "image1".getBytes()
         );
-        MockMultipartFile file2 = new MockMultipartFile(
-                "file",
-                "img2.png",
-                "image/png",
-                "image2".getBytes()
-        );
 
-        files.add(file1);
-        files.add(file2);
         Long memberId = 4L;
 
-        int result = myPlantService.registerMyPlant(request, files, memberId);
+        int result = myPlantService.registerMyPlant(request, file, memberId);
 
         log.info(String.valueOf(result));
     }
@@ -100,20 +91,18 @@ class MyPlantServiceTest {
                 .temperature("666~999℃")
                 .build();
 
-        List<MultipartFile> files = new ArrayList<>();
-        MockMultipartFile file1 = new MockMultipartFile(
+        MockMultipartFile file = new MockMultipartFile(
                 "file",
                 "img1.png",
                 "image/png",
                 "image1".getBytes()
         );
 
-        files.add(file1);
         Long memberId = 4L;
 
         boolean result;
         try {
-            myPlantService.registerMyPlant(request, files, memberId);
+            myPlantService.registerMyPlant(request, file, memberId);
             result = true;
         } catch (Exception e) {
             result = false;
@@ -129,31 +118,28 @@ class MyPlantServiceTest {
         MyPlantRequest request = MyPlantRequest.builder()
                 .memberId(4L)
                 .myplantId(26L)
-                .name("수정테스트식물1")
-                .type("수정테스트마이플랜트타입1")
+                .name("수정테스트식물11")
+                .type("수정테스트마이플랜트타입11")
                 .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
                 .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(28)
-                .soil("수정테스트마이플랜트비료1")
+                .soil("수정테스트마이플랜트비료11")
                 .temperature("666~999℃")
                 .build();
 
-        List<Long> delImgList = new ArrayList();
-        delImgList.add(26L);
+        Long delFileTargetId =26L;
 
 
-        List<MultipartFile> files = new ArrayList<>();
-        MockMultipartFile file1 = new MockMultipartFile(
+        MockMultipartFile file = new MockMultipartFile(
                 "file",
                 "img1.png",
                 "image/png",
                 "image1".getBytes()
         );
 
-        files.add(file1);
         Long memberId = 4L;
 
-        int result = myPlantService.updateMyPlant(request, delImgList, files, memberId);
+        int result = myPlantService.updateMyPlant(request, delFileTargetId, file, memberId);
 
         log.info(String.valueOf(result));
     }

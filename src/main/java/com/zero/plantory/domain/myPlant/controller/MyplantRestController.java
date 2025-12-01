@@ -3,7 +3,6 @@ package com.zero.plantory.domain.myPlant.controller;
 import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
 import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import com.zero.plantory.domain.myPlant.service.MyPlantService;
-import com.zero.plantory.global.dto.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +30,15 @@ public class MyplantRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> addMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam("files") List<MultipartFile> files,@RequestParam("memberId") Long memberId) throws IOException {
-        if(myPlantService.registerMyPlant(request, files, memberId) == 0)
+    public ResponseEntity<Map<String, String>> addMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("memberId") Long memberId) throws IOException {
+        if(myPlantService.registerMyPlant(request, file, memberId) == 0)
             return ResponseEntity.status(400).body(Map.of("message", "myPlant regist fail"));
         return ResponseEntity.ok().body(Map.of("message", "myPlant regist success"));
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, String>> updateMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam List<Long> delFiles, @RequestPart(name = "files", required = false) List<MultipartFile> files, @RequestParam("memberId") Long memberId) throws IOException {
-        if(myPlantService.updateMyPlant(request, delFiles, files, memberId) == 0)
+    public ResponseEntity<Map<String, String>> updateMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam(name = "delFile", required = false) Long delFile, @RequestPart(name = "file", required = false) MultipartFile file, @RequestParam("memberId") Long memberId) throws IOException {
+        if(myPlantService.updateMyPlant(request, delFile, file, memberId) == 0)
             return ResponseEntity.status(400).body(Map.of("message", "myPlant regist fail"));
         return ResponseEntity.ok().body(Map.of("message", "myPlant regist success"));
     }
