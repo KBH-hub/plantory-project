@@ -13,4 +13,39 @@
         INSERT INTO report (reporter_id, target_member_id, content, status, created_at)
         VALUES (#{reporterId}, #{targetMemberId}, #{content}, #{status}, SYSDATE());
     </insert>
+
+    <select id="selectReportList"
+            parameterType="com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementSearchRequest"
+            resultType="com.zero.plantory.domain.admin.reportManagement.dto.ReportResponse">
+
+        SELECT
+        admin_id,
+        reporter_id,
+        target_member_id,
+        content,
+        status,
+        created_at,
+        admin_memo,
+        COUNT(*) OVER() AS total_count
+        FROM report
+
+        <where>
+            del_flag IS NULL
+
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+
+            <if test="keyword != null and keyword != ''">
+                AND (content LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+
+        <if test="limit != null and offset != null">
+            LIMIT #{limit} OFFSET #{offset}
+        </if>
+
+    </select>
+
+
 </mapper>

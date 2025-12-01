@@ -2,6 +2,7 @@ package com.zero.plantory.global.cmdController;
 
 import com.zero.plantory.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,7 @@ public class CmdController {
         return "member/login";
     }
 
-    @RequestMapping("/memberManagement")
+    @RequestMapping("admin/memberManagement")
     public String memberManagement(){
         return "admin/memberManagement";
     }
@@ -93,7 +94,7 @@ public class CmdController {
         return "question/readQuestion";
     }
 
-    @GetMapping("/reportManagement")
+    @GetMapping("admin/reportManagement")
     public String reportManagement(){
         return "admin/reportManagement";
     }

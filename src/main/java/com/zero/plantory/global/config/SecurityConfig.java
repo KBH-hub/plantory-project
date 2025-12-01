@@ -1,9 +1,12 @@
 package com.zero.plantory.global.config;
 
+import com.zero.plantory.global.security.MemberLoginSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -13,9 +16,11 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final MemberLoginSuccessHandler memberLoginSuccessHandler;
     private final UserDetailsService userDetailsService;
     private final Environment env;
 
@@ -73,7 +78,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login-process")
                         .usernameParameter("membername")
-                        .defaultSuccessUrl("/dashboard")
+                        .successHandler(memberLoginSuccessHandler)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
@@ -86,7 +91,15 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                );
+                )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("{\"error\":\"권한이 없습니다.\"}");
+                        }))
+                )
+        ;
 
         return http.build();
     }

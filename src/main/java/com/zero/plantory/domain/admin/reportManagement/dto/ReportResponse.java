@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.reportManagement.dto;
+package com.zero.plantory.domain.admin.reportManagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +20,6 @@ public class ReportResponse {
     private String status;
     private Date createdAt;
     private String adminMemo;
+    private int totalCount;
     private Date delFlag;
 }
