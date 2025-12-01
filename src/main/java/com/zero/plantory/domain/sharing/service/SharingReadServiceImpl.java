@@ -5,6 +5,8 @@ import com.zero.plantory.domain.sharing.dto.*;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.global.dto.ImageTargetType;
 import com.zero.plantory.global.dto.ImageDTO;
+import com.zero.plantory.global.dto.ManagementLevel;
+import com.zero.plantory.global.dto.ManagementNeeds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,17 @@ public class SharingReadServiceImpl implements SharingReadService {
 
         if (detail == null) {
             return null;
+        }
+        if (detail.getManagementLevel() != null) {
+            detail.setManagementLevelLabel(
+                    ManagementLevel.valueOf(detail.getManagementLevel()).getLabel()
+            );
+        }
+
+        if (detail.getManagementNeeds() != null) {
+            detail.setManagementNeedsLabel(
+                    ManagementNeeds.valueOf(detail.getManagementNeeds()).getLabel()
+            );
         }
 
         List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.SHARING, sharingId);
