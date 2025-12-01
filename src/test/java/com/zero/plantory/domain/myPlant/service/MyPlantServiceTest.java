@@ -2,13 +2,20 @@ package com.zero.plantory.domain.myPlant.service;
 
 import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
 import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
+import com.zero.plantory.global.dto.ImageDTO;
+import com.zero.plantory.global.dto.ImageTargetType;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -44,18 +51,37 @@ class MyPlantServiceTest {
 
     @Test
     @DisplayName("내 식물 등록 처리")
-    void registerMyPlantTest() {
-        MyPlantRequest request  = MyPlantRequest.builder()
+    void registerMyPlantTest() throws IOException {
+        MyPlantRequest request = MyPlantRequest.builder()
                 .memberId(4L)
                 .name("테스트마이플랜트명")
                 .type("테스트마이플랜트타입")
-                .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
-                .endDate(java.sql.Timestamp.valueOf("2025-11-01 00:00:00"))
+                .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
+                .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(28)
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")
                 .build();
-        int result = myPlantService.registerMyPlant(request);
+
+        List<MultipartFile> files = new ArrayList<>();
+        MockMultipartFile file1 = new MockMultipartFile(
+                "file",
+                "img1.png",
+                "image/png",
+                "image1".getBytes()
+        );
+        MockMultipartFile file2 = new MockMultipartFile(
+                "file",
+                "img2.png",
+                "image/png",
+                "image2".getBytes()
+        );
+
+        files.add(file1);
+        files.add(file2);
+        Long memberId = 4L;
+
+        int result = myPlantService.registerMyPlant(request, files, memberId);
 
         log.info(String.valueOf(result));
     }
@@ -63,20 +89,31 @@ class MyPlantServiceTest {
     @Test
     @DisplayName("내 식물 등록 필수값 누락 실패 처리")
     void registerMyPlantFailTest() {
-        MyPlantRequest request  = MyPlantRequest.builder()
+        MyPlantRequest request = MyPlantRequest.builder()
                 .memberId(4L)
                 .name("")
                 .type("테스트마이플랜트타입")
-                .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
-                .endDate(java.sql.Timestamp.valueOf("2025-11-01 00:00:00"))
+                .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
+                .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(28)
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")
                 .build();
 
+        List<MultipartFile> files = new ArrayList<>();
+        MockMultipartFile file1 = new MockMultipartFile(
+                "file",
+                "img1.png",
+                "image/png",
+                "image1".getBytes()
+        );
+
+        files.add(file1);
+        Long memberId = 4L;
+
         boolean result;
         try {
-            myPlantService.registerMyPlant(request);
+            myPlantService.registerMyPlant(request, files, memberId);
             result = true;
         } catch (Exception e) {
             result = false;
@@ -88,20 +125,35 @@ class MyPlantServiceTest {
 
     @Test
     @DisplayName("내 식물 수정 처리")
-    void updateMyPlantTest() {
-        MyPlantRequest request  = MyPlantRequest.builder()
+    void updateMyPlantTest() throws IOException {
+        MyPlantRequest request = MyPlantRequest.builder()
                 .memberId(4L)
-                .myplantId(1L)
-                .name("테스트마이플랜트명수정")
-                .type("테스트마이플랜트타입수정")
-                .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
-                .endDate(java.sql.Timestamp.valueOf("2025-11-01 00:00:00"))
+                .myplantId(26L)
+                .name("수정테스트식물1")
+                .type("수정테스트마이플랜트타입1")
+                .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
+                .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(28)
-                .soil("테스트마이플랜트비료")
+                .soil("수정테스트마이플랜트비료1")
                 .temperature("666~999℃")
                 .build();
 
-        int result = myPlantService.updateMyPlant(request);
+        List<Long> delImgList = new ArrayList();
+        delImgList.add(26L);
+
+
+        List<MultipartFile> files = new ArrayList<>();
+        MockMultipartFile file1 = new MockMultipartFile(
+                "file",
+                "img1.png",
+                "image/png",
+                "image1".getBytes()
+        );
+
+        files.add(file1);
+        Long memberId = 4L;
+
+        int result = myPlantService.updateMyPlant(request, delImgList, files, memberId);
 
         log.info(String.valueOf(result));
     }

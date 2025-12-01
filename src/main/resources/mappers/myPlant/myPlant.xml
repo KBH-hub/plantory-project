@@ -21,7 +21,10 @@
             LIMIT 10 OFFSET 0;
     </select>
 
-    <insert id="insertMyPlant">
+    <insert id="insertMyPlant"
+            useGeneratedKeys="true"
+            keyProperty="myplantId"
+            keyColumn="myplant_id">
         INSERT INTO myplant
         (member_id, name, type, start_at, end_date, `interval`, soil, temperature, created_at)
         VALUES (
