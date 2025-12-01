@@ -38,15 +38,18 @@ public interface SharingMapper {
     List<SharingPartnerResponse> selectSharingMessagePartners(@Param("receiverId") Long receiverId, @Param("sharingId") Long sharingId);
     int updateSharingComplete(@Param("sharingId") Long sharingId, @Param("targetMemberId") Long targetMemberId);
 
-    /** Sharing review*/
+
     List<SharingHistoryResponse> selectProfileSharingGiven(@Param("memberId") Long memberId);
     List<SharingHistoryResponse> selectProfileSharingReceived(@Param("memberId") Long memberId);
+
+    /** Sharing review*/
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
 
     ReviewInfoResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
     ReviewInfoResponse selectReviewInfoForReceiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
 
-
+    void updateReviewFlag(Long sharingId);
+    void updateReceiverReviewFlag(Long sharingId);
 
 
 

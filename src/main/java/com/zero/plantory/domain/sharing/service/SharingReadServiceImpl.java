@@ -68,43 +68,6 @@ public class SharingReadServiceImpl implements SharingReadService {
 
 
 
-//    @Override
-//    public ReviewInfoResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId) {
-//
-//        ReviewInfoResponse result =
-//                sharingMapper.selectReviewInfoForGiver(sharingId, loginMemberId);
-//
-//        if (result == null) {
-//            throw new IllegalArgumentException("후기 작성 권한이 없습니다(분양자).");
-//        }
-//
-//        return ReviewInfoResponse.builder()
-//                .sharingId(result.getSharingId())
-//                .partnerId(result.getPartnerId())
-//                .partnerNickname(result.getPartnerNickname())
-//                .title(result.getTitle())
-//                .createdAt(result.getCreatedAt())
-//                .reviewerType(SharingScoreServiceImpl.ReviewerType.GIVER).build();
-//    }
-//
-//    @Override
-//    public ReviewInfoResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId) {
-//
-//        ReviewInfoResponse result =
-//                sharingMapper.selectReviewInfoForReceiver(sharingId, loginMemberId);
-//
-//        if (result == null) {
-//            throw new IllegalArgumentException("후기 작성 권한이 없습니다(피분양자).");
-//        }
-//
-//        return ReviewInfoResponse.builder()
-//                .sharingId(result.getSharingId())
-//                .partnerId(result.getPartnerId())
-//                .partnerNickname(result.getPartnerNickname())
-//                .title(result.getTitle())
-//                .createdAt(result.getCreatedAt())
-//                .reviewerType(SharingScoreServiceImpl.ReviewerType.RECEIVER).build();
-//    }
     @Override
     public ReviewInfoResponse getReviewInfo(Long sharingId, Long memberId) {
 
@@ -116,7 +79,9 @@ public class SharingReadServiceImpl implements SharingReadService {
             type = SharingScoreServiceImpl.ReviewerType.GIVER;
             ReviewInfoResponse query =
                     sharingMapper.selectReviewInfoForGiver(sharingId, memberId);
-
+            if (query == null) {
+                throw new IllegalStateException("후기 정보를 조회할 수 없습니다.");
+            }
             return ReviewInfoResponse.builder()
                     .reviewerType(type)
                     .sharingId(query.getSharingId())
@@ -130,6 +95,9 @@ public class SharingReadServiceImpl implements SharingReadService {
             type = SharingScoreServiceImpl.ReviewerType.RECEIVER;
             ReviewInfoResponse query =
                     sharingMapper.selectReviewInfoForReceiver(sharingId, memberId);
+            if (query == null) {
+                throw new IllegalStateException("후기 정보를 조회할 수 없습니다.");
+            }
 
             return ReviewInfoResponse.builder()
                     .reviewerType(type)

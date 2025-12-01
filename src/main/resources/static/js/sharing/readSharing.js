@@ -36,6 +36,11 @@ function renderDetail(detail) {
     document.getElementById("interestCount").innerText = `(${detail.interestNum})`;
     document.getElementById("sharingRate").innerHTML =  `🌿 나눔 지수 ${detail.sharingRate}% `;
 
+    document.body.dataset.reviewFlag = detail.reviewFlag;
+    document.body.dataset.receiverReviewFlag = detail.receiverReviewFlag;
+    // console.log("detail.reviewFlag =", detail.reviewFlag);
+    // console.log("detail.receiverReviewFlag =", detail.receiverReviewFlag);
+
     let timeText;
 
     if (detail.updatedAt) {
@@ -74,7 +79,10 @@ function renderCarousel(images) {
 function updateActionButtons() {
     const loginId = Number(document.body.dataset.memberId);
     const writerId = Number(document.body.dataset.writerId);
-    const status = document.body.dataset.sharingStatus;
+    const status = document.body.dataset.sharingStatus; // 'true' | 'false'
+
+    const reviewFlag = document.body.dataset.reviewFlag === "null" ? null : document.body.dataset.reviewFlag;
+    const receiverReviewFlag = document.body.dataset.receiverReviewFlag === "null" ? null : document.body.dataset.receiverReviewFlag;
 
     const myActions = document.getElementById("myActions");
     const otherActions = document.getElementById("otherActions");
@@ -85,22 +93,35 @@ function updateActionButtons() {
         myActions.style.display = "flex";
 
         if (status === "false") {
-            btnComplete.style.display = "block";   // 나눔 전
+            btnComplete.style.display = "block";
             btnWriteReview.style.display = "none";
-        } else {
-            btnComplete.style.display = "none";    // 나눔 완료
+            return;
+        }
+
+        btnComplete.style.display = "none";
+
+        if (!reviewFlag) {
             btnWriteReview.style.display = "block";
-        }
-
-        const reviewed = localStorage.getItem(`review_done_${sharingId}_${loginId}`);
-        if (reviewed === "true") {
+        } else {
             btnWriteReview.style.display = "none";
         }
 
+        return;
+    }
+
+    otherActions.style.display = "flex";
+
+    if (status === "true") {
+        if (!receiverReviewFlag) {
+            btnWriteReview.style.display = "block";
+        } else {
+            btnWriteReview.style.display = "none";
+        }
     } else {
-        otherActions.style.display = "flex";
+        btnWriteReview.style.display = "none";
     }
 }
+
 
 
 function getInterestCount() {
@@ -257,7 +278,6 @@ function renderCompleteTargetList(partners) {
         `;
     });
 }
-
 
 
 async function toggleInterest() {

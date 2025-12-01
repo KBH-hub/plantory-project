@@ -33,4 +33,6 @@ public class SelectSharingDetailResponse {
     private List<ImageDTO> images;
     private boolean isInterested;
 
+    private LocalDateTime reviewFlag;
+    private LocalDateTime receiverReviewFlag;
 }
