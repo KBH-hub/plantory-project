@@ -56,9 +56,9 @@
             <div class="modal-body">
                 <div class="text-center mb-2">
                     <h6 class="fw-bold">프로필 사진</h6>
-                    <img id="addImgPreview" src="/image/default.png" class="plant-preview">
-                    <div class="mt-2">
-                        <input type="file" id="addImgFile" accept="image/*" class="form-control"/>
+                    <img id="addImgPreview" src="/image/default.png" class="plant-preview" alt="preview">
+                    <div class="mt-2 d-flex gap-2 justify-content-center">
+                        <input type="file" id="addImgFile" accept="image/*" class="form-control" style="max-width: 360px;">
                     </div>
                 </div>
 
@@ -122,8 +122,11 @@
             <div class="modal-body">
                 <div class="text-center">
                     <h6 class="fw-bold">프로필 사진</h6>
-                    <img id="detailImg" src="https://picsum.photos/200/230"
-                         class="border rounded plant-profile-img">
+                    <img id="editImgPreview" src="/image/default.png" class="plant-preview" alt="preview">
+                    <div class="mt-2 d-flex gap-2 justify-content-center">
+                        <input type="file" id="detailImgFile" accept="image/*" class="form-control" style="max-width: 360px;">
+                        <button type="button" class="btn btn-outline-danger" id="photoDeleteBtn">사진 삭제</button>
+                    </div>
                 </div>
 
                 <label class="fw-bold">식물 이름 <span class="text-danger">*필수입니다.</span></label>
@@ -169,9 +172,10 @@
                 <label class="fw-bold mt-2">생육 온도</label>
                 <input type="text" id="detailTemp" class="form-control" placeholder="예: 18–27℃">
 
-                <button class="btn w-100 fw-bold text-white detail-modal-submit">
-                    나의 식물 등록
-                </button>
+                <div class="d-flex w-50 mx-auto">
+                    <button type="button" class="btn btn-success fw-bold d-block mx-auto mt-3" id="editSubmitBtn">수정하기</button>
+                    <button type="button" class="btn btn-danger fw-bold d-block mx-auto mt-3" id="deleteSubmitBtn">삭제하기</button>
+                </div>
             </div>
 
         </div>

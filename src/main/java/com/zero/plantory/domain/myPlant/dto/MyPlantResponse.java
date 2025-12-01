@@ -22,6 +22,7 @@ public class MyPlantResponse {
     private String soil;
     private String temperature;
     private String imageUrl;
+    private Long imageId;
     private Date createdAt;
     private Date delFlag;
     private int totalCount;
