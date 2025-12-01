@@ -55,7 +55,7 @@
                             <div class="input-group input-group-sm">
                                 <input id="plantNameInput" type="text" class="form-control" placeholder="식물 종류를 입력해 주세요.">
                                 <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#plantSearchModal">
-                                    불러오기
+                                    식물검색
                                 </button>
                             </div>
                         </div>
@@ -116,10 +116,11 @@
                 <div class="mb-3">
                     <label class="form-label small mb-1">식물명</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" placeholder="식물 이름을 입력하세요.">
-                        <button class="input-group-text"><i class="bi bi-search"></i></button>
+                        <input id="plantSearchInput" type="text" class="form-control" placeholder="식물 이름을 입력하세요.">
+                        <button id="plantSearchBtn" class="input-group-text"><i class="bi bi-search"></i></button>
                     </div>
                 </div>
+                <div id="plantSearchResultList" class="vstack gap-2"></div>
 
                 <!-- 검색 결과 리스트 -->
                 <div class="vstack gap-2">
@@ -165,6 +166,7 @@
                     </div>
 
                 </div>
+
 
             </div>
 

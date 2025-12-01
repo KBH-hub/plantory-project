@@ -25,6 +25,8 @@ public class SelectSharingDetailResponse {
     private String plantType;
     private String managementLevel;
     private String managementNeeds;
+    private String managementLevelLabel;
+    private String managementNeedsLabel;
     private Integer interestNum;
     private String status;
     private LocalDateTime createdAt;
