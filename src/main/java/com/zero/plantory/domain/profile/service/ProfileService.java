@@ -1,9 +1,8 @@
 package com.zero.plantory.domain.profile.service;
 
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface ProfileService {
 
@@ -11,12 +10,11 @@ public interface ProfileService {
 
     boolean updateNoticeEnabled(Long memberId, int enabled);
 
-    boolean updateMyInfo(MemberUpdateRequest request);
+    boolean updateProfileInfo(ProfileUpdateRequest request);
 
-    boolean deleteMember(Long memberId);
+    boolean deleteMemberById(Long memberId);
 
     PublicProfileResponse getPublicProfile(Long memberId);
 
-    @Transactional
-    boolean changePassword(Long memberId, String oldPw, String newPw);
+    boolean changePassword(Long memberId, String oldPassword, String newPassword);
 }

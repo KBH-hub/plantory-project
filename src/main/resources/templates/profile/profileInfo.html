@@ -27,16 +27,28 @@
 
 
             <div class="text-center">
-                <div class="profile-img d-flex justify-content-center align-items-center">
-                    <i class="bi bi-person fs-2 text-secondary"></i>
+                <div class="profile-img d-flex justify-content-center align-items-center position-relative"
+                     style="width: 150px; height: 150px;">
+                    <i id="profileDefaultIcon" class="bi bi-person fs-2 text-secondary"></i>
+                    <img id="profilePreview"
+                         class="rounded-circle position-absolute top-0 start-0"
+                         width="150" height="150"
+                         style="object-fit: cover; display: none;">
+
                 </div>
+
                 <p id="profileNickname" class="fw-bold mb-0 mt-2">닉네임</p>
                 <small id="profileAddress" class="text-muted">서울특별시 금천구</small>
             </div>
 
-            <input type="text" class="form-control d-none ." value="장명훈">
+
+            <input type="text" class="form-control d-none ." value="이름">
 
             <div id="myButtons" class="mt-2 d-flex flex-column align-items-center gap-2">
+                <a th:href="@{/profileSharingHistory(memberId=${memberId})}"
+                   class="btn btn-outline-warning btn-sm w-100">
+                    관심 나눔글
+                </a>
                 <button id="updateMyInfoBtn" class="btn btn-outline-primary btn-sm w-100">내 정보 변경</button>
                 <button id="deleteProfileWrittenBtn" class="btn btn-outline-danger btn-sm w-100">내가 쓴 글 삭제</button>
             </div>
@@ -67,34 +79,26 @@
             </div>
 
 
-            <select class="form-select form-select-sm w-auto">
-                <option>전체</option>
-                <option>질문</option>
-                <option>나눔</option>
+            <select id="categorySelect" class="form-select form-select-sm w-auto">
             </select>
         </div>
 
         <table class="table table-hover text-center align-middle">
             <thead class="table-light">
-                <tr>
-                    <th>작성자</th>
-                    <th>카테고리</th>
-                    <th>제목</th>
-                    <th>작성일</th>
-                </tr>
+            <tr>
+                <th><input type="checkbox" id="checkAll"></th>
+                <th>작성자</th>
+                <th>카테고리</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="profileWrittenTbody" class="d-none"></tbody>
+            <tbody id="profileCommentTbody" class="d-none"></tbody>
         </table>
 
         <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-3">
-                <li class="page-item disabled">
-                    <a class="page-link">&laquo;</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link">&raquo;</a>
-                </li>
-            </ul>
+            <ul id="pagination" class="pagination justify-content-center"></ul>
         </nav>
 
     </div>

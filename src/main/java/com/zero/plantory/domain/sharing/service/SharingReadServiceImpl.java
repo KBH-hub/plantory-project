@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.sharing.service;
 
-import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.domain.sharing.dto.*;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.global.dto.ImageTargetType;
