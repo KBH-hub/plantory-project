@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
+import com.zero.plantory.domain.admin.memberManagement.mapper.MemberManagement;
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.global.dto.DeleteTargetType;
 import lombok.extern.slf4j.Slf4j;

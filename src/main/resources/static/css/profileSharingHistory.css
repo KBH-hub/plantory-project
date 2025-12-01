@@ -2,6 +2,12 @@ body {
     background: #f4f4f4;
 }
 
+.post-card {
+    width: 260px;
+    height: auto;
+    margin: 0 auto;
+}
+
 .card:hover {
     transform: translateY(-4px);
     transition: 0.25s;
@@ -9,7 +15,7 @@ body {
 }
 
 .card-img-top {
-    height: 350px;
+    height: 220px;
     object-fit: cover;
 }
 

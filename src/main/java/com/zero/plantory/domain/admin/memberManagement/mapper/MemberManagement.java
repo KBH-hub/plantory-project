@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.memberManagement.mapper;
+package com.zero.plantory.domain.admin.memberManagement.mapper;
 
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.global.dto.DeleteTargetType;

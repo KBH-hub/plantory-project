@@ -2,7 +2,7 @@ const myPostsLink = document.getElementById('myPostsLink');
 const receivedPostsLink = document.getElementById('receivedPostsLink');
 
 let filteredData = [];
-const limit = 6;
+const limit = 12;
 let currentPage = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -70,15 +70,12 @@ function renderCards(posts) {
     const list = document.getElementById("post-list");
     list.innerHTML = posts.map(post => `
 
-        <div class="col-12 col-md-4">
-            <div class="card border-0 shadow-sm h-100 post-card" data-id="${post.sharingId}">
+        <div class="col-auto">
+            <div class="card border-0 shadow-sm post-card" data-id="${post.sharingId}">
                 <span class="badge badge-status position-absolute top-0 start-0 m-2">
                     ${post.status === "false" ? "나눔중" : "나눔완료"}
                 </span>
                 
-<img src="${post.thumbnail ? post.thumbnail : 'https://via.placeholder.com/300x250?text=No+Image'}"
-     class="card-img-top rounded-top">
-
                 <img src="${post.thumbnail || '/image/default.png'}" class="card-img-top rounded-top">
 
                 <div class="card-body">
@@ -163,7 +160,7 @@ function bindPaginationClick() {
         btn.addEventListener("click", (e) => {
             e.preventDefault();
 
-            const page = e.currentTarget.dataset.page; // ← 중요!
+            const page = e.currentTarget.dataset.page;
 
             if (!page || Number(page) === currentPage) return;
 

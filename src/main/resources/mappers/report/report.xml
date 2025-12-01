@@ -13,4 +13,6 @@
         INSERT INTO report (reporter_id, target_member_id, content, status, created_at)
         VALUES (#{reporterId}, #{targetMemberId}, #{content}, #{status}, SYSDATE());
     </insert>
+
+
 </mapper>

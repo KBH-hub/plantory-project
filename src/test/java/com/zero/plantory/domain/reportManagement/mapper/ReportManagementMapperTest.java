@@ -1,8 +1,9 @@
 package com.zero.plantory.domain.reportManagement.mapper;
 
-import com.zero.plantory.domain.reportManagement.dto.ReportDetailResponse;
-import com.zero.plantory.domain.reportManagement.dto.ReportManagementSearchResponse;
-import com.zero.plantory.domain.reportManagement.dto.ReportResponse;
+import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementDetailResponse;
+import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementSearchRequest;
+import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementResponse;
+import com.zero.plantory.domain.admin.reportManagement.mapper.ReportManagementMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,12 +22,12 @@ class ReportManagementMapperTest {
     @Test
     @DisplayName("신고 관리 화면 - 일반 조회")
     void selectReportListTest() {
-        ReportManagementSearchResponse vo = ReportManagementSearchResponse.builder()
+        ReportManagementSearchRequest vo = ReportManagementSearchRequest.builder()
                 .limit(10)
                 .offset(0)
                 .build();
 
-        List<ReportResponse> result = reportManagementMapper.selectReportList(vo);
+        List<ReportManagementResponse> result = reportManagementMapper.selectReportList(vo);
 
         log.info("result={}", result);
     }
@@ -34,14 +35,14 @@ class ReportManagementMapperTest {
     @Test
     @DisplayName("신고 관리 화면 - 신고 내용으로 검색")
     void selectReportListByKeywordTest() {
-        ReportManagementSearchResponse vo = ReportManagementSearchResponse.builder()
+        ReportManagementSearchRequest vo = ReportManagementSearchRequest.builder()
                 .keyword("약속")
                 .status(null)
                 .limit(10)
                 .offset(0)
                 .build();
 
-        List<ReportResponse> result = reportManagementMapper.selectReportList(vo);
+        List<ReportManagementResponse> result = reportManagementMapper.selectReportList(vo);
 
         log.info("result={}", result);
     }
@@ -49,14 +50,14 @@ class ReportManagementMapperTest {
     @Test
     @DisplayName("신고 관리 화면 - 처리 완료 필터링 조회")
     void selectReportListByStatusTest() {
-        ReportManagementSearchResponse vo = ReportManagementSearchResponse.builder()
+        ReportManagementSearchRequest vo = ReportManagementSearchRequest.builder()
                 .keyword(null)
                 .status("true")
                 .limit(10)
                 .offset(0)
                 .build();
 
-        List<ReportResponse> result = reportManagementMapper.selectReportList(vo);
+        List<ReportManagementResponse> result = reportManagementMapper.selectReportList(vo);
 
         log.info("result={}", result);
     }
@@ -76,7 +77,7 @@ class ReportManagementMapperTest {
     void selectReportDetailTest() {
         Long reportId = 3L;
 
-        ReportDetailResponse result = reportManagementMapper.selectReportDetail(reportId);
+        ReportManagementDetailResponse result = reportManagementMapper.selectReportDetail(reportId);
 
         log.info("result={}", result);
     }
@@ -84,7 +85,7 @@ class ReportManagementMapperTest {
     @Test
     @DisplayName("처리 의견 입력")
     void insertAdminMemoTest() {
-        ReportResponse vo = ReportResponse.builder()
+        ReportManagementResponse vo = ReportManagementResponse.builder()
                 .adminId(18L)
                 .adminMemo("조치하였습니다")
                 .status("true")
