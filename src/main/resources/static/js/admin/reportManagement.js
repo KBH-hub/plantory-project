@@ -1,38 +1,248 @@
-async function initReport(){
-    try {
-        let res = await axios.get("/api/reportManagement/list",{
-            params: {
-                keyword: keyword,
-                status: status,
-            }
-        })
-        console.log(res.data)
-    } catch (err) {
-        console.log(err)
-    }
+let limit = 8;
+let offset = 0;
+let totalCount = 0;
 
+let reportModal = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    reportModal = new bootstrap.Modal(document.getElementById("reportModal"));
+
+    await loadReportList();
+
+    document.getElementById("statusFilter").addEventListener("change", () => {
+        offset = 0;
+        loadReportList();
+    });
+
+    document.getElementById("keywordInput").addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+            offset = 0;
+            loadReportList();
+        }
+    });
+
+    document.getElementById("deleteBtn").addEventListener("click", deleteSelectedReports);
+})
+
+document.getElementById("searchBtn").addEventListener("click", async () => {
+    offset = 0;
+    await loadReportList();
+});
+async function loadReportList() {
+    const status = document.getElementById("statusFilter").value;
+    const keyword = document.getElementById("keywordInput").value;
+
+    try {
+        const res = await axios.get("/api/reportManagement/list", {
+            params: {
+                keyword,
+                status,
+                limit,
+                offset
+            }
+        });
+
+        // console.log(res.data);
+
+        const data = res.data;
+
+        totalCount = data.totalCount;
+        renderTable(data.list);
+        renderPagination();
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-const keyword = document.getElementById("keywordInput").value;
-const status = document.getElementById("statusFilter").value;
 
-document.addEventListener("DOMContentLoaded", async () => {
-await initReport()
-});
+function renderTable(list) {
+    const tbody = document.getElementById("reportTableBody");
+    tbody.innerHTML = "";
 
-const modal = new bootstrap.Modal(document.getElementById("reportModal"));
+    if (!list || list.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center py-4 text-muted">조회된 신고가 없습니다.</td>
+            </tr>
+        `;
+        return;
+    }
 
-document.querySelectorAll(".report-row").forEach(row => {
-    row.addEventListener("click", e => {
-        if (e.target.type === "checkbox") return;
+    list.forEach(item => {
+        const tr = document.createElement("tr");
 
-        const cells = row.children;
+        tr.innerHTML = `
+            <td><input type="checkbox" class="form-check-input report-check" data-id="${item.reportId}"></td>
+            <td>${item.targetMemberId ?? "-"}</td>
+            <td>${item.reporterId ?? "-"}</td>
+            <td>${item.adminId ?? "-"}</td>
+            <td class="text-truncate" style="max-width:200px;">${item.content}</td>
+            <td>${item.status === "true" ? "처리완료" : "처리전"}</td>
+            <td><button class="btn btn-sm btn-outline-secondary" onclick="openDetail(${item.reportId})">보기</button></td>
+            <td>${formatDate(item.createdAt)}</td>
+        `;
 
-        document.getElementById("reportedId").innerText = cells[1].innerText;
-        document.getElementById("reporterId").innerText = cells[2].innerText;
-        document.getElementById("reportContent").innerText = cells[4].innerText;
-        document.getElementById("processOpinion").innerText = cells[5].innerText;
+        tbody.appendChild(tr);
+    });
+}
+document.getElementById("reportCheckbox").addEventListener("change", (e) => {
+    const checked = e.target.checked;
 
-        modal.show();
+    document.querySelectorAll(".report-check").forEach(cb => {
+        cb.checked = checked;
     });
 });
+
+
+function formatDate(dateTime) {
+    if (!dateTime) return "-";
+    return dateTime.replace("T", " ").substring(0, 16);
+}
+
+
+async function openDetail(reportId) {
+    try {
+        const response = await axios.get(`/api/reportManagement/detail/${reportId}`);
+        const data = response.data;
+
+        document.getElementById("reporterId").innerText = data.reporterName ?? "-";
+        document.getElementById("targetId").innerText = data.targetName ?? "-";
+        document.getElementById("reportContent").innerText = data.content ?? "-";
+        document.getElementById("processOpinion").innerText = data.adminMemo ?? "-";
+
+        reportModal.show();
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+async function deleteSelectedReports() {
+    const checked = [...document.querySelectorAll(".report-check:checked")];
+
+    if (checked.length === 0) {
+        return;
+    }
+
+    const ids = checked.map(c => Number(c.dataset.id));
+// console.log(ids);
+    try {
+        const res = await axios.put("/api/reportManagement/softDelete", { ids });
+        console.log(res);
+        showAlert("삭제되었습니다.");
+        loadReportList();
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+function renderPagination() {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    const totalPage = Math.ceil(totalCount / limit);
+    const currentPage = Math.floor(offset / limit) + 1;
+
+    if (totalPage <= 1) return;
+
+    const pageGroupSize = 5;
+
+    const currentGroup = Math.ceil(currentPage / pageGroupSize);        // 현재 그룹
+    const groupStart = (currentGroup - 1) * pageGroupSize + 1;          // 그룹 시작 페이지
+    const groupEnd = Math.min(currentGroup * pageGroupSize, totalPage); // 그룹 마지막 페이지
+
+
+    const firstLi = document.createElement("li");
+    firstLi.className = "page-item " + (currentGroup === 1 ? "disabled" : "");
+
+    firstLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="First">
+            &laquo;&laquo;
+        </a>
+    `;
+
+    firstLi.addEventListener("click",  () => {
+        if (currentGroup > 1) {
+            const newPage = groupStart - pageGroupSize;
+            offset = (newPage - 1) * limit;
+             loadReportList();
+        }
+    });
+
+    pagination.appendChild(firstLi);
+
+
+    const prevLi = document.createElement("li");
+    prevLi.className = "page-item " + (currentPage === 1 ? "disabled" : "");
+
+    prevLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Previous">
+            &laquo;
+        </a>
+    `;
+
+    prevLi.addEventListener("click",  () => {
+        if (currentPage > 1) {
+            offset = (currentPage - 2) * limit;
+             loadReportList();
+        }
+    });
+
+    pagination.appendChild(prevLi);
+
+
+    for (let p = groupStart; p <= groupEnd; p++) {
+        const li = document.createElement("li");
+        li.className = "page-item " + (p === currentPage ? "active" : "");
+
+        li.innerHTML = `<a class="page-link" href="#">${p}</a>`;
+
+        li.addEventListener("click", () => {
+            offset = (p - 1) * limit;
+            loadReportList();
+        });
+
+        pagination.appendChild(li);
+    }
+
+
+    const nextLi = document.createElement("li");
+    nextLi.className = "page-item " + (currentPage === totalPage ? "disabled" : "");
+
+    nextLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Next">
+            &raquo;
+        </a>
+    `;
+
+    nextLi.addEventListener("click",  () => {
+        if (currentPage < totalPage) {
+            offset = currentPage * limit;
+             loadReportList();
+        }
+    });
+
+    pagination.appendChild(nextLi);
+
+
+    const lastLi = document.createElement("li");
+    lastLi.className = "page-item " + (groupEnd === totalPage ? "disabled" : "");
+
+    lastLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Last">
+            &raquo;&raquo;
+        </a>
+    `;
+
+    lastLi.addEventListener("click",  () => {
+        if (groupEnd < totalPage) {
+            const newPage = groupEnd + 1;
+            offset = (newPage - 1) * limit;
+             loadReportList();
+        }
+    });
+
+    pagination.appendChild(lastLi);
+}
+
