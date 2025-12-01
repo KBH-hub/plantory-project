@@ -11,7 +11,7 @@ import java.util.List;
 public interface MyPlantService {
     List<MyPlantResponse> getMyPlantList(Long memberId,String name ,int limit, int offset);
     List<MyPlantResponse> getMyPlantByName(Long memberId, String name);
-    int registerMyPlant(MyPlantRequest vo, List<MultipartFile> files, Long memberId) throws IOException;
-    int updateMyPlant(MyPlantRequest vo, List<Long> delImgList, List<MultipartFile> files, Long memberId) throws IOException;
+    int registerMyPlant(MyPlantRequest vo, MultipartFile file, Long memberId) throws IOException;
+    int updateMyPlant(MyPlantRequest vo, Long delFile, MultipartFile file, Long memberId) throws IOException;
     int removePlant(Long myplantId);
 }

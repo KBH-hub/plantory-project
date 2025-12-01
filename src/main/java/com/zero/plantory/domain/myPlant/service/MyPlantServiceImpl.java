@@ -26,7 +26,7 @@ public class MyPlantServiceImpl implements MyPlantService {
     private final StorageUploader storageUploader;
 
     @Override
-    public List<MyPlantResponse> getMyPlantList(Long memberId,String name, int limit, int offset) {
+    public List<MyPlantResponse> getMyPlantList(Long memberId, String name, int limit, int offset) {
         List<MyPlantResponse> resultList = new ArrayList<>();
         List<MyPlantResponse> myPlantList = myPlantMapper.selectMyPlantList(memberId, name, limit, offset);
         for (MyPlantResponse response : myPlantList) {
@@ -63,39 +63,40 @@ public class MyPlantServiceImpl implements MyPlantService {
 
     @Override
     @Transactional
-    public int registerMyPlant(MyPlantRequest request, List<MultipartFile> files, Long memberId) throws IOException {
-        if(request.getName() == null || request.getName().equals("")){
+    public int registerMyPlant(MyPlantRequest request, MultipartFile file, Long memberId) throws IOException {
+        if (request.getName() == null || request.getName().equals("")) {
             throw new IllegalArgumentException("내 식물 등록 필수값(식물 이름) 누락");
         }
-        List<MultipartFile> safeFiles = (files==null)? List.of()
-                :files.stream().filter(f -> f != null && !f.isEmpty()).toList();
 
         int insertMyplant = myPlantMapper.insertMyPlant(request);
-        if(insertMyplant == 0){
+        if (insertMyplant == 0) {
             throw new IllegalStateException("관찰일지 저장 실패");
         }
 
         Long myplantId = request.getMyplantId();
-        if(myplantId == null){
+        if (myplantId == null) {
             throw new IllegalStateException("myplantId 미할당");
         }
 
         int insertedImages = 0;
-        for (MultipartFile file : safeFiles) {
-            String url = storageUploader.uploadFile(file);
+        String url = storageUploader.uploadFile(file);
 
-            ImageDTO image = ImageDTO.builder()
-                    .memberId(memberId)
-                    .targetType(ImageTargetType.MYPLANT)
-                    .targetId(myplantId)
-                    .fileUrl(url)
-                    .fileName(file.getOriginalFilename())
-                    .build();
+        ImageDTO image = ImageDTO.builder()
+                .memberId(memberId)
+                .targetType(ImageTargetType.MYPLANT)
+                .targetId(myplantId)
+                .fileUrl(url)
+                .fileName(file.getOriginalFilename())
+                .build();
 
-            insertedImages += imageMapper.insertImage(image);
-        }
+        insertedImages += imageMapper.insertImage(image);
 
-        if (insertMyplant == 1 && insertedImages == safeFiles.size()) {
+        if (insertMyplant == 1) {
+            if (image != null) {
+                if (insertedImages == 1) {
+                    return 2;
+                }
+            }
             return 1;
         }
 
@@ -104,19 +105,22 @@ public class MyPlantServiceImpl implements MyPlantService {
 
     @Override
     @Transactional
-    public int updateMyPlant(MyPlantRequest request, List<Long> delImgList, List<MultipartFile> files, Long memberId) throws IOException {
+    public int updateMyPlant(MyPlantRequest request, Long delFileTargetId, MultipartFile file, Long memberId) throws IOException {
         int result = 0;
         result += myPlantMapper.updateMyPlant(request);
+        int fileCount = 0;
+        fileCount += delFileTargetId == null ? 0 : 1;
+        fileCount += file == null ? 0 : 1;
 
-        if(request.getName() == null || request.getName().equals("")){
+        if (request.getName() == null || request.getName().equals("")) {
             throw new IllegalArgumentException("내 식물 수정 필수값(식물 이름) 누락");
         }
 
-        for(Long image : delImgList){
-            result += imageMapper.softDeleteImagesByTarget(ImageTargetType.MYPLANT, image);
+        if(delFileTargetId != null) {
+            result += imageMapper.softDeleteImagesByTarget(ImageTargetType.MYPLANT, delFileTargetId);
         }
 
-        for(MultipartFile file : files){
+        if(file != null) {
             String url = storageUploader.uploadFile(file);
 
             ImageDTO image = ImageDTO.builder()
@@ -129,7 +133,7 @@ public class MyPlantServiceImpl implements MyPlantService {
             result += imageMapper.insertImage(image);
         }
 
-        if(result == delImgList.size() + files.size() + 1){
+        if (result == fileCount + 1) {
             return result;
         }
         throw new IllegalStateException("관찰일지 수정 실패(업데이트 누락)");
@@ -138,7 +142,7 @@ public class MyPlantServiceImpl implements MyPlantService {
     @Override
     public int removePlant(Long myplantId) {
         int result = myPlantMapper.deletePlant(myplantId);
-        if(result == 0){
+        if (result == 0) {
             throw new IllegalArgumentException("내 식물 삭제 실패");
         }
         return result;
