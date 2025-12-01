@@ -101,7 +101,9 @@
             s.interest_num,
             s.status,
             s.created_at,
-            s.updated_at
+            s.updated_at,
+            s.review_flag,
+            s.target_member_review_flag as receiverReviewFlag
         FROM sharing s
                  JOIN member mb ON s.member_id = mb.member_id
         WHERE s.sharing_id = #{sharingId}

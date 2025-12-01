@@ -46,7 +46,7 @@ public interface SharingMapper {
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
 
     ReviewInfoResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
-    ReviewInfoResponse selectReviewInfoForReceiver(@Param("haringId") Long sharingId, @Param("memberId") Long memberId);
+    ReviewInfoResponse selectReviewInfoForReceiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
 
     void updateReviewFlag(Long sharingId);
     void updateReceiverReviewFlag(Long sharingId);
