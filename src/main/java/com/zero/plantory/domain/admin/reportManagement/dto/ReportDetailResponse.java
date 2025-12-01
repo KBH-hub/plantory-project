@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.reportManagement.dto;
+package com.zero.plantory.domain.admin.reportManagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

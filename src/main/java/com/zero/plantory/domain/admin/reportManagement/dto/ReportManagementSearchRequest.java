@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.reportManagement.dto;
+package com.zero.plantory.domain.admin.reportManagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportManagementSearchResponse {
+public class ReportManagementSearchRequest {
     private String keyword;
     private String status;
     private Integer limit;

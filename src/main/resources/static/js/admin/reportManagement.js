@@ -1,3 +1,25 @@
+async function initReport(){
+    try {
+        let res = await axios.get("/api/reportManagement/list",{
+            params: {
+                keyword: keyword,
+                status: status,
+            }
+        })
+        console.log(res.data)
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+const keyword = document.getElementById("keywordInput").value;
+const status = document.getElementById("statusFilter").value;
+
+document.addEventListener("DOMContentLoaded", async () => {
+await initReport()
+});
+
 const modal = new bootstrap.Modal(document.getElementById("reportModal"));
 
 document.querySelectorAll(".report-row").forEach(row => {

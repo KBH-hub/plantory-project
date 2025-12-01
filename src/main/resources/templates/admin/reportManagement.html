@@ -10,7 +10,7 @@
 
 <body class="bg-light">
 
-<th:block th:replace="~{fragments/header :: headerBar}"></th:block>
+<th:block th:replace="~{fragments/adminHeader :: headerBar}"></th:block>
 
 <div class="container mt-5">
 
@@ -19,20 +19,20 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex gap-2">
-            <select class="form-select form-select-sm" style="width:120px;">
-                <option>전체</option>
-                <option>처리 전</option>
-                <option>처리 완료</option>
+            <select id="statusFilter" class="form-select form-select-sm" style="width:120px;">
+                <option value="">전체</option>
+                <option value="false">처리 전</option>
+                <option value="true">처리 완료</option>
             </select>
         </div>
 
         <div class="d-flex gap-2">
-            <input type="text" class="form-control form-control-sm" placeholder="내용으로 검색" style="width:250px;">
-            <button class="btn btn-secondary btn-sm">삭제</button>
+            <input id="keywordInput" type="text" class="form-control form-control-sm" placeholder="내용으로 검색" style="width:250px;">
+            <button id="deleteBtn" class="btn btn-secondary btn-sm">삭제</button>
         </div>
     </div>
 
-    <table class="table table-hover bg-white rounded-3 shadow-sm">
+    <table id="reportTable" class="table table-hover bg-white rounded-3 shadow-sm">
         <thead class="table-secondary">
         <tr>
             <th style="width: 40px;"></th>
@@ -45,30 +45,7 @@
             <th>신고 시간</th>
         </tr>
         </thead>
-
-        <tbody>
-        <tr class="report-row">
-            <td><input type="checkbox" class="form-check-input"></td>
-            <td>nab01</td>
-            <td>abc01</td>
-            <td>-</td>
-            <td>욕설 신고합니다.</td>
-            <td class="text-danger fw-bold">처리 전</td>
-            <td><span class="badge bg-danger">신고처리</span></td>
-            <td>2025-11-08 17:55:08</td>
-        </tr>
-
-        <tr class="report-row">
-            <td><input type="checkbox" class="form-check-input"></td>
-            <td>kimtc01</td>
-            <td>sfksd01</td>
-            <td>-</td>
-            <td>약속시간을 지키지 않았어요.</td>
-            <td class="text-danger fw-bold">처리 전</td>
-            <td><span class="badge bg-danger">신고처리</span></td>
-            <td>2025-11-08 18:04:04</td>
-        </tr>
-        </tbody>
+        <tbody id="reportTableBody"></tbody>
     </table>
 
 </div>
@@ -91,7 +68,7 @@
                     </tr>
                     <tr>
                         <th class="bg-light">피신고자 아이디</th>
-                        <td id="reportedId"></td>
+                        <td id="targetId"></td>
                     </tr>
                     <tr>
                         <th class="bg-light">신고 내용</th>
@@ -114,8 +91,9 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
- <script th:src="@{/js/common/header.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/common/alert.js}"></script>
  <script th:src="@{/js/admin/reportManagement.js}"></script>
 
 </body>
