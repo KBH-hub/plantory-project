@@ -21,8 +21,12 @@ function renderDetail(detail) {
     document.getElementById("shareTitle").innerText = detail.title;
 
     document.getElementById("plantType").innerText = detail.plantType;
-    document.getElementById("managementLevel").innerText = detail.managementLevel;
-    document.getElementById("managementNeeds").innerText = detail.managementNeeds;
+    // document.getElementById("managementLevel").innerText = detail.managementLevel;
+    // document.getElementById("managementNeeds").innerText = detail.managementNeeds;
+    // console.log(detail.managementLevel);
+    // console.log(detail.managementNeeds);
+    document.getElementById("managementLevel").innerText = detail.managementLevelLabel;
+    document.getElementById("managementNeeds").innerText = detail.managementNeedsLabel;
 
     document.getElementById("contentBox").innerHTML = detail.content;
     document.getElementById("writerNickname").innerText = detail.nickname;

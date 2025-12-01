@@ -4,10 +4,9 @@ let totalCount = 0;
 
 let reportModal = null;
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     reportModal = new bootstrap.Modal(document.getElementById("reportModal"));
-
-    await loadReportList();
+    loadReportList();
 
     document.getElementById("statusFilter").addEventListener("change", () => {
         offset = 0;
@@ -85,6 +84,7 @@ function renderTable(list) {
         tbody.appendChild(tr);
     });
 }
+
 document.getElementById("reportCheckbox").addEventListener("change", (e) => {
     const checked = e.target.checked;
 
@@ -94,28 +94,75 @@ document.getElementById("reportCheckbox").addEventListener("change", (e) => {
 });
 
 
-function formatDate(dateTime) {
-    if (!dateTime) return "-";
-    return dateTime.replace("T", " ").substring(0, 16);
-}
+const reportDetailModal = new bootstrap.Modal(document.getElementById("reportDetailModal"), {
+    backdrop: "static",
+    keyboard: false
+});
 
+const reportDetailModalElement = document.getElementById("reportDetailModal");
+
+reportDetailModalElement.addEventListener("hidden.bs.modal", () => {
+    document.activeElement.blur();
+});
+
+reportDetailModalElement.addEventListener("shown.bs.modal", () => {
+    reportDetailModalElement.focus();
+});
+
+document.getElementById("modalCloseBtn").addEventListener("click", e => {
+    e.target.blur();
+});
 
 async function openDetail(reportId) {
+
     try {
-        const response = await axios.get(`/api/reportManagement/detail/${reportId}`);
-        const data = response.data;
+        const res = await axios.get(`/api/reportManagement/detail/${reportId}`);
+        const report = res.data;
 
-        document.getElementById("reporterId").innerText = data.reporterName ?? "-";
-        document.getElementById("targetId").innerText = data.targetName ?? "-";
-        document.getElementById("reportContent").innerText = data.content ?? "-";
-        document.getElementById("processOpinion").innerText = data.adminMemo ?? "-";
+        document.getElementById("rd-reporterName").textContent = report.reporterName;
+        document.getElementById("rd-targetName").textContent = report.targetName;
+        document.getElementById("rd-content").textContent = report.content;
+        document.getElementById("rd-createdAt").textContent = formatDate(report.createdAt);
+        document.getElementById("rd-adminMemo").textContent = report.adminMemo ?? "-";
 
-        reportModal.show();
+        const imgRes = await axios.get("/api/reportManagement/images", {
+            params: {
+                targetType: "REPORT",
+                targetId: reportId
+            }
+        });
 
-    } catch (error) {
-        console.error(error);
+        const images = imgRes.data;
+
+        const img = document.getElementById("rd-evidenceImage");
+        const noEvidence = document.getElementById("rd-noEvidence");
+
+        if (images && images.length > 0 && images[0].fileUrl) {
+            img.src = images[0].fileUrl;
+            img.classList.remove("d-none");
+            noEvidence.classList.add("d-none");
+        } else {
+            img.classList.add("d-none");
+            noEvidence.classList.remove("d-none");
+        }
+
+
+        reportDetailModal.show();
+    } catch (err) {
+        console.error(err);
     }
 }
+
+
+function formatDate(isoString) {
+    if (!isoString) return "-";
+
+    const date = new Date(isoString);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} `
+        + `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
+
+
 
 
 async function deleteSelectedReports() {
@@ -148,9 +195,9 @@ function renderPagination() {
 
     const pageGroupSize = 5;
 
-    const currentGroup = Math.ceil(currentPage / pageGroupSize);        // 현재 그룹
-    const groupStart = (currentGroup - 1) * pageGroupSize + 1;          // 그룹 시작 페이지
-    const groupEnd = Math.min(currentGroup * pageGroupSize, totalPage); // 그룹 마지막 페이지
+    const currentGroup = Math.ceil(currentPage / pageGroupSize);
+    const groupStart = (currentGroup - 1) * pageGroupSize + 1;
+    const groupEnd = Math.min(currentGroup * pageGroupSize, totalPage);
 
 
     const firstLi = document.createElement("li");
