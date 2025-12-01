@@ -87,6 +87,10 @@ public class MyPlantServiceImpl implements MyPlantService {
             throw new IllegalStateException("myplantId 미할당");
         }
 
+        if (file == null) {
+            return insertMyplant;
+        }
+
         int insertedImages = 0;
         String url = storageUploader.uploadFile(file);
 
@@ -100,13 +104,8 @@ public class MyPlantServiceImpl implements MyPlantService {
 
         insertedImages += imageMapper.insertImage(image);
 
-        if (insertMyplant == 1) {
-            if (image != null) {
-                if (insertedImages == 1) {
-                    return 2;
-                }
-            }
-            return 1;
+        if (insertedImages == 1) {
+            return 2;
         }
 
         throw new IllegalArgumentException("내 식물 등록 실패");
@@ -125,11 +124,11 @@ public class MyPlantServiceImpl implements MyPlantService {
             throw new IllegalArgumentException("내 식물 수정 필수값(식물 이름) 누락");
         }
 
-        if(delFileTargetId != null) {
+        if (delFileTargetId != null) {
             result += imageMapper.softDeleteImagesByTarget(ImageTargetType.MYPLANT, delFileTargetId);
         }
 
-        if(file != null) {
+        if (file != null) {
             String url = storageUploader.uploadFile(file);
 
             ImageDTO image = ImageDTO.builder()

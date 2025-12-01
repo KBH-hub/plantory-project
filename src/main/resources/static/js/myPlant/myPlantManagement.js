@@ -192,7 +192,7 @@ function openDetailModal(raw) {
     const vm = normalizePlant(raw);
     currentVM = vm;
 
-    if (dImgEl)  dImgEl.src = raw.img || "https://via.placeholder.com/200x230?text=No+Image";
+    if (dImgEl)  dImgEl.src = raw.img;
     if (dNameEl) dNameEl.value = vm.name || "";
     if (dTypeEl) dTypeEl.value = vm.type || "";
     if (dSoilEl) dSoilEl.value = vm.soil || "";
@@ -209,7 +209,6 @@ function openDetailModal(raw) {
 
 // ========== 이벤트 바인딩 ==========
 document.addEventListener("DOMContentLoaded", () => {
-    // 등록 모달 버튼(등록 모달을 사용 안 하면 이 블록은 제거)
     const addBtn = document.getElementById("openAddModal");
     const addModalEl = document.getElementById("addPlantModal");
     if (addBtn && addModalEl) {
@@ -217,6 +216,89 @@ document.addEventListener("DOMContentLoaded", () => {
             bootstrap.Modal.getOrCreateInstance(addModalEl).show();
         });
     }
+
+    function toLocalDateTimeStr(dateStr) {
+        if (!dateStr) return "";
+        return `${dateStr}T00:00:00`;
+    }
+
+    {
+        const fileEl = document.getElementById("addImgFile");
+        const imgEl  = document.getElementById("addImgPreview");
+        const FALLBACK = "https://via.placeholder.com/200x230?text=No+Image";
+
+        if (fileEl && imgEl) {
+            imgEl.addEventListener("error", () => { imgEl.src = FALLBACK; });
+
+            fileEl.addEventListener("change", () => {
+                const f = fileEl.files && fileEl.files[0];
+                if (!f) { imgEl.src = FALLBACK; return; }
+                if (!f.type || !f.type.startsWith("image/")) { alert("이미지 파일만 선택하세요."); fileEl.value=""; imgEl.src = FALLBACK; return; }
+
+                const url = URL.createObjectURL(f);
+                imgEl.onload = () => { URL.revokeObjectURL(url); };
+                imgEl.src = url;
+            });
+        }
+    }
+
+    (() => {
+        const addBtnEl        = document.getElementById("addSubmitBtn");
+        const addNameEl       = document.getElementById("addName");
+        const addTypeEl       = document.getElementById("addType");
+        const addStartAtEl    = document.getElementById("addStartAt");
+        const addEndDateEl    = document.getElementById("addEndDate");
+        const addIntervalEl   = document.getElementById("addIntervalDays");
+        const addSoilEl       = document.getElementById("addFertilizer"); // HTML id는 그대로, 서버 필드명은 'soil'
+        const addTempEl       = document.getElementById("addTemp");
+        const addFileEl       = document.getElementById("addImgFile");
+        const addModalEl      = document.getElementById("addPlantModal");
+
+        if (!addBtnEl) return;
+
+        addBtnEl.addEventListener("click", async () => {
+            try {
+                // 최소 검증: 이름
+                const name = (addNameEl?.value || "").trim();
+                if (!name) {
+                    alert("식물 이름은 필수입니다.");
+                    return;
+                }
+
+                const fd = new FormData();
+
+                // 테스트 코드와 동일한 필드명으로 전송
+                fd.append("memberId", String(memberId)); // body data-member-id에서 읽은 값
+                fd.append("name", name);
+                fd.append("type", (addTypeEl?.value || "").trim());
+                fd.append("startAt", toLocalDateTimeStr(addStartAtEl?.value || ""));
+                fd.append("endDate", toLocalDateTimeStr(addEndDateEl?.value || ""));
+                fd.append("interval", String(addIntervalEl?.value || "0"));
+                fd.append("soil", (addSoilEl?.value || "").trim());          // 서버 DTO의 'soil'
+                fd.append("temperature", (addTempEl?.value || "").trim());   // 서버 DTO의 'temperature'
+
+                // 파일 파트명은 'file'이어야 테스트와 1:1 매칭됨
+                const file = addFileEl?.files?.[0];
+                if (file) {
+                    fd.append("file", file, file.name);
+                }
+
+                await axios.post("/api/myPlant", fd, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                });
+
+                await fetchPlants(1);
+
+                if (addModalEl) {
+                    bootstrap.Modal.getOrCreateInstance(addModalEl).hide();
+                }
+            } catch (err) {
+                console.error(err);
+                alert("등록에 실패했습니다. 잠시 후 다시 시도해주세요.");
+            }
+        });
+    })();
+
 
     // 카드 클릭 위임
     listEl.addEventListener("click", e => {
@@ -253,4 +335,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 초기 로드
     fetchPlants(1);
+
 });

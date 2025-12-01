@@ -43,6 +43,7 @@
     </nav>
 </div>
 
+<!-- 등록 모달 -->
 <div class="modal fade" id="addPlantModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0">
@@ -51,13 +52,61 @@
                 <button type="button" class="btn-close bg-white rounded-circle" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
+
             <div class="modal-body">
-                <!-- 최소 본문: 이후 실제 폼 연결 예정 -->
-                <p class="text-muted mb-0">등록 폼은 추후 연결합니다.</p>
+                <div class="text-center mb-2">
+                    <h6 class="fw-bold">프로필 사진</h6>
+                    <img id="addImgPreview" src="/image/default.png">
+                    <div class="mt-2">
+                        <input type="file" id="addImgFile" accept="image/*" class="form-control"/>
+                    </div>
+                </div>
+
+                <label class="fw-bold">식물 이름 <span class="text-danger">*필수입니다.</span></label>
+                <input type="text" id="addName" class="form-control" placeholder="예: 테라리움">
+
+                <label class="fw-bold mt-2">식물 종류</label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text">🌱</span>
+                    <input type="text" id="addType" class="form-control" placeholder="예: 산세베리아 '하니'">
+                    <a class="btn btn-dark" href="/plantDictionary">식물 검색</a>
+                </div>
+
+                <div class="row g-2 align-items-center">
+                    <div class="col-12 col-md-4">
+                        <div class="form-floating">
+                            <input type="date" id="addStartAt" class="form-control" placeholder="최초 물 준 일자">
+                            <label for="addStartAt">최초 물 준 일자</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-floating">
+                            <input type="number" id="addIntervalDays" class="form-control" placeholder="간격(일)" min="0"
+                                   step="1">
+                            <label for="addIntervalDays">간격(일)</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="form-floating">
+                            <input type="date" id="addEndDate" class="form-control" placeholder="마지막 물 준 일자">
+                            <label for="addEndDate">마지막 물 준 일자</label>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="fw-bold mt-2">비료 정보</label>
+                <input type="text" id="addFertilizer" class="form-control" placeholder="예: 비료는 보통 요구함">
+
+                <label class="fw-bold mt-2">생육 온도</label>
+                <input type="text" id="addTemp" class="form-control" placeholder="예: 18–27℃">
+
+
+                <button type="button" class="btn-success bg-white" id="addSubmitBtn"> 등록하기</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- 상세보기 모달 -->
 <div class="modal fade" id="plantDetailModal" tabindex="-1">

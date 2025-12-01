@@ -9,6 +9,7 @@
         WHERE del_flag IS NULL
           AND member_id = #{memberId}
           AND name LIKE CONCAT('%', #{name}, '%')
+        ORDER BY created_at DESC
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
