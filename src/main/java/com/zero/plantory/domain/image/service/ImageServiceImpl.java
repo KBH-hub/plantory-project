@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +56,11 @@ public class ImageServiceImpl implements ImageService {
         return dto != null ? dto.getFileUrl() : null;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ImageDTO> getImagesByTarget(ImageTargetType targetType, Long targetId) {
+        return imageMapper.selectImagesByTarget(targetType, targetId);
+    }
 
 
     private String extractFileNameFromUrl(String url) {
