@@ -19,4 +19,12 @@ public class SharingController {
         return "sharing/createSharing";
     }
 
+    @GetMapping("/sharing/{sharingId}/review")
+    public String updateReview(@PathVariable Long sharingId, Model model) {
+        model.addAttribute("sharingId", sharingId);
+        return "sharing/updateReview";
+    }
+
+
+
 }

@@ -68,31 +68,83 @@ public class SharingReadServiceImpl implements SharingReadService {
 
 
 
+//    @Override
+//    public ReviewInfoResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId) {
+//
+//        ReviewInfoResponse result =
+//                sharingMapper.selectReviewInfoForGiver(sharingId, loginMemberId);
+//
+//        if (result == null) {
+//            throw new IllegalArgumentException("후기 작성 권한이 없습니다(분양자).");
+//        }
+//
+//        return ReviewInfoResponse.builder()
+//                .sharingId(result.getSharingId())
+//                .partnerId(result.getPartnerId())
+//                .partnerNickname(result.getPartnerNickname())
+//                .title(result.getTitle())
+//                .createdAt(result.getCreatedAt())
+//                .reviewerType(SharingScoreServiceImpl.ReviewerType.GIVER).build();
+//    }
+//
+//    @Override
+//    public ReviewInfoResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId) {
+//
+//        ReviewInfoResponse result =
+//                sharingMapper.selectReviewInfoForReceiver(sharingId, loginMemberId);
+//
+//        if (result == null) {
+//            throw new IllegalArgumentException("후기 작성 권한이 없습니다(피분양자).");
+//        }
+//
+//        return ReviewInfoResponse.builder()
+//                .sharingId(result.getSharingId())
+//                .partnerId(result.getPartnerId())
+//                .partnerNickname(result.getPartnerNickname())
+//                .title(result.getTitle())
+//                .createdAt(result.getCreatedAt())
+//                .reviewerType(SharingScoreServiceImpl.ReviewerType.RECEIVER).build();
+//    }
     @Override
-    public SharingHistoryResponse getReviewInfoForGiver(Long sharingId, Long loginMemberId) {
+    public ReviewInfoResponse getReviewInfo(Long sharingId, Long memberId) {
 
-        SharingHistoryResponse result =
-                sharingMapper.selectReviewInfoForGiver(sharingId, loginMemberId);
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
 
-        if (result == null) {
-            throw new IllegalArgumentException("후기 작성 권한이 없습니다(분양자).");
+        SharingScoreServiceImpl.ReviewerType type;
+
+        if (memberId.equals(sharing.getMemberId())) {
+            type = SharingScoreServiceImpl.ReviewerType.GIVER;
+            ReviewInfoResponse query =
+                    sharingMapper.selectReviewInfoForGiver(sharingId, memberId);
+
+            return ReviewInfoResponse.builder()
+                    .reviewerType(type)
+                    .sharingId(query.getSharingId())
+                    .partnerId(query.getPartnerId())
+                    .partnerNickname(query.getPartnerNickname())
+                    .title(query.getTitle())
+                    .createdAt(query.getCreatedAt())
+                    .build();
+
+        } else if (memberId.equals(sharing.getTargetMemberId())) {
+            type = SharingScoreServiceImpl.ReviewerType.RECEIVER;
+            ReviewInfoResponse query =
+                    sharingMapper.selectReviewInfoForReceiver(sharingId, memberId);
+
+            return ReviewInfoResponse.builder()
+                    .reviewerType(type)
+                    .sharingId(query.getSharingId())
+                    .partnerId(query.getPartnerId())
+                    .partnerNickname(query.getPartnerNickname())
+                    .title(query.getTitle())
+                    .createdAt(query.getCreatedAt())
+                    .build();
+
+        } else {
+            throw new IllegalArgumentException("후기 작성 권한이 없습니다.");
         }
-
-        return result;
     }
 
-    @Override
-    public SharingHistoryResponse getReviewInfoForReceiver(Long sharingId, Long loginMemberId) {
-
-        SharingHistoryResponse result =
-                sharingMapper.selectReviewInfoForReceiver(sharingId, loginMemberId);
-
-        if (result == null) {
-            throw new IllegalArgumentException("후기 작성 권한이 없습니다(피분양자).");
-        }
-
-        return result;
-    }
 
 
 }

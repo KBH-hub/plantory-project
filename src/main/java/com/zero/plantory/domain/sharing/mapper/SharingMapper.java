@@ -43,8 +43,8 @@ public interface SharingMapper {
     List<SharingHistoryResponse> selectProfileSharingReceived(@Param("memberId") Long memberId);
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
 
-    SharingHistoryResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
-    SharingHistoryResponse selectReviewInfoForReceiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
+    ReviewInfoResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
+    ReviewInfoResponse selectReviewInfoForReceiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
 
 
 
