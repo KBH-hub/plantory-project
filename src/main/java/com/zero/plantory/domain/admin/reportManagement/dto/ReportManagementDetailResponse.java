@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportDetailResponse {
+public class ReportManagementDetailResponse {
     private Long reportId;
     private Long adminId;
     private Long reporterId;

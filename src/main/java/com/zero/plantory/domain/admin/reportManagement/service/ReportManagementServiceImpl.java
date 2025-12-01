@@ -1,7 +1,9 @@
 package com.zero.plantory.domain.admin.reportManagement.service;
 
+import com.zero.plantory.domain.admin.reportManagement.dto.IdListRequest;
+import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementPageResponse;
 import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementSearchRequest;
-import com.zero.plantory.domain.admin.reportManagement.dto.ReportResponse;
+import com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementResponse;
 import com.zero.plantory.domain.admin.reportManagement.mapper.ReportManagementMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,19 @@ public class ReportManagementServiceImpl implements ReportManagementService {
     private final ReportManagementMapper reportManagementMapper;
 
     @Override
-    public List<ReportResponse> getReporManagmentList(ReportManagementSearchRequest request) {
-        return  reportManagementMapper.selectReportList(request);
+    public ReportManagementPageResponse getReporManagmentList(ReportManagementSearchRequest request) {
+
+        int totalCount = reportManagementMapper.selectReportTotalCount(request);
+        List<ReportManagementResponse> list = reportManagementMapper.selectReportList(request);
+
+        return ReportManagementPageResponse.builder()
+                .totalCount(totalCount)
+                .list(list)
+                .build();
+    }
+
+    @Override
+    public int deleteReporManagmentList(List<Long> ids) {
+        return reportManagementMapper.deleteReports(ids);
     }
 }

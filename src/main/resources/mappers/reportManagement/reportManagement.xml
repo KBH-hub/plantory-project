@@ -2,9 +2,28 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.admin.reportManagement.mapper.ReportManagementMapper">
+
+    <select id="selectReportTotalCount"
+            parameterType="com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementSearchRequest"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM report r
+        <where>
+            r.del_flag IS NULL
+            <if test="keyword != null and keyword != ''">
+                AND r.content LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND r.status = #{status}
+            </if>
+        </where>
+    </select>
+
+
+
     <select id="selectReportList"
             parameterType="com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementSearchRequest"
-            resultType="com.zero.plantory.domain.admin.reportManagement.dto.ReportResponse">
+            resultType="com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementResponse">
         SELECT
         r.report_id,
         r.admin_id,
@@ -39,7 +58,7 @@
         </foreach>
     </update>
     
-    <select id="selectReportDetail" resultType="com.zero.plantory.domain.admin.reportManagement.dto.ReportDetailResponse">
+    <select id="selectReportDetail" resultType="com.zero.plantory.domain.admin.reportManagement.dto.ReportManagementDetailResponse">
         SELECT
             r.report_id,
             r.admin_id,
