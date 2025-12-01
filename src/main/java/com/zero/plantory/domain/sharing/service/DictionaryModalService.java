@@ -45,7 +45,6 @@ public class DictionaryModalService {
 
             String id = item.path("cntntsNo").asText();
 
-            // 썸네일은 여러 개일 수 있어 첫 번째만 사용
             String thumb = item.path("rtnThumbFileUrl").asText("");
             if (thumb.contains("|")) thumb = thumb.split("\\|")[0];
 
@@ -134,7 +133,7 @@ public class DictionaryModalService {
         String fileUrl = item.path("thumbImgUrl1").asText(null);
 
         String levelName = item.path("manageLevelNm").asText();
-        String demandName = item.path("manageDemandNm").asText(); 
+        String demandName = item.path("manageDemandNm").asText();
 
         ManageLevel level = convertLevel(levelName);
         ManageDemand demand = convertDemand(demandName);
