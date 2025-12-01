@@ -40,6 +40,16 @@
             LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <select id="selectQuestionTotalCount" resultType="int">
+        SELECT COUNT(*)
+        FROM question q
+                 JOIN member m ON q.member_id = m.member_id
+        WHERE q.del_flag IS NULL
+          AND m.del_flag IS NULL
+          AND (#{keyword} IS NULL OR q.title LIKE CONCAT('%', #{keyword}, '%'))
+    </select>
+
+
     <insert id="insertQuestion" parameterType="com.zero.plantory.domain.question.dto.QuestionRequest" useGeneratedKeys="true"
             keyProperty="questionId">
 

@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 public interface QuestionMapper {
     List<SelectQuestionListResponse> selectQuestionList(@Param("keyword") String keyword, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    int selectQuestionTotalCount(@Param("keyword") String keyword);
     int insertQuestion(QuestionRequest request);
     SelectQuestionDetailResponse selectQuestionDetail(@Param("questionId") Long questionId);
     List<SelectAnswerListResponse> selectQuestionAnswers(@Param("questionId") Long questionId);
