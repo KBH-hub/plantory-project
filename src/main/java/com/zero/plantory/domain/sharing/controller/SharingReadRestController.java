@@ -4,7 +4,10 @@ import com.zero.plantory.domain.sharing.dto.*;
 import com.zero.plantory.domain.sharing.dto.SharingHistoryResponse;
 import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
 import com.zero.plantory.domain.sharing.service.SharingReadService;
+import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,5 +63,18 @@ public class SharingReadRestController {
     public List<SharingHistoryResponse> getMySharingReceived(@RequestParam Long memberId) {
         return sharingReadService.getMySharingReceived(memberId);
     }
+
+    @GetMapping("/{sharingId}/reviewInfo")
+    public ResponseEntity<ReviewInfoResponse> getReviewInfo(
+            @PathVariable Long sharingId,
+            @AuthenticationPrincipal MemberDetail memberDetail
+    ) {
+        Long memberId = memberDetail.getMemberResponse().getMemberId();
+        ReviewInfoResponse result = sharingReadService.getReviewInfo(sharingId, memberId);
+
+        return ResponseEntity.ok(result);
+    }
+
+
 }
 

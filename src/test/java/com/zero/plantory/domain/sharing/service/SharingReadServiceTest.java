@@ -62,16 +62,11 @@ public class SharingReadServiceTest {
         log.info("내가 받은 나눔 내역 = {}", sharingReadService.getMySharingReceived(1L));
     }
 
-    @Test
-    @DisplayName("분양자 리뷰정보 조회")
-    void getReviewInfoForGiverTest() {
-        log.info("분양자 리뷰정보 조회 = {}", sharingReadService.getReviewInfoForGiver(1L, 10L)); }
 
     @Test
-    @DisplayName("피분양자 리뷰정보 조회")
-    void getReviewInfoForReceiverTest() {
-        log.info("피분양자 리뷰정보 조회 = {}", sharingReadService.getReviewInfoForReceiver(1L, 20L)); }
-
-
+    @DisplayName("리뷰 정보 조회")
+    void getReviewInfoTest(){
+        log.info("리뷰 정보 조회 = {}", sharingReadService.getReviewInfo(1L, 3L));
+    }
 
 }
