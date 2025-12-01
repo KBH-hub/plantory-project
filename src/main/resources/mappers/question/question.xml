@@ -72,7 +72,7 @@
 
         SELECT
             a.answer_id AS answerId,
-            a.writer_id AS writerId,
+            a.writer_id AS member_id,
             m.nickname AS nickname,
             a.content AS content,
             a.created_at AS createdAt,

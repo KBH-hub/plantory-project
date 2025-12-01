@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.question.service;
 
-import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.domain.question.dto.SelectAnswerListResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;

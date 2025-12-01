@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.member.mapper;
 
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.mapper.ProfileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ class ProfileMapperTest {
     @Test
     @DisplayName("내 정보 수정")
     void updateProfileInfoTest() {
-        MemberUpdateRequest request = MemberUpdateRequest.builder()
+        ProfileUpdateRequest request = ProfileUpdateRequest.builder()
                 .memberId(20L)
                 .nickname("홍길동22")
                 .phone("010-1111-2222")
@@ -49,8 +49,8 @@ class ProfileMapperTest {
     }
 
     @Test
-    void deleteMemberTest() {
-        int result = profileMapper.deleteMember(1L);
+    void deleteMemberByIdTest() {
+        int result = profileMapper.deleteMemberById(1L);
         assertTrue(result > 0);
         log.info(String.valueOf(result));
     }

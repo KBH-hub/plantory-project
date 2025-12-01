@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MemberUpdateRequest {
+public class ProfileUpdateRequest {
     private Long memberId;
     private String nickname;
     private String phone;

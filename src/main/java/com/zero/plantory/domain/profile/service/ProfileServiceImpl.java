@@ -1,9 +1,8 @@
 package com.zero.plantory.domain.profile.service;
 
-import com.zero.plantory.domain.member.mapper.MemberMapper;
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.domain.profile.dto.ProfileInfoResponse;
-import com.zero.plantory.domain.profile.dto.MemberUpdateRequest;
+import com.zero.plantory.domain.profile.dto.ProfileUpdateRequest;
 import com.zero.plantory.domain.profile.dto.PublicProfileResponse;
 import com.zero.plantory.domain.profile.mapper.ProfileMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileMapper profileMapper;
-    private final MemberMapper memberMapper;
     private final BCryptPasswordEncoder  bCryptPasswordEncoder;
 
     @Override
@@ -40,14 +38,15 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     @Transactional
-    public boolean updateMyInfo(MemberUpdateRequest request) {
-        return profileMapper.updateProfileInfo(request) > 0;
+    public boolean updateProfileInfo(ProfileUpdateRequest request) {
+            return profileMapper.updateProfileInfo(request) > 0;
     }
+
 
     @Override
     @Transactional
-    public boolean deleteMember(Long memberId) {
-        return profileMapper.deleteMember(memberId) > 0;
+    public boolean deleteMemberById(Long memberId) {
+        return profileMapper.deleteMemberById(memberId) > 0;
     }
 
     @Override
@@ -55,19 +54,19 @@ public class ProfileServiceImpl implements ProfileService {
         return profileMapper.selectPublicProfile(memberId);
     }
 
-    @Transactional
     @Override
     public boolean changePassword(Long memberId, String oldPassword, String newPassword) {
-        MemberResponse member = memberMapper.selectByMemberId(memberId);
+        MemberResponse member = profileMapper.selectByMemberId(memberId);
+        log.info(member.toString());
 
         if (!bCryptPasswordEncoder.matches(oldPassword, member.getPassword())) {
             return false;
         }
 
         member.setPassword(bCryptPasswordEncoder.encode(newPassword));
-        memberMapper.updatePassword(member.getPassword(),member.getMemberId());
 
-        return true;
+        int updatedRows = profileMapper.updatePassword(member.getPassword(), member.getMemberId());
+        return updatedRows > 0;
     }
 
 }

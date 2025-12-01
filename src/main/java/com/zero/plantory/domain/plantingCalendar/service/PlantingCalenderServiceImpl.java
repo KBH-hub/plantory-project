@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
-import com.zero.plantory.domain.image.ImageMapper;
+import com.zero.plantory.domain.image.mapper.ImageMapper;
 import com.zero.plantory.domain.plantingCalendar.dto.*;
 import com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper;
 import com.zero.plantory.global.config.SolapiConfig;

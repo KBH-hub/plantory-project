@@ -125,11 +125,11 @@ public class CmdController {
     public String updateMyInfo(){return "profile/updateProfileInfo";}
 
     @RequestMapping("/updateReview")
-    public String updateReview(){ return "sharing/updateReview"; }
+    public String updateReview(){ return "updateReviewForGiver"; }
 
     @RequestMapping("/updateReviewTargetMember")
     public String updateReviewTargetMember(){
-        return "sharing/updateReviewTargetMember";
+        return "updateReview";
     }
 
 }

@@ -86,6 +86,9 @@
                             <a id="btnUpdate" href="#" class="btn btn-primary px-4">수정</a>
                             <button id="btnDelete" class="btn btn-danger px-4">삭제</button>
                             <button id="btnComplete" class="btn btn-success px-4">나눔 완료</button>
+                            <a id="btnWriteReview" class="btn btn-success" style="display:none;"
+                                    th:href="@{'/sharing/' + ${sharingId} + '/review'}">후기 작성하기</a>
+
                         </div>
 
                         <div id="otherActions" class="gap-2" style="display:none;">
@@ -188,7 +191,7 @@
             </div>
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
-                <a id="goReview" href="/updateReview" class="btn btn-success">후기 작성하러 가기</a>
+                <a id="goReview" href="#" class="btn btn-success">후기 작성하러 가기</a>
             </div>
         </div>
     </div>

@@ -14,11 +14,9 @@ import java.time.LocalDateTime;
 public class ProfileWrittenListResponse {
     private Long id;
     private Long targetId;
-    private Long writerId;
     private Long memberId;
     private String nickname;
     private String title;
     private LocalDateTime createdAt;
-    private String type;
     private String category;
 }
