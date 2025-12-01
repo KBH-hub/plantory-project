@@ -32,11 +32,22 @@ public class MyPlantServiceImpl implements MyPlantService {
         for (MyPlantResponse response : myPlantList) {
             List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
+            Long imageId = images.isEmpty() ? null : images.get(0).getImageId();
             MyPlantResponse dto = MyPlantResponse.builder()
                     .myplantId(response.getMyplantId())
+                    .memberId(response.getMemberId())
                     .name(response.getName())
+                    .type(response.getType())
                     .startAt(response.getStartAt())
+                    .endDate(response.getEndDate())
+                    .interval(response.getInterval())
+                    .soil(response.getSoil())
+                    .temperature(response.getTemperature())
                     .imageUrl(url)
+                    .imageId(imageId)
+                    .createdAt(response.getCreatedAt())
+                    .delFlag(response.getDelFlag())
+                    .totalCount(response.getTotalCount())
                     .build();
             resultList.add(dto);
         }
@@ -78,6 +89,10 @@ public class MyPlantServiceImpl implements MyPlantService {
             throw new IllegalStateException("myplantId 미할당");
         }
 
+        if (file == null) {
+            return insertMyplant;
+        }
+
         int insertedImages = 0;
         String url = storageUploader.uploadFile(file);
 
@@ -91,13 +106,8 @@ public class MyPlantServiceImpl implements MyPlantService {
 
         insertedImages += imageMapper.insertImage(image);
 
-        if (insertMyplant == 1) {
-            if (image != null) {
-                if (insertedImages == 1) {
-                    return 2;
-                }
-            }
-            return 1;
+        if (insertedImages == 1) {
+            return 2;
         }
 
         throw new IllegalArgumentException("내 식물 등록 실패");
@@ -105,22 +115,22 @@ public class MyPlantServiceImpl implements MyPlantService {
 
     @Override
     @Transactional
-    public int updateMyPlant(MyPlantRequest request, Long delFileTargetId, MultipartFile file, Long memberId) throws IOException {
+    public int updateMyPlant(MyPlantRequest request, Long delFile, MultipartFile file, Long memberId) throws IOException {
         int result = 0;
         result += myPlantMapper.updateMyPlant(request);
         int fileCount = 0;
-        fileCount += delFileTargetId == null ? 0 : 1;
+        fileCount += delFile == null ? 0 : 1;
         fileCount += file == null ? 0 : 1;
 
         if (request.getName() == null || request.getName().equals("")) {
             throw new IllegalArgumentException("내 식물 수정 필수값(식물 이름) 누락");
         }
 
-        if(delFileTargetId != null) {
-            result += imageMapper.softDeleteImagesByTarget(ImageTargetType.MYPLANT, delFileTargetId);
+        if (delFile != null) {
+            result += imageMapper.softDeleteImage(delFile);
         }
 
-        if(file != null) {
+        if (file != null) {
             String url = storageUploader.uploadFile(file);
 
             ImageDTO image = ImageDTO.builder()
@@ -133,6 +143,8 @@ public class MyPlantServiceImpl implements MyPlantService {
             result += imageMapper.insertImage(image);
         }
 
+        System.out.println(result);
+        System.out.println(fileCount);
         if (result == fileCount + 1) {
             return result;
         }
@@ -140,10 +152,14 @@ public class MyPlantServiceImpl implements MyPlantService {
     }
 
     @Override
-    public int removePlant(Long myplantId) {
+    @Transactional
+    public int removePlant(Long myplantId, Long delFile) {
         int result = myPlantMapper.deletePlant(myplantId);
-        if (result == 0) {
-            throw new IllegalArgumentException("내 식물 삭제 실패");
+        result += imageMapper.softDeleteImage(delFile);
+        if(delFile != null) {
+            if (result < 2) {
+                throw new IllegalArgumentException("내 식물 삭제 실패");
+            }
         }
         return result;
     }

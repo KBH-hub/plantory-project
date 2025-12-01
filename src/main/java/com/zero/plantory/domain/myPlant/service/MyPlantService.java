@@ -13,5 +13,5 @@ public interface MyPlantService {
     List<MyPlantResponse> getMyPlantByName(Long memberId, String name);
     int registerMyPlant(MyPlantRequest vo, MultipartFile file, Long memberId) throws IOException;
     int updateMyPlant(MyPlantRequest vo, Long delFile, MultipartFile file, Long memberId) throws IOException;
-    int removePlant(Long myplantId);
+    int removePlant(Long myplantId, Long delFile) throws IOException;
 }

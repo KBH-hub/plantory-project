@@ -37,15 +37,15 @@ public class MyplantRestController {
     }
 
     @PutMapping
-    public ResponseEntity<Map<String, String>> updateMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam(name = "delFile", required = false) Long delFile, @RequestPart(name = "file", required = false) MultipartFile file, @RequestParam("memberId") Long memberId) throws IOException {
+    public ResponseEntity<Map<String, String>> updateMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam(name = "delFile", required = false) Long delFile, @RequestParam(name = "file", required = false) MultipartFile file, @RequestParam("memberId") Long memberId) throws IOException {
         if(myPlantService.updateMyPlant(request, delFile, file, memberId) == 0)
             return ResponseEntity.status(400).body(Map.of("message", "myPlant regist fail"));
         return ResponseEntity.ok().body(Map.of("message", "myPlant regist success"));
     }
 
     @DeleteMapping
-    public ResponseEntity<Map<String, String>> removeMyPlant(@RequestBody Long myplantId) {
-        if(myPlantService.removePlant(myplantId) == 0)
+    public ResponseEntity<Map<String, String>> removeMyPlant(@RequestParam Long myplantId, @RequestParam(required = false) Long delFile) throws IOException {
+        if(myPlantService.removePlant(myplantId, delFile) == 0)
             return ResponseEntity.status(400).body(Map.of("message", "myPlant regist fail"));
         return ResponseEntity.ok().body(Map.of("message", "myPlant regist success"));
     }

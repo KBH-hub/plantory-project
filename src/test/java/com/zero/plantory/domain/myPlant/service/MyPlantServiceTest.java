@@ -146,10 +146,11 @@ class MyPlantServiceTest {
 
     @Test
     @DisplayName("내 식물 삭제 처리")
-    void removePlantTest() {
+    void removePlantTest() throws IOException {
         Long myPlantId = 1L;
+        Long delFile = 2L;
 
-        int result = myPlantService.removePlant(myPlantId);
+        int result = myPlantService.removePlant(myPlantId, delFile);
 
         log.info(String.valueOf(result));
     }
