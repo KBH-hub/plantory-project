@@ -3,8 +3,10 @@ package com.zero.plantory.domain.myPlant.mapper;
 import com.zero.plantory.domain.myPlant.dto.MyPlantRequest;
 import com.zero.plantory.domain.myPlant.dto.MyPlantResponse;
 import com.zero.plantory.domain.myPlant.dto.MyPlantSearchNameResponse;
+import com.zero.plantory.global.dto.ImageDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

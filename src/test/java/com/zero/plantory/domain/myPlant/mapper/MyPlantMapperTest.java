@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @SpringBootTest
@@ -50,8 +51,8 @@ class MyPlantMapperTest {
                 .myplantId(1L)
                 .name("테스트마이플랜트명")
                 .type("테스트마이플랜트타입")
-                .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
-                .endDate(java.sql.Timestamp.valueOf("2025-11-01 00:00:00"))
+                .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
+                .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(28)
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")
@@ -70,8 +71,8 @@ class MyPlantMapperTest {
                 .myplantId(20L)
                 .name("수정11테스트마이플랜트명")
                 .type("수정11테스트마이플랜트타입")
-                .startAt(java.sql.Timestamp.valueOf("2025-10-01 00:00:00"))
-                .endDate(java.sql.Timestamp.valueOf("2025-11-01 00:00:00"))
+                .startAt(Timestamp.valueOf("2025-10-01 00:00:00").toLocalDateTime())
+                .endDate(Timestamp.valueOf("2025-11-01 00:00:00").toLocalDateTime())
                 .interval(29)
                 .soil("테스트마이플랜트비료")
                 .temperature("666~999℃")

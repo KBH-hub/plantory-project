@@ -15,9 +15,9 @@ public interface PlantingCalendarMapper {
     List<PlantingCalendarResponse> selectWateringCalendar(@Param("memberId") Long memberId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
     List<PlantingCalendarResponse> selectDiaryCalendar(@Param("memberId") Long memberId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
     DiaryResponse selectDiaryUpdateInfo(@Param("diaryId") Long diaryId);
-    int updateDiary(DiaryRequest vo);
+    int updateDiary(DiaryRequest request);
     List<MyPlantDiaryResponse> selectMyPlant(@Param("memberId") Long memberId);
-    int insertDiary(DiaryRequest vo);
+    int insertDiary(DiaryRequest request);
     int deleteDiary(Long diaryId);
     List<MyplantSlotBaseResponse> selectMyplantsForWindow(@Param("limit") int limit);
     int insertWateringAtIgnore(@Param("myplantId") Long myplantId, @Param("dateAt") java.time.LocalDateTime dateAt);
