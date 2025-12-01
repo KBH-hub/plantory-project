@@ -308,6 +308,7 @@
         WHERE s.sharing_id = #{sharingId}
           AND s.status = 'true'
           AND s.member_id = #{memberId}
+          AND s.review_flag IS NULL
           AND s.del_flag IS NULL
           AND mb.del_flag IS NULL;
     </select>
@@ -326,6 +327,7 @@
         WHERE s.sharing_id = #{sharingId}
           AND s.target_member_id = #{memberId}
           AND s.status = 'true'
+          AND s.target_member_review_flag IS NULL
           AND s.del_flag IS NULL
           AND mb.del_flag IS NULL;
 

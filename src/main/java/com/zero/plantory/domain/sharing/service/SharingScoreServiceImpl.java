@@ -141,34 +141,4 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     }
 
 
-//        private int calculateReviewScore(ReviewerType reviewerType, int manner, int reShare, Integer satisfaction) {
-//
-//        // 1) 공통 항목 검증
-//        validateRange(manner, "manner");
-//
-//        if (reShare != 0 && reShare != 1) {
-//            throw new IllegalArgumentException("reShare must be 0 or 1");
-//        }
-//
-//        int score = 0;
-//
-//        // manner + reShare 는 공통
-//        score += manner;
-//        score += reShare;
-//
-//
-//        // 2) 피분양자(RECEIVER)일 때만 satisfaction 추가
-//        if (reviewerType == ReviewerType.RECEIVER) {
-//            if (satisfaction == null) {
-//                throw new IllegalArgumentException("satisfaction is required when reviewer is RECEIVER.");
-//            }
-//
-//            validateRange(satisfaction, "satisfaction");
-//            score += satisfaction;
-//        }
-//
-//        return score;
-//    }
-
-
 }
