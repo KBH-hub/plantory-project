@@ -11,3 +11,31 @@
 }
 
 .card-img-top { height: 260px; object-fit: cover; }
+
+/* 카드 썸네일 박스: 1:1 정사각, 높이 고정(260px) */
+.plant-thumb {
+    position: relative;
+    width: 100%;
+    height: 260px;          /* 목록 카드 고정 높이 */
+    background: #f4f6f8;    /* 기본 배경 */
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    overflow: hidden;
+}
+
+.plant-thumb > img {
+    position: absolute;
+    inset: 0;               /* top/right/bottom/left = 0 */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      /* 가운데 기준 잘라내기 */
+}
+
+/* 등록/수정 모달의 미리보기: 200x230 고정 */
+.plant-preview {
+    width: 230px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: .5rem;
+    background: #f4f6f8;
+}
