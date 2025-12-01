@@ -34,9 +34,18 @@ public class MyPlantServiceImpl implements MyPlantService {
             String url = images.isEmpty() ? null : images.get(0).getFileUrl();
             MyPlantResponse dto = MyPlantResponse.builder()
                     .myplantId(response.getMyplantId())
+                    .memberId(response.getMemberId())
                     .name(response.getName())
+                    .type(response.getType())
                     .startAt(response.getStartAt())
+                    .endDate(response.getEndDate())
+                    .interval(response.getInterval())
+                    .soil(response.getSoil())
+                    .temperature(response.getTemperature())
                     .imageUrl(url)
+                    .createdAt(response.getCreatedAt())
+                    .delFlag(response.getDelFlag())
+                    .totalCount(response.getTotalCount())
                     .build();
             resultList.add(dto);
         }

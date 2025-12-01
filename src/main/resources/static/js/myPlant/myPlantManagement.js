@@ -1,50 +1,147 @@
-document.getElementById("openAddModal").addEventListener("click", () => {
-    new bootstrap.Modal(document.getElementById("addPlantModal")).show();
-});
-
-const dummyPlants = [
-    { id: 1, name: "방토방토", img: "https://picsum.photos/id/111/400/300", days: 125 },
-    { id: 2, name: "다육이", img: "https://picsum.photos/id/122/400/300", days: 25 },
-    { id: 3, name: "몬stera", img: "", days: 125 },
-    { id: 4, name: "행운목", img: "https://picsum.photos/id/133/400/300", days: 10 },
-    { id: 5, name: "산세베리아", img: "https://picsum.photos/id/155/400/300", days: 45 },
-    { id: 6, name: "칼라디움", img: "", days: 80 }
-];
-
-let plants = [...dummyPlants];
-let filtered = [...plants];
-let currentPage = 1;
-const limit = 3;
-
-document.addEventListener("DOMContentLoaded", () => loadPage(1));
-document.getElementById("searchBtn").addEventListener("click", filterPlants);
-document.getElementById("search").addEventListener("keyup", e => e.key === "Enter" && filterPlants());
-
-function filterPlants() {
-    const keyword = document.getElementById("search").value.toLowerCase();
-    filtered = plants.filter(p => p.name.toLowerCase().includes(keyword));
-    loadPage(1);
+// ========== 유틸 ==========
+function toDate(val) {
+    if (!val) return null;
+    const d = new Date(val);
+    return Number.isNaN(d.getTime()) ? null : d;
+}
+function daysBetween(from) {
+    const d = toDate(from);
+    if (!d) return 0;
+    return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
+}
+function addDays(dateVal, days) {
+    const d = toDate(dateVal);
+    if (!d || !Number.isFinite(days)) return null;
+    const r = new Date(d);
+    r.setDate(r.getDate() + days);
+    return r;
+}
+function formatDate(val) {
+    const d = toDate(val);
+    if (!d) return "";
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
 }
 
-function loadPage(page) {
-    currentPage = page;
-    const start = (page - 1) * limit;
-    renderCards(filtered.slice(start, start + limit));
-    renderPagination();
+// ========== 상태 ==========
+const rawMemberId = document.body.dataset.memberId;
+const memberId = Number(rawMemberId);
+
+const state = {
+    plants: [],
+    filtered: [],
+    currentPage: 1,
+    limit: 8,
+    totalCount: 0,   // 서버에서 유효 totalCount 받으면 사용
+    keyword: ""
+};
+
+// 현재 상세 VM(모달용)
+let currentVM = null;
+
+// ========== 엘리먼트 ==========
+const listEl    = document.getElementById("plant-list");
+const pagEl     = document.getElementById("pagination");
+const searchEl  = document.getElementById("search");
+const searchBtn = document.getElementById("searchBtn");
+
+// 상세 모달 요소
+const detailEl    = document.getElementById("plantDetailModal");
+const dImgEl      = document.getElementById("detailImg");
+const dNameEl     = document.getElementById("detailName");
+const dTypeEl     = document.getElementById("detailType");
+const dSoilEl     = document.getElementById("detailFertilizer");
+const dTempEl     = document.getElementById("detailTemp");
+const dStartEl    = document.getElementById("detailStartAt");
+const dEndEl      = document.getElementById("detailEndDate");
+const dIntervalEl = document.getElementById("detailIntervalDays");
+const dNextEl     = document.getElementById("detailNextWaterAt");
+
+// ========== 응답 → 뷰모델 ==========
+function normalizePlant(r) {
+    const createdAt = r.createdAt ?? null;     // 카드 “함께한지” 기준
+    const startAt   = r.startAt ?? null;       // 최초 물 준 일자
+    const endDate   = r.endDate ?? null;       // 마지막 물 준 일자
+    const interval  = Number(r.interval) || 0; // 간격(일)
+    const baseForNext = endDate || startAt;
+    const nextWaterAt = interval > 0 ? addDays(baseForNext, interval) : null;
+
+    return {
+        id: r.myplantId ?? null,
+        memberId: r.memberId ?? null,
+        name: r.name ?? "",
+        type: r.type || "",
+        soil: r.soil || "",
+        temperature: r.temperature || "",
+        img: r.imageUrl || "",
+        createdAt,
+        startAt,
+        endDate,
+        interval,
+        daysSinceCreated:   daysBetween(createdAt),
+        daysSinceLastWater: daysBetween(endDate),
+        nextWaterAt
+    };
 }
 
+// ========== 서버 호출 ==========
+async function fetchPlants(page = 1) {
+    try {
+        if (!Number.isFinite(memberId) || memberId <= 0) {
+            console.warn("memberId가 유효하지 않습니다:", rawMemberId);
+            return;
+        }
+        const offset = (page - 1) * state.limit;
+        const name = state.keyword ?? "";
+
+        const { data } = await axios.get("/api/myPlant/list", {
+            params: { memberId, name, limit: state.limit, offset }
+        });
+
+        const rows = Array.isArray(data) ? data : [];
+        state.totalCount = rows[0]?.totalCount > 0 ? rows[0].totalCount : 0;
+
+        state.plants = rows.map(normalizePlant);
+        state.filtered = state.plants.slice();
+        state.currentPage = page;
+
+        renderCards(state.filtered);
+        renderPagination();
+    } catch (e) {
+        console.error("목록 조회 실패:", e);
+        state.plants = [];
+        state.filtered = [];
+        state.totalCount = 0;
+        renderCards([]);
+        renderPagination();
+    }
+}
+
+// ========== 렌더 ==========
 function renderCards(items) {
-    document.getElementById("plant-list").innerHTML = items.map(p => `
-    <div class="col-12 col-md-4">
-      <div class="card plant-card shadow-sm border-0 h-100" onclick='openDetailModal(${JSON.stringify(p)})'>
+    if (!items.length) {
+        listEl.innerHTML = `
+      <div class="col-12">
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-box"></i> 표시할 식물이 없습니다.
+        </div>
+      </div>`;
+        return;
+    }
+
+    listEl.innerHTML = items.map((p, idx) => `
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="card plant-card shadow-sm border-0 h-100" data-index="${idx}">
         ${p.img
-        ? `<img src="${p.img}" class="card-img-top rounded-top" />`
+        ? `<img src="${p.img}" class="card-img-top rounded-top" alt="plant">`
         : `<div class="bg-light d-flex justify-content-center align-items-center" style="height:260px;">
                <i class="bi bi-image fs-1 text-muted"></i>
              </div>`}
         <div class="card-body text-center">
-          <h6 class="fw-bold">${p.name}</h6>
-          <p class="text-muted small mb-0">함께한지 +${p.days}일</p>
+          <h6 class="fw-bold mb-1">${p.name}</h6>
+          <p class="text-muted small mb-0">함께한지 +${p.daysSinceCreated}일</p>
         </div>
       </div>
     </div>
@@ -52,38 +149,108 @@ function renderCards(items) {
 }
 
 function renderPagination() {
-    const totalPages = Math.ceil(filtered.length / limit);
-    const pagination = document.getElementById("pagination");
-    let html = "";
+    const totalPages = state.totalCount > 0
+        ? Math.max(1, Math.ceil(state.totalCount / state.limit))
+        : 1;
+
+    const cur = state.currentPage;
 
     const btn = (page, text, disabled, active = false) => `
     <li class="page-item ${disabled ? "disabled" : ""} ${active ? "active" : ""}">
       <button class="page-link" data-page="${page}">${text}</button>
     </li>`;
 
-    html += btn(1, "&laquo;", currentPage === 1);
-    html += btn(currentPage - 1, "&lsaquo;", currentPage === 1);
-    for (let i = 1; i <= totalPages; i++) html += btn(i, i, false, i === currentPage);
-    html += btn(currentPage + 1, "&rsaquo;", currentPage === totalPages);
-    html += btn(totalPages, "&raquo;", currentPage === totalPages);
+    let html = "";
+    html += btn(1, "&laquo;", cur === 1);
+    html += btn(cur - 1, "&lsaquo;", cur === 1);
+    for (let i = 1; i <= totalPages; i++) html += btn(i, i, false, i === cur);
+    html += btn(cur + 1, "&rsaquo;", cur === totalPages);
+    html += btn(totalPages, "&raquo;", cur === totalPages);
 
-    pagination.innerHTML = html;
+    pagEl.innerHTML = html;
+}
 
-    pagination.addEventListener("click", e => {
-        if (e.target.dataset.page) loadPage(Number(e.target.dataset.page));
+// ========== 상세 모달 ==========
+function updateNextWaterAndBind(vm) {
+    // 입력 → VM 반영
+    const sVal = dStartEl?.value || "";
+    const eVal = dEndEl?.value || "";
+    const iVal = Number(dIntervalEl?.value);
+
+    vm.startAt  = sVal ? new Date(sVal).toISOString() : null;
+    vm.endDate  = eVal ? new Date(eVal).toISOString() : null;
+    vm.interval = Number.isFinite(iVal) && iVal > 0 ? iVal : 0;
+
+    // 다음 물 줄 날짜 계산
+    const base = vm.endDate || vm.startAt;
+    vm.nextWaterAt = vm.interval > 0 ? addDays(base, vm.interval) : null;
+
+    if (dNextEl) dNextEl.value = vm.nextWaterAt ? formatDate(vm.nextWaterAt) : "";
+}
+
+function openDetailModal(raw) {
+    const vm = normalizePlant(raw);
+    currentVM = vm;
+
+    if (dImgEl)  dImgEl.src = raw.img || "https://via.placeholder.com/200x230?text=No+Image";
+    if (dNameEl) dNameEl.value = vm.name || "";
+    if (dTypeEl) dTypeEl.value = vm.type || "";
+    if (dSoilEl) dSoilEl.value = vm.soil || "";
+    if (dTempEl) dTempEl.value = vm.temperature || "";
+
+    if (dStartEl)    dStartEl.value    = vm.startAt ? formatDate(vm.startAt) : "";
+    if (dEndEl)      dEndEl.value      = vm.endDate ? formatDate(vm.endDate) : "";
+    if (dIntervalEl) dIntervalEl.value = vm.interval > 0 ? String(vm.interval) : "";
+
+    updateNextWaterAndBind(vm);
+
+    if (detailEl) bootstrap.Modal.getOrCreateInstance(detailEl).show();
+}
+
+// ========== 이벤트 바인딩 ==========
+document.addEventListener("DOMContentLoaded", () => {
+    // 등록 모달 버튼(등록 모달을 사용 안 하면 이 블록은 제거)
+    const addBtn = document.getElementById("openAddModal");
+    const addModalEl = document.getElementById("addPlantModal");
+    if (addBtn && addModalEl) {
+        addBtn.addEventListener("click", () => {
+            bootstrap.Modal.getOrCreateInstance(addModalEl).show();
+        });
+    }
+
+    // 카드 클릭 위임
+    listEl.addEventListener("click", e => {
+        const card = e.target.closest(".plant-card");
+        if (!card) return;
+        const idx = Number(card.dataset.index);
+        const item = state.filtered[idx];
+        if (item) openDetailModal(item);
     });
-}
 
-function openDetailModal(p) {
-    document.getElementById("detailImg").src = p.img || "https://via.placeholder.com/160x200";
-    document.getElementById("detailName").value = p.name;
-    document.getElementById("detailWater").value = p.days + "일 경과";
-    new bootstrap.Modal(document.getElementById("plantDetailModal")).show();
-}
+    // 페이지네이션
+    pagEl.addEventListener("click", e => {
+        const btn = e.target.closest("[data-page]");
+        if (!btn) return;
+        const page = Number(btn.dataset.page);
+        if (!Number.isFinite(page)) return;
+        fetchPlants(page);
+    });
 
-document.getElementById("saveWatering").addEventListener("click", () => {
-    bootstrap.Modal.getInstance(document.getElementById("wateringModal")).hide();
-    setTimeout(() => {
-        new bootstrap.Modal(document.getElementById("addPlantModal")).show();
-    }, 100);
+    // 검색
+    function filterPlants() {
+        state.keyword = searchEl.value.trim();
+        fetchPlants(1);
+    }
+    searchBtn.addEventListener("click", filterPlants);
+    searchEl.addEventListener("keyup", e => e.key === "Enter" && filterPlants());
+
+    // 상세 모달 내 물주기 3칸: 실시간 갱신(리스너는 한 번만 부착)
+    ["change", "input"].forEach(evt => {
+        dStartEl?.addEventListener(evt, () => currentVM && updateNextWaterAndBind(currentVM));
+        dEndEl?.addEventListener(evt,   () => currentVM && updateNextWaterAndBind(currentVM));
+        dIntervalEl?.addEventListener(evt, () => currentVM && updateNextWaterAndBind(currentVM));
+    });
+
+    // 초기 로드
+    fetchPlants(1);
 });
