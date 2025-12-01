@@ -101,7 +101,9 @@
             s.interest_num,
             s.status,
             s.created_at,
-            s.updated_at
+            s.updated_at,
+            s.review_flag,
+            s.target_member_review_flag as receiverReviewFlag
         FROM sharing s
                  JOIN member mb ON s.member_id = mb.member_id
         WHERE s.sharing_id = #{sharingId}
@@ -293,6 +295,19 @@
         WHERE member_id = #{memberId}
     </update>
 
+    <update id="updateReviewFlag">
+        UPDATE sharing
+        SET review_flag = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+    <update id="updateReceiverReviewFlag">
+        UPDATE sharing
+        SET target_member_review_flag = NOW()
+        WHERE sharing_id = #{sharingId}
+    </update>
+
+
 
     <select id="selectReviewInfoForGiver"
             resultType="com.zero.plantory.domain.sharing.dto.ReviewInfoResponse">
@@ -308,6 +323,7 @@
         WHERE s.sharing_id = #{sharingId}
           AND s.status = 'true'
           AND s.member_id = #{memberId}
+          AND s.review_flag IS NULL
           AND s.del_flag IS NULL
           AND mb.del_flag IS NULL;
     </select>
@@ -326,6 +342,7 @@
         WHERE s.sharing_id = #{sharingId}
           AND s.target_member_id = #{memberId}
           AND s.status = 'true'
+          AND s.target_member_review_flag IS NULL
           AND s.del_flag IS NULL
           AND mb.del_flag IS NULL;
 

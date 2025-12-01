@@ -3,6 +3,7 @@ const sharingId = document.body.dataset.sharingId;
 
 async function loadReviewInfo() {
     try {
+        // console.log(sharingId);
         const res = await axios.get(`/api/sharing/${sharingId}/reviewInfo`);
 
         const data = res.data;
@@ -19,10 +20,11 @@ async function loadReviewInfo() {
             document.getElementById("receiverOnly").style.display = "none";
         }
 
-
     } catch (err) {
         console.error(err);
-        showAlert("후기 정보를 불러오지 못했습니다.");
+        showAlert("후기 작성 권한이 없습니다.", () => {
+            location.href = `/readSharing/${sharingId}`;
+        });
     }
 }
 
@@ -46,10 +48,8 @@ function bindSubmitReview() {
                 reShare: Number(reShare),
                 satisfaction: satisfaction ? Number(satisfaction) : null
             });
-            localStorage.setItem(`review_done_${sharingId}_${memberId}`, "true");
-
             showAlert("후기가 등록되었습니다.");
-            location.href = `/dashboard`;
+            location.href = `/readSharing/${sharingId}`;
 
         } catch (err) {
             console.error(err);
