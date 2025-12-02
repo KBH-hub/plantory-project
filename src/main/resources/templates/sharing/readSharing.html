@@ -12,12 +12,15 @@
     <link rel="stylesheet" th:href="@{/css/layout.css}">
     <link rel="stylesheet" th:href="@{/css/readSharing.css}">
 </head>
+
 <body class="bg-light" th:data-sharing-id="${sharingId}"
       th:data-member-id="${#authentication.principal.MemberResponse.memberId}"
       th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
+    <h5 class="fw-bold mb-3">나눔글 상세</h5>
+    <hr class="mt-1 mb-4"/>
     <div class="card">
         <div class="card-body">
 
@@ -223,6 +226,6 @@
 <script th:src="@{/js/common/timeAgo.js}"></script>
 <script type="module" th:src="@{/js/sharing/readSharing.js}"></script>
 <script type="module" th:src="@{/js/common/message.js}"></script>
-<script type="module" th:src="@{/js/sharing/readSharing.comment.js}"></script>
+<!--<script type="module" th:src="@{/js/sharing/readSharin></script>-->
 </body>
 </html>

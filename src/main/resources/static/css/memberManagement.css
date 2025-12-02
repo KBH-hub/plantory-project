@@ -8,11 +8,6 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-.pagination .page-link {
-    border-radius: 6px !important;
-    margin: 0 3px;
-}
-
 .page-link.active {
     background-color: #343a40 !important;
     border-color: #343a40 !important;

@@ -17,6 +17,7 @@ public class SharingCardListResponse {
     private Integer interestNum;
     private String status;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     private Integer commentCount;
     private String fileUrl;

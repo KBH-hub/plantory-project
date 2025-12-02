@@ -3,10 +3,10 @@ let newImages = [];
 let deletedImageIds = [];
 
 const MAX_IMAGES = 5;
-const sharingId = document.body.dataset.sharingId;
+const questionId = document.body.dataset.questionId || null;
 
 function uuid() {
-    return 'temp_' + Math.random().toString(36).substring(2, 11);
+    return "temp_" + Math.random().toString(36).substring(2, 11);
 }
 
 function renderImages() {
@@ -15,6 +15,7 @@ function renderImages() {
 
     previewList.innerHTML = "";
 
+    // 기존 이미지
     existingImages.forEach((img) => {
         const box = document.createElement("div");
         box.className = "position-relative";
@@ -32,6 +33,7 @@ function renderImages() {
         previewList.appendChild(box);
     });
 
+    // 새 이미지
     newImages.forEach((img) => {
         const url = URL.createObjectURL(img.file);
 
@@ -55,15 +57,16 @@ function renderImages() {
 }
 
 function bindImageUploader() {
-    const fileInput = document.querySelector("#plantImages");
-    const addTile = document.querySelector("#addTile");
+    const fileInput = document.getElementById("imageInput");
+    const uploadBox = document.getElementById("imageUploadBox");
     const previewList = document.getElementById("previewList");
 
-    addTile.addEventListener("click", () => fileInput.click());
+    uploadBox.addEventListener("click", () => fileInput.click());
 
     fileInput.addEventListener("change", (e) => {
         const files = Array.from(e.target.files);
 
+        // 개수 제한
         if (existingImages.length + newImages.length + files.length > MAX_IMAGES) {
             showAlert("최대 5장까지만 업로드할 수 있습니다.");
             return;
@@ -79,6 +82,7 @@ function bindImageUploader() {
         renderImages();
     });
 
+    // 삭제 처리
     previewList.addEventListener("click", (e) => {
         const btn = e.target.closest("button");
         if (!btn) return;
@@ -97,41 +101,22 @@ function bindImageUploader() {
     });
 }
 
-function bindPlantSelect() {
-    document.addEventListener("click", (e) => {
-        const btn = e.target.closest(".plant-select-btn");
-        if (!btn) return;
-
-        document.querySelector("#plantNameInput").value = btn.dataset.plantName;
-        document.querySelector("#managementLevel").value = btn.dataset.levelLabel;
-        document.querySelector("#managementNeeds").value = btn.dataset.needsLabel;
-
-        document.querySelector("#managementLevel").dataset.enum = btn.dataset.levelEnum;
-        document.querySelector("#managementNeeds").dataset.enum = btn.dataset.needsEnum;
-    });
-}
-
 function bindSubmit() {
-    const form = document.querySelector("form");
+    const submitBtn = document.getElementById("btnSubmit");
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
+    submitBtn.addEventListener("click", async () => {
         const formData = new FormData();
-        const memberId = document.body.dataset.memberId;
 
-        formData.append("memberId", memberId);
-        formData.append("title", document.querySelector("#titleInput").value);
-        formData.append("content", document.querySelector("#contentInput").value);
-        formData.append("plantType", document.querySelector("#plantNameInput").value);
+        const title = document.getElementById("titleInput").value.trim();
+        const content = document.getElementById("contentInput").value.trim();
 
+        if (!title || !content) {
+            showAlert("제목과 내용을 입력하세요.");
+            return;
+        }
 
-        const levelEnum = document.querySelector("#managementLevel").dataset.enum;
-        const needsEnum = document.querySelector("#managementNeeds").dataset.enum;
-
-        formData.append("managementLevel", levelEnum ? levelEnum : "");
-        formData.append("managementNeeds", needsEnum ? needsEnum : "");
-
+        formData.append("title", title);
+        formData.append("content", content);
         formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
 
         newImages.forEach(img => {
@@ -139,23 +124,25 @@ function bindSubmit() {
         });
 
         try {
-            if (sharingId) {
-                await axios.put(`/api/sharing/${sharingId}`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
+            // 수정
+            if (questionId) {
+                await axios.put(`/api/questions/${questionId}`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" }
                 });
 
                 showAlert("수정 완료되었습니다.");
-                window.location.href = `/readSharing/${sharingId}`;
+                window.location.href = `/readQuestion/${questionId}`;
                 return;
             }
 
-            const res = await axios.post("/api/sharing", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
+            // 등록
+            const res = await axios.post("/api/questions", formData, {
+                headers: { "Content-Type": "multipart/form-data" }
             });
 
             const savedId = res.data;
             showAlert("등록 완료되었습니다.");
-            window.location.href = `/readSharing/${savedId}`;
+            window.location.href = `/readQuestion/${savedId}`;
 
         } catch (err) {
             console.error(err);
@@ -164,38 +151,26 @@ function bindSubmit() {
     });
 }
 
-async function loadUpdateSharing() {
-    const res = await axios.get(`/api/sharing/${sharingId}`);
+async function loadUpdateQuestion() {
+    const res = await axios.get(`/api/questions/${questionId}`);
     const data = res.data;
 
-    document.querySelector("#plantNameInput").value = data.plantType;
-    document.querySelector("#titleInput").value = data.title;
-    document.querySelector("#contentInput").value = data.content;
-
-    document.querySelector("#managementLevel").value = data.managementLevelLabel;
-    document.querySelector("#managementNeeds").value = data.managementNeedsLabel;
-
-    document.querySelector("#managementLevel").dataset.enum = data.managementLevel;
-    document.querySelector("#managementNeeds").dataset.enum = data.managementNeeds;
+    document.getElementById("titleInput").value = data.title;
+    document.getElementById("contentInput").value = data.content;
 
     existingImages = data.images; // [{imageId, fileUrl}, ...]
     renderImages();
 }
 
-async function initCreateSharing() {
-    // renderImages();
+async function initCreateQuestion() {
     bindImageUploader();
-    bindPlantSelect();
     bindSubmit();
 
-    if (sharingId) {
-        document.getElementById("pageTitle").innerText = "나눔글 수정";
-        document.getElementById("submitBtn").innerText = "수정";
-        await loadUpdateSharing();
-    } else {
-        document.getElementById("pageTitle").innerText = "나눔글 등록";
-        document.getElementById("submitBtn").innerText = "등록";
+    if (questionId) {
+        document.querySelector("h5").innerText = "질문글 수정";
+        document.getElementById("btnSubmit").innerText = "수정";
+        await loadUpdateQuestion();
     }
 }
 
-document.addEventListener("DOMContentLoaded", initCreateSharing);
+document.addEventListener("DOMContentLoaded", initCreateQuestion);

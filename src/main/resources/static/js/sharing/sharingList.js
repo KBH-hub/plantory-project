@@ -6,6 +6,11 @@ function renderSharingList(list) {
     const container = document.getElementById("sharingListContainer");
 
     list.forEach(item => {
+        const isEdited = item.updatedAt && item.updatedAt !== item.createdAt;
+        const editedTag = isEdited ? " <span class='text-muted'>(수정됨)</span>" : "";
+
+        const displayTime = isEdited ? timeAgo(item.updatedAt) : timeAgo(item.createdAt);
+
         const card = `
         <div class="col-12 col-sm-6 col-md-4"> 
             <a href="/readSharing/${item.sharingId}"
@@ -30,7 +35,7 @@ function renderSharingList(list) {
                     </div>
 
                     <div class="d-flex justify-content-between small text-muted">
-                        <span>${timeAgo(item.createdAt)}</span>
+                        <span>${displayTime} ${editedTag}</span>
                         <span>
                             <i class="bi bi-chat"></i> ${item.commentCount}
                             <span class="ms-1">

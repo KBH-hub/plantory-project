@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
-import com.zero.plantory.domain.admin.memberManagement.mapper.MemberManagement;
+import com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementPageResponse;
+import com.zero.plantory.domain.admin.memberManagement.mapper.MemberManagementMapper;
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.global.dto.DeleteTargetType;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import java.util.List;
 @Slf4j
 class MemberDetailManagementTest {
     @Autowired
-    MemberManagement memberManagement;
+    MemberManagementMapper memberManagementMapper;
 
     @Test
     @DisplayName("회원 관리 화면 조회")
@@ -24,7 +25,7 @@ class MemberDetailManagementTest {
         int limit = 10;
         int offset = 0;
 
-        List<MemberResponse> result =  memberManagement.selectMemberList(keyword, limit, offset);
+        List<MemberResponse> result =  memberManagementMapper.selectMemberList(keyword, limit, offset);
 
         log.info("result:{}", result);
     }
@@ -35,7 +36,7 @@ class MemberDetailManagementTest {
         DeleteTargetType targetType = DeleteTargetType.SHARING;
         Long targetId = 1L;
 
-        int result = memberManagement.deleteContent(targetType, targetId);
+        int result = memberManagementMapper.deleteContent(targetType, targetId);
 
         log.info(String.valueOf(result));
     }

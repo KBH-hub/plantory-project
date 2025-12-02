@@ -2,7 +2,6 @@ let currentTab = "profilePosts";
 let currentPage = 1;
 const rowsPerPage = 10;
 
-const IS_ME = ProfileData.isMe;
 const PROFILE_ID = ProfileData.profileId;
 
 let content = [];
@@ -67,7 +66,7 @@ document.addEventListener("change", (e) => {
 
 async function loadProfile() {
     const res = await axios.get("/api/profile/picture", {
-        params: {memberId: PROFILE_ID}
+        params: { memberId: PROFILE_ID }
     });
 
     const profileImg = document.getElementById("profilePreview");
@@ -82,6 +81,7 @@ async function loadProfile() {
         defaultIcon.style.display = "block";
     }
 }
+
 
 
 async function handleDeleteWritten() {
@@ -126,15 +126,11 @@ async function handleDeleteWritten() {
 }
 
 
+
 async function fetchProfileData() {
     try {
-        if (IS_ME) {
-            const res = await axios.get("/api/profile/me");
-            return res.data;
-        } else {
-            const res = await axios.get(`/api/profile/publicProfile/${PROFILE_ID}`);
-            return res.data;
-        }
+        const res = await axios.get(`/api/profile/publicProfile/${PROFILE_ID}`);
+        return res.data;
     } catch (e) {
         console.error(e);
         showAlert("프로필 정보를 불러오지 못했습니다.");
@@ -142,27 +138,14 @@ async function fetchProfileData() {
     }
 }
 
-window.fetchProfileData = fetchProfileData;
-
 async function initProfileInfo() {
     const data = await fetchProfileData();
     if (!data) return;
 
-    if (IS_ME) {
-        renderMyProfile(data);
-    } else {
-        renderPublicProfile(data);
-        hideMyButtons();
-    }
+    renderPublicProfile(data);
 
     await loadProfileWritten();
     initPagination();
-}
-
-function renderMyProfile(data) {
-    document.getElementById("profileNickname").textContent = data.nickname;
-    document.getElementById("profileAddress").textContent = data.address;
-    document.getElementById("sharingRate").textContent = `나눔지수: ${data.sharingRate}%`;
 }
 
 function renderPublicProfile(data) {
@@ -177,16 +160,15 @@ function hideMyButtons() {
 }
 
 function initButtons() {
-    const updateBtn = document.getElementById("updateMyInfoBtn");
+    // const updateBtn = document.getElementById("updateMyInfoBtn");
     const deleteBtn = document.getElementById("deleteProfileWrittenBtn");
 
-    if (updateBtn) {
-        updateBtn.addEventListener("click", () => {
-            if (IS_ME) {
-                window.location.href = `/profile/update/${PROFILE_ID}`;
-            }
-        });
-    }
+    // if (updateBtn) {
+    //     updateBtn.addEventListener("click", () => {
+    //         window.location.href = `/profile/update/${PROFILE_ID}`;
+    //     });
+    // }
+
 
     if (deleteBtn) {
         deleteBtn.addEventListener("click", handleDeleteWritten);
@@ -211,7 +193,7 @@ async function loadProfileWritten(category = getCategory()) {
         }
     });
 
-    const {total, list} = response.data;
+    const { total, list } = response.data;
 
     content = list || [];
 
@@ -244,7 +226,6 @@ function renderTable() {
         bindRowClick();
     });
 }
-
 function bindRowClick() {
     document.querySelectorAll("#profileWrittenTbody tr").forEach(row => {
         const checkbox = row.querySelector(".row-check");

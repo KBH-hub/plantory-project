@@ -10,6 +10,8 @@
 
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}">
     <link rel="stylesheet" th:href="@{/css/readSharing.css}">
 </head>
 
@@ -22,6 +24,8 @@
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="mx-auto" style="width:1470px; padding:16px;">
+        <h5 class="fw-bold mb-3">질문글 상세</h5>
+        <hr class="mt-1 mb-4"/>
     <div class="card">
         <div class="card-body">
 
@@ -45,7 +49,6 @@
                     </div>
                 </div>
 
-                <!-- (2) 제목 + 본문 (sharing과 동일) -->
                 <div class="col-md-7">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 id="questionTitle" class="fw-bold mb-1"></h5>
@@ -59,7 +62,6 @@
 
             </div>
 
-            <!-- (3) 작성자, 나눔지수 ↓ → 질문은 나눔지수 없음 → label만 제거 -->
             <div class="my-3">
                 <div class="row align-items-center">
 
@@ -76,19 +78,15 @@
                     </div>
 
                     <div class="col-2 text-start">
-                        <!-- 질문은 나눔지수 없음 → 자리만 유지 -->
                     </div>
 
-                    <!-- (4) 수정/삭제/쪽지 - sharing과 동일 -->
                     <div class="col-7 d-flex justify-content-end gap-2">
 
-                        <!-- 내가 쓴 글일 때 -->
                         <div id="myActions" class="gap-2" style="display:none;">
                             <a id="btnUpdate" href="#" class="btn btn-primary px-4">수정</a>
                             <button id="btnDelete" class="btn btn-danger px-4">삭제</button>
                         </div>
 
-                        <!-- 다른 사람이 쓴 글일 때 -->
                         <div id="otherActions" class="gap-2" style="display:none;">
                             <button id="btnMessage" class="btn btn-success px-4">쪽지 보내기</button>
                         </div>
@@ -130,10 +128,9 @@
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/common/modal.js}"></script>
 <script th:src="@{/js/common/timeAgo.js}"></script>
-
+<script th:src="@{/js/common/alert.js}"></script>
 <script type="module" th:src="@{/js/question/readQuestion.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
-<script th:src="@{/js/question/questionList.js}"></script>
 <script type="module" th:src="@{/js/common/message.js}"></script>
 
 </body>

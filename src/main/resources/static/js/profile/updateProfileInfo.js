@@ -17,28 +17,20 @@ fileInput.addEventListener("change", (e) => {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-        alert("이미지 파일만 업로드 가능합니다.");
+        showAlert("이미지 파일만 업로드 가능합니다.");
         fileInput.value = "";
         return;
     }
 
-    const img = new Image();
-    img.src = URL.createObjectURL(file);
+    const imgURL = URL.createObjectURL(file);
 
-    img.onload = function() {
-        const MAX_SIZE = 300;
+    // 미리보기 설정
+    previewImg.src = imgURL;
+    previewImg.style.display = "block";
 
-        if (img.width > MAX_SIZE || img.height > MAX_SIZE) {
-            showAlert(`이미지 크기는 ${MAX_SIZE}x${MAX_SIZE} 이하만 업로드할 수 있습니다.`);
-            fileInput.value = "";
-            return;
-        }
-
-        previewImg.src = this.src;
-
-        selectedFile = file;
-    };
+    selectedFile = file;
 });
+
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -56,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 phoneInput.addEventListener("input", function (e) {
-    let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+    let value = e.target.value.replace(/[^0-9]/g, "");
 
     if (value.length > 11) {
         value = value.slice(0, 11);
