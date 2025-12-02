@@ -125,10 +125,12 @@ function bindSubmit() {
         formData.append("content", document.querySelector("#contentInput").value);
         formData.append("plantType", document.querySelector("#plantNameInput").value);
 
-        formData.append("managementLevel",
-            document.querySelector("#managementLevel").dataset.enum);
-        formData.append("managementNeeds",
-            document.querySelector("#managementNeeds").dataset.enum);
+
+        const levelEnum = document.querySelector("#managementLevel").dataset.enum;
+        const needsEnum = document.querySelector("#managementNeeds").dataset.enum;
+
+        formData.append("managementLevel", levelEnum ? levelEnum : "");
+        formData.append("managementNeeds", needsEnum ? needsEnum : "");
 
         formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
 
