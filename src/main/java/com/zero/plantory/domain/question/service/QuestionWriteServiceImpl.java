@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.image.mapper.ImageMapper;
-import com.zero.plantory.domain.notice.NoticeMapper;
+import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.domain.question.dto.AnswerRequest;
 import com.zero.plantory.domain.question.dto.QuestionRequest;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;

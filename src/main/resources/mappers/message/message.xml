@@ -130,7 +130,10 @@
     </select>
 
     <insert id="insertMessage"
-            parameterType="com.zero.plantory.domain.message.dto.MessageRequest">
+            parameterType="com.zero.plantory.domain.message.dto.MessageRequest"
+            useGeneratedKeys="true"
+            keyProperty="messageId"
+            keyColumn="message_id">
         INSERT INTO message
         (sender_id, receiver_id, title, content, target_type, target_id, created_at)
         VALUES

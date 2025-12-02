@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 
-<body class="bg-light" style="overflow-x: auto;">
+<body class="bg-light" style="overflow-x: auto;" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 

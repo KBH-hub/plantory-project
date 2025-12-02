@@ -16,6 +16,7 @@ public class MyplantSlotBaseResponse {
     private LocalDateTime startAt;
     private LocalDateTime endDate;
     private Integer interval;
+    private Long memberId;
     private String phone;
     private String name;
 }

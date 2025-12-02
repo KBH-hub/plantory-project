@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.sharing.service;
 
-import com.zero.plantory.domain.notice.NoticeMapper;
+import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.global.dto.NoticeTargetType;
@@ -36,7 +36,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
                 .receiverId(targetMemberId)
                 .targetId(sharingId)
                 .targetType(NoticeTargetType.SHARING)
-                .content("분양자가 나눔을 완료했습니다. 후기를 작성해주세요! | 제목: " + sharing.getTitle())
+                .content("나눔 완료 알림(후기 작성하기) | 제목: " + sharing.getTitle())
                 .build();
 
         noticeMapper.insertNotice(notice);

@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.image.mapper.ImageMapper;
-import com.zero.plantory.domain.notice.NoticeMapper;
+import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;

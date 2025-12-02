@@ -35,8 +35,8 @@
     // 관련 글 링크
     const buildTargetUrl = (type, id) => {
         if (!type || !id) return '';
-        if (type === 'SHARING') return `/sharing/${id}`;
-        if (type === 'QUESTION') return `/question/${id}`;
+        if (type === 'SHARING') return `/readSharing/${id}`;
+        if (type === 'QUESTION') return `/readQuestion/${id}`;
         return '';
     };
 

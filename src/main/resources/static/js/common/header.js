@@ -1,4 +1,3 @@
-
 (function () {
     function openMemberSearchModal() {
         var el = document.getElementById("memberSearchModal");
@@ -53,7 +52,7 @@
                 params: { nickname: nickname, viewerId: viewerIdNum },
             });
             var data = Array.isArray(response?.data) ? response.data : [response?.data ?? []];
-            console.log("[searchMember] sample:", data?.[0]); // 여기에 id 키가 뭔지 찍힙니다.
+            console.log("[searchMember] sample:", data?.[0]);
             renderRows(data);
         } catch (e) {
             console.error("searchMember error:", e);
@@ -101,8 +100,7 @@
         var targetId = document.getElementById("reportTargetId");
         if (targetId) {
             targetId.value = Number.isFinite(memberId) ? String(memberId) : "";
-            console.log("[selectMember] set hidden:", targetId.value); // 반드시 숫자 문자열이어야 함
-            }
+        }
 
         closeMemberSearchModal();
     }
@@ -121,15 +119,14 @@
             return;
         }
         if (!content) {
-            alert("신고 내용을 입력하세요.");
+            showAlert("신고 내용을 입력하세요.");
             return;
         }
         if (!files.length) {
-            alert("근거 사진을 1장 이상 첨부하세요.");
+            showAlert("근거 사진을 1장 이상 첨부하세요.");
             return;
         }
 
-        // 로그인 사용자(신고자) 아이디
         const reporterIdRaw = document.body?.getAttribute("data-member-id");
         const reporterId = reporterIdRaw ? Number(reporterIdRaw) : null;
 
@@ -138,12 +135,12 @@
         if (reporterId != null) fd.append("reporterId", String(reporterId));
         fd.append("content", content);
         for (let i = 0; i < files.length; i++) {
-            fd.append("files", files[i]); // 컨트롤러와 동일 키
+            fd.append("files", files[i]);
         }
 
         try {
             const res = await axios.post("/api/report", fd);
-            alert(res?.data?.message ?? "신고가 등록되었습니다.");
+            showAlert(res?.data?.message ?? "신고가 등록되었습니다.");
 
             const reportModalEl = document.getElementById("reportModal");
             bootstrap.Modal.getInstance(reportModalEl)?.hide();
@@ -164,7 +161,7 @@
         } catch (err) {
             console.error(err);
             const msg = err?.response?.data?.message || "신고 등록에 실패했습니다.";
-            alert(msg);
+            showAlert(msg);
         }
     }
 
@@ -174,7 +171,176 @@
         if (dropdown) dropdown.hide();
     }
 
+    /* =========================================================
+       Notice 드롭다운 바인딩 (NoticeDTO 대응)
+       ========================================================= */
+
+    const noticeAPI = {
+        list: (receiverId) => axios.get("/api/notice", { params: { receiverId } }),
+        markRead: (noticeId) => axios.put("/api/notice", null, { params: { noticeId } }),
+        clearAll: (receiverId) => axios.delete("/api/notice", { params: { receiverId } }),
+    };
+
+    function noticeFormatDate(isoOrEpoch) {
+        try {
+            const d = typeof isoOrEpoch === "number" ? new Date(isoOrEpoch) : new Date(String(isoOrEpoch));
+            if (isNaN(d.getTime())) return "";
+            const yy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            const hh = String(d.getHours()).padStart(2, "0");
+            const mi = String(d.getMinutes()).padStart(2, "0");
+            return `${yy}-${mm}-${dd} ${hh}:${mi}`;
+        } catch { return ""; }
+    }
+
+    // NoticeTargetType + targetId -> 링크 생성
+    function noticeBuildLink(n) {
+        const id = n?.targetId;
+        switch (String(n?.targetType || "")) {
+            case "SHARING":   return `/readSharing/${id}`;
+            case "QUESTION":  return `/readQuestion/${id}`;
+            case "MESSAGE":    return `/messageDetail?messageId=${id}`;
+            case "WATERING":     return `/plantCalendar`;
+            default:          return "#";
+        }
+    }
+
+    function noticeUpdateBadge(count) {
+        const badge = document.getElementById("alarmBadge"); // 있으면 갱신
+        if (!badge) return;
+        if (count > 0) {
+            badge.textContent = count;
+            badge.classList.remove("d-none");
+        } else {
+            badge.classList.add("d-none");
+        }
+    }
+
+    let _noticeBadgeLoading = false;
+    let _noticeBadgeLast = null;
+
+    async function noticeInitBadge() {
+        if (_noticeBadgeLoading) return;
+
+        const viewerIdRaw = document.body?.getAttribute("data-member-id");
+        const receiverId = viewerIdRaw ? Number(viewerIdRaw) : null;
+        if (!Number.isFinite(receiverId)) return;
+
+        _noticeBadgeLoading = true;
+        try {
+            const res = await noticeAPI.list(receiverId);
+            const items = Array.isArray(res?.data) ? res.data : [];
+            // 유효(delFlag == null) + 미읽음(readFlag == null)만 카운트
+            const unread = items.filter(n => n?.delFlag == null && n?.readFlag == null).length;
+
+            // 동일 값이면 DOM 업데이트 생략
+            if (_noticeBadgeLast !== unread) {
+                noticeUpdateBadge(unread);
+                _noticeBadgeLast = unread;
+            }
+        } catch (err) {
+            console.error("[notice] init badge load error", err);
+            // 실패 시 강제 숨김은 하지 않음
+        } finally {
+            _noticeBadgeLoading = false;
+        }
+    }
+
+    function noticeRenderEmpty() {
+        const listEl = document.getElementById("alarmList");
+        if (!listEl) return;
+        listEl.innerHTML = '<div class="p-4 text-center text-muted">읽지 않은 알림이 없습니다</div>';
+        noticeUpdateBadge(0);
+    }
+
+    function noticeRenderList(notices) {
+        const listEl = document.getElementById("alarmList");
+        if (!listEl) return;
+
+        // delFlag가 null인 것만 표시
+        const rows = (Array.isArray(notices) ? notices : []).filter(n => n?.delFlag == null);
+
+        if (rows.length === 0) {
+            noticeRenderEmpty();
+            return;
+        }
+
+        const unread = rows.filter(n => n?.readFlag == null).length;
+        noticeUpdateBadge(unread);
+
+        let html = "";
+        for (const n of rows) {
+            const id = n.noticeId;
+            const dt = noticeFormatDate(n.createdAt);
+            const msg = escapeHtml(n.content ?? "");
+            const link = noticeBuildLink(n);
+            const isRead = n.readFlag != null;
+            const readClass = isRead ? "opacity-75" : "fw-semibold";
+            html += `
+                <div class="p-3 border-bottom d-flex align-items-start ph-alarm-item" data-notice-id="${id}">
+                  <div class="w-100">
+                    <small class="text-secondary d-block">${dt}</small>
+                    <a href="${link}" class="text-dark d-block text-truncate ${readClass} js-notice-link"
+                       data-notice-id="${id}">${msg}</a>
+                  </div>
+                </div>
+            `;
+        }
+        listEl.innerHTML = html;
+    }
+
+    async function noticeLoad() {
+        const viewerIdRaw = document.body?.getAttribute("data-member-id");
+        const receiverId = viewerIdRaw ? Number(viewerIdRaw) : null;
+        if (!Number.isFinite(receiverId)) {
+            noticeRenderEmpty();
+            return;
+        }
+        try {
+            const res = await noticeAPI.list(receiverId);
+            noticeRenderList(res?.data);
+        } catch (e) {
+            console.error("[notice] load error", e);
+            noticeRenderEmpty();
+        }
+    }
+
+    async function noticeOnItemClick(e) {
+        const a = e.target.closest(".js-notice-link");
+        if (!a) return;
+        const noticeId = Number(a.getAttribute("data-notice-id"));
+        if (!Number.isFinite(noticeId)) return;
+
+        try {
+            await noticeAPI.markRead(noticeId);
+            a.classList.add("opacity-75");
+            a.classList.remove("fw-semibold");
+            // 배지 낙관 갱신
+            const badge = document.getElementById("alarmBadge");
+            const cur = Number(badge?.textContent ?? 0);
+            if (badge && cur > 0) noticeUpdateBadge(cur - 1);
+        } catch (err) {
+            console.error("[notice] markRead error", err);
+        }
+        // 링크 이동은 기본 동작
+    }
+
+    async function noticeOnClearAll() {
+        const viewerIdRaw = document.body?.getAttribute("data-member-id");
+        const receiverId = viewerIdRaw ? Number(viewerIdRaw) : null;
+        if (!Number.isFinite(receiverId)) return;
+
+        try {
+            await noticeAPI.clearAll(receiverId);
+            noticeRenderEmpty();
+        } catch (err) {
+            console.error("[notice] clearAll error", err);
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
+        // 전역 노출
         window.openMemberSearchModal = openMemberSearchModal;
         window.closeMemberSearchModal = closeMemberSearchModal;
         window.searchMember = searchMember;
@@ -190,9 +356,9 @@
                 var memberId = Number(memberIdStr);
                 if (!Number.isFinite(memberId)) {
                     console.warn("Invalid data-member-id:", memberIdStr);
-                    alert("잘못된 회원 ID 입니다.");
+                    showAlert("잘못된 회원 ID 입니다.");
                     return;
-                    }
+                }
                 selectMember(nickname, memberId);
             });
         }
@@ -225,34 +391,6 @@
             });
         }
 
-        var deleteMode = false;
-        var alarmDeleteBtn = document.getElementById("alarmDeleteBtn");
-        if (alarmDeleteBtn) {
-            alarmDeleteBtn.addEventListener("click", function () {
-                deleteMode = !deleteMode;
-
-                var checkboxes = document.querySelectorAll(".alarm-check");
-                var footer = document.getElementById("alarmFooter") || document.querySelector(".ph-alarm-footer");
-
-                if (deleteMode) {
-                    checkboxes.forEach(function (cb) { cb.classList.remove("d-none"); });
-                    if (footer) {
-                        footer.innerHTML = '<button class="btn btn-danger btn-sm w-100" id="alarmDeleteConfirm">삭제</button>';
-                    }
-                } else {
-                    checkboxes.forEach(function (cb) {
-                        cb.checked = false;
-                        cb.classList.add("d-none");
-                    });
-                    if (footer) {
-                        footer.innerHTML =
-                            '<button class="btn btn-light btn-sm">닫기</button>' +
-                            '<button class="btn btn-secondary btn-sm">모두 읽음</button>';
-                    }
-                }
-            });
-        }
-
         var memberSearchInput = document.getElementById("memberSearchInput");
         if (memberSearchInput) {
             memberSearchInput.addEventListener("keypress", function (e) {
@@ -262,5 +400,20 @@
                 }
             });
         }
+
+        noticeInitBadge();
+
+        // 드롭다운이 펼쳐질 때 서버에서 알림 로드
+        document.getElementById("alarmDropdownBtn")?.addEventListener("shown.bs.dropdown", noticeLoad);
+
+        // 항목 클릭 위임(읽음 처리)
+        document.getElementById("alarmList")?.addEventListener("click", noticeOnItemClick);
+
+        // "비우기" 버튼 핸들링
+        document.getElementById("removeAllAlarm")?.addEventListener("click", noticeOnClearAll);
+
+        // 알림 드롭다운 닫히고 다시 계산
+        document.getElementById("alarmDropdownBtn")
+            ?.addEventListener("hidden.bs.dropdown", noticeInitBadge);
     });
 })();

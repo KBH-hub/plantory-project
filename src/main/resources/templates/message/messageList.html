@@ -9,9 +9,6 @@
     <link rel="stylesheet" th:href="@{/css/modal.css}"/>
     <link rel="stylesheet" th:href="@{/css/alert.css}" />
 
-
-    <!-- 로그인 사용자 ID 주입 -->
-    <meta name="current-member-id" th:content="${loginMemberId}">
 </head>
 <body class="bg-light"  th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>

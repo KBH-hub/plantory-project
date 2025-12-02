@@ -1,9 +1,12 @@
 package com.zero.plantory.domain.plantingCalendar.service;
 
 import com.zero.plantory.domain.image.mapper.ImageMapper;
+import com.zero.plantory.domain.notice.service.NoticeService;
 import com.zero.plantory.domain.plantingCalendar.dto.*;
 import com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper;
 import com.zero.plantory.global.config.SolapiConfig;
+import com.zero.plantory.global.dto.NoticeDTO;
+import com.zero.plantory.global.dto.NoticeTargetType;
 import com.zero.plantory.global.utils.StorageUploader;
 import com.zero.plantory.global.dto.ImageTargetType;
 import com.zero.plantory.global.dto.ImageDTO;
@@ -28,6 +31,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
     private final StorageUploader storageUploader;
     private final SMSService smsService;
     private final SolapiConfig solapi;
+    private final NoticeService noticeService;
 
 
     @Override
@@ -168,9 +172,17 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
 
             if (condToday(nextAt, b.getEndDate(), windowStart, windowEnd)) {
                 int ins = plantingCalendarMapper.insertWateringAtIgnore(b.getMyplantId(), nextAt);
+                String noticeText = "오늘 \"" + b.getName() + "\" 물주기 알림";
+                NoticeDTO notice = NoticeDTO.builder()
+                        .receiverId(b.getMemberId())
+                        .targetType(NoticeTargetType.WATERING)
+                        .targetId(b.getMyplantId())
+                        .content(noticeText)
+                        .build();
+                noticeService.registerNotice(notice);
                 if (ins > 0) {
-                    String text = "[Plantory] 오늘 \"" + b.getName() + "\" 물주기 알림";
                     try {
+                        String text = "[Plantory] 오늘 \"" + b.getName() + "\" 물주기 알림";
                         smsService.sendSMS(SMSRequestDTO.builder()
                                 .to(b.getPhone())
                                 .from(solapi.from())

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zero.plantory.domain.notice.NoticeMapper">
+<mapper namespace="com.zero.plantory.domain.notice.mapper.NoticeMapper">
 
     <select id="selectNoticesByReceiver" resultType="com.zero.plantory.global.dto.NoticeDTO">
         SELECT
@@ -27,20 +27,16 @@
             (#{receiverId}, #{targetType}, #{targetId}, #{content}, NULL, NOW(), NULL)
     </insert>
 
-    <update id="markNoticeAsRead">
+    <update id="updateNoticeReadFlag">
         UPDATE notice
         SET read_flag = NOW()
         WHERE notice_id = #{noticeId}
-          AND receiver_id = #{receiverId}
-          AND read_flag IS NULL
-          AND del_flag IS NULL
     </update>
 
-    <update id="deleteNotice">
+    <update id="deleteAllNotice">
         UPDATE notice
         SET del_flag = NOW()
-        WHERE notice_id = #{noticeId}
-          AND receiver_id = #{receiverId}
+        WHERE receiver_id = #{receiverId}
           AND del_flag IS NULL
     </update>
 
