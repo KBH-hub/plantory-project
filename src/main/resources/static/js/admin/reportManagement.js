@@ -42,7 +42,6 @@ async function loadReportList() {
             }
         });
 
-        // console.log(res.data);
 
         const data = res.data;
 
@@ -177,11 +176,6 @@ async function submitReportProcess() {
     const stopDay = document.getElementById("selectStopDay").value;
 
 
-    console.log(currentReportId);
-    console.log(currentTargetMemberId);
-    console.log(adminMemo);
-    console.log(stopDay);
-
     if (!adminMemo) {
         showAlert("처리 의견을 입력해주세요.");
         return;
@@ -193,8 +187,6 @@ async function submitReportProcess() {
             adminMemo: adminMemo,
             stopDays: stopDay
         });
-
-        console.log("처리 결과:", res.data);
 
         const modalEl = document.getElementById("reportProcessModal");
         const modal = bootstrap.Modal.getInstance(modalEl);
@@ -269,10 +261,8 @@ async function deleteSelectedReports() {
     }
 
     const ids = checked.map(c => Number(c.dataset.id));
-// console.log(ids);
     try {
         const res = await axios.put("/api/reportManagement/softDelete", { ids });
-        console.log(res);
         showAlert("삭제되었습니다.");
 
         const topCheckbox = document.getElementById("reportCheckbox");

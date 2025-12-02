@@ -93,7 +93,6 @@ async function initUpdateProfileInfo() {
         const res = await axios.get("/api/profile/me");
         const data = res.data;
 
-        console.log(data);
 
         document.getElementById("nicknameInput").value = data.nickname;
         document.getElementById("phoneInput").value = data.phone;
@@ -185,7 +184,6 @@ async function submitProfile(event) {
             history.back();
         });
     } catch (err) {
-        console.log(err);
         showAlert("프로필 수정에 실패했습니다.");
     }
 }
@@ -247,21 +245,13 @@ function toggleWithdrawBtn() {
 
 async function withdrawMember() {
     try {
-        const res = await axios.update("/api/profile/withdraw");
-
-        if (res.data.success) {
-            showAlert("회원탈퇴가 완료되었습니다.");
-            setTimeout(() => {
-                window.location.href = "/logout";
-            }, 1200);
-        } else {
-            showAlert("회원탈퇴에 실패했습니다.");
-        }
-    } catch (err) {
-        console.log(err);
-        showAlert("회원탈퇴 중 오류가 발생했습니다.");
+        await axios.put("/api/profile/withdraw");
+    } finally {
+        window.location.href = "/logout";
     }
 }
+
+
 
 function goBack() {
     history.back();

@@ -93,7 +93,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/login?message=withdraw")
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(((request, response, accessDeniedException) -> {

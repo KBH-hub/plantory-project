@@ -112,11 +112,14 @@ async function handleDeleteWritten() {
         questionIds
     };
 
-    console.log("삭제 요청:", payload);
 
     await axios.post("/api/profileWritten/softDelete", payload);
 
     showAlert("삭제되었습니다.");
+
+    document.getElementById("checkAll").checked = false;
+    document.querySelectorAll(".row-check").forEach(chk => chk.checked = false);
+
     loadProfileWritten();
 }
 
@@ -237,13 +240,19 @@ function renderTable() {
                 <td>${item.createdAt}</td>
             </tr>
         `;
-        // console.log(item.id)
-        console.log(item.category)
         bindRowClick();
     });
 }
 function bindRowClick() {
     document.querySelectorAll("#profileWrittenTbody tr").forEach(row => {
+        const checkbox = row.querySelector(".row-check");
+        if (checkbox) {
+            checkbox.addEventListener("click", (e) => {
+                e.stopPropagation();
+            })
+        }
+
+
         row.addEventListener("click", (e) => {
             const checkbox = row.querySelector(".row-check");
             if (!checkbox) return;
