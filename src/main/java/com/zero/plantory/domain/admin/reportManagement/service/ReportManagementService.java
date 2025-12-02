@@ -12,4 +12,6 @@ public interface ReportManagementService {
     ReportManagementPageResponse getReporManagmentList(ReportManagementSearchRequest request);
     int deleteReporManagmentList(List<Long> ids);
     ReportManagementDetailResponse getReportDetail(Long reportId);
+    void processReport(Long reportId, Long memberId, String adminMemo, int stopDays);
+
 }

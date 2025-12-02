@@ -5,6 +5,7 @@ import com.zero.plantory.domain.admin.reportManagement.mapper.ReportManagementMa
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,4 +37,21 @@ public class ReportManagementServiceImpl implements ReportManagementService {
     public ReportManagementDetailResponse getReportDetail(Long reportId) {
         return reportManagementMapper.selectReportDetail(reportId);
     }
+
+        @Transactional
+        @Override
+        public void processReport(Long reportId,
+                                  Long memberId,
+                                  String adminMemo,
+                                  int stopDays) {
+
+            ReportManagementResponse memo = new ReportManagementResponse();
+            memo.setReportId(reportId);
+            memo.setAdminMemo(adminMemo);
+
+            reportManagementMapper.insertAdminMemo(memo);
+
+            reportManagementMapper.updateStopDay(memberId, stopDays);
+        }
+
 }

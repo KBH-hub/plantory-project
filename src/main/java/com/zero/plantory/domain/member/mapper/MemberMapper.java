@@ -10,5 +10,7 @@ public interface MemberMapper {
     int countByNickname(@Param("nickname") String nickname);
     int insertMember(MemberResponse memberResponse);
     MemberResponse selectByMembername(@Param("membername") String membername);
+
+    void resetStopDay(Long memberId);
 }
 

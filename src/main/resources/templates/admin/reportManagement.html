@@ -115,12 +115,56 @@
                 <button id="modalCloseBtn" type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">닫기</button>
             </div>
 
+
         </div>
     </div>
 </div>
 
 
+<div class="modal fade" id="reportProcessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="width: 450px;">
 
+            <div class="modal-header bg-white border-bottom">
+                <h5 class="modal-title fw-bold">신고 처리</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <label class="fw-semibold mb-1">처리의견 *</label>
+                <label for="reportMemo"></label>
+                <textarea id="reportMemo" type="text" class="form-control mb-3" placeholder="처리 의견 입력"></textarea>
+
+                <label class="fw-semibold mb-1">활동정지 기간 *</label>
+                <div class="d-flex align-items-center gap-2">
+                    <select id="selectStopDay" class="form-select">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="7">7</option>
+                        <option value="14">14</option>
+                        <option value="28">28</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0 d-flex justify-content-between">
+
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    취소
+                </button>
+
+                <button id="reportSubmitBtn" type="button" class="btn btn-success">
+                    처리완료
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
