@@ -52,7 +52,7 @@ public class ProfileRestController {
         return ResponseEntity.ok(Map.of("success", success));
     }
 
-    @PostMapping("/withdraw")
+    @PutMapping("/withdraw")
     public ResponseEntity<?> softWithdraw(
             @AuthenticationPrincipal MemberDetail memberDetail) {
 
