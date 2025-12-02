@@ -1,6 +1,5 @@
-package com.zero.plantory.domain.notice;
+package com.zero.plantory.domain.notice.mapper;
 
-import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.global.dto.NoticeTargetType;
 import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ class NoticeMapperTest {
 
     @Test
     @DisplayName("알림 생성")
-    void insertNoticeTest() {
+    void registerNotice() {
         NoticeDTO vo = NoticeDTO.builder()
                 .receiverId(3L)
                 .targetType(NoticeTargetType.SHARING)
@@ -36,14 +35,14 @@ class NoticeMapperTest {
     }
 
     @Test
-    @DisplayName("알림 읽음 처리")
-    void markNoticeAsReadTest() {
-        log.info("읽음 처리 결과 = {}", mapper.markNoticeAsRead(1L, 3L));
+    @DisplayName("읽음 플래그 업데이트")
+    void updateNoticeReadFlag() {
+        log.info("읽음 플래그 업데이트  결과 = {}",mapper.updateNoticeReadFlag(1L));
     }
 
     @Test
-    @DisplayName("알림 소프트 삭제")
-    void deleteNoticeTest() {
-        log.info("삭제 결과 = {}", mapper.deleteNotice(1L, 3L));
+    @DisplayName("알림 비우기 (소프트 삭제)")
+    void removeAllNotice() {
+        log.info("삭제 결과 = {}", mapper.deleteAllNotice(4L));
     }
 }

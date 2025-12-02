@@ -27,20 +27,16 @@
             (#{receiverId}, #{targetType}, #{targetId}, #{content}, NULL, NOW(), NULL)
     </insert>
 
-    <update id="markNoticeAsRead">
-        UPDATE notice
-        SET read_flag = NOW()
-        WHERE notice_id = #{noticeId}
-          AND receiver_id = #{receiverId}
-          AND read_flag IS NULL
-          AND del_flag IS NULL
-    </update>
-
-    <update id="deleteNotice">
+    <update id="updateNoticeReadFlag">
         UPDATE notice
         SET del_flag = NOW()
         WHERE notice_id = #{noticeId}
-          AND receiver_id = #{receiverId}
+    </update>
+
+    <update id="deleteAllNotice">
+        UPDATE notice
+        SET del_flag = NOW()
+        WHERE receiver_id = #{receiverId}
           AND del_flag IS NULL
     </update>
 

@@ -101,7 +101,6 @@
         var targetId = document.getElementById("reportTargetId");
         if (targetId) {
             targetId.value = Number.isFinite(memberId) ? String(memberId) : "";
-            console.log("[selectMember] set hidden:", targetId.value); // 반드시 숫자 문자열이어야 함
             }
 
         closeMemberSearchModal();
@@ -225,33 +224,33 @@
             });
         }
 
-        var deleteMode = false;
-        var alarmDeleteBtn = document.getElementById("alarmDeleteBtn");
-        if (alarmDeleteBtn) {
-            alarmDeleteBtn.addEventListener("click", function () {
-                deleteMode = !deleteMode;
-
-                var checkboxes = document.querySelectorAll(".alarm-check");
-                var footer = document.getElementById("alarmFooter") || document.querySelector(".ph-alarm-footer");
-
-                if (deleteMode) {
-                    checkboxes.forEach(function (cb) { cb.classList.remove("d-none"); });
-                    if (footer) {
-                        footer.innerHTML = '<button class="btn btn-danger btn-sm w-100" id="alarmDeleteConfirm">삭제</button>';
-                    }
-                } else {
-                    checkboxes.forEach(function (cb) {
-                        cb.checked = false;
-                        cb.classList.add("d-none");
-                    });
-                    if (footer) {
-                        footer.innerHTML =
-                            '<button class="btn btn-light btn-sm">닫기</button>' +
-                            '<button class="btn btn-secondary btn-sm">모두 읽음</button>';
-                    }
-                }
-            });
-        }
+        // var deleteMode = false;
+        // var alarmDeleteBtn = document.getElementById("alarmDeleteBtn");
+        // if (alarmDeleteBtn) {
+        //     alarmDeleteBtn.addEventListener("click", function () {
+        //         deleteMode = !deleteMode;
+        //
+        //         var checkboxes = document.querySelectorAll(".alarm-check");
+        //         var footer = document.getElementById("alarmFooter") || document.querySelector(".ph-alarm-footer");
+        //
+        //         if (deleteMode) {
+        //             checkboxes.forEach(function (cb) { cb.classList.remove("d-none"); });
+        //             if (footer) {
+        //                 footer.innerHTML = '<button class="btn btn-danger btn-sm w-100" id="alarmDeleteConfirm">삭제</button>';
+        //             }
+        //         } else {
+        //             checkboxes.forEach(function (cb) {
+        //                 cb.checked = false;
+        //                 cb.classList.add("d-none");
+        //             });
+        //             if (footer) {
+        //                 footer.innerHTML =
+        //                     '<button class="btn btn-light btn-sm">닫기</button>' +
+        //                     '<button class="btn btn-secondary btn-sm">모두 읽음</button>';
+        //             }
+        //         }
+        //     });
+        // }
 
         var memberSearchInput = document.getElementById("memberSearchInput");
         if (memberSearchInput) {
