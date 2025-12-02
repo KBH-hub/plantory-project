@@ -14,6 +14,7 @@ public class SelectQuestionListResponse {
     private String title;
     private String nickname;
     private String createdAt;
+    private String updatedAt;
     private Integer answerCount;
     private String imageUrl;
 }

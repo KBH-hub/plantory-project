@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,7 @@ public class QuestionRequest {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     LocalDateTime delFlag;
+
+    private String deletedImageIds;
+    private List<Long> deletedImageIdList;
 }

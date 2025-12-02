@@ -39,6 +39,9 @@ public class SharingWriteServiceImpl implements SharingWriteService {
             throw new IllegalArgumentException("제목은 필수입니다.");
         }
 
+        if (request.getContent() == null || request.getContent().isBlank())
+            throw new IllegalArgumentException("내용은 필수입니다.");
+
         if (files != null) {
             for (MultipartFile file : files) {
 
@@ -148,8 +151,17 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
 
     @Override
     @Transactional
-    public boolean addComment(Long sharingId, Long writerId, String content) {
+    public boolean addComment(CommentRequest request) {
+
+        Long sharingId = request.getSharingId();
+        Long writerId = request.getWriterId();
+        String content = request.getContent();
+
         SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
+        if (sharing == null) {
+            throw new IllegalArgumentException("존재하지 않는 나눔글입니다.");
+        }
+
         int inserted = sharingMapper.insertComment(sharingId, writerId, content);
 
         if (inserted > 0) {
@@ -162,7 +174,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
                         .receiverId(ownerId)
                         .targetId(sharingId)
                         .targetType(NoticeTargetType.SHARING)
-                        .content("새로운 댓글이 등록되었습니다!")
+                        .content("새 댓글 알림 | 제목: " + sharing.getTitle())
                         .build();
 
                 noticeMapper.insertNotice(notice);
@@ -171,6 +183,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
 
         return inserted > 0;
     }
+
 
     @Override
     @Transactional
@@ -195,6 +208,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
 
         return sharingMapper.deleteComment(request) > 0;
     }
+
 
 
 }

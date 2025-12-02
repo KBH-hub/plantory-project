@@ -36,7 +36,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
                 .receiverId(targetMemberId)
                 .targetId(sharingId)
                 .targetType(NoticeTargetType.SHARING)
-                .content("분양자가 나눔을 완료했습니다. 후기를 작성해주세요!")
+                .content("분양자가 나눔을 완료했습니다. 후기를 작성해주세요! | 제목: " + sharing.getTitle())
                 .build();
 
         noticeMapper.insertNotice(notice);
