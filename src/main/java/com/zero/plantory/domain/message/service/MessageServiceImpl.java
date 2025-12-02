@@ -5,8 +5,12 @@ import com.zero.plantory.domain.message.dto.MessageRequest;
 import com.zero.plantory.domain.message.dto.MessageResponse;
 import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import com.zero.plantory.domain.message.mapper.MessageMapper;
+import com.zero.plantory.domain.notice.service.NoticeService;
+import com.zero.plantory.global.dto.NoticeDTO;
+import com.zero.plantory.global.dto.NoticeTargetType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +21,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     MessageMapper messageMapper;
+
+    @Autowired
+    NoticeService noticeService;
 
     @Override
     public List<MessageListResponse> getMessageList(MessageSearchRequest request) {
@@ -43,6 +50,7 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
+    @Transactional
     public int registerMessage(MessageRequest request) {
         if (request.getTitle() == null || "".equals(request.getTitle()))
             throw new IllegalArgumentException("쪽지 전송 필수값(제목) 누락");
@@ -50,7 +58,15 @@ public class MessageServiceImpl implements MessageService {
         if (request.getContent() == null || "".equals(request.getContent()))
             throw new IllegalArgumentException("메시지 전송 필수값(내용) 누락");
 
-        return messageMapper.insertMessage(request);
+        messageMapper.insertMessage(request);
+        NoticeDTO notice = NoticeDTO.builder()
+                .receiverId(request.getReceiverId())
+                .targetType(NoticeTargetType.MESSAGE)
+                .targetId(request.getMessageId())
+                .content("새 쪽지 알림 | 제목: "+request.getTitle())
+                .build();
+
+        return noticeService.registerNotice(notice);
     }
 
     @Override

@@ -29,7 +29,7 @@
 
     <update id="updateNoticeReadFlag">
         UPDATE notice
-        SET del_flag = NOW()
+        SET read_flag = NOW()
         WHERE notice_id = #{noticeId}
     </update>
 

@@ -115,6 +115,7 @@
         mp.end_date,
         mp.`interval`,
         m.phone,
+        m.member_id,
         mp.name
         FROM myplant mp
         JOIN member m ON m.member_id = mp.member_id
