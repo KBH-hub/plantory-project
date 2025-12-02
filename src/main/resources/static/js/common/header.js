@@ -121,11 +121,11 @@
             return;
         }
         if (!content) {
-            alert("신고 내용을 입력하세요.");
+            showAlert("신고 내용을 입력하세요.");
             return;
         }
         if (!files.length) {
-            alert("근거 사진을 1장 이상 첨부하세요.");
+            showAlert("근거 사진을 1장 이상 첨부하세요.");
             return;
         }
 
@@ -143,7 +143,7 @@
 
         try {
             const res = await axios.post("/api/report", fd);
-            alert(res?.data?.message ?? "신고가 등록되었습니다.");
+            showAlert(res?.data?.message ?? "신고가 등록되었습니다.");
 
             const reportModalEl = document.getElementById("reportModal");
             bootstrap.Modal.getInstance(reportModalEl)?.hide();
@@ -164,7 +164,7 @@
         } catch (err) {
             console.error(err);
             const msg = err?.response?.data?.message || "신고 등록에 실패했습니다.";
-            alert(msg);
+            showAlert(msg);
         }
     }
 
@@ -190,7 +190,7 @@
                 var memberId = Number(memberIdStr);
                 if (!Number.isFinite(memberId)) {
                     console.warn("Invalid data-member-id:", memberIdStr);
-                    alert("잘못된 회원 ID 입니다.");
+                    showAlert("잘못된 회원 ID 입니다.");
                     return;
                     }
                 selectMember(nickname, memberId);

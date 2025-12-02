@@ -1,4 +1,4 @@
-package com.zero.plantory.domain.notice;
+package com.zero.plantory.domain.notice.mapper;
 
 import com.zero.plantory.global.dto.NoticeDTO;
 import org.apache.ibatis.annotations.Mapper;

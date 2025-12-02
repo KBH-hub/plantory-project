@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.notice;
 
+import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.global.dto.NoticeTargetType;
 import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.extern.slf4j.Slf4j;
