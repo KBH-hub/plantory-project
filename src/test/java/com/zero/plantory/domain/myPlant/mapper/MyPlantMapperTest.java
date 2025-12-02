@@ -33,17 +33,6 @@ class MyPlantMapperTest {
     }
 
     @Test
-    @DisplayName("나의 식물 이름 검색")
-    void selectMyPlantByNameTest() {
-        Long memberId = 2L;
-        String name = "다육";
-
-        List<MyPlantSearchNameResponse> result = myPlantMapper.selectMyPlantByName(memberId, name);
-
-        log.info(result.toString());
-    }
-
-    @Test
     @DisplayName("나의 식물 등록 처리")
     void insertMyPlantTest() {
         MyPlantRequest vo  = MyPlantRequest.builder()

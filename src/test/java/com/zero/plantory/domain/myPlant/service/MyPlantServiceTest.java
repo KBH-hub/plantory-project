@@ -39,17 +39,6 @@ class MyPlantServiceTest {
     }
 
     @Test
-    @DisplayName("내 식물 리스트 이름 검색 조회")
-    void getMyPlantByNameTest() {
-        Long memberId = 1L;
-        String name = "투";
-
-        List<MyPlantResponse> result = myPlantService.getMyPlantByName(memberId, name);
-
-        log.info("result={}", result);
-    }
-
-    @Test
     @DisplayName("내 식물 등록 처리")
     void registerMyPlantTest() throws IOException {
         MyPlantRequest request = MyPlantRequest.builder()
