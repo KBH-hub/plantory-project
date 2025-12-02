@@ -48,6 +48,7 @@ public class ReportManagementServiceImpl implements ReportManagementService {
             ReportManagementResponse memo = new ReportManagementResponse();
             memo.setReportId(reportId);
             memo.setAdminMemo(adminMemo);
+            memo.setStatus("true");
 
             reportManagementMapper.insertAdminMemo(memo);
 

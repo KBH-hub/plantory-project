@@ -91,13 +91,14 @@ function renderTable(list) {
             : `<span class="badge bg-secondary">처리전</span>`}
     </td>
 
-    <td>
-        <button class="btn btn-sm btn-danger report-process-btn" 
-                data-report-id="${item.reportId}" 
-                data-target-id="${item.targetMemberId}">
-            신고처리
-        </button>
-    </td>
+<td>
+    <button class="btn btn-sm ${item.status === "true" ? "btn-secondary" : "btn-danger"} report-process-btn"
+            data-report-id="${item.reportId}"
+            data-target-id="${item.targetMemberId}"
+            ${item.status === "true" ? "disabled" : ""}>
+        신고처리
+    </button>
+</td>
 
     <td>${formatDate(item.createdAt)}</td>
 `;
