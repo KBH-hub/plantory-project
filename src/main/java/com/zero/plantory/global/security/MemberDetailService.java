@@ -25,4 +25,8 @@ public class MemberDetailService implements UserDetailsService {
         return new MemberDetail(memberResponse);
     }
 
+    public void resetStopDay(Long memberId) {
+        memberMapper.resetStopDay(memberId);
+    }
+
 }

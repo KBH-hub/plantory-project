@@ -1,5 +1,6 @@
 package com.zero.plantory.global.config;
 
+import com.zero.plantory.global.security.MemberAuthFailureHandler;
 import com.zero.plantory.global.security.MemberLoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final MemberLoginSuccessHandler memberLoginSuccessHandler;
     private final UserDetailsService userDetailsService;
     private final Environment env;
+    private final MemberAuthFailureHandler memberAuthFailureHandler;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -80,6 +82,7 @@ public class SecurityConfig {
                         .usernameParameter("membername")
                         .successHandler(memberLoginSuccessHandler)
                         .failureUrl("/login?error=true")
+                        .failureHandler(memberAuthFailureHandler)
                         .permitAll()
                 )
                 .rememberMe(remember -> remember

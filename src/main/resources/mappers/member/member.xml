@@ -4,6 +4,13 @@
 
 <mapper namespace="com.zero.plantory.domain.member.mapper.MemberMapper">
 
+    <update id="resetStopDay">
+        UPDATE member
+        SET stop_day = NULL
+        WHERE member_id = #{memberId}
+    </update>
+
+
     <select id="countByMembername" resultType="int">
         SELECT COUNT(*)
         FROM member

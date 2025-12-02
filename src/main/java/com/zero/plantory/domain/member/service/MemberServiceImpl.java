@@ -61,31 +61,34 @@ public class MemberServiceImpl implements MemberService {
                  memberMapper.insertMember(memberResponse);
     }
 
-    @Override
-    public MemberResponse login(String membername, String password) {
-        MemberResponse memberResponse = memberMapper.selectByMembername(membername);
-
-        if (memberResponse == null) {
-            return null;
-        }
-
-        if (memberResponse.getStopDay() != null) {
-
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime stopDay = memberResponse.getStopDay();
-
-            if (stopDay.isAfter(now)) {
-                long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
-                throw new IllegalStateException(String.format("정지 해제까지 %d일 남았습니다.", days));
-            }
-        }
-
-        if (!bCryptPasswordEncoder.matches(password, memberResponse.getPassword())) {
-            return null;
-        }
-
-        return memberResponse;
-    }
+//    @Override
+//    public MemberResponse login(String membername, String password) {
+//        MemberResponse memberResponse = memberMapper.selectByMembername(membername);
+//
+//        if (memberResponse == null) {
+//            return null;
+//        }
+//
+//        if (memberResponse.getStopDay() != null) {
+//
+//            LocalDateTime now = LocalDateTime.now();
+//            LocalDateTime stopDay = memberResponse.getStopDay();
+//
+//            if (stopDay.isAfter(now)) {
+//                long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
+//                throw new IllegalStateException(String.format("정지 해제까지 %d일 남았습니다.", days));
+//            } else {
+//                memberMapper.resetStopDay(memberResponse.getMemberId());
+//                memberResponse.setStopDay(null);
+//            }
+//        }
+//
+//        if (!bCryptPasswordEncoder.matches(password, memberResponse.getPassword())) {
+//            return null;
+//        }
+//
+//        return memberResponse;
+//    }
 
 
 }

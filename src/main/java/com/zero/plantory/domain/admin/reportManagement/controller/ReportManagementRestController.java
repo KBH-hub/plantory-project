@@ -7,7 +7,6 @@ import com.zero.plantory.global.dto.ImageDTO;
 import com.zero.plantory.global.dto.ImageTargetType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +53,19 @@ private final ImageService imageService;
         return imageService.getImagesByTarget(targetType, targetId);
     }
 
+    @PostMapping("/{reportId}")
+    public ResponseEntity<?> processReport(
+            @PathVariable Long reportId,
+            @RequestBody ReportProcessRequest request
+    ) {
 
+        reportManagementService.processReport(
+                reportId,
+                request.getTargetMemberId(),
+                request.getAdminMemo(),
+                request.getStopDays()
+        );
+
+        return ResponseEntity.ok("처리 완료");
+    }
 }
