@@ -4,38 +4,52 @@ const questionId = Number(document.body.dataset.questionId);
 
 document.addEventListener("DOMContentLoaded", () => {
     bindMessageSubmit();
+    setLoginUserNickname();
     loadQuestionDetail();
     loadAnswerList();
-    setLoginUserNickname();
+    bindAnswerSubmit();
+    bindDeleteButton();
 });
 
 function setLoginUserNickname() {
     const nick = document.body.dataset.memberNickname;
-    document.getElementById("loginUserNickname").innerText = nick;
+    const span = document.getElementById("loginUserNickname");
+    if (span && nick) span.innerText = nick;
 }
 
 async function loadQuestionDetail() {
     try {
         const res = await axios.get(`/api/questions/${questionId}`);
-        renderDetail(res.data);
-        renderCarousel(res.data.images);
-        updateActionButtons(res.data);
+        const detail = res.data;
+
+        renderDetail(detail);
+        renderCarousel(detail.images);
+        updateActionButtons(detail);
+
     } catch (err) {
         console.error(err);
-        alert("질문 상세 정보를 불러오는데 실패했습니다.");
+        showAlert("질문 상세 정보를 불러오는데 실패했습니다.");
     }
 }
 
 function renderDetail(detail) {
+
     document.getElementById("questionTitle").innerText = detail.title;
     document.getElementById("writerNickname").innerText = detail.nickname;
-    document.getElementById("questionCreated").innerText = timeAgo(detail.createdAt);
-
     document.getElementById("contentBox").innerHTML = detail.content;
 
     document.body.dataset.writerId = detail.memberId;
+
     document.getElementById("writerProfileLink").href = `/profile/${detail.memberId}`;
     document.getElementById("btnUpdate").href = `/updateQuestion/${questionId}`;
+
+    let timeText;
+    if (detail.updatedAt) {
+        timeText = timeAgo(detail.updatedAt) + " (수정됨)";
+    } else {
+        timeText = timeAgo(detail.createdAt);
+    }
+    document.getElementById("questionCreated").innerText = timeText;
 }
 
 
@@ -59,8 +73,7 @@ function renderCarousel(images) {
         indicators.insertAdjacentHTML("beforeend", `
             <button type="button" data-bs-target="#questionCarousel"
                     data-bs-slide-to="${i}"
-                    class="${i === 0 ? "active" : ""}">
-            </button>
+                    class="${i === 0 ? "active" : ""}"></button>
         `);
     });
 }
@@ -77,6 +90,7 @@ function updateActionButtons(detail) {
     } else {
         otherActions.style.display = "flex";
 
+        // 쪽지 보내기
         document.getElementById("btnMessage").addEventListener("click", () => {
             openMessageModal(
                 writerId,
@@ -87,6 +101,25 @@ function updateActionButtons(detail) {
             );
         });
     }
+}
+
+function bindDeleteButton() {
+    const btn = document.getElementById("btnDelete");
+    if (!btn) return;
+
+    btn.addEventListener("click", async () => {
+        showModal("정말 삭제하시겠습니까?", async confirm => {
+            if (!confirm) return;
+
+            try {
+                await axios.delete(`/api/questions/${questionId}`);
+                showAlert("삭제되었습니다.", () => (location.href = "/questionList"));
+            } catch (err) {
+                console.error(err);
+                showAlert("삭제 실패!");
+            }
+        });
+    });
 }
 
 async function loadAnswerList() {
@@ -115,5 +148,33 @@ function renderAnswerList(list) {
                 <p class="mt-2 mb-0">${a.content}</p>
             </div>
         `);
+    });
+}
+
+function bindAnswerSubmit() {
+    const btn = document.getElementById("btnAnswerSubmit");
+    const input = document.getElementById("answerInput");
+
+    btn.addEventListener("click", async () => {
+        const content = input.value.trim();
+        if (!content) {
+            showAlert("댓글 내용을 입력하세요.");
+            return;
+        }
+
+        try {
+            await axios.post(`/api/questions/${questionId}/answers`, null, {
+                params: {
+                    content,
+                }
+            });
+
+            input.value = "";
+            loadAnswerList();
+
+        } catch (err) {
+            console.error(err);
+            showAlert("댓글 등록 실패했습니다.");
+        }
     });
 }

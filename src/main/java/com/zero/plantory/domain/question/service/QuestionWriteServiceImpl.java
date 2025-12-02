@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,46 +40,60 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
         if (request.getContent() == null || request.getContent().isBlank())
             throw new IllegalArgumentException("내용은 필수입니다.");
 
-        questionMapper.insertQuestion(request);
-        Long questionId = request.getQuestionId();
+        List<ImageDTO> imageList = new ArrayList<>();
 
         if (images != null) {
             for (MultipartFile file : images) {
 
+                if (file.isEmpty()) continue;
+
                 String url = storageUploader.uploadFile(file);
 
-                ImageDTO img = ImageDTO.builder()
-                        .memberId(request.getMemberId())
-                        .targetType(ImageTargetType.QUESTION)
-                        .targetId(questionId)
-                        .fileUrl(url)
-                        .fileName(file.getOriginalFilename())
-                        .build();
-
-                imageMapper.insertImage(img);
+                imageList.add(
+                        ImageDTO.builder()
+                                .memberId(request.getMemberId())
+                                .targetType(ImageTargetType.QUESTION)
+                                .fileUrl(url)
+                                .fileName(file.getOriginalFilename())
+                                .build()
+                );
             }
+        }
+
+        questionMapper.insertQuestion(request);
+        Long questionId = request.getQuestionId();
+
+        for (ImageDTO img : imageList) {
+            img.setTargetId(questionId);
+            imageMapper.insertImage(img);
         }
 
         return questionId;
     }
+
 
     @Override
     @Transactional
     public boolean updateQuestion(QuestionRequest request, Long loginMemberId, List<MultipartFile> newImages) throws IOException {
 
         if (!loginMemberId.equals(request.getMemberId()))
-            throw new IllegalStateException("본인의 질문만 수정할 수 있습니다.");
+            throw new IllegalStateException("본인 글만 수정 가능");
 
         if (questionMapper.countMyQuestion(request) == 0)
             throw new IllegalStateException("수정 권한 없음");
 
         Long questionId = request.getQuestionId();
 
+        if (request.getDeletedImageIdList() != null && !request.getDeletedImageIdList().isEmpty()) {
+            for (Long id : request.getDeletedImageIdList()) {
+                imageMapper.softDeleteImage(id);
+            }
+        }
+
         if (newImages != null && !newImages.isEmpty()) {
-
-            imageMapper.softDeleteImagesByTarget(ImageTargetType.QUESTION, questionId);
-
             for (MultipartFile file : newImages) {
+
+                if (file.isEmpty()) continue;
 
                 String url = storageUploader.uploadFile(file);
 

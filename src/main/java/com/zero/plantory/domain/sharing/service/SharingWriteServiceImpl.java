@@ -39,6 +39,9 @@ public class SharingWriteServiceImpl implements SharingWriteService {
             throw new IllegalArgumentException("제목은 필수입니다.");
         }
 
+        if (request.getContent() == null || request.getContent().isBlank())
+            throw new IllegalArgumentException("내용은 필수입니다.");
+
         if (files != null) {
             for (MultipartFile file : files) {
 
@@ -149,6 +152,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
     @Override
     @Transactional
     public boolean addComment(Long sharingId, Long writerId, String content) {
+
         SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
         int inserted = sharingMapper.insertComment(sharingId, writerId, content);
 

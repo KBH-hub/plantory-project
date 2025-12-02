@@ -12,4 +12,10 @@ public class QuestionController {
         model.addAttribute("questionId", questionId);
         return "question/readQuestion";
     }
+
+    @GetMapping("/updateQuestion/{questionId}")
+    public String updateQuestion(@PathVariable Long questionId, Model model){
+        model.addAttribute("questionId", questionId);
+        return "question/createQuestion";
+    }
 }
