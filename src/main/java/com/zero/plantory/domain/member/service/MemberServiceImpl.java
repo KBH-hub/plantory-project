@@ -54,9 +54,11 @@ public class MemberServiceImpl implements MemberService {
                 .nickname(request.getNickname())
                 .phone(request.getPhone())
                 .address(request.getAddress())
-                .noticeEnabled(1)
                 .sharingRate(7)
+                .skillRate(0)
+                .managementRate(0)
                 .role(Role.USER)
+                .noticeEnabled(1)
                 .build();
 
                  memberMapper.insertMember(memberResponse);

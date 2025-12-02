@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}">
+</head>
+
+<body class="bg-light" th:data-profile-id="${profileId}">
+<th:block th:replace="~{fragments/adminHeader :: headerBar}"></th:block>
+    <div class="container mt-4">
+
+        <h4 class="fw-bold border-bottom pb-2">프로필</h4>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+
+            <div class="text-center">
+                <span id="sharingRate" class="text-danger fw-bold">나눔지수: </span>
+            </div>
+
+
+            <div class="text-center">
+                <div class="profile-img d-flex justify-content-center align-items-center position-relative"
+                     style="width: 150px; height: 150px;">
+                    <i id="profileDefaultIcon" class="bi bi-person fs-2 text-secondary"></i>
+                    <img id="profilePreview"
+                         class="rounded-circle position-absolute top-0 start-0"
+                         width="150" height="150"
+                         style="object-fit: cover; display: none;">
+
+                </div>
+
+                <p id="profileNickname" class="fw-bold mb-0 mt-2">닉네임</p>
+                <small id="profileAddress" class="text-muted">서울특별시 금천구</small>
+            </div>
+
+
+            <input type="text" class="form-control d-none ." value="이름">
+
+            <div id="myButtons" class="mt-2 d-flex flex-column align-items-center gap-2">
+<!--                <a th:href="@{/profileSharingHistory(memberId=${memberId})}"-->
+<!--                   class="btn btn-outline-warning btn-sm w-100">-->
+<!--                    관심 나눔글-->
+<!--                </a>-->
+<!--                <button id="updateMyInfoBtn" class="btn btn-outline-primary btn-sm w-100">내 정보 변경</button>-->
+                <button id="deleteProfileWrittenBtn" class="btn btn-outline-danger btn-sm w-100">내가 쓴 글 삭제</button>
+            </div>
+
+
+            <div class="text-center">
+                <p class="fw-bold m-0">관심 나눔글</p>
+                <span class="fw-bold">3개</span>
+            </div>
+            <div class="text-center">
+                <p class="fw-bold m-0">나눔 내역</p>
+                <span class="fw-bold">5개</span>
+            </div>
+
+        </div>
+
+        <div class="mt-4 border-bottom pb-2" id="tabs">
+            <span class="me-4 tab-active cursor-pointer" data-tab="profilePosts">쓴 글</span>
+            <span class="cursor-pointer text-secondary" data-tab="profileComments">댓글 단 글</span>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 my-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="검색">
+                <button class="btn btn-dark">
+                    <i class="bi bi-search text-white"></i>
+                </button>
+            </div>
+
+
+            <select id="categorySelect" class="form-select form-select-sm w-auto">
+            </select>
+        </div>
+
+        <table class="table table-hover text-center align-middle">
+            <thead class="table-light">
+            <tr>
+                <th><input type="checkbox" id="checkAll"></th>
+                <th>작성자</th>
+                <th>카테고리</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody id="profileWrittenTbody" class="d-none"></tbody>
+            <tbody id="profileCommentTbody" class="d-none"></tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul id="pagination" class="pagination justify-content-center"></ul>
+        </nav>
+
+    </div>
+<script th:inline="javascript">
+    const ProfileData = /*[[${profileInfo}]]*/ {};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin/adminProfile.js}"></script>
+<script th:src="@{/js/admin/header.js}"></script>
+<script th:src="@{/js/common/alert.js}"></script>
+</body>
+</html>

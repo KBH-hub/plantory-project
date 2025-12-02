@@ -88,9 +88,8 @@ public class ProfileRestController {
     }
 
     @GetMapping("/picture")
-    public Map<String, Object> getProfileImage(@AuthenticationPrincipal MemberDetail user) {
+    public Map<String, Object> getProfileImage(@RequestParam Long memberId) {
 
-        Long memberId = user.getMemberResponse().getMemberId();
         String imageUrl = imageService.getProfileImageUrl(memberId);
 
         Map<String, Object> response = new HashMap<>();
@@ -99,6 +98,7 @@ public class ProfileRestController {
 
         return response;
     }
+
 
 
 
