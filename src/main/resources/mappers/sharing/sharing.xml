@@ -13,6 +13,7 @@
             s.interest_num,
             s.status,
             s.created_at,
+            s.updated_at,
 
             (SELECT COUNT(*) FROM comment c
              WHERE c.sharing_id = s.sharing_id AND c.del_flag IS NULL) AS comment_count,

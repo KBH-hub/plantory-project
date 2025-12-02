@@ -91,7 +91,7 @@ public class QuestionWriteRestController {
     ) {
         request.setAnswerId(answerId);
         Long loginId = memberDetail.getMemberResponse().getMemberId();
-
+        request.setWriterId(loginId);
         boolean result = questionWriteService.updateAnswer(request, loginId);
         return ResponseEntity.ok(result);
     }
@@ -100,14 +100,14 @@ public class QuestionWriteRestController {
     public ResponseEntity<?> deleteAnswer(
             @PathVariable Long answerId,
             @AuthenticationPrincipal MemberDetail memberDetail,
-            @RequestParam Long questionId
+            @RequestBody AnswerRequest request
     ) {
-        AnswerRequest request = new AnswerRequest();
-        request.setAnswerId(answerId);
-        request.setQuestionId(questionId);
-        request.setWriterId(memberDetail.getMemberResponse().getMemberId());
+        Long loginId = memberDetail.getMemberResponse().getMemberId();
 
-        boolean result = questionWriteService.deleteAnswer(request, request.getWriterId());
+        request.setAnswerId(answerId);
+        request.setWriterId(loginId);
+
+        boolean result = questionWriteService.deleteAnswer(request, loginId);
         return ResponseEntity.ok(result);
     }
 }

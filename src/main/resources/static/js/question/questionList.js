@@ -35,6 +35,7 @@ async function loadQuestionList(page) {
 
 function renderList(list) {
     const container = document.getElementById("questionList");
+
     container.innerHTML = "";
 
     if (list.length === 0) {
@@ -43,35 +44,40 @@ function renderList(list) {
     }
 
     list.forEach(item => {
+
+        const isEdited = item.updatedAt && item.updatedAt !== item.createdAt;
+        const editedTag = isEdited ? " <span class='text-muted'>(수정됨)</span>" : "";
+
+        const displayTime = isEdited ? timeAgo(item.updatedAt) : timeAgo(item.createdAt);
+
         const html = `
-            <div class="row mb-3 p-3 bg-white border rounded">
-
-                <div class="col-1 d-flex justify-content-center">
-                    <img src="https://via.placeholder.com/40"
-                         class="rounded-circle" style="width:40px;height:40px;">
-                </div>
-
-                <div class="col-9">
-                    <a href="/readQuestion/${item.questionId}" class="text-decoration-none text-dark">
-                        <p class="fw-bold mb-1">${item.title}</p>
-                        <small class="text-muted">${item.nickname} · ${timeAgo(item.createdAt)}</small>
-                    </a>
-                </div>
-
-                <div class="col-2 d-flex flex-column align-items-end justify-content-center">
-                    <img src="${item.imageUrl ?? 'https://via.placeholder.com/70'}"
-                         class="border rounded mb-1" 
-                         style="width:70px;height:70px;object-fit:cover;">
-                    <span class="text-muted small">
-                        <i class="bi bi-chat-left-text"></i> ${item.answerCount}
-                    </span>
-                </div>
-
+        <div class="row mb-3 p-3 bg-white border rounded">
+            <div class="col-1 d-flex justify-content-center">
+                <img src="https://via.placeholder.com/40"
+                     class="rounded-circle" style="width:40px;height:40px;">
             </div>
-        `;
+
+            <div class="col-9">
+                <a href="/readQuestion/${item.questionId}" class="text-decoration-none text-dark">
+                    <p class="fw-bold mb-1">${item.title}</p>
+                    <small class="text-muted">${item.nickname} · ${displayTime} ${editedTag}</small>
+                </a>
+            </div>
+
+            <div class="col-2 d-flex flex-column align-items-end justify-content-center">
+                <img src="${item.imageUrl}"
+                     class="border rounded mb-1" 
+                     style="width:70px;height:70px;object-fit:cover;">
+                <span class="text-muted small">
+                    <i class="bi bi-chat-left-text"></i> ${item.answerCount}
+                </span>
+            </div>
+        </div>
+    `;
 
         container.insertAdjacentHTML("beforeend", html);
     });
+
 }
 
 function renderPagination(page, size, totalCount) {

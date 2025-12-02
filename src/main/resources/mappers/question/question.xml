@@ -13,6 +13,7 @@
             q.title            AS title,
             m.nickname         AS nickname,
             q.created_at       AS createdAt,
+            q.updated_at,
 
             (
                 SELECT COUNT(*)
@@ -82,7 +83,7 @@
 
         SELECT
             a.answer_id AS answerId,
-            a.writer_id AS member_id,
+            a.writer_id AS writer_id,
             m.nickname AS nickname,
             a.content AS content,
             a.created_at AS createdAt,
