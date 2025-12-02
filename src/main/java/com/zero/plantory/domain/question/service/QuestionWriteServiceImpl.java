@@ -149,7 +149,7 @@ public class QuestionWriteServiceImpl implements QuestionWriteService {
                         .receiverId(ownerId)
                         .targetId(request.getQuestionId())
                         .targetType(NoticeTargetType.QUESTION)
-                        .content("새로운 답변이 등록되었습니다!")
+                        .content("새 답글 알림 | 제목: " + question.getTitle())
                         .build();
 
                 noticeMapper.insertNotice(notice);

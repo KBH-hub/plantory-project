@@ -174,7 +174,7 @@ public boolean updateSharing(SharingRequest request, List<MultipartFile> newImag
                         .receiverId(ownerId)
                         .targetId(sharingId)
                         .targetType(NoticeTargetType.SHARING)
-                        .content("새로운 댓글이 등록되었습니다!")
+                        .content("새 댓글 알림 | 제목: " + sharing.getTitle())
                         .build();
 
                 noticeMapper.insertNotice(notice);
