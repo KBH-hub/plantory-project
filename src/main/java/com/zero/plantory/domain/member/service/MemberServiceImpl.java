@@ -55,6 +55,7 @@ public class MemberServiceImpl implements MemberService {
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .noticeEnabled(1)
+                .sharingRate(7)
                 .role(Role.USER)
                 .build();
 

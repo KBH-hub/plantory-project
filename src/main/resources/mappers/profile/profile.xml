@@ -34,7 +34,7 @@
           AND del_flag IS NULL
     </update>
 
-    <update id="deleteMemberById" parameterType="long">
+    <update id="deleteMemberById">
         UPDATE member
         SET del_flag = NOW()
         WHERE member_id = #{memberId}
