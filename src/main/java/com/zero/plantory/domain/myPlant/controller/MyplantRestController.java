@@ -24,11 +24,6 @@ public class MyplantRestController {
         return myPlantService.getMyPlantList(memberId, name, limit, offset);
     }
 
-    @GetMapping("/list/name")
-    public List<MyPlantResponse> getMyPlantListByName(@RequestParam Long memberId, @RequestParam String name) {
-        return myPlantService.getMyPlantByName(memberId, name);
-    }
-
     @PostMapping
     public ResponseEntity<Map<String, String>> addMyPlant(@ModelAttribute MyPlantRequest request, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("memberId") Long memberId) throws IOException {
         if(myPlantService.registerMyPlant(request, file, memberId) == 0)

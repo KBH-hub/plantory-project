@@ -1,4 +1,3 @@
-// ========== 유틸 ==========
 function toDate(val) {
     if (!val) return null;
     const d = new Date(val);
@@ -28,7 +27,6 @@ function formatDate(val) {
     return `${yyyy}-${mm}-${dd}`;
 }
 
-// ========== 상태 ==========
 const rawMemberId = document.body.dataset.memberId;
 const memberId = Number(rawMemberId);
 
@@ -37,20 +35,17 @@ const state = {
     filtered: [],
     currentPage: 1,
     limit: 8,
-    totalCount: 0,   // 서버에서 유효 totalCount 받으면 사용
+    totalCount: 0,
     keyword: ""
 };
 
-// 현재 상세 VM(모달용)
 let currentVM = null;
 
-// ========== 엘리먼트 ==========
 const listEl = document.getElementById("plant-list");
 const pagEl = document.getElementById("pagination");
 const searchEl = document.getElementById("search");
 const searchBtn = document.getElementById("searchBtn");
 
-// 상세 모달 요소
 const detailEl = document.getElementById("plantDetailModal");
 const dImgEl = document.getElementById("detailImg");
 const dNameEl = document.getElementById("detailName");
@@ -62,12 +57,11 @@ const dEndEl = document.getElementById("detailEndDate");
 const dIntervalEl = document.getElementById("detailIntervalDays");
 const dNextEl = document.getElementById("detailNextWaterAt");
 
-// ========== 응답 → 뷰모델 ==========
 function normalizePlant(r) {
-    const createdAt = r.createdAt ?? null;     // 카드 “함께한지” 기준
-    const startAt = r.startAt ?? null;       // 최초 물 준 일자
-    const endDate = r.endDate ?? null;       // 마지막 물 준 일자
-    const interval = Number(r.interval) || 0; // 간격(일)
+    const createdAt = r.createdAt ?? null;
+    const startAt = r.startAt ?? null;
+    const endDate = r.endDate ?? null;
+    const interval = Number(r.interval) || 0;
     const baseForNext = endDate || startAt;
     const nextWaterAt = interval > 0 ? addDays(baseForNext, interval) : null;
 
@@ -90,7 +84,6 @@ function normalizePlant(r) {
     };
 }
 
-// ========== 서버 호출 ==========
 async function fetchPlants(page = 1) {
     try {
         if (!Number.isFinite(memberId) || memberId <= 0) {
@@ -123,7 +116,6 @@ async function fetchPlants(page = 1) {
     }
 }
 
-// ========== 렌더 ==========
 function renderCards(items) {
     if (!items.length) {
         listEl.innerHTML = `
@@ -174,24 +166,6 @@ function renderPagination() {
     pagEl.innerHTML = html;
 }
 
-// ========== 상세 모달 ==========
-function updateNextWaterAndBind(vm) {
-    // 입력 → VM 반영
-    const sVal = dStartEl?.value || "";
-    const eVal = dEndEl?.value || "";
-    const iVal = Number(dIntervalEl?.value);
-
-    vm.startAt = sVal ? new Date(sVal).toISOString() : null;
-    vm.endDate = eVal ? new Date(eVal).toISOString() : null;
-    vm.interval = Number.isFinite(iVal) && iVal > 0 ? iVal : 0;
-
-    // 다음 물 줄 날짜 계산
-    const base = vm.endDate || vm.startAt;
-    vm.nextWaterAt = vm.interval > 0 ? addDays(base, vm.interval) : null;
-
-    if (dNextEl) dNextEl.value = vm.nextWaterAt ? formatDate(vm.nextWaterAt) : "";
-}
-
 function openDetailModal(raw) {
     const vm = (raw && typeof raw === "object" && raw.id != null) ? raw : normalizePlant(raw);
     currentVM = vm;
@@ -206,27 +180,23 @@ function openDetailModal(raw) {
     if (dEndEl) dEndEl.value = vm.endDate ? formatDate(vm.endDate) : "";
     if (dIntervalEl) dIntervalEl.value = vm.interval > 0 ? String(vm.interval) : "";
 
-    updateNextWaterAndBind(vm);
 
     if (detailEl) bootstrap.Modal.getOrCreateInstance(detailEl).show();
 
     const imgEl = document.getElementById("editImgPreview");
-    const FALLBACK = "/image/default.png"; // 프로젝트 기본 이미지 경로
+    const FALLBACK = "/image/default.png";
     imgEl.src = raw.imageUrl || raw.img || FALLBACK;
 
-    // 삭제 플래그 초기화
     deletePhoto = false;
 
-    // 사진삭제 버튼 상태
     const photoDelBtn = document.getElementById("photoDeleteBtn");
     if (photoDelBtn) {
         const hasFile = Number.isFinite(Number(vm.fileId)) && Number(vm.fileId) > 0;
-        photoDelBtn.disabled = !hasFile; // 기존 파일 없으면 비활성화
+        photoDelBtn.disabled = !hasFile;
     }
 }
 
 
-// ========== 이벤트 바인딩 ==========
 document.addEventListener("DOMContentLoaded", () => {
     const addBtn = document.getElementById("openAddModal");
     const addModalEl = document.getElementById("addPlantModal");
@@ -258,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
                 if (!f.type || !f.type.startsWith("image/")) {
-                    alert("이미지 파일만 선택하세요.");
+                    showAlert("이미지 파일만 선택하세요.");
                     fileEl.value = "";
                     imgEl.src = FALLBACK;
                     return;
@@ -280,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const addStartAtEl = document.getElementById("addStartAt");
         const addEndDateEl = document.getElementById("addEndDate");
         const addIntervalEl = document.getElementById("addIntervalDays");
-        const addSoilEl = document.getElementById("addFertilizer"); // HTML id는 그대로, 서버 필드명은 'soil'
+        const addSoilEl = document.getElementById("addFertilizer");
         const addTempEl = document.getElementById("addTemp");
         const addFileEl = document.getElementById("addImgFile");
         const addModalEl = document.getElementById("addPlantModal");
@@ -289,26 +259,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         addBtnEl.addEventListener("click", async () => {
             try {
-                // 최소 검증: 이름
                 const name = (addNameEl?.value || "").trim();
                 if (!name) {
-                    alert("식물 이름은 필수입니다.");
+                    showAlert("식물 이름은 필수입니다.");
                     return;
                 }
 
                 const fd = new FormData();
 
-                // 테스트 코드와 동일한 필드명으로 전송
-                fd.append("memberId", String(memberId)); // body data-member-id에서 읽은 값
+                fd.append("memberId", String(memberId));
                 fd.append("name", name);
                 fd.append("type", (addTypeEl?.value || "").trim());
                 fd.append("startAt", toLocalDateTimeStr(addStartAtEl?.value || ""));
                 fd.append("endDate", toLocalDateTimeStr(addEndDateEl?.value || ""));
                 fd.append("interval", String(addIntervalEl?.value || "0"));
-                fd.append("soil", (addSoilEl?.value || "").trim());          // 서버 DTO의 'soil'
-                fd.append("temperature", (addTempEl?.value || "").trim());   // 서버 DTO의 'temperature'
+                fd.append("soil", (addSoilEl?.value || "").trim());
+                fd.append("temperature", (addTempEl?.value || "").trim());
 
-                // 파일 파트명은 'file'이어야 테스트와 1:1 매칭됨
                 const file = addFileEl?.files?.[0];
                 if (file) {
                     fd.append("file", file, file.name);
@@ -320,19 +287,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 await fetchPlants(1);
 
+                showAlert("등록되었습니다.");
                 if (addModalEl) {
                     bootstrap.Modal.getOrCreateInstance(addModalEl).hide();
                 }
             } catch (err) {
                 console.error(err);
-                alert("등록에 실패했습니다. 잠시 후 다시 시도해주세요.");
+                showAlert("등록에 실패했습니다. 잠시 후 다시 시도해주세요.");
             }
         });
     })();
 
     document.getElementById("editSubmitBtn")?.addEventListener("click", async () => {
         if (!currentVM?.id) {
-            alert("수정 대상 식물 정보를 찾지 못했습니다.");
+            showAlert("수정 대상 식물 정보를 찾지 못했습니다.");
             return;
         }
 
@@ -345,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const itv = document.getElementById("detailIntervalDays")?.value || "0";
 
         if (!name) {
-            alert("식물 이름은 필수입니다.");
+            showAlert("식물 이름은 필수입니다.");
             return;
         }
 
@@ -365,33 +333,29 @@ document.addEventListener("DOMContentLoaded", () => {
         fd.append("soil", soil);
         fd.append("temperature", temp);
 
-        // === 사진 교체/삭제 처리 (이 부분이 핵심) ===
+        console.log(type);
         const fileEl = document.getElementById("detailImgFile");
         const newFile = fileEl?.files?.[0];
 
         if (newFile) {
-            // 새 파일 업로드
             fd.append("file", newFile, newFile.name);
-            // 기존 파일이 있었다면 동시에 삭제 지시(교체 시 둘 다 보냄)
             if (Number.isFinite(Number(currentVM.fileId)) && Number(currentVM.fileId) > 0) {
                 fd.append("delFile", String(currentVM.fileId));
             }
         } else if (deletePhoto && Number.isFinite(Number(currentVM.fileId)) && Number(currentVM.fileId) > 0) {
-            // 새 파일은 없고, 사진삭제만 선택한 경우
             fd.append("delFile", String(currentVM.fileId));
         }
-        // 새 파일도 없고 삭제도 아니면 이미지 관련 전송 없음(유지)
 
         try {
             await axios.put("/api/myPlant", fd, {
                 headers: {"Content-Type": "multipart/form-data"}
             });
-            alert("수정되었습니다.");
+            showAlert("수정되었습니다.");
             bootstrap.Modal.getOrCreateInstance(document.getElementById("plantDetailModal")).hide();
             await fetchPlants(1);
         } catch (err) {
             const msg = err?.response?.data?.message || "수정 중 오류가 발생했습니다.";
-            alert(msg);
+            showAlert(msg);
         }
     });
 
@@ -403,24 +367,45 @@ document.addEventListener("DOMContentLoaded", () => {
         const fileEl = document.getElementById("detailImgFile");
         const FALLBACK = "/image/default.png";
 
-        // 미리보기 제거(플레이스홀더로 대체) + 파일 선택값 초기화
         if (imgEl) imgEl.src = FALLBACK;
         if (fileEl) fileEl.value = "";
 
-        // 삭제 플래그 설정
         deletePhoto = true;
 
-        // 한 번 더 누를 필요 없도록 버튼 잠금
         const photoDelBtn = document.getElementById("photoDeleteBtn");
         if (photoDelBtn) photoDelBtn.disabled = true;
     });
 
+    document.getElementById("deleteWateringBtn")?.addEventListener("click", () => {
+        const btn = document.getElementById("deleteWateringBtn");
+        btn?.setAttribute("disabled", "true");
+        try {
+            const params = {myplantId: currentVM.id, memberId:memberId};
+
+            showModal("물주기를 삭제하시겠습니까?", async (result) => {
+                if (result) {
+                    await axios.delete("/api/plantingCalender/watering", {
+                        params
+                    });
+                    document.getElementById("detailStartAt").value = "";
+                    document.getElementById("detailIntervalDays").value = "";
+                    document.getElementById("detailEndDate").value = "";
+                    showAlert("삭제되었습니다.");
+                }
+            });
+
+        } catch (err) {
+            showAlert(err?.response?.data?.message || "삭제 중 오류가 발생했습니다.");
+        } finally {
+            btn?.removeAttribute("disabled");
+        }
+    })
+
     document.getElementById("deleteSubmitBtn")?.addEventListener("click", async () => {
         if (!Number.isInteger(Number(currentVM?.id))) {
-            alert("삭제 대상 식물 정보를 찾지 못했습니다.");
+            showAlert("삭제 대상 식물 정보를 찾지 못했습니다.");
             return;
         }
-        if (!confirm("정말 삭제하시겠습니까?")) return;
 
         const btn = document.getElementById("deleteSubmitBtn");
         btn?.setAttribute("disabled", "true");
@@ -431,21 +416,35 @@ document.addEventListener("DOMContentLoaded", () => {
             if (Number.isInteger(fileIdNum) && fileIdNum > 0) {
                 params.delFile = fileIdNum;
             }
-            await axios.delete("/api/myPlant", {
-                params
+            showModal("식물을 삭제하시겠습니까?", async (result) => {
+                if (!result) {
+                    btn?.removeAttribute("disabled");
+                    return;
+                }
+
+                try {
+                    await axios.delete("/api/myPlant", { params });
+
+                    bootstrap.Modal.getOrCreateInstance(
+                        document.getElementById("plantDetailModal")
+                    ).hide();
+
+                    await fetchPlants(1);
+
+                    showAlert("삭제되었습니다.");
+                } catch (err) {
+                    showAlert(err?.response?.data?.message || "삭제 중 오류가 발생했습니다.");
+                } finally {
+                    btn?.removeAttribute("disabled");
+                }
             });
 
-            alert("삭제되었습니다.");
-            bootstrap.Modal.getOrCreateInstance(document.getElementById("plantDetailModal")).hide();
-            await fetchPlants(1);
         } catch (err) {
-            alert(err?.response?.data?.message || "삭제 중 오류가 발생했습니다.");
-        } finally {
+            showAlert("처리 중 오류가 발생했습니다.");
             btn?.removeAttribute("disabled");
         }
     });
 
-    // 카드 클릭 위임
     listEl.addEventListener("click", e => {
         const card = e.target.closest(".plant-card");
         if (!card) return;
@@ -454,7 +453,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (item) openDetailModal(item);
     });
 
-    // 페이지네이션
     pagEl.addEventListener("click", e => {
         const btn = e.target.closest("[data-page]");
         if (!btn) return;
@@ -463,7 +461,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchPlants(page);
     });
 
-    // 검색
     function filterPlants() {
         state.keyword = searchEl.value.trim();
         fetchPlants(1);
@@ -472,11 +469,10 @@ document.addEventListener("DOMContentLoaded", () => {
     searchBtn.addEventListener("click", filterPlants);
     searchEl.addEventListener("keyup", e => e.key === "Enter" && filterPlants());
 
-    // 상세 모달 내 물주기 3칸: 실시간 갱신(리스너는 한 번만 부착)
     ["change", "input"].forEach(evt => {
-        dStartEl?.addEventListener(evt, () => currentVM && updateNextWaterAndBind(currentVM));
-        dEndEl?.addEventListener(evt, () => currentVM && updateNextWaterAndBind(currentVM));
-        dIntervalEl?.addEventListener(evt, () => currentVM && updateNextWaterAndBind(currentVM));
+        dStartEl?.addEventListener(evt, () => currentVM);
+        dEndEl?.addEventListener(evt, () => currentVM);
+        dIntervalEl?.addEventListener(evt, () => currentVM);
     });
 
     {
@@ -487,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const f = fileEl.files && fileEl.files[0];
                 if (!f) return;
                 if (!f.type?.startsWith("image/")) {
-                    alert("이미지 파일만 선택하세요.");
+                    showAlert("이미지 파일만 선택하세요.");
                     fileEl.value = "";
                     return;
                 }
@@ -496,16 +492,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 imgEl.onload = () => URL.revokeObjectURL(url);
                 imgEl.src = url;
 
-                // 새 파일을 올렸다면 삭제 플래그는 해제
                 deletePhoto = false;
 
-                // 사용자가 새 파일을 올린 경우에도 굳이 삭제 버튼을 누를 필요가 없으므로 버튼은 그대로 두어도 무방
             });
         }
     }
-
-
-    // 초기 로드
     fetchPlants(1);
-
 });

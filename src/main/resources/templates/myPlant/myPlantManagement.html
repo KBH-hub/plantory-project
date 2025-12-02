@@ -17,7 +17,7 @@
 
 <body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
-<div class="container-xxl py-3" style="width: 1470px; padding: 16px;">
+<div class="container-xxl py-3 bg-white" style="width: 1470px; padding: 16px;">
     <h3 class="fw-bold">나의 식물 관리</h3>
 
     <div class="d-flex justify-content-end align-items-center mb-3">
@@ -33,7 +33,6 @@
         </button>
     </div>
 
-    <!-- 카드 그리드: gutter 적용 -->
     <div class="plant-management-container rounded">
         <div class="row g-3" id="plant-list"></div>
     </div>
@@ -43,7 +42,6 @@
     </nav>
 </div>
 
-<!-- 등록 모달 -->
 <div class="modal fade" id="addPlantModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0">
@@ -66,12 +64,18 @@
                 <input type="text" id="addName" class="form-control" placeholder="예: 테라리움">
 
                 <label class="fw-bold mt-2">식물 종류</label>
-                <div class="input-group mb-2">
-                    <span class="input-group-text">🌱</span>
+                <div class="input-group">
                     <input type="text" id="addType" class="form-control" placeholder="예: 산세베리아 '하니'">
                     <a class="btn btn-dark" href="/plantDictionary">식물 검색</a>
                 </div>
 
+                <label class="fw-bold mt-2">비료 정보</label>
+                <input type="text" id="addFertilizer" class="form-control" placeholder="예: 비료는 보통 요구함">
+
+                <label class="fw-bold mt-2">생육 온도</label>
+                <input type="text" id="addTemp" class="form-control" placeholder="예: 18–27℃">
+
+                <label class="fw-bold mt-2">물주기</label>
                 <div class="row g-2 align-items-center">
                     <div class="col-12 col-md-4">
                         <div class="form-floating">
@@ -94,13 +98,6 @@
                     </div>
                 </div>
 
-                <label class="fw-bold mt-2">비료 정보</label>
-                <input type="text" id="addFertilizer" class="form-control" placeholder="예: 비료는 보통 요구함">
-
-                <label class="fw-bold mt-2">생육 온도</label>
-                <input type="text" id="addTemp" class="form-control" placeholder="예: 18–27℃">
-
-
                 <button type="button" class="btn btn-success fw-bold d-block mx-auto mt-3" id="addSubmitBtn">등록하기</button>
 
             </div>
@@ -109,7 +106,6 @@
 </div>
 
 
-<!-- 상세보기 모달 -->
 <div class="modal fade" id="plantDetailModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0">
@@ -129,17 +125,24 @@
                     </div>
                 </div>
 
-                <label class="fw-bold">식물 이름 <span class="text-danger">*필수입니다.</span></label>
+                <label class="fw-bold mt-2">식물 이름 <span class="text-danger">*필수입니다.</span></label>
                 <input type="text" id="detailName" class="form-control" placeholder="예: 테라리움">
 
-                <label class="fw-bold">식물 종류</label>
-                <div class="input-group mb-2">
-                    <span class="input-group-text">🌱</span>
+                <label class="fw-bold mt-2">식물 종류</label>
+                <div class="input-group">
                     <input type="text" id="detailType" class="form-control" placeholder="예: 산세베리아 '하니'">
                     <a class="btn btn-dark" href="/plantDictionary">식물 검색
                     </a>
                 </div>
 
+
+                <label class="fw-bold mt-2">비료 정보</label>
+                <input type="text" id="detailFertilizer" class="form-control" placeholder="예: 비료는 보통 요구함">
+
+                <label class="fw-bold mt-2">생육 온도</label>
+                <input type="text" id="detailTemp" class="form-control" placeholder="예: 18–27℃">
+
+                <label class="fw-bold mt-2">물주기</label>
                 <div class="row g-2 align-items-center">
                     <div class="col-12 col-md-4">
                         <div class="form-floating">
@@ -162,19 +165,10 @@
                     </div>
                 </div>
 
-
-                <label class="fw-bold mt-2">다음 물 줄 날짜</label>
-                <input type="text" id="detailNextWaterAt" class="form-control" placeholder="자동 계산" readonly>
-
-                <label class="fw-bold">비료 정보</label>
-                <input type="text" id="detailFertilizer" class="form-control" placeholder="예: 비료는 보통 요구함">
-
-                <label class="fw-bold mt-2">생육 온도</label>
-                <input type="text" id="detailTemp" class="form-control" placeholder="예: 18–27℃">
-
                 <div class="d-flex w-50 mx-auto">
                     <button type="button" class="btn btn-success fw-bold d-block mx-auto mt-3" id="editSubmitBtn">수정하기</button>
                     <button type="button" class="btn btn-danger fw-bold d-block mx-auto mt-3" id="deleteSubmitBtn">삭제하기</button>
+                    <button type="button" class="btn btn-outline-danger d-block mx-auto mt-3" id="deleteWateringBtn">물주기 삭제</button>
                 </div>
             </div>
 

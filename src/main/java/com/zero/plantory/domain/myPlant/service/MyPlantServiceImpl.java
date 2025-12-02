@@ -55,24 +55,6 @@ public class MyPlantServiceImpl implements MyPlantService {
     }
 
     @Override
-    public List<MyPlantResponse> getMyPlantByName(Long memberId, String name) {
-        List<MyPlantResponse> resultList = new ArrayList<>();
-        List<MyPlantSearchNameResponse> myPlantList = myPlantMapper.selectMyPlantByName(memberId, name);
-        for (MyPlantSearchNameResponse response : myPlantList) {
-            List<ImageDTO> images = imageMapper.selectImagesByTarget(ImageTargetType.MYPLANT, response.getMyplantId());
-            String url = images.isEmpty() ? null : images.get(0).getFileUrl();
-            MyPlantResponse dto = MyPlantResponse.builder()
-                    .myplantId(response.getMyplantId())
-                    .name(response.getName())
-                    .startAt(response.getStartAt())
-                    .imageUrl(url)
-                    .build();
-            resultList.add(dto);
-        }
-        return resultList;
-    }
-
-    @Override
     @Transactional
     public int registerMyPlant(MyPlantRequest request, MultipartFile file, Long memberId) throws IOException {
         if (request.getName() == null || request.getName().equals("")) {
@@ -143,8 +125,6 @@ public class MyPlantServiceImpl implements MyPlantService {
             result += imageMapper.insertImage(image);
         }
 
-        System.out.println(result);
-        System.out.println(fileCount);
         if (result == fileCount + 1) {
             return result;
         }
