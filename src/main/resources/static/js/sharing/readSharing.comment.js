@@ -134,9 +134,10 @@ export async function submitComment(sharingId) {
         return false;
     }
 
-    await axios.post(`/api/sharing/${sharingId}/comments`, null, {
-        params: { memberId, content }
+    await axios.post(`/api/sharing/${sharingId}/comments`, {
+        content
     });
+
 
     input.value = "";
     return true;
@@ -160,7 +161,9 @@ export async function deleteComment(commentId) {
         if (!confirm) return;
 
         await axios.delete(`/api/sharing/comments/${commentId}`, {
-            params: { sharingId }
+            data: {
+                sharingId: Number(document.body.dataset.sharingId)
+            }
         });
 
 

@@ -114,7 +114,13 @@ public class SharingWriteServiceTest {
     @Order(6)
     @DisplayName("댓글 등록")
     void addCommentTest() {
-        log.info("댓글 등록 결과 = {}", sharingWriteService.addComment(29L, 1L, "댓글 내용"));
+        CommentRequest request = CommentRequest.builder()
+                .commentId(19L)
+                .sharingId(17L)
+                .writerId(14L)
+                .content("댓글")
+                .build();
+        log.info("댓글 등록 결과 = {}", sharingWriteService.addComment(request));
     }
 
     /** 7. 댓글 수정 */

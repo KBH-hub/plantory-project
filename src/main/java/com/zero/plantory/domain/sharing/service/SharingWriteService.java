@@ -18,7 +18,7 @@ public interface SharingWriteService {
 
     boolean removeInterest(Long memberId, Long sharingId);
 
-    boolean addComment(Long sharingId, Long writerId, String content);
+    boolean addComment(CommentRequest request);
 
     boolean updateComment(CommentRequest request);
 
