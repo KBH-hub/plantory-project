@@ -1,3 +1,5 @@
+const questionId = document.body.dataset.questionId;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     loadQuestionList(1);
@@ -50,7 +52,7 @@ function renderList(list) {
                 </div>
 
                 <div class="col-9">
-                    <a href="/question/${item.questionId}" class="text-decoration-none text-dark">
+                    <a href="/readQuestion/${item.questionId}" class="text-decoration-none text-dark">
                         <p class="fw-bold mb-1">${item.title}</p>
                         <small class="text-muted">${item.nickname} · ${timeAgo(item.createdAt)}</small>
                     </a>
