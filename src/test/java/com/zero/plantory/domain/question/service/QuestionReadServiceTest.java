@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.question.service;
 
+import com.zero.plantory.domain.question.dto.QuestionListPageResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class QuestionReadServiceTest {
     @Test
     @DisplayName("질문 목록 조회")
     void selectQuestionListTest() {
-        List<SelectQuestionListResponse> result = questionReadService.getQuestionList("", 10, 0);
+        QuestionListPageResponse result = questionReadService.getQuestionList("", 10, 0);
         log.info("조회 결과 = {}", result);
     }
 

@@ -1,6 +1,7 @@
 package com.zero.plantory.domain.question.service;
 
 import com.zero.plantory.domain.image.mapper.ImageMapper;
+import com.zero.plantory.domain.question.dto.QuestionListPageResponse;
 import com.zero.plantory.domain.question.dto.SelectAnswerListResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionDetailResponse;
 import com.zero.plantory.domain.question.dto.SelectQuestionListResponse;
@@ -19,8 +20,21 @@ public class QuestionReadServiceImpl implements QuestionReadService {
     private final ImageMapper imageMapper;
 
     @Override
-    public List<SelectQuestionListResponse> getQuestionList(String keyword, Integer limit, Integer offset) {
-        return questionMapper.selectQuestionList(keyword, limit, offset);
+    public QuestionListPageResponse getQuestionList(String keyword, int page, int size) {
+
+        int limit = size;
+        int offset = (page - 1) * size;
+
+        List<SelectQuestionListResponse> list = questionMapper.selectQuestionList(keyword, limit, offset);
+
+        int totalCount = questionMapper.selectQuestionTotalCount(keyword);
+
+        return QuestionListPageResponse.builder()
+                .list(list)
+                .totalCount(totalCount)
+                .page(page)
+                .size(size)
+                .build();
     }
 
     @Override

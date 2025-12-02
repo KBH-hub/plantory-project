@@ -1,10 +1,13 @@
 // readSharing.js
+
 import {
     renderComments,
     submitComment,
     submitEditComment,
     deleteComment
 } from "/js/sharing/readSharing.comment.js";
+
+import { openMessageModal, bindMessageSubmit } from "/js/common/message.js";
 
 const sharingId = Number(document.body.dataset.sharingId);
 
@@ -321,41 +324,8 @@ async function toggleInterest() {
     }
 }
 
-function bindMessageButton() {
-    document.getElementById("btnMessage").addEventListener("click", () => {
-        document.getElementById("msgTo").value = document.getElementById("writerNickname").innerText;
-        document.getElementById("msgPost").value = document.getElementById("shareTitle").innerText;
 
-        new bootstrap.Modal(document.getElementById("messageModal")).show();
-    });
-}
 
-document.getElementById("messageForm").addEventListener("submit", async e => {
-    e.preventDefault();
-
-    const senderId = Number(document.body.dataset.memberId);
-    const receiverId = Number(document.body.dataset.writerId);
-    const title = document.getElementById("msgTitle").value.trim();
-    const content = document.getElementById("msgContent").value.trim();
-
-    if (!title || !content) {
-        showAlert("제목과 내용을 입력하세요.");
-        return;
-    }
-
-    await axios.post("/api/message/messageRegist", {
-        senderId,
-        receiverId,
-        title,
-        content,
-        targetType: "SHARING",
-        targetId: sharingId
-    });
-
-    showAlert("쪽지를 보냈습니다!");
-
-    bootstrap.Modal.getInstance(document.getElementById("messageModal")).hide();
-});
 
 async function deleteSharing() {
     showModal("정말 삭제하시겠습니까?", async confirm => {
@@ -399,7 +369,19 @@ function init() {
 
     document.getElementById("btnInterest").addEventListener("click", toggleInterest);
     document.getElementById("btnDelete").addEventListener("click", deleteSharing);
-    bindMessageButton();
+
+    bindMessageSubmit(); // 공통 submit 바인딩
+
+    document.getElementById("btnMessage").addEventListener("click", () => {
+        openMessageModal(
+            Number(document.body.dataset.writerId),              // receiverId
+            document.getElementById("writerNickname").innerText, // nickname
+            document.getElementById("shareTitle").innerText,     // post title
+            "SHARING",                                           // targetType
+            sharingId
+        );
+    });
+
     bindCommentSubmitEvent();
     bindCompleteButton();
 
