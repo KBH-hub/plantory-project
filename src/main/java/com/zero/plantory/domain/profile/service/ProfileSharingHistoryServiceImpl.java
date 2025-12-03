@@ -35,10 +35,10 @@ public class ProfileSharingHistoryServiceImpl implements ProfileSharingHistorySe
         int totalCount;
 
         if ("MY".equals(req.getMyType())) {
-            list = profileSharingHistoryMapper.selectMySharingList(req);
+            list = profileSharingHistoryMapper.selectProfileSharingList(req);
             totalCount = profileSharingHistoryMapper.countMySharing(req);
         } else {
-            list = profileSharingHistoryMapper.selectReceivedSharingList(req);
+            list = profileSharingHistoryMapper.selectProfileSharingList(req);
             totalCount = profileSharingHistoryMapper.countReceivedSharing(req);
         }
 

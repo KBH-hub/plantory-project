@@ -1,8 +1,8 @@
 const myPostsLink = document.getElementById('myPostsLink');
 const receivedPostsLink = document.getElementById('receivedPostsLink');
 
-let filteredData = [];
-const limit = 12;
+const limit = 10;
+const offset = 0;
 let currentPage = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,12 +22,16 @@ async function loadList(myType) {
         }
     });
 
-    const totalCount = res.data.totalCount ?? res.data.length;
-    filteredData = res.data.list ?? res.data;
+    console.res
 
-    renderCards(filteredData);
+    const totalCount = res.data.totalCount;
+    const pageData = res.data.list;
+
+    renderCards(pageData);
     renderPagination(totalCount);
 }
+
+
 
 document.getElementById("searchBtn").addEventListener("click", () => {
     currentPage = 1;
@@ -71,45 +75,45 @@ function renderCards(posts) {
     list.innerHTML = posts.map(post => `
 
         <div class="col-auto">
-            <div class="card border-0 shadow-sm post-card" data-id="${post.sharingId}">
-                <span class="badge badge-status position-absolute top-0 start-0 m-2">
-                    ${post.status === "false" ? "나눔중" : "나눔완료"}
-                </span>
-                
-                <img src="${post.thumbnail || '/image/default.png'}" class="card-img-top rounded-top">
+            <div class="post-card border-custom shadow-sm" data-id="${post.sharingId}">
 
-                <div class="card-body">
-                    <h6 class="fw-bold text-truncate">${post.title}</h6>
-                    <p class="text-muted small mb-2">${formatTime(post.createdAt)}</p>
+                <div class="card-img-section">
+            <img
+            src="${post.thumbnail ? post.thumbnail : '/image/default.png'}"
+            class="card-img-top card-img">
 
-                    <div class="d-flex justify-content-between small mb-2">
-                        <span><i class="bi bi-chat-dots"></i> ${post.commentCount}</span>
-                        <span><i class="bi bi-heart"></i> ${post.interestNum}</span>
+
+                    
+                    <span class="badge badge-status position-absolute top-0 start-0 m-2">
+                        ${post.status === "false" ? "나눔중" : "나눔완료"}
+                    </span>
+                </div>
+
+                <div class="card-body text-section">
+                    <h6 class="fw-bold text-truncate mb-2">${post.title}</h6>
+                    <p class="text-muted small mb-2"><i class="bi bi-clock"></i> ${formatTime(post.createdAt)}</p>
+
+                    <div class="d-flex justify-content-between small mb-3">
+                        <span class="text-secondary"><i class="bi bi-chat-dots"></i> ${post.commentCount}</span>
+                        <span class="text-danger"><i class="bi bi-heart-fill"></i> ${post.interestNum}</span>
                     </div>
 
                     ${post.reviewFlag ? `
-                        <div class="text-end">
-                            <button class="btn btn-sm btn-outline-secondary review-badge" data-id="${post.sharingId}">
+                        <div class="mt-auto text-end">
+                            <button class="btn btn-sm btn-outline-success review-badge" data-id="${post.sharingId}">
                                 후기 작성
                             </button>
                         </div>
                     ` : ""}
                 </div>
+
             </div>
         </div>
 
     `).join("");
 
-    bindCardClick();
 }
-function bindCardClick() {
-    document.querySelectorAll(".post-card").forEach(card => {
-        card.addEventListener("click", () => {
-            const sharingId = card.dataset.id;
-            window.location.href = `/readSharing/${sharingId}`;
-        });
-    });
-}
+
 document.addEventListener("click", e => {
     if (e.target.closest(".review-badge")) {
         e.stopPropagation();
