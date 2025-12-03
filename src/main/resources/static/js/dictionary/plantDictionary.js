@@ -7,23 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const state = { q: '', mode: 'server' };
     let allCache = [];
 
-    // 초기 렌더
+    let currentController = null;
+    const CONCURRENCY = 50;
+
     loadList(pageNo, numOfRows);
 
-    // 검색 UI
     const $q = document.getElementById('qName');
     const $btnSearch = document.getElementById('btnSearch');
+
     $btnSearch && $btnSearch.addEventListener('click', onSearch);
     $q && $q.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
 
-    // 초기화(전체보기)
     document.querySelector('button.btn.btn-secondary')?.addEventListener('click', () => {
         if ($q) $q.value = '';
         state.q = ''; state.mode = 'server'; pageNo = 1;
         loadList(pageNo, numOfRows);
     });
 
-    // 서버 페이징 목록
     async function loadList(p, rows) {
         try {
             const res = await api.get('/api/dictionary/garden', {
@@ -48,74 +48,119 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 검색(프론트 필터)
     async function onSearch() {
         state.q = ($q?.value || '').trim();
         pageNo = 1;
+
+        if (currentController) currentController.abort();
+        currentController = new AbortController();
+
         if (!state.q) {
             state.mode = 'server';
             return loadList(pageNo, numOfRows);
         }
+
         state.mode = 'client';
-        await collectAll(); // 단순 전페이지 수집
-        renderClientSearch();
-    }
 
-    async function collectAll() {
-        allCache = [];
-        // 1페이지로 전체 페이지 계산
-        const first = await api.get('/api/dictionary/garden', {
-            params: { pageNo: '1', numOfRows: String(numOfRows) },
-        });
-        const firstBody  = first.data?.body;
-        const firstItems = asArray(firstBody?.items?.item || []);
-        const totalCount = Number(firstBody?.items?.totalCount || 0);
-        const size       = Number(firstBody?.items?.numOfRows || numOfRows);
-        const totalPages = Math.max(1, Math.ceil(totalCount / size));
-        allCache.push(...firstItems);
-
-        // 나머지 페이지 수집(상한 없음: 필요하면 제한 추가)
-        for (let p = 2; p <= totalPages; p++) {
-            const res = await api.get('/api/dictionary/garden', {
-                params: { pageNo: String(p), numOfRows: String(size) },
-            });
-            const pageItems = asArray(res.data?.body?.items?.item || []);
-            allCache.push(...pageItems);
-        }
-    }
-
-    function renderClientSearch() {
+        const { totalPages, size, firstItems } = await collectFirstPage({ signal: currentController.signal });
         const q = state.q.toLowerCase();
-        const filtered = allCache.filter((it) => {
-            const a = String(it?.cntntsSj || '').toLowerCase();
-            const b = String(it?.distbNm  || '').toLowerCase();
-            return a.includes(q) || b.includes(q);
-        });
 
+        const base = firstItems.map(withSearchKey);
+        allCache = base;
+
+        let filtered = base.filter(byQuery(q));
+
+        renderClientPage(filtered);
+
+        collectRestPages({
+            totalPages,
+            size,
+            q,
+            signal: currentController.signal,
+            onBatch: (batch) => {
+                allCache.push(...batch);
+                if (state.mode === 'client') {
+                    const f = allCache.filter(byQuery(q));
+                    renderClientPage(f);
+                }
+            },
+            shouldStop: () => {
+                const need = pageNo * numOfRows;
+                return allCache.filter(byQuery(q)).length >= need + numOfRows;
+            }
+        }).catch((err) => {
+            if (err.name !== 'AbortError') console.error(err);
+        });
+    }
+
+    function withSearchKey(it) {
+        const a = String(it?.cntntsSj || '');
+        const b = String(it?.distbNm || '');
+        return { ...it, _searchKey: (a + ' ' + b).toLowerCase() };
+    }
+    function byQuery(q) {
+        return (it) => it._searchKey?.includes(q);
+    }
+
+    function renderClientPage(filtered) {
         const totalCount = filtered.length;
         const size = numOfRows;
         const totalPages = Math.max(1, Math.ceil(totalCount / size));
         const current = Math.min(Math.max(1, pageNo), totalPages);
         const from = (current - 1) * size;
-        const to   = Math.min(from + size, totalCount);
+        const to = Math.min(from + size, totalCount);
 
         renderList(filtered.slice(from, to));
         renderPager({
             current,
             totalPages,
-            onMove: (next) => { pageNo = next; renderClientSearch(); },
+            onMove: (next) => { pageNo = next; renderClientPage(filtered); },
         });
     }
 
-    // 렌더
+    async function collectFirstPage({ signal }) {
+        const res = await api.get('/api/dictionary/garden', {
+            params: { pageNo: '1', numOfRows: String(numOfRows) },
+            signal,
+        });
+        const body = res.data?.body;
+        const firstItems = asArray(body?.items?.item || []);
+        const totalCount = Number(body?.items?.totalCount || 0);
+        const size = Number(body?.items?.numOfRows || numOfRows);
+        const totalPages = Math.max(1, Math.ceil(totalCount / size));
+        return { totalPages, size, firstItems };
+    }
+
+    async function collectRestPages({ totalPages, size, q, signal, onBatch, shouldStop }) {
+        const pages = [];
+        for (let p = 2; p <= totalPages; p++) pages.push(p);
+
+        let idx = 0;
+
+        async function worker() {
+            while (idx < pages.length && !shouldStop()) {
+                const p = pages[idx++];
+                const res = await api.get('/api/dictionary/garden', {
+                    params: { pageNo: String(p), numOfRows: String(size) },
+                    signal,
+                });
+                const batch = asArray(res.data?.body?.items?.item || []).map(withSearchKey);
+                onBatch?.(batch);
+            }
+        }
+
+        const workers = Array.from({ length: CONCURRENCY }, () => worker());
+        await Promise.allSettled(workers);
+    }
+
     function renderList(items) {
-        const container = document.getElementById('resultList');
-        if (!container) return;
+        const c = document.getElementById('resultList');
+        if (!c) return;
         if (!items.length) {
-            container.innerHTML = '<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>';
+            c.innerHTML = '<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>';
             return;
         }
-        container.innerHTML = items.map(toCardHtml).join('');
+        c.innerHTML = items.map(toCardHtml).join('');
     }
 
     function toCardHtml(item) {
@@ -150,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     }
 
-    // 단일 페이저
     function renderPager({ current, totalPages, onMove }) {
         const ul = document.getElementById('paging');
         if (!ul) return;
@@ -182,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ul.appendChild(makeItem('»', totalPages,  { disabled: isLast }));
     }
 
-    // 유틸
     function splitPipes(s) {
         return !s || typeof s !== 'string' ? [] : s.split('|').map((x) => x.trim()).filter(Boolean);
     }
