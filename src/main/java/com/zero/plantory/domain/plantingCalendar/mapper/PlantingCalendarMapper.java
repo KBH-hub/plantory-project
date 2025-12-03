@@ -20,5 +20,5 @@ public interface PlantingCalendarMapper {
     int insertDiary(DiaryRequest request);
     int deleteDiary(Long diaryId);
     List<MyplantSlotBaseResponse> selectMyplantsForWindow(@Param("limit") int limit);
-    int insertWateringAtIgnore(@Param("myplantId") Long myplantId, @Param("dateAt") java.time.LocalDateTime dateAt);
+    int insertWatering(@Param("myplantId") Long myplantId, @Param("dateAt") java.time.LocalDateTime dateAt);
 }

@@ -154,7 +154,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
 
     @Override
     @Transactional
-    public int processOnce(int batchSize) {
+    public int registerWatering(int batchSize) {
         var bases = plantingCalendarMapper.selectMyplantsForWindow(batchSize);
 
         var tz = ZoneId.of("Asia/Seoul");
@@ -171,7 +171,7 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
             var nextAt = computeNextAt(b.getStartAt(), interval, windowStart);
 
             if (condToday(nextAt, b.getEndDate(), windowStart, windowEnd)) {
-                int ins = plantingCalendarMapper.insertWateringAtIgnore(b.getMyplantId(), nextAt);
+                ok += plantingCalendarMapper.insertWatering(b.getMyplantId(), nextAt);
                 String noticeText = "오늘 \"" + b.getName() + "\" 물주기 알림";
                 NoticeDTO notice = NoticeDTO.builder()
                         .receiverId(b.getMemberId())
@@ -179,20 +179,41 @@ public class PlantingCalenderServiceImpl implements PlantingCalenderService {
                         .targetId(b.getMyplantId())
                         .content(noticeText)
                         .build();
-                noticeService.registerNotice(notice);
-                if (ins > 0) {
-                    try {
-                        String text = "[Plantory] 오늘 \"" + b.getName() + "\" 물주기 알림";
-                        smsService.sendSMS(SMSRequestDTO.builder()
-                                .to(b.getPhone())
-                                .from(solapi.from())
-                                .text(text)
-                                .build());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    ok++;
+                ok += noticeService.registerNotice(notice);
+            }
+        }
+        return ok;
+    }
+
+    @Override
+    public int sendSMS(int batchSize) {
+        var bases = plantingCalendarMapper.selectMyplantsForWindow(batchSize);
+
+        var tz = ZoneId.of("Asia/Seoul");
+        var today0 = LocalDate.now(tz).atStartOfDay();
+        var windowStart = today0;
+        var windowEnd = today0.plusDays(1);
+
+        int ok = 0;
+        for (var b : bases) {
+            Integer interval = b.getInterval();
+            if (interval == null || interval <= 0) continue;
+            if (b.getPhone() == null || b.getPhone().isBlank()) continue;
+
+            var nextAt = computeNextAt(b.getStartAt(), interval, windowStart);
+
+            if (condToday(nextAt, b.getEndDate(), windowStart, windowEnd)) {
+                try {
+                    String text = "[Plantory] 오늘 \"" + b.getName() + "\" 물주기 알림";
+                    smsService.sendSMS(SMSRequestDTO.builder()
+                            .to(b.getPhone())
+                            .from(solapi.from())
+                            .text(text)
+                            .build());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                ok++;
             }
         }
         return ok;

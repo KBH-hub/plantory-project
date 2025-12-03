@@ -2,10 +2,6 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.plantingCalendar.mapper.PlantingCalendarMapper">
-    <insert id="insertWatering" parameterType="Long">
-        INSERT INTO watering (myplant_id, date_at)
-        VALUES (#{myplantId}, NOW())
-    </insert>
 
     <update id="updatePlantWateringCheck" parameterType="Long">
         UPDATE watering
@@ -128,7 +124,7 @@
         LIMIT #{limit}
     </select>
 
-    <insert id="insertWateringAtIgnore">
+    <insert id="insertWatering">
         INSERT IGNORE INTO watering (myplant_id, date_at)
         VALUES (#{myplantId}, #{dateAt})
     </insert>
