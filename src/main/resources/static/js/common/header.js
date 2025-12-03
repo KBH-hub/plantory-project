@@ -199,6 +199,7 @@
         const id = n?.targetId;
         switch (String(n?.targetType || "")) {
             case "SHARING":   return `/readSharing/${id}`;
+            case "SHARING_REVIEW":   return `/sharing/${id}/review`;
             case "QUESTION":  return `/readQuestion/${id}`;
             case "MESSAGE":    return `/messageDetail?messageId=${id}`;
             case "WATERING":     return `/plantCalendar`;
