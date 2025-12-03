@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>나눔 게시글 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/readSharing.css}">
+</head>
+
+<body class="bg-light" th:data-sharing-id="${sharingId}"
+      th:data-member-id="${#authentication.principal.MemberResponse.memberId}"
+      th:data-member-nickname="${#authentication.principal.MemberResponse.nickname}"
+      th:data-member-role="${#authentication.principal.MemberResponse.role}">
+<th:block th:replace="~{fragments/adminHeader :: headerBar}"></th:block>
+
+<div class="mx-auto" style="width:1470px; padding:16px;">
+    <h5 class="fw-bold mb-3">나눔글 상세</h5>
+    <hr class="mt-1 mb-4"/>
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div id="shareCarousel" class="carousel slide share-image-wrap" data-bs-ride="false">
+                        <div id="shareCarouselInner" class="carousel-inner"></div>
+
+                        <button class="carousel-control-prev" type="button"
+                                data-bs-target="#shareCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button"
+                                data-bs-target="#shareCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+
+                        <div id="shareCarouselIndicators" class="carousel-indicators m-0"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 id="shareTitle" class="fw-bold mb-1"></h5>
+                        <div id="shareCreated" class="text-muted small"></div>
+                    </div>
+
+                    <hr>
+
+                    <div class="text-muted small mb-2">
+                        식물 종류: <span id="plantType" class="text-dark"></span>
+                        <span class="mx-2">|</span>
+                        관리난이도: <span id="managementLevel" class="text-dark"></span>
+                        <span class="mx-2">|</span>
+                        관리요구도: <span id="managementNeeds" class="text-dark"></span>
+                    </div>
+
+                    <div id="contentBox" class="p-2 bg-white"></div>
+                </div>
+            </div>
+
+
+            <div class="my-3">
+                <div class="row align-items-center">
+
+                    <div class="col-3">
+                        <a href="#" id="writerProfileLink"
+                           class="d-flex align-items-center text-decoration-none"
+                           style="color: inherit; cursor: pointer;">
+                            <div class="me-3">
+                                <div class="bg-secondary rounded-circle"
+                                     style="width:48px;height:48px;"></div>
+                            </div>
+                            <span id="writerNickname" class="fw-semibold"></span>
+                        </a>
+                    </div>
+
+                    <div class="col-2 text-start">
+                        <small id="sharingRate" class="text-success fw-bold"></small>
+                    </div>
+
+                    <div class="col-7 d-flex justify-content-end gap-2">
+
+                        <div id="myActions" class="gap-2" style="display:none;">
+                            <a id="btnUpdate" href="#" class="btn btn-primary px-4">수정</a>
+                            <button id="btnDelete" class="btn btn-danger px-4">삭제</button>
+                            <button id="btnComplete" class="btn btn-success px-4">나눔 완료</button>
+                            <a id="btnWriteReview" class="btn btn-success" style="display:none;"
+                                    th:href="@{'/sharing/' + ${sharingId} + '/review'}">후기 작성하기</a>
+
+                        </div>
+
+                        <div id="otherActions" class="gap-2" style="display:none;">
+                            <button id="btnInterest" class="btn btn-outline-secondary px-4">
+                                <span id="interestIcon">관심♡</span>
+                                <span id="interestCount">(0)</span>
+                            </button>
+                            <button id="btnMessage" class="btn btn-success px-4">쪽지 보내기</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+                <hr class="my-3">
+
+                <div class="mb-2 text-muted small">댓글</div>
+                 <!-- 댓글 리스트 -->
+                <ul id="commentList" class="list-group mt-3"></ul>
+
+                <!-- 댓글 입력 영역 -->
+                <div class="d-flex align-items-center mt-3">
+                    <div class="me-3 d-flex align-items-center" style="width:40px;">
+                        <span id="loginUserNickname" class="ms-2 fw-semibold small"></span>
+
+                    </div>
+
+                    <div class="input-group">
+                        <input id="commentInput" type="text" class="form-control" placeholder="댓글을 입력하세요.">
+                        <button id="btnCommentSubmit" class="btn btn-secondary">등록</button>
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 2) 모달 1: 나눔 완료 상대 선택 -->
+<div class="modal fade modal-fixed" id="modalSelectCounterpart" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료 상대 선택</h6>
+            </div>
+            <div class="modal-body">
+                <div class="small text-muted mb-2">이 글에 대해 마지막으로 나눈 상대</div>
+                <div class="form-check">
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+                <button id="btnSelectComplete" class="btn btn-success"
+                        data-next="#modalConfirmDone"
+                        data-current="#modalSelectCounterpart" disabled>선택 완료</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3) 모달 2: 완료 확인 -->
+<div class="modal fade modal-fixed" id="modalConfirmComplete" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료</h6>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    <strong id="confirmName" class="text-success"></strong>님과의 나눔을 완료하시겠습니까?
+                </p>
+                <small class="text-muted">(나눔 완료 후, 취소는 불가능합니다)</small>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button id="btnCompleteCancel"
+                        class="btn btn-secondary"
+                        data-back="#modalSelectCounterpart"
+                        data-current="#modalConfirmDone">취소</button>
+                <button id="btnCompleteConfirm"
+                        class="btn btn-success"
+                        data-next="#modalDoneResult"
+                        data-current="#modalConfirmDone">나눔 완료</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4) 모달 3: 완료 안내 + 후기 유도 -->
+<div class="modal fade modal-fixed" id="modalCompleteResult" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-semibold">나눔 완료 확인</h6>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0"><strong id="resultName" class="text-success"></strong>님과의 나눔이 완료되었습니다.</p>
+                <small class="text-muted">후기를 남겨 서로의 나눔지수를 올려보세요!</small>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">닫기</button>
+                <a id="goReview" href="#" class="btn btn-success">후기 작성하러 가기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 이미지 원본보기 모달 -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-dark">
+            <div class="modal-body p-0 text-center">
+                <img id="modalImage" src=""
+                     class="img-fluid"
+                     style="max-height: 90vh; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 쪽지 보내기 모달 -->
+<th:block th:replace="~{fragments/messageModal :: messageModal}"></th:block>
+
+<script>
+    console.log("role = ", document.body.dataset.memberRole);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/common/header.js}"></script>
+<script th:src="@{/js/common/modal.js}"></script>
+<script th:src="@{/js/common/alert.js}"></script>
+<script th:src="@{/js/common/timeAgo.js}"></script>
+<script type="module" th:src="@{/js/sharing/readSharing.js}"></script>
+<script type="module" th:src="@{/js/common/message.js}"></script>
+<!--<script type="module" th:src="@{/js/sharing/readSharin></script>-->
+</body>
+</html>

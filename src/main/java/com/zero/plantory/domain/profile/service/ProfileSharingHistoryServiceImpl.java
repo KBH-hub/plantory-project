@@ -31,6 +31,10 @@ public class ProfileSharingHistoryServiceImpl implements ProfileSharingHistorySe
     @Override
     public ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req) {
 
+        if (req.getStatus() != null && req.getStatus().isBlank()) {
+            req.setStatus(null);
+        }
+
         List<ProfileSharingHistoryListResponse> list;
         int totalCount;
 

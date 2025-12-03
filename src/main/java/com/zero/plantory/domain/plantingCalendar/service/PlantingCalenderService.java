@@ -22,5 +22,6 @@ public interface PlantingCalenderService {
     List<MyPlantDiaryResponse> getMyPlant(Long memberId);
     int registerDiary(DiaryRequest request, List<MultipartFile> files, Long memberId) throws IOException;
     int removeDiary(Long diaryId);
-    int processOnce(int batchSize);
+    int registerWatering(int batchSize);
+    int sendSMS(int batchSize);
 }
