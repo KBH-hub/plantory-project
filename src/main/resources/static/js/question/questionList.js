@@ -51,17 +51,15 @@ function renderList(list) {
         const displayTime = isEdited ? timeAgo(item.updatedAt) : timeAgo(item.createdAt);
 
         const html = `
-        <div class="row mb-3 p-3 bg-white border rounded">
+        <a href="/readQuestion/${item.questionId}" class="row mb-3 p-3 bg-white border rounded text-decoration-none text-dark">
             <div class="col-1 d-flex justify-content-center">
                 <img src="https://via.placeholder.com/40"
                      class="rounded-circle" style="width:40px;height:40px;">
             </div>
 
             <div class="col-9">
-                <a href="/readQuestion/${item.questionId}" class="text-decoration-none text-dark">
                     <p class="fw-bold mb-1">${item.title}</p>
                     <small class="text-muted">${item.nickname} · ${displayTime} ${editedTag}</small>
-                </a>
             </div>
 
             <div class="col-2 d-flex flex-column align-items-end justify-content-center">
@@ -72,7 +70,7 @@ function renderList(list) {
                     <i class="bi bi-chat-left-text"></i> ${item.answerCount}
                 </span>
             </div>
-        </div>
+        </a>
     `;
 
         container.insertAdjacentHTML("beforeend", html);
