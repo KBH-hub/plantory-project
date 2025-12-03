@@ -48,7 +48,7 @@
     async function loadDetail() {
         const messageId = Number(qs('messageId'));
         const viewerId = Number(qs('viewerId'));
-        viewerIdNum = Number.isFinite(viewerId) ? viewerId : null;
+        viewerIdNum = Number(document.body.dataset.memberId);
 
         if (!Number.isFinite(messageId)) {
             showAlert('유효하지 않은 messageId 입니다.');
