@@ -21,6 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final StopUserFilter stopUserFilter;
+
     private final MemberLoginSuccessHandler memberLoginSuccessHandler;
     private final UserDetailsService userDetailsService;
     private final Environment env;
