@@ -29,6 +29,11 @@ public class SecurityConfig {
     private final MemberAuthFailureHandler memberAuthFailureHandler;
 
     @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers("/static/**", "/css/**", "/js/**", "/image/**","/data/**");
