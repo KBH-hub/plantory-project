@@ -35,7 +35,7 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         NoticeDTO notice = NoticeDTO.builder()
                 .receiverId(targetMemberId)
                 .targetId(sharingId)
-                .targetType(NoticeTargetType.SHARING)
+                .targetType(NoticeTargetType.SHARING_REVIEW)
                 .content("나눔 완료 알림(후기 작성하기) | 제목: " + sharing.getTitle())
                 .build();
 
