@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allCache = [];
 
     let currentController = null;
-    const CONCURRENCY = 50;
+    const CONCURRENCY = 10;
 
     loadList(pageNo, numOfRows);
 
