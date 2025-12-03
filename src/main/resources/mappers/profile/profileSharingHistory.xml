@@ -39,7 +39,6 @@
                AND i.target_id = s.sharing_id
                AND i.del_flag IS NULL
              ORDER BY i.image_id ASC LIMIT 1) AS thumbnail
-
         FROM sharing s
         WHERE s.member_id = #{memberId}
           AND (#{keyword} IS NULL OR s.title LIKE CONCAT('%', #{keyword}, '%'))
@@ -109,6 +108,7 @@
         s.target_member_review_flag,
 
         COALESCE(c.comment_count, 0) AS comment_count,
+
         (
         SELECT file_url
         FROM image i
@@ -118,7 +118,7 @@
         ORDER BY i.image_id ASC
         LIMIT 1
         ) AS thumbnail
-        COUNT(*) OVER() AS total_count
+
         FROM sharing s
         LEFT JOIN (
         SELECT sharing_id, COUNT(*) AS comment_count
