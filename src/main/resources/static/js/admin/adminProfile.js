@@ -26,24 +26,12 @@ const commentOptions = `
 `;
 
 function updateTableVisibility() {
-    const writtenTbody = document.getElementById("profileWrittenTbody");
-    const commentTbody = document.getElementById("profileCommentTbody");
-
-    if (!writtenTbody || !commentTbody) return;
-
-    writtenTbody.classList.add("d-none");
-    commentTbody.classList.add("d-none");
-
-    if (currentTab === "profilePosts") {
-        writtenTbody.classList.remove("d-none");
-    } else {
-        commentTbody.classList.remove("d-none");
-    }
+    document.getElementById("profileWrittenTbody").classList.toggle("d-none", currentTab !== "profilePosts");
+    document.getElementById("profileCommentTbody").classList.toggle("d-none", currentTab !== "profileComments");
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
     const categorySelect = document.getElementById("categorySelect");
-
     categorySelect.innerHTML = writtenOptions;
     categorySelect.value = "ALL";
 
@@ -55,15 +43,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateTableVisibility();
 });
 
+/* 전체 선택 체크박스 */
 document.addEventListener("change", (e) => {
     if (e.target.id === "checkAll") {
-        const checked = e.target.checked;
         document.querySelectorAll(".row-check").forEach(chk => {
-            chk.checked = checked;
+            chk.checked = e.target.checked;
         });
     }
 });
 
+/* 프로필 이미지 로드 */
 async function loadProfile() {
     const res = await axios.get("/api/profile/picture", {
         params: { memberId: PROFILE_ID }
@@ -82,15 +71,14 @@ async function loadProfile() {
     }
 }
 
-
-
+/* 글 삭제 */
 async function handleDeleteWritten() {
     if (currentTab !== "profilePosts") {
         showAlert("댓글에서는 삭제할 수 없습니다.");
         return;
     }
 
-    const selected = Array.from(document.querySelectorAll(".row-check:checked"));
+    const selected = [...document.querySelectorAll(".row-check:checked")];
 
     const sharingIds = [];
     const questionIds = [];
@@ -108,25 +96,20 @@ async function handleDeleteWritten() {
         return;
     }
 
-    const payload = {
+    await axios.post("/api/profileWritten/softDelete", {
         memberId: PROFILE_ID,
         sharingIds,
         questionIds
-    };
-
-
-    await axios.post("/api/profileWritten/softDelete", payload);
+    });
 
     showAlert("삭제되었습니다.");
 
     document.getElementById("checkAll").checked = false;
-    document.querySelectorAll(".row-check").forEach(chk => chk.checked = false);
 
     loadProfileWritten();
 }
 
-
-
+/* 프로필 데이터 */
 async function fetchProfileData() {
     try {
         const res = await axios.get(`/api/profile/publicProfile/${PROFILE_ID}`);
@@ -144,8 +127,8 @@ async function initProfileInfo() {
 
     renderPublicProfile(data);
 
+    await loadProfileCounts();
     await loadProfileWritten();
-    initPagination();
 }
 
 function renderPublicProfile(data) {
@@ -154,40 +137,38 @@ function renderPublicProfile(data) {
     document.getElementById("sharingRate").textContent = `나눔지수: ${data.sharingRate}%`;
 }
 
-function hideMyButtons() {
-    const btnBox = document.getElementById("myButtons");
-    if (btnBox) btnBox.classList.add("d-none");
-}
-
 function initButtons() {
-    // const updateBtn = document.getElementById("updateMyInfoBtn");
     const deleteBtn = document.getElementById("deleteProfileWrittenBtn");
-
-    // if (updateBtn) {
-    //     updateBtn.addEventListener("click", () => {
-    //         window.location.href = `/profile/update/${PROFILE_ID}`;
-    //     });
-    // }
-
-
-    if (deleteBtn) {
-        deleteBtn.addEventListener("click", handleDeleteWritten);
-    }
+    deleteBtn?.addEventListener("click", handleDeleteWritten);
+}
+function fmtKST(iso) {
+    if (!iso) return '';
+    return new Intl.DateTimeFormat('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+    }).format(new Date(iso))
+        .replace(/\./g, '-')
+        .replace(/-\s/g, '-')
+        .replace(/\s/g, ' ');
 }
 
+/* 검색 input selector 수정됨 */
 function getKeyword() {
-    return document.querySelector(".input-group input").value.trim();
+    return document.getElementById("searchInput").value.trim();
 }
 
 function getCategory() {
-    return document.querySelector(".form-select").value;
+    return document.getElementById("categorySelect").value;
 }
 
+/* 글/댓글 로드 */
 async function loadProfileWritten(category = getCategory()) {
     const response = await axios.get(`/api/profileWritten/${PROFILE_ID}`, {
         params: {
             keyword: getKeyword(),
-            category: category,
+            category,
             limit: rowsPerPage,
             offset: (currentPage - 1) * rowsPerPage
         }
@@ -201,67 +182,97 @@ async function loadProfileWritten(category = getCategory()) {
     renderPagination(total);
 }
 
+/* 테이블 렌더링 */
 function renderTable() {
-    const tbody =
-        currentTab === "profilePosts"
-            ? document.getElementById("profileWrittenTbody")
-            : document.getElementById("profileCommentTbody");
-
-    if (!tbody) return;
+    const tbody = currentTab === "profilePosts"
+        ? document.getElementById("profileWrittenTbody")
+        : document.getElementById("profileCommentTbody");
 
     tbody.innerHTML = "";
+
+    if (content.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    <div class="text-center text-muted py-5">
+                        <i class="bi bi-box fs-3"></i><br>
+                        표시할 데이터가 없습니다.
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
 
     content.forEach(item => {
         tbody.innerHTML += `
             <tr>
                 <td>
-                       ${currentTab === "profilePosts" ? `<input type="checkbox" class="row-check" data-id="${item.id}" data-category="${item.category}">` : ``}
+                    <input type="checkbox" class="row-check" 
+                           data-id="${item.id}" 
+                           data-category="${item.category}">
                 </td>
                 <td>${item.nickname}</td>
                 <td>${categoryMap[item.category] || item.category}</td>
                 <td>${item.title}</td>
-                <td>${item.createdAt}</td>
+                <td>${fmtKST(item.createdAt)}</td>
             </tr>
         `;
-        bindRowClick();
     });
+
+    bindRowClick();
 }
+
+
+async function loadProfileCounts() {
+    try {
+        const res = await axios.get("/api/profileSharing/counts");
+
+        document.getElementById("interestCount").textContent =
+            `${res.data.interestCount}개`;
+
+        document.getElementById("sharingHistoryCount").textContent =
+            `${res.data.sharingCount}개`;
+
+    } catch (err) {
+        console.error("카운트 로딩 실패", err);
+    }
+}
+
+
+/* 글 클릭 이동 */
 function bindRowClick() {
     document.querySelectorAll("#profileWrittenTbody tr").forEach(row => {
-        const checkbox = row.querySelector(".row-check");
-        if (checkbox) {
-            checkbox.addEventListener("click", (e) => {
-                e.stopPropagation();
-            })
-        }
 
-
-        row.addEventListener("click", (e) => {
+        row.addEventListener("click", () => {
             const checkbox = row.querySelector(".row-check");
             if (!checkbox) return;
 
             const id = checkbox.dataset.id;
             const category = checkbox.dataset.category;
 
-            if (category === "SHARING") {
-                window.location.href = `/readSharing/${id}`;
-            } else if (category === "QUESTION") {
-                window.location.href = `/readSharing/${id}`;
-            }
+            window.location.href = `/admin/readSharing/${id}`;
         });
+
+        const checkbox = row.querySelector(".row-check");
+        if (checkbox) {
+            checkbox.addEventListener("click", (e) => e.stopPropagation());
+        }
     });
 }
 
+/* 탭 이벤트 — 새 UI와 매칭 */
 function initTabs() {
-    const tabs = document.querySelectorAll("#tabs span");
+    const tabs = document.querySelectorAll("#profileTabs span[data-tab]");
     const categorySelect = document.getElementById("categorySelect");
 
     tabs.forEach(tab => {
         tab.addEventListener("click", () => {
-            tabs.forEach(t => t.classList.remove("tab-active", "text-dark"));
+
+            tabs.forEach(t => t.classList.remove("fw-semibold", "text-dark"));
             tabs.forEach(t => t.classList.add("text-secondary"));
 
-            tab.classList.add("tab-active", "text-dark");
+            tab.classList.add("fw-semibold", "text-dark");
             tab.classList.remove("text-secondary");
 
             currentTab = tab.dataset.tab;
@@ -282,8 +293,9 @@ function initTabs() {
     });
 }
 
+/* 검색 필터 */
 function initSearchFilter() {
-    const searchInput = document.querySelector(".input-group input");
+    const searchInput = document.getElementById("searchInput");
     const categorySelect = document.getElementById("categorySelect");
 
     searchInput.addEventListener("input", () => {
@@ -297,47 +309,9 @@ function initSearchFilter() {
     });
 }
 
-function initPagination() {
-    const paginationContainer = document.querySelector(".pagination");
-    if (!paginationContainer) return;
-
-    paginationContainer.addEventListener("click", (e) => {
-        const pageItem = e.target.closest(".page-item");
-        if (!pageItem) return;
-
-        const page = pageItem.dataset.page;
-        if (!page) return;
-
-        if (page === "prev" && currentPage > 1) {
-            currentPage--;
-        } else if (page === "next") {
-            currentPage++;
-        } else {
-            currentPage = Number(page);
-        }
-
-        loadProfileWritten();
-    });
-}
-
-function bindPaginationClick() {
-    document.querySelectorAll("#pagination .page-link").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            const page = Number(e.target.dataset.page);
-            if (page < 1) return;
-
-            currentPage = page;
-            loadProfileWritten();
-        });
-    });
-}
-
+/* 페이징 렌더링 — 충돌 제거 후 최종 버전 */
 function renderPagination(totalCount) {
     const pagination = document.getElementById("pagination");
-    if (!pagination) return;
-
     const totalPages = Math.ceil(totalCount / rowsPerPage);
 
     pagination.innerHTML = "";
@@ -346,9 +320,6 @@ function renderPagination(totalCount) {
         <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
             <a class="page-link" data-page="1">«</a>
         </li>
-    `;
-
-    pagination.innerHTML += `
         <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
             <a class="page-link" data-page="${currentPage - 1}">‹</a>
         </li>
@@ -366,14 +337,20 @@ function renderPagination(totalCount) {
         <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
             <a class="page-link" data-page="${currentPage + 1}">›</a>
         </li>
-    `;
-
-    pagination.innerHTML += `
         <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
             <a class="page-link" data-page="${totalPages}">»</a>
         </li>
     `;
 
-    bindPaginationClick();
-    loadProfile()
+    /* 단일 페이징 클릭 이벤트 */
+    document.querySelectorAll("#pagination .page-link").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = Number(e.target.dataset.page);
+            if (page < 1) return;
+
+            currentPage = page;
+            loadProfileWritten();
+        });
+    });
 }
