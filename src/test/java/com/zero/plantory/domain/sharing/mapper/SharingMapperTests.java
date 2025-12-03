@@ -14,6 +14,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
@@ -55,7 +57,7 @@ public class SharingMapperTests {
     @Test
     @DisplayName("나눔지수 업데이트")
     void updateSharingRateTest() {
-        log.info("나눔지수 업데이트 ={}", mapper.updateSharingRate(1L, 1.5));
+        log.info("나눔지수 업데이트 ={}", mapper.updateSharingRate(1L, BigDecimal.valueOf(1.50)));
     }
 
     @Test

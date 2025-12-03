@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class SelectSharingDetailResponse {
     private Long memberId;
     private Long targetMemberId;
     private String nickname;
-    private Integer sharingRate;
+    private BigDecimal sharingRate;
 
     private String title;
     private String content;
