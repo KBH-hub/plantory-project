@@ -75,7 +75,7 @@ function renderCards(posts) {
     list.innerHTML = posts.map(post => `
 
         <div class="col-auto">
-            <div class="post-card border-custom shadow-sm" data-id="${post.sharingId}">
+            <div class="card post-card border-custom shadow-sm" data-id="${post.sharingId}">
 
                 <div class="card-img-section">
             <img
@@ -174,3 +174,25 @@ function bindPaginationClick() {
     });
 }
 
+document.addEventListener("click", (e) => {
+    const card = e.target.closest(".post-card");
+
+    if (e.target.closest(".review-badge")) {
+        return;
+    }
+
+    if (card) {
+        const sharingId = card.dataset.id;
+        window.location.href = `/readSharing/${sharingId}`;
+    }
+});
+
+document.addEventListener("click", (e) => {
+    const reviewBtn = e.target.closest(".review-badge");
+    if (reviewBtn) {
+        e.stopPropagation();
+        const sharingId = reviewBtn.dataset.id;
+        window.location.href = `/sharing/${sharingId}/review`;
+        return;
+    }
+});

@@ -33,9 +33,9 @@ public class ProfileSharingHistoryRestController {
     public ProfileSharingHistoryPageResponse getMySharing(
             @AuthenticationPrincipal MemberDetail user,
             @RequestParam(required = false) String keyword,
-            @RequestParam String status,
-            @RequestParam Integer offset,
-            @RequestParam Integer limit
+            @RequestParam(required = false) String status,
+            @RequestParam int offset,
+            @RequestParam int limit
     ) {
         ProfileSharingHistoryListRequest request = ProfileSharingHistoryListRequest.builder()
                 .memberId(user.getMemberResponse().getMemberId())
