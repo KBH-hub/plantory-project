@@ -2,6 +2,10 @@ package com.zero.plantory.domain.admin.reportManagement.service;
 
 import com.zero.plantory.domain.admin.reportManagement.dto.*;
 import com.zero.plantory.domain.admin.reportManagement.mapper.ReportManagementMapper;
+import com.zero.plantory.domain.member.mapper.MemberMapper;
+import com.zero.plantory.domain.profile.dto.MemberResponse;
+import com.zero.plantory.domain.profile.mapper.ProfileMapper;
+import com.zero.plantory.domain.profile.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,8 @@ import java.util.List;
 public class ReportManagementServiceImpl implements ReportManagementService {
 
     private final ReportManagementMapper reportManagementMapper;
+    private final AdminUserService adminUserService;
+    private final ProfileMapper profileMapper;
 
     @Override
     public ReportManagementPageResponse getReporManagmentList(ReportManagementSearchRequest request) {
@@ -53,6 +59,8 @@ public class ReportManagementServiceImpl implements ReportManagementService {
             reportManagementMapper.insertAdminMemo(memo);
 
             reportManagementMapper.updateStopDay(memberId, stopDays);
+            MemberResponse memberResponse = profileMapper.selectByMemberId(memberId);
+            adminUserService.forceLogout(memberResponse.getMembername());
         }
 
 }

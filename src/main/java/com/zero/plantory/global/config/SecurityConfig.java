@@ -11,9 +11,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,10 +24,17 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final StopUserFilter stopUserFilter;
+
     private final MemberLoginSuccessHandler memberLoginSuccessHandler;
     private final UserDetailsService userDetailsService;
     private final Environment env;
     private final MemberAuthFailureHandler memberAuthFailureHandler;
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -101,8 +111,14 @@ public class SecurityConfig {
                             response.setContentType("application/json;charset=UTF-8");
                             response.getWriter().write("{\"error\":\"권한이 없습니다.\"}");
                         }))
-                )
-        ;
+                );
+                http
+                .sessionManagement(session -> session
+                        .maximumSessions(-1)
+                        .sessionRegistry(sessionRegistry())
+                );
+                http
+                .addFilterBefore(stopUserFilter, LogoutFilter.class);
 
         return http.build();
     }

@@ -92,8 +92,18 @@
 
     <update id="updateStopDay">
         UPDATE member
-        SET stop_day = DATE_ADD(NOW(), INTERVAL #{days} DAY)
+        <set>
+            <choose>
+                <when test="days == 0">
+                    stop_day = NULL
+                </when>
+                <otherwise>
+                    stop_day = DATE_ADD(NOW(), INTERVAL #{days} DAY)
+                </otherwise>
+            </choose>
+        </set>
         WHERE member_id = #{memberId}
-          AND del_flag IS NULL
+        AND del_flag IS NULL
     </update>
+
 </mapper>
