@@ -1,40 +1,29 @@
-body {
-    background: #f4f4f4;
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
 }
 
-.post-card {
-    width: 260px;
-    height: auto;
-    margin: 0 auto;
+/* Pulse animation */
+@keyframes cardPulse {
+    0% { transform: translateY(-6px) scale(1.02); }
+    50% { transform: translateY(-8px) scale(1.04); }
+    100% { transform: translateY(-6px) scale(1.02); }
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    transition: 0.25s;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+    animation: cardPulse 1.4s ease-in-out infinite;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
 }
 
 .card-img-top {
     height: 220px;
     object-fit: cover;
+    transition: transform 0.35s ease;
 }
 
-.content-box {
-    display: flex;
-    flex-direction: column;
-    min-height: 800px;
-}
-
-#post-list {
-    flex: 1;
-}
-
-.badge-status {
-    font-size: 0.75rem;
-    background: rgba(0, 0, 0, 0.75);
-    padding: 4px 10px;
-}
-
-.toggle-link {
-    cursor: pointer;
+.card:hover .card-img-top {
+    transform: scale(1.05);
 }

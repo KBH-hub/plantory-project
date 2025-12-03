@@ -40,6 +40,16 @@ public class StopUserFilter extends OncePerRequestFilter {
             Long memberId = userDetail.getMemberResponse().getMemberId();
             MemberResponse member = profileMapper.selectByMemberId(memberId);
 
+            if (member == null) {
+                request.getSession().invalidate();
+                SecurityContextHolder.clearContext();
+                String error = URLEncoder.encode("계정 정보를 찾을 수 없습니다.", StandardCharsets.UTF_8);
+                response.sendRedirect("/login?error=" + error);
+                return;
+            }
+
+
+
             LocalDateTime stopDay = member.getStopDay();
             LocalDateTime today = LocalDateTime.now();
 

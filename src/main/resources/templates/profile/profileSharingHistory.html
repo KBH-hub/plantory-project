@@ -1,59 +1,75 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나눔 내역</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/profileSharingHistory.css}">
 </head>
 
-<body>
+<body class="bg-light">
+
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
-<h3 class="fw-bold mb-2">나눔 내역</h3>
-<p class="text-muted small mb-1">나의 식물 > 내프로필 > 나눔 내역</p>
+<div class="container py-4">
 
-<p class="mb-4">
-    <span id="myPostsLink" class="toggle-link active me-3">내가 올린 나눔 글</span> |
-    <span id="receivedPostsLink" class="toggle-link ms-3">분양 받은 나눔 글</span>
-</p>
+    <!-- Title -->
+    <div class="mb-4">
+        <h3 class="fw-bold mb-1">나눔 내역</h3>
+        <p class="text-muted small mb-0">나의 식물 > 내프로필 > 나눔 내역</p>
+    </div>
 
-<div class="d-flex justify-content-end align-items-start mb-3">
-    <div class="d-flex align-items-center gap-2">
+    <!-- Tabs (내가 올린 / 분양 받은) -->
+    <ul class="nav nav-pills mb-0">
+        <li class="nav-item">
+            <button id="myPostsLink" class="nav-link active" style="cursor:pointer;">내가 올린 나눔 글</button>
+        </li>
+        <li class="nav-item ms-2">
+            <button id="receivedPostsLink" class="nav-link" style="cursor:pointer;">분양 받은 나눔 글</button>
+        </li>
+    </ul>
 
-        <div class="d-flex align-items-center gap-2">
-            <input class="form-control flex-grow-1" id="search" placeholder="제목으로 검색">
-            <button class="btn btn-dark" id="searchBtn"><i class="bi bi-search"></i></button>
+    <!-- Search + Filter -->
+    <div class="row g-2 mb-2 justify-content-end">
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search" placeholder="제목으로 검색">
+                <button class="btn btn-dark" id="searchBtn" type="button">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
 
-        <select id="statusFilter" class="form-select form-select-sm">
-            <option value="">전체</option>
-            <option value="false">나눔중</option>
-            <option value="true">나눔완료</option>
-        </select>
+        <div class="col-auto">
+            <select id="statusFilter" class="form-select">
+                <option value="false">나눔중</option>
+                <option value="true">나눔완료</option>
+            </select>
         </div>
     </div>
-</div>
-<div class="bg-white p-4 rounded content-box">
-    <div class="d-flex justify-content-center row gy-4" id="post-list"></div>
+    <!-- Content -->
+    <div class="bg-white p-4 rounded shadow-sm border border-light">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="post-list"></div>
 
-    <nav class="mt-4">
-        <ul class="pagination pagination-sm justify-content-center mb-0" id="pagination"></ul>
-    </nav>
-</div>
+        <!-- Pagination -->
+        <nav class="mt-4">
+            <ul class="pagination pagination-sm justify-content-center mb-0" id="pagination"></ul>
+        </nav>
+    </div>
 
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 <script th:src="@{/js/common/alert.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/profile/profileSharingHistory.js}"></script>
 
 </body>
-
 </html>
