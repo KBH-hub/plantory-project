@@ -156,6 +156,8 @@ async function initProfileInfo() {
     }
 
     await loadProfileWritten();
+
+    await loadProfileCounts();
     initPagination();
 }
 
@@ -194,8 +196,10 @@ function initButtons() {
 }
 
 function getKeyword() {
-    return document.querySelector(".input-group input").value.trim();
+    const input = document.getElementById("searchInput");
+    return input ? input.value.trim() : "";
 }
+
 
 function getCategory() {
     return document.querySelector(".form-select").value;
@@ -229,6 +233,21 @@ function renderTable() {
 
     tbody.innerHTML = "";
 
+    if (content.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    <div class="text-center text-muted py-5">
+                        <i class="bi bi-box fs-3"></i><br>
+                        표시할 데이터가 없습니다.
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+
     content.forEach(item => {
         tbody.innerHTML += `
             <tr>
@@ -238,11 +257,23 @@ function renderTable() {
                 <td>${item.nickname}</td>
                 <td>${categoryMap[item.category] || item.category}</td>
                 <td>${item.title}</td>
-                <td>${item.createdAt}</td>
+                <td>${fmtKST(item.createdAt)}</td>
             </tr>
         `;
         bindRowClick();
     });
+}
+function fmtKST(iso) {
+    if (!iso) return '';
+    return new Intl.DateTimeFormat('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+    }).format(new Date(iso))
+        .replace(/\./g, '-')
+        .replace(/-\s/g, '-')
+        .replace(/\s/g, ' ');
 }
 
 function bindRowClick() {
@@ -272,7 +303,7 @@ function bindRowClick() {
 }
 
 function initTabs() {
-    const tabs = document.querySelectorAll("#tabs span");
+    const tabs = document.querySelectorAll('[data-tab]');
     const categorySelect = document.getElementById("categorySelect");
 
     tabs.forEach(tab => {
@@ -302,7 +333,7 @@ function initTabs() {
 }
 
 function initSearchFilter() {
-    const searchInput = document.querySelector(".input-group input");
+    const searchInput = document.getElementById("searchInput");
     const categorySelect = document.getElementById("categorySelect");
 
     searchInput.addEventListener("input", () => {
@@ -395,4 +426,19 @@ function renderPagination(totalCount) {
 
     bindPaginationClick();
     loadProfile()
+}
+
+async function loadProfileCounts() {
+    try {
+        const res = await axios.get("/api/profileSharing/counts");
+
+        document.getElementById("interestCount").textContent =
+            `${res.data.interestCount}개`;
+
+        document.getElementById("sharingHistoryCount").textContent =
+            `${res.data.sharingCount}개`;
+
+    } catch (err) {
+        console.error("카운트 로딩 실패", err);
+    }
 }
