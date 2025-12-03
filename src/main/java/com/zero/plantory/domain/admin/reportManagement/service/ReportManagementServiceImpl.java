@@ -53,6 +53,8 @@ public class ReportManagementServiceImpl implements ReportManagementService {
             reportManagementMapper.insertAdminMemo(memo);
 
             reportManagementMapper.updateStopDay(memberId, stopDays);
+            MemberResponse memberResponse = profileMapper.selectByMemberId(memberId);
+            adminUserService.forceLogout(memberResponse.getMembername());
         }
 
 }
