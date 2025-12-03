@@ -101,8 +101,14 @@ public class SecurityConfig {
                             response.setContentType("application/json;charset=UTF-8");
                             response.getWriter().write("{\"error\":\"권한이 없습니다.\"}");
                         }))
-                )
-        ;
+                );
+                http
+                .sessionManagement(session -> session
+                        .maximumSessions(-1)
+                        .sessionRegistry(sessionRegistry())
+                );
+                http
+                .addFilterBefore(stopUserFilter, LogoutFilter.class);
 
         return http.build();
     }
