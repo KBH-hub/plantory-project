@@ -103,6 +103,7 @@
             </choose>
         </set>
         WHERE member_id = #{memberId}
-          AND del_flag IS NULL
+        AND del_flag IS NULL
     </update>
+
 </mapper>
