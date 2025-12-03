@@ -129,8 +129,12 @@ function bindSubmit() {
         const levelEnum = document.querySelector("#managementLevel").dataset.enum;
         const needsEnum = document.querySelector("#managementNeeds").dataset.enum;
 
-        formData.append("managementLevel", levelEnum ? levelEnum : "");
-        formData.append("managementNeeds", needsEnum ? needsEnum : "");
+        if (levelEnum && levelEnum !== "null") {
+            formData.append("managementLevel", levelEnum);
+        }
+        if (needsEnum && needsEnum !== "null") {
+            formData.append("managementNeeds", needsEnum);
+        }
 
         formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
 

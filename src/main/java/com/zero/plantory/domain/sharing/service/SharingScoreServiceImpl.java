@@ -8,6 +8,9 @@ import com.zero.plantory.global.dto.NoticeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Service
 @RequiredArgsConstructor
 public class SharingScoreServiceImpl implements SharingScoreService {
@@ -67,21 +70,24 @@ public class SharingScoreServiceImpl implements SharingScoreService {
             throw new IllegalArgumentException("후기 작성 권한이 없습니다.");
         }
 
-        // Integer임
-        Integer baseRateInt = sharing.getSharingRate();
-        double baseRate = (baseRateInt == null) ? 1.0 : baseRateInt.doubleValue();
+        BigDecimal baseRate = sharing.getSharingRate();
+        if (baseRate == null) baseRate = new BigDecimal("1.00");
+//        double baseRate = (baseRateInt == null) ? 1.0 : baseRateInt.doubleValue();
 
 
-        double score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
+        BigDecimal score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
 
-        double finalScore = score + 0.2; // 가산
+        BigDecimal finalScore = score.add(new BigDecimal("0.20"));
+
 
         // 정규화
-        if (finalScore > 100) finalScore = 100;
-        if (finalScore < 1) finalScore = 1;
+        finalScore = clamp14(finalScore);
 
-        Long targetMemberId = reviewerType == ReviewerType.GIVER ? sharing.getTargetMemberId() : sharing.getMemberId();
+        Long targetMemberId = (reviewerType == ReviewerType.GIVER)
+                ? sharing.getTargetMemberId()
+                : sharing.getMemberId();
 
+        // BigDecimal을 그대로 저장
         sharingMapper.updateSharingRate(targetMemberId, finalScore);
 
         // review flag
@@ -92,6 +98,21 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         }
     }
 
+    // Normalization
+    private static final BigDecimal MIN_RATE = new BigDecimal("1.00");
+    private static final BigDecimal MAX_RATE = new BigDecimal("14.00");
+
+    private BigDecimal clamp14(BigDecimal value) {
+        if (value == null) return MIN_RATE;
+
+        if (value.compareTo(MIN_RATE) < 0) {
+            return MIN_RATE;
+        }
+        if (value.compareTo(MAX_RATE) > 0) {
+            return MAX_RATE;
+        }
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
 
     /**
      * 후기 기반 점수를 계산하는 메서드.
@@ -128,24 +149,26 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     }
 
     // 최종
-    private double calculateRate(double baseRate, ReviewerType reviewerType,
-                                 int manner, int reShare, Integer satisfaction) {
+    private BigDecimal calculateRate(BigDecimal baseRate,
+                                     ReviewerType reviewerType,
+                                     int manner,
+                                     int reShare,
+                                     Integer satisfaction) {
 
-        double result = baseRate;
+        BigDecimal result = baseRate;
 
-        result *= getMannerWeight(manner);
-        result *= getReShareWeight(reShare);
+        // BigDecimal × double → multiply(BigDecimal.valueOf())
+        result = result.multiply(BigDecimal.valueOf(getMannerWeight(manner)));
+        result = result.multiply(BigDecimal.valueOf(getReShareWeight(reShare)));
 
         if (reviewerType == ReviewerType.RECEIVER) {
-            result *= getSatisfactionWeight(satisfaction);
+            result = result.multiply(BigDecimal.valueOf(getSatisfactionWeight(satisfaction)));
         }
 
-        // 정규화
-        if (result > 100) result = 100;
-        if (result < 1) result = 1;
-
-        return result;
+        // 정규화 (1.00 ~ 14.00)
+        return clamp14(result);
     }
+
 
 
 }

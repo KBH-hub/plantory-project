@@ -292,9 +292,10 @@
 
     <update id="updateSharingRate">
         UPDATE member
-        SET sharing_rate = COALESCE(sharing_rate, 0) + #{score}
+        SET sharing_rate = #{score}
         WHERE member_id = #{memberId}
     </update>
+
 
     <update id="updateReviewFlag">
         UPDATE sharing

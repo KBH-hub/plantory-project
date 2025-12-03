@@ -4,6 +4,7 @@ import com.zero.plantory.domain.sharing.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -43,7 +44,7 @@ public interface SharingMapper {
     List<SharingHistoryResponse> selectProfileSharingReceived(@Param("memberId") Long memberId);
 
     /** Sharing review*/
-    int updateSharingRate(@Param("memberId") Long memberId, @Param("score") double score);
+    int updateSharingRate(@Param("memberId") Long memberId, @Param("score") BigDecimal score);
 
     ReviewInfoResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
     ReviewInfoResponse selectReviewInfoForReceiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
