@@ -4,8 +4,8 @@ import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingHistoryResponse;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
 import com.zero.plantory.domain.sharing.dto.SharingSearchRequest;
-import com.zero.plantory.global.dto.ManagementLevel;
-import com.zero.plantory.global.dto.ManagementNeeds;
+import com.zero.plantory.global.dto.ManageLevel;
+import com.zero.plantory.global.dto.ManageDemand;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -98,8 +98,8 @@ public class SharingMapperTests {
                 .title("산세베리아 나눔해요 (시간 조율 가능)")
                 .content("튼튼한 산세베리아 나눔합니다. 평일 저녁이나 주말 가능해요.")
                 .plantType("산세베리아 골든 하니")
-                .managementLevel(ManagementLevel.EASY)
-                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .managementLevel(ManageLevel.EASY)
+                .managementNeeds(ManageDemand.LITTLE_CARE)
                 .build();
 
         log.info("내용 수정 결과 = {}", mapper.updateSharing(request));
@@ -208,8 +208,8 @@ public class SharingMapperTests {
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .plantType("금전수")
-                .managementLevel(ManagementLevel.EASY)
-                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .managementLevel(ManageLevel.EASY)
+                .managementNeeds(ManageDemand.LITTLE_CARE)
                 .status("false")
                 .build();
 

@@ -1,7 +1,7 @@
 package com.zero.plantory.domain.sharing.dto;
 
-import com.zero.plantory.global.dto.ManagementLevel;
-import com.zero.plantory.global.dto.ManagementNeeds;
+import com.zero.plantory.global.dto.ManageLevel;
+import com.zero.plantory.global.dto.ManageDemand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +21,8 @@ public class SharingRequest {
     private String title;
     private String content;
     private String plantType;
-    private ManagementLevel managementLevel;
-    private ManagementNeeds managementNeeds;
+    private ManageLevel managementLevel;
+    private ManageDemand managementNeeds;
     private Integer interestNum;
     private String status;
     private LocalDateTime reviewFlag;

@@ -2,8 +2,8 @@ package com.zero.plantory.domain.sharing.service;
 
 import com.zero.plantory.domain.sharing.dto.CommentRequest;
 import com.zero.plantory.domain.sharing.dto.SharingRequest;
-import com.zero.plantory.global.dto.ManagementLevel;
-import com.zero.plantory.global.dto.ManagementNeeds;
+import com.zero.plantory.global.dto.ManageLevel;
+import com.zero.plantory.global.dto.ManageDemand;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +48,8 @@ public class SharingWriteServiceTest {
                 .title("테스트 글")
                 .content("테스트 내용")
                 .plantType("다육이")
-                .managementLevel(ManagementLevel.EASY)
-                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .managementLevel(ManageLevel.EASY)
+                .managementNeeds(ManageDemand.LITTLE_CARE)
                 .build();
 
         Long id = sharingWriteService.registerSharing(request, fileList);
@@ -76,8 +76,8 @@ public class SharingWriteServiceTest {
                 .content("수정된 내용")
                 .content("테스트 내용")
                 .plantType("다육이")
-                .managementLevel(ManagementLevel.EASY)
-                .managementNeeds(ManagementNeeds.LITTLE_CARE)
+                .managementLevel(ManageLevel.EASY)
+                .managementNeeds(ManageDemand.LITTLE_CARE)
                 .build();
 
         boolean result = sharingWriteService.updateSharing(request, List.of(newMockFile));
