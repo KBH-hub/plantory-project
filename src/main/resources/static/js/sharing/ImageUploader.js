@@ -70,7 +70,7 @@ export function createImageUploader({
             const files = Array.from(e.target.files);
 
             if (existingImages.length + newImages.length + files.length > max) {
-                alert(`이미지는 최대 ${max}장까지 업로드 가능합니다.`);
+                showAlert(`이미지는 최대 ${max}장까지 업로드 가능합니다.`);
                 return;
             }
 

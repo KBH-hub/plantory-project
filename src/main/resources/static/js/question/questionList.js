@@ -29,7 +29,7 @@ async function loadQuestionList(page) {
 
     } catch (err) {
         console.error(err);
-        alert("목록을 불러오는데 실패했습니다.");
+        showAlert("목록을 불러오는데 실패했습니다.");
     }
 }
 

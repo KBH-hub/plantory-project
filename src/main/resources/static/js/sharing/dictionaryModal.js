@@ -21,7 +21,7 @@ function bindSearchEvent() {
     searchBtn.addEventListener("click", () => {
         const word = searchInput.value.trim();
         if (!word) {
-            alert("검색어를 입력해주세요.");
+            showAlert("검색어를 입력해주세요.");
             return;
         }
         searchPlants(word);
@@ -32,7 +32,7 @@ function bindSearchEvent() {
         if (e.key === "Enter") {
             const word = searchInput.value.trim();
             if (!word) {
-                alert("검색어를 입력해주세요.");
+                showAlert("검색어를 입력해주세요.");
                 return;
             }
             searchPlants(word);
@@ -47,7 +47,7 @@ async function searchPlants(word) {
         renderSearchList(res.data);
     } catch (err) {
         console.error(err);
-        alert("검색 중 오류가 발생했습니다.");
+        showAlert("검색 중 오류가 발생했습니다.");
     }
 }
 
@@ -121,7 +121,7 @@ function bindSelectEvent() {
 
         } catch (err) {
             console.error(err);
-            alert("식물 정보를 불러오지 못했습니다.");
+            showAlert("식물 정보를 불러오지 못했습니다.");
         }
     });
 }

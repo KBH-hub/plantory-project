@@ -146,7 +146,7 @@ async function submitProfile(event) {
     }
 
     if (!selectedFile) {
-        alert("프로필 사진을 선택해주세요.");
+        showAlert("프로필 사진을 선택해주세요.");
         return;
     }
 
