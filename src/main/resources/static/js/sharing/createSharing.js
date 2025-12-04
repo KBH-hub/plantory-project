@@ -122,6 +122,20 @@ function bindSubmit() {
         submitBtn.disabled = true;
         submitBtn.innerText = "처리 중...";
 
+    try{
+        const title = document.getElementById("titleInput").value.trim();
+        const content = document.getElementById("contentInput").value.trim();
+
+        if (!title) {
+            showAlert("제목을 입력하세요.");
+            return;
+        }
+
+        if (!content) {
+            showAlert("내용 입력하세요.");
+            return;
+        }
+
         const formData = new FormData();
         const memberId = document.body.dataset.memberId;
 
@@ -147,35 +161,34 @@ function bindSubmit() {
             formData.append("files", img.file);
         });
 
-        try {
-            if (sharingId) {
-                await axios.put(`/api/sharing/${sharingId}`, formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
-
-                showAlert("수정 완료되었습니다.", () => {
-                    window.location.href = `/readSharing/${sharingId}`;
-                });
-                return;
-            }
-
-            const res = await axios.post("/api/sharing", formData, {
+        if (sharingId) {
+            await axios.put(`/api/sharing/${sharingId}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            const savedId = res.data;
-            showAlert("등록 완료되었습니다.", () => {
-                window.location.href = `/readSharing/${savedId}`;
+            showAlert("수정 완료되었습니다.", () => {
+                window.location.href = `/readSharing/${sharingId}`;
             });
-
-        } catch (err) {
-            console.error(err);
-            showAlert("저장 중 오류가 발생했습니다.");
-
-            submitBtn.disabled = false;
-            submitBtn.innerText = "등록";
-            isSubmitting = false;
+            return;
         }
+
+        const res = await axios.post("/api/sharing", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        const savedId = res.data;
+        showAlert("등록 완료되었습니다.", () => {
+            window.location.href = `/readSharing/${savedId}`;
+        });
+
+    } catch (err) {
+        console.error(err);
+        showAlert("저장 중 오류가 발생했습니다.");
+    } finally {
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        submitBtn.innerText = sharingId ? "수정" : "등록";
+    }
     });
 }
 

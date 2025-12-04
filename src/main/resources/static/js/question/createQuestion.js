@@ -111,16 +111,22 @@ function bindSubmit() {
         submitBtn.disabled = true;
         submitBtn.innerText = "처리 중...";
 
-        const formData = new FormData();
 
+    try{
         const title = document.getElementById("titleInput").value.trim();
         const content = document.getElementById("contentInput").value.trim();
 
-        if (!title || !content) {
-            showAlert("제목과 내용을 입력하세요.");
+        if (!title) {
+            showAlert("제목을 입력하세요.");
             return;
         }
 
+        if (!content) {
+            showAlert("내용을 입력하세요.");
+            return;
+        }
+
+        const formData = new FormData();
         formData.append("title", title);
         formData.append("content", content);
         formData.append("deletedImageIds", JSON.stringify(deletedImageIds));
@@ -129,7 +135,6 @@ function bindSubmit() {
             formData.append("files", img.file);
         });
 
-        try {
             if (questionId) {
                 await axios.put(`/api/questions/${questionId}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" }
@@ -153,10 +158,10 @@ function bindSubmit() {
         } catch (err) {
             console.error(err);
             showAlert("저장 중 오류가 발생했습니다.");
-
-            submitBtn.disabled = false;
-            submitBtn.innerText = "등록";
+        } finally {
             isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.innerText = questionId ? "수정" : "등록";
         }
     });
 }

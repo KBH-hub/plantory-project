@@ -67,7 +67,7 @@ function renderList(list) {
             <div class="col-2 d-flex flex-column align-items-end justify-content-center">
                 <img src="${item.imageUrl}"
                      class="border rounded mb-1" 
-                     style="width:70px;height:70px;object-fit:cover;">
+                     style="width:100px;height:100px;object-fit:cover;">
                 <span class="text-muted small">
                     <i class="bi bi-chat-left-text"></i> ${item.answerCount}
                 </span>

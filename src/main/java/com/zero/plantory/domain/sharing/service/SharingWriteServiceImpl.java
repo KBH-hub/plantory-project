@@ -35,9 +35,8 @@ public class SharingWriteServiceImpl implements SharingWriteService {
 
         List<ImageDTO> imageList = new ArrayList<>();
 
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
+        if (request.getTitle() == null || request.getTitle().isBlank())
             throw new IllegalArgumentException("제목은 필수입니다.");
-        }
 
         if (request.getContent() == null || request.getContent().isBlank())
             throw new IllegalArgumentException("내용은 필수입니다.");
