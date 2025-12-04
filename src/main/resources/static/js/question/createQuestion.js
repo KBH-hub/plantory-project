@@ -103,8 +103,14 @@ function bindImageUploader() {
 
 function bindSubmit() {
     const submitBtn = document.getElementById("btnSubmit");
+    let isSubmitting = false;
 
     submitBtn.addEventListener("click", async () => {
+        if (isSubmitting) return;
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "처리 중...";
+
         const formData = new FormData();
 
         const title = document.getElementById("titleInput").value.trim();
@@ -124,29 +130,33 @@ function bindSubmit() {
         });
 
         try {
-            // 수정
             if (questionId) {
                 await axios.put(`/api/questions/${questionId}`, formData, {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
 
-                showAlert("수정 완료되었습니다.");
-                window.location.href = `/readQuestion/${questionId}`;
+                showAlert("수정 완료되었습니다.", () => {
+                    window.location.href = `/readQuestion/${questionId}`;
+                });
                 return;
             }
 
-            // 등록
             const res = await axios.post("/api/questions", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
 
             const savedId = res.data;
-            showAlert("등록 완료되었습니다.");
-            window.location.href = `/readQuestion/${savedId}`;
+            showAlert("등록 완료되었습니다.", () => {
+                window.location.href = `/readQuestion/${savedId}`;
+            });
 
         } catch (err) {
             console.error(err);
             showAlert("저장 중 오류가 발생했습니다.");
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "등록";
+            isSubmitting = false;
         }
     });
 }
@@ -158,7 +168,7 @@ async function loadUpdateQuestion() {
     document.getElementById("titleInput").value = data.title;
     document.getElementById("contentInput").value = data.content;
 
-    existingImages = data.images; // [{imageId, fileUrl}, ...]
+    existingImages = data.images;
     renderImages();
 }
 
@@ -167,9 +177,12 @@ async function initCreateQuestion() {
     bindSubmit();
 
     if (questionId) {
-        document.querySelector("h5").innerText = "질문글 수정";
+        document.getElementById("pageTitle").innerText = "질문글 수정";
         document.getElementById("btnSubmit").innerText = "수정";
         await loadUpdateQuestion();
+    } else {
+        document.getElementById("pageTitle").innerText = "질문글 등록";
+        document.getElementById("btnSubmit").innerText = "등록";
     }
 }
 

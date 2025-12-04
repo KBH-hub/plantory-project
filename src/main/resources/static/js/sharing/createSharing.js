@@ -113,9 +113,14 @@ function bindPlantSelect() {
 
 function bindSubmit() {
     const form = document.querySelector("form");
+    let isSubmitting = false;
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "처리 중...";
 
         const formData = new FormData();
         const memberId = document.body.dataset.memberId;
@@ -148,8 +153,9 @@ function bindSubmit() {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
 
-                showAlert("수정 완료되었습니다.");
-                window.location.href = `/readSharing/${sharingId}`;
+                showAlert("수정 완료되었습니다.", () => {
+                    window.location.href = `/readSharing/${sharingId}`;
+                });
                 return;
             }
 
@@ -158,12 +164,17 @@ function bindSubmit() {
             });
 
             const savedId = res.data;
-            showAlert("등록 완료되었습니다.");
-            window.location.href = `/readSharing/${savedId}`;
+            showAlert("등록 완료되었습니다.", () => {
+                window.location.href = `/readSharing/${savedId}`;
+            });
 
         } catch (err) {
             console.error(err);
             showAlert("저장 중 오류가 발생했습니다.");
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "등록";
+            isSubmitting = false;
         }
     });
 }
@@ -182,12 +193,11 @@ async function loadUpdateSharing() {
     document.querySelector("#managementLevel").dataset.enum = data.managementLevel;
     document.querySelector("#managementNeeds").dataset.enum = data.managementNeeds;
 
-    existingImages = data.images; // [{imageId, fileUrl}, ...]
+    existingImages = data.images;
     renderImages();
 }
 
 async function initCreateSharing() {
-    // renderImages();
     bindImageUploader();
     bindPlantSelect();
     bindSubmit();
