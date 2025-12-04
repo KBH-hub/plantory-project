@@ -14,6 +14,7 @@
             m.nickname         AS nickname,
             q.created_at       AS createdAt,
             q.updated_at,
+            m.member_id,
 
             (
                 SELECT COUNT(*)

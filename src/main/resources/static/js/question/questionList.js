@@ -53,8 +53,10 @@ function renderList(list) {
         const html = `
         <a href="/readQuestion/${item.questionId}" class="row mb-3 p-3 bg-white border rounded text-decoration-none text-dark">
             <div class="col-1 d-flex justify-content-center">
-                <img src="https://via.placeholder.com/40"
-                     class="rounded-circle" style="width:40px;height:40px;">
+                <div id="profile-${item.memberId}">
+                    <img src="https://via.placeholder.com/40"
+                         class="rounded-circle" style="width:40px;height:40px;">
+                     </div>
             </div>
 
             <div class="col-9">
@@ -74,6 +76,8 @@ function renderList(list) {
     `;
 
         container.insertAdjacentHTML("beforeend", html);
+
+        loadProfileImage(item.memberId);
     });
 
 }
@@ -116,4 +120,26 @@ function renderPagination(page, size, totalCount) {
     }
 
     pager.innerHTML = html;
+}
+
+async function loadProfileImage(memberId) {
+    if (!memberId) return;
+    memberId = Number(memberId);
+
+    const box = document.getElementById(`profile-${memberId}`);
+    if (!box) return;
+
+    try {
+        const res = await axios.get(`/api/profile/picture`, {
+            params: { memberId }
+        });
+        const url = res.data.imageUrl;
+
+        box.innerHTML = url
+            ? `<img src="${url}" class="rounded-circle" style="width:40px;height:40px;">`
+            : `<div class="bg-secondary rounded-circle" style="width:40px;height:40px;"></div>`;
+
+    } catch (err) {
+        console.error("프사 불러오기 실패", err);
+    }
 }
