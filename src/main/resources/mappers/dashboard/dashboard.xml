@@ -21,7 +21,6 @@
           AND m.del_flag IS NULL
           AND mb.del_flag IS NULL
           AND DATE(w.date_at) = CURDATE()
-          AND w.check_flag IS NULL
     </select>
 
     <select id="countCareNeededPlants" resultType="int">
@@ -85,7 +84,6 @@
           AND m.del_flag IS NULL
           AND mb.del_flag IS NULL
           AND DATE(w.date_at) = CURDATE()
-          AND w.check_flag IS NULL
 
     </select>
 
