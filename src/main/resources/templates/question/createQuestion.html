@@ -19,23 +19,19 @@
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <main class="container-fluid px-4 py-4" style="width:1470px; padding:16px;">
-    <h5 class="fw-bold mb-3">질문글 등록</h5>
+    <h5 id="pageTitle" class="fw-bold mb-3">질문글 등록</h5>
     <hr class="mt-1 mb-4"/>
 
     <div>
         <form>
-
-            <!-- 이미지 영역 -->
             <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-semibold small">이미지</label>
                 <div class="col-sm-10">
 
                     <div id="thumbs" class="d-flex flex-wrap gap-2 align-items-start">
 
-                        <!-- 미리보기 -->
                         <div id="previewList" class="d-flex flex-wrap gap-2"></div>
 
-                        <!-- 업로드 버튼 -->
                         <div id="imageUploadBox"
                              class="border bg-light-subtle d-flex flex-column align-items-center justify-content-center"
                              style="width:120px;height:120px;cursor:pointer;">
@@ -50,7 +46,6 @@
                 </div>
             </div>
 
-            <!-- 제목 -->
             <div class="row mb-3">
                 <label class="col-sm-2 col-form-label fw-semibold small">
                     제목 <span class="text-danger">*</span>
@@ -61,7 +56,6 @@
                 </div>
             </div>
 
-            <!-- 내용 -->
             <div class="row mb-4">
                 <label class="col-sm-2 col-form-label fw-semibold small">
                     내용 <span class="text-danger">*</span>
@@ -72,7 +66,6 @@
                 </div>
             </div>
 
-            <!-- 버튼 -->
             <div class="d-flex justify-content-center gap-3 pt-2">
                 <a type="button" href="/questionList" class="btn btn-secondary px-5">취소</a>
                 <button id="btnSubmit" type="button" class="btn btn-success px-5">등록</button>

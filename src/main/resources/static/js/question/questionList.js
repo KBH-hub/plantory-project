@@ -53,8 +53,10 @@ function renderList(list) {
         const html = `
         <a href="/readQuestion/${item.questionId}" class="row mb-3 p-3 bg-white border rounded text-decoration-none text-dark">
             <div class="col-1 d-flex justify-content-center">
-                <img src="https://via.placeholder.com/40"
-                     class="rounded-circle" style="width:40px;height:40px;">
+                <div id="profile-${item.memberId}">
+                    <img src="https://via.placeholder.com/40"
+                         class="rounded-circle" style="width:40px;height:40px;">
+                     </div>
             </div>
 
             <div class="col-9">
@@ -65,7 +67,7 @@ function renderList(list) {
             <div class="col-2 d-flex flex-column align-items-end justify-content-center">
                 <img src="${item.imageUrl}"
                      class="border rounded mb-1" 
-                     style="width:70px;height:70px;object-fit:cover;">
+                     style="width:100px;height:100px;object-fit:cover;">
                 <span class="text-muted small">
                     <i class="bi bi-chat-left-text"></i> ${item.answerCount}
                 </span>
@@ -74,46 +76,83 @@ function renderList(list) {
     `;
 
         container.insertAdjacentHTML("beforeend", html);
+
+        loadProfileImage(item.memberId);
     });
 
 }
 
 function renderPagination(page, size, totalCount) {
+    const ul = document.getElementById('pager');
+    if (!ul) return;
 
-    const pager = document.getElementById("pager");
-    pager.innerHTML = "";
+    ul.innerHTML = "";
 
-    const totalPage = Math.ceil(totalCount / size);
-    if (totalPage === 0) return;
+    const totalPages = Math.max(1, Math.ceil(totalCount / size));
+    const current = page;
 
-    let html = "";
+    const goPage = (p) => loadQuestionList(p);
 
-    // 이전
-    if (page > 1) {
-        html += `
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="loadQuestionList(${page - 1})">&laquo;</a>
-            </li>
-        `;
+    const makeItem = (label, p, { disabled = false, active = false, aria = null } = {}) => {
+        const li = document.createElement('li');
+        li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = "#";
+        if (aria) a.setAttribute('aria-label', aria);
+        a.textContent = label;
+
+        if (!disabled && !active) {
+            a.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                goPage(p);
+            });
+        } else {
+            a.addEventListener('click', (ev) => ev.preventDefault());
+        }
+
+        li.appendChild(a);
+        return li;
+    };
+
+    ul.appendChild(makeItem('«', 1, { disabled: current === 1, aria: "처음" }));
+
+    ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1, aria: "이전" }));
+
+    const windowSize = 5;
+    const blockStart = Math.floor((current - 1) / windowSize) * windowSize + 1;
+    const blockEnd = Math.min(blockStart + windowSize - 1, totalPages);
+
+    for (let p = blockStart; p <= blockEnd; p++) {
+        ul.appendChild(makeItem(String(p), p, { active: p === current }));
     }
 
-    // 페이지 번호
-    for (let p = 1; p <= totalPage; p++) {
-        html += `
-            <li class="page-item ${p === page ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="loadQuestionList(${p})">${p}</a>
-            </li>
-        `;
-    }
+    const isLast = current >= totalPages;
+    ul.appendChild(makeItem('›', current + 1, { disabled: isLast, aria: "다음" }));
 
-    // 다음
-    if (page < totalPage) {
-        html += `
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="loadQuestionList(${page + 1})">&raquo;</a>
-            </li>
-        `;
-    }
+    ul.appendChild(makeItem('»', totalPages, { disabled: isLast, aria: "마지막" }));
+}
 
-    pager.innerHTML = html;
+
+async function loadProfileImage(memberId) {
+    if (!memberId) return;
+    memberId = Number(memberId);
+
+    const box = document.getElementById(`profile-${memberId}`);
+    if (!box) return;
+
+    try {
+        const res = await axios.get(`/api/profile/picture`, {
+            params: { memberId }
+        });
+        const url = res.data.imageUrl;
+
+        box.innerHTML = url
+            ? `<img src="${url}" class="rounded-circle" style="width:40px;height:40px;">`
+            : `<div class="bg-secondary rounded-circle" style="width:40px;height:40px;"></div>`;
+
+    } catch (err) {
+        console.error("프사 불러오기 실패", err);
+    }
 }

@@ -19,8 +19,7 @@ function renderSharingList(list) {
 
                 <img src="${item.fileUrl}"
                      class="card-img-top object-fit-cover"
-                     style="height:350px;"
-                     alt="thumbnail">
+                     style="height:350px;">
 
                 <div class="card-body px-2 py-2">
 

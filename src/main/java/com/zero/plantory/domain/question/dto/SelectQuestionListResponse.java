@@ -17,4 +17,5 @@ public class SelectQuestionListResponse {
     private String updatedAt;
     private Integer answerCount;
     private String imageUrl;
+    private Long memberId;
 }

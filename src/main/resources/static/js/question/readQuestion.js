@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAnswerList(questionId);
     bindAnswerSubmit(questionId);
     bindDeleteButton();
-
     document.addEventListener("answers:changed", () => {
         loadAnswerList(questionId);
     });
@@ -53,7 +52,20 @@ function renderDetail(detail) {
         : timeAgo(detail.createdAt);
 
     document.getElementById("questionCreated").innerText = timeText;
+    renderProfileImage(detail.memberId);
+
 }
+
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("question-image")) {
+        const originalUrl = e.target.dataset.original;
+        const zoomImg = document.getElementById("zoomImg");
+        zoomImg.src = originalUrl;
+
+        const modal = new bootstrap.Modal(document.getElementById("imgZoomModal"));
+        modal.show();
+    }
+});
 
 function renderCarousel(images) {
     const inner = document.getElementById("questionCarouselInner");
@@ -67,8 +79,11 @@ function renderCarousel(images) {
     images.forEach((img, i) => {
         inner.insertAdjacentHTML("beforeend", `
             <div class="carousel-item ${i === 0 ? "active" : ""}">
-                <img src="${img.fileUrl}" class="d-block w-100 object-fit-cover"
-                     style="height:350px; cursor:pointer;">
+                 <img src="${img.fileUrl}" 
+                     data-original="${img.fileUrl}"
+                     class="d-block w-100 object-fit-cover question-image"
+                     style="height:450px; cursor:pointer;">
+            </div>
             </div>
         `);
 
@@ -78,6 +93,7 @@ function renderCarousel(images) {
                     class="${i === 0 ? "active" : ""}">
             </button>
         `);
+
     });
 }
 
@@ -122,4 +138,30 @@ function bindDeleteButton() {
             }
         });
     });
+}
+
+async function renderProfileImage(memberId) {
+    const box = document.getElementById("writerProfileImage");
+    if (!box) return;
+
+    try {
+        const res = await axios.get(`/api/profile/picture?memberId=${memberId}`);
+        const imageUrl = res.data.imageUrl;
+
+        if (imageUrl) {
+            box.innerHTML = `
+                <img src="${imageUrl}" 
+                     class="rounded-circle"
+                     style="width:48px; height:48px; object-fit:cover;">
+            `;
+        } else {
+            box.innerHTML = `
+                <div class="bg-secondary rounded-circle"
+                     style="width:48px;height:48px;"></div>
+            `;
+        }
+
+    } catch (e) {
+        console.error("프로필 이미지 불러오기 실패", e);
+    }
 }

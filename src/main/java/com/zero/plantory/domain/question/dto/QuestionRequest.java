@@ -13,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class QuestionRequest {
-    Long questionId;
-    Long memberId;
-    String title;
-    String content;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
-    LocalDateTime delFlag;
+    private Long questionId;
+    private Long memberId;
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime delFlag;
 
     private String deletedImageIds;
     private List<Long> deletedImageIdList;
