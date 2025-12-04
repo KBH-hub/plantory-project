@@ -83,44 +83,57 @@ function renderList(list) {
 }
 
 function renderPagination(page, size, totalCount) {
+    const ul = document.getElementById('pager');
+    if (!ul) return;
 
-    const pager = document.getElementById("pager");
-    pager.innerHTML = "";
+    ul.innerHTML = "";
 
-    const totalPage = Math.ceil(totalCount / size);
-    if (totalPage === 0) return;
+    const totalPages = Math.max(1, Math.ceil(totalCount / size));
+    const current = page;
 
-    let html = "";
+    const goPage = (p) => loadQuestionList(p);
 
-    // 이전
-    if (page > 1) {
-        html += `
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="loadQuestionList(${page - 1})">&laquo;</a>
-            </li>
-        `;
+    const makeItem = (label, p, { disabled = false, active = false, aria = null } = {}) => {
+        const li = document.createElement('li');
+        li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = "#";
+        if (aria) a.setAttribute('aria-label', aria);
+        a.textContent = label;
+
+        if (!disabled && !active) {
+            a.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                goPage(p);
+            });
+        } else {
+            a.addEventListener('click', (ev) => ev.preventDefault());
+        }
+
+        li.appendChild(a);
+        return li;
+    };
+
+    ul.appendChild(makeItem('«', 1, { disabled: current === 1, aria: "처음" }));
+
+    ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1, aria: "이전" }));
+
+    const windowSize = 5;
+    const blockStart = Math.floor((current - 1) / windowSize) * windowSize + 1;
+    const blockEnd = Math.min(blockStart + windowSize - 1, totalPages);
+
+    for (let p = blockStart; p <= blockEnd; p++) {
+        ul.appendChild(makeItem(String(p), p, { active: p === current }));
     }
 
-    // 페이지 번호
-    for (let p = 1; p <= totalPage; p++) {
-        html += `
-            <li class="page-item ${p === page ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="loadQuestionList(${p})">${p}</a>
-            </li>
-        `;
-    }
+    const isLast = current >= totalPages;
+    ul.appendChild(makeItem('›', current + 1, { disabled: isLast, aria: "다음" }));
 
-    // 다음
-    if (page < totalPage) {
-        html += `
-            <li class="page-item">
-                <a class="page-link" href="#" onclick="loadQuestionList(${page + 1})">&raquo;</a>
-            </li>
-        `;
-    }
-
-    pager.innerHTML = html;
+    ul.appendChild(makeItem('»', totalPages, { disabled: isLast, aria: "마지막" }));
 }
+
 
 async function loadProfileImage(memberId) {
     if (!memberId) return;
