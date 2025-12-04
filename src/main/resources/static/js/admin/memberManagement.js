@@ -83,7 +83,7 @@ function renderTable(members) {
                 <td>${m.address}</td>
                 <td>${m.skillRate}%</td>
                 <td>${m.managementRate}%</td>
-                <td>${m.shareRate}%</td>
+                <td>${m.sharingRate}%</td>
                 <td>${getRemainDays(m.stopDay)}</td>
                 <td>${m.createdAt}</td>
             </tr>
