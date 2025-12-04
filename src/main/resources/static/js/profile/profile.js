@@ -39,6 +39,9 @@ function updateTableVisibility() {
         writtenTbody.classList.remove("d-none");
     } else {
         commentTbody.classList.remove("d-none");
+
+        const checkboxes = commentTbody.querySelectorAll(".row-check");
+        checkboxes.forEach(cb => cb.remove());
     }
 }
 
