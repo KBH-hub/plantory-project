@@ -200,15 +200,11 @@
     </div>
 </div>
 
-<!-- 이미지 원본보기 모달 -->
-<div class="modal fade" id="imageModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content bg-dark">
-            <div class="modal-body p-0 text-center">
-                <img id="modalImage" src=""
-                     class="img-fluid"
-                     style="max-height: 90vh; object-fit: contain;">
-            </div>
+<!-- 이미지 확대 모달 -->
+<div class="modal fade" id="imgZoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0 shadow-none">
+            <img id="zoomImg" class="w-100 rounded" style="max-height:90vh; object-fit:contain;">
         </div>
     </div>
 </div>

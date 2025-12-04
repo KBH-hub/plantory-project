@@ -56,6 +56,17 @@ function renderDetail(detail) {
 
 }
 
+document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("question-image")) {
+        const originalUrl = e.target.dataset.original;
+        const zoomImg = document.getElementById("zoomImg");
+        zoomImg.src = originalUrl;
+
+        const modal = new bootstrap.Modal(document.getElementById("imgZoomModal"));
+        modal.show();
+    }
+});
+
 function renderCarousel(images) {
     const inner = document.getElementById("questionCarouselInner");
     const indicators = document.getElementById("questionCarouselIndicators");
@@ -68,8 +79,11 @@ function renderCarousel(images) {
     images.forEach((img, i) => {
         inner.insertAdjacentHTML("beforeend", `
             <div class="carousel-item ${i === 0 ? "active" : ""}">
-                <img src="${img.fileUrl}" class="d-block w-100 object-fit-cover"
-                     style="height:350px; cursor:pointer;">
+                 <img src="${img.fileUrl}" 
+                     data-original="${img.fileUrl}"
+                     class="d-block w-100 object-fit-cover question-image"
+                     style="height:450px; cursor:pointer;">
+            </div>
             </div>
         `);
 
@@ -79,6 +93,7 @@ function renderCarousel(images) {
                     class="${i === 0 ? "active" : ""}">
             </button>
         `);
+
     });
 }
 

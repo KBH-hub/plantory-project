@@ -70,7 +70,7 @@ function renderCarousel(images) {
             <div class="carousel-item ${idx === 0 ? "active" : ""}">
                 <img src="${img.fileUrl}" data-original="${img.fileUrl}"
                      class="d-block w-100 object-fit-cover share-image"
-                     style="height:350px; cursor:pointer;">
+                     style="height:450px; cursor:pointer;">
             </div>
         `);
 
@@ -80,6 +80,16 @@ function renderCarousel(images) {
                     class="${idx === 0 ? "active" : ""}">
             </button>
         `);
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("share-image")) {
+                const originalUrl = e.target.dataset.original;
+                const zoomImg = document.getElementById("zoomImg");
+                zoomImg.src = originalUrl;
+
+                const modal = new bootstrap.Modal(document.getElementById("imgZoomModal"));
+                modal.show();
+            }
+        });
     });
 }
 
