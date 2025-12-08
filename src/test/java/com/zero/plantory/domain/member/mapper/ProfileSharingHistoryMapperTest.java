@@ -45,7 +45,6 @@ class ProfileSharingHistoryMapperTest {
     void selectProfileSharingHistoryList() {
         ProfileSharingHistoryListRequest request = new ProfileSharingHistoryListRequest();
         request.setMemberId(1L);
-        request.setMyType("MY");
         request.setLimit(10);
         request.setOffset(0);
 

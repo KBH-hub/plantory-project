@@ -2,7 +2,6 @@ package com.zero.plantory.domain.profile.service;
 
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListRequest;
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse;
-import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryPageResponse;
 
 import java.util.List;
 
@@ -12,6 +11,8 @@ public interface ProfileSharingHistoryService {
 
     int getCompletedSharingCount(Long memberId);
 
-    ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req);
+//    ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req);
 
+List<ProfileSharingHistoryListResponse> getMySharingList(ProfileSharingHistoryListRequest request);
+List<ProfileSharingHistoryListResponse> getReceivedSharingList(ProfileSharingHistoryListRequest request);
 }

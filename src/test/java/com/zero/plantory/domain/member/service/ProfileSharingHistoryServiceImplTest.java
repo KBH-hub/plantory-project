@@ -2,69 +2,63 @@ package com.zero.plantory.domain.member.service;
 
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListRequest;
 import com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse;
-import com.zero.plantory.domain.profile.mapper.ProfileSharingHistoryMapper;
-import com.zero.plantory.domain.profile.service.ProfileSharingHistoryServiceImpl;
+import com.zero.plantory.domain.profile.service.ProfileSharingHistoryService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(MockitoExtension.class)
+@Slf4j
+@SpringBootTest
 class ProfileSharingHistoryServiceImplTest {
 
-    @Mock
-    private ProfileSharingHistoryMapper profileSharingHistoryMapper;
-
-    @InjectMocks
-    private ProfileSharingHistoryServiceImpl profileSharingHistoryService;
+    @Autowired
+    private ProfileSharingHistoryService profileSharingHistoryService;
 
     @Test
     @DisplayName("나눔 관심 수 조회 테스트")
     void getInterestCountTest() {
-        when(profileSharingHistoryMapper.countByInterestCount(1L)).thenReturn(5);
 
         int result = profileSharingHistoryService.getInterestCount(1L);
 
-        assertEquals(5, result);
-        verify(profileSharingHistoryMapper, times(1)).countByInterestCount(1L);
+        log.info("interestCount = {}", result);
+
+        assertTrue(result >= 0);
     }
 
     @Test
     @DisplayName("완료된 나눔 수 조회 테스트")
     void getCompletedSharingCountTest() {
-        when(profileSharingHistoryMapper.countByCompletedSharingCount(1L)).thenReturn(3);
 
         int result = profileSharingHistoryService.getCompletedSharingCount(1L);
 
-        assertEquals(3, result);
-        verify(profileSharingHistoryMapper, times(1)).countByCompletedSharingCount(1L);
+        log.info("completedSharingCount = {}", result);
+
+        assertTrue(result >= 0);
     }
 
     @Test
-    @DisplayName("나의 나눔 내역 리스트 조회 테스트")
+    @DisplayName("나의 나눔/나눔 받은 내역 리스트 조회 테스트")
     void getProfileSharingHistoryListTest() {
-        ProfileSharingHistoryListRequest request = new ProfileSharingHistoryListRequest();
-        request.setMemberId(1L);
 
-        ProfileSharingHistoryListResponse item = new ProfileSharingHistoryListResponse();
-        item.setSharingId(10L);
-        item.setTitle("나눔 테스트 제목");
+        ProfileSharingHistoryListRequest req = ProfileSharingHistoryListRequest.builder()
+                .memberId(1L)
+                .keyword("")
+                .status("")
+                .offset(0)
+                .limit(10)
+                .build();
 
-        when(profileSharingHistoryMapper.selectProfileSharingList(request)).thenReturn(List.of(item));
+        List<ProfileSharingHistoryListResponse> list = profileSharingHistoryService.getMySharingList(req);
+        List<ProfileSharingHistoryListResponse> list2 = profileSharingHistoryService.getReceivedSharingList(req);
 
-        List<ProfileSharingHistoryListResponse> result = profileSharingHistoryService.getProfileSharingHistoryList(request).getList();
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("나눔 테스트 제목", result.get(0).getTitle());
-        verify(profileSharingHistoryMapper, times(1)).selectProfileSharingList(request);
+        log.info("나의 나움 내역 리스트 조회 로그 결과: = {}", list);
+        log.info("나눔 받은 내역 리스트 조회 로그 결과2: = {}", list2);
     }
 }

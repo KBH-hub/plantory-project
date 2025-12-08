@@ -29,28 +29,55 @@ public class ProfileSharingHistoryServiceImpl implements ProfileSharingHistorySe
     }
 
     @Override
-    public ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req) {
-
-        if (req.getStatus() != null && req.getStatus().isBlank()) {
-            req.setStatus(null);
+    public  List<ProfileSharingHistoryListResponse> getMySharingList(ProfileSharingHistoryListRequest request) {
+        if (request.getKeyword() != null && request.getKeyword().isBlank()) {
+            request.setKeyword(null);
+        }
+        if (request.getStatus() != null && request.getStatus().isBlank()) {
+            request.setStatus(null);
         }
 
         List<ProfileSharingHistoryListResponse> list;
-        int totalCount;
+        list = profileSharingHistoryMapper.selectMySharingList(request);
+        return list;
+    }
 
-        if ("MY".equals(req.getMyType())) {
-            list = profileSharingHistoryMapper.selectProfileSharingList(req);
-            totalCount = profileSharingHistoryMapper.countMySharing(req);
-        } else {
-            list = profileSharingHistoryMapper.selectProfileSharingList(req);
-            totalCount = profileSharingHistoryMapper.countReceivedSharing(req);
+    @Override
+    public  List<ProfileSharingHistoryListResponse> getReceivedSharingList(ProfileSharingHistoryListRequest request) {if (request.getKeyword() != null && request.getKeyword().isBlank()) {
+        request.setKeyword(null);
+    }
+        if (request.getStatus() != null && request.getStatus().isBlank()) {
+            request.setStatus(null);
         }
 
-        ProfileSharingHistoryPageResponse response = new ProfileSharingHistoryPageResponse();
-        response.setList(list);
-        response.setTotalCount(totalCount);
 
-        return response;
+        List<ProfileSharingHistoryListResponse> list;
+        list = profileSharingHistoryMapper.selectReceivedSharingList(request);
+        return list;
     }
+//    @Override
+//    public ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req) {
+//
+//        if (req.getStatus() != null && req.getStatus().isBlank()) {
+//            req.setStatus(null);
+//        }
+//
+//        List<ProfileSharingHistoryListResponse> list;
+//        int totalCount;
+//
+//        if ("MY".equals(req.getMyType())) {
+//            list = profileSharingHistoryMapper.selectProfileSharingList(req);
+//            totalCount = profileSharingHistoryMapper.countMySharing(req);
+//        } else {
+//            list = profileSharingHistoryMapper.selectProfileSharingList(req);
+//            totalCount = profileSharingHistoryMapper.countReceivedSharing(req);
+//        }
+//
+//        ProfileSharingHistoryPageResponse response = new ProfileSharingHistoryPageResponse();
+//        response.setList(list);
+//        response.setTotalCount(totalCount);
+//
+//        return response;
+//    }
 
 }

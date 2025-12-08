@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ProfileSharingHistoryListRequest {
     private Long memberId;
-    private String myType;
     private String keyword;
     private String status;
     private Integer limit;
