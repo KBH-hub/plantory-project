@@ -27,10 +27,9 @@ import java.util.Map;
 public class ProfileSharingHistoryRestController {
 
     private final ProfileSharingHistoryService profileSharingHistoryService;
-    private final ImageService imageService;
 
     @GetMapping("/my")
-    public ProfileSharingHistoryPageResponse getMySharing(
+    public List<ProfileSharingHistoryListResponse> getMySharing(
             @AuthenticationPrincipal MemberDetail user,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String status,
@@ -43,14 +42,13 @@ public class ProfileSharingHistoryRestController {
                 .status(status)
                 .offset(offset)
                 .limit(limit)
-                .myType("MY")
                 .build();
 
-        return profileSharingHistoryService.getProfileSharingHistoryList(request);
+        return profileSharingHistoryService.getMySharingList(request);
     }
 
     @GetMapping("/received")
-    public ProfileSharingHistoryPageResponse getReceivedSharing(
+    public List<ProfileSharingHistoryListResponse> getReceivedSharing(
             @AuthenticationPrincipal MemberDetail memberDetail,
             @RequestParam(required = false) String keyword,
             @RequestParam String status,
@@ -63,10 +61,9 @@ public class ProfileSharingHistoryRestController {
                 .status(status)
                 .offset(offset)
                 .limit(limit)
-                .myType("RECEIVED")
                 .build();
 
-        return profileSharingHistoryService.getProfileSharingHistoryList(request);
+        return profileSharingHistoryService.getReceivedSharingList(request);
     }
 
     @GetMapping("/counts")

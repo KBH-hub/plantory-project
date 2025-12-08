@@ -34,7 +34,7 @@ mybatis:
 
 
 server:
-  port: 5432
+  port: 9000
 
 openapi:
   nongsaro:

@@ -1,198 +1,254 @@
-const myPostsLink = document.getElementById('myPostsLink');
-const receivedPostsLink = document.getElementById('receivedPostsLink');
+(function () {
+    const state = {
+        apiBase: '/api/profileSharing',
+        tab: 'MY',
+        keyword: '',
+        status: '',
+        offset: 0,
+        limit: 10,
+        total: 0,
+        items: []
+    };
 
-const limit = 10;
-const offset = 0;
-let currentPage = 1;
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadList("MY");
-});
+    function normalizeResponse(items) {
+        return {
+            items,
+            total: items[0]?.totalCount ?? 0
+        };
+    }
 
-async function loadList(myType) {
-    const keyword = document.getElementById("search").value.trim();
-    const status = document.getElementById("statusFilter").value;
+    function resetOffset() {
+        state.offset = 0;
+    }
 
-    const res = await axios.get(`/api/profileSharing/${myType === "MY" ? "my" : "received"}`, {
-        params: {
-            keyword: keyword,
-            status: status,
-            limit: limit,
-            offset: (currentPage - 1) * limit
+
+    async function fetchSharing() {
+        const s = state;
+        const url = `${s.apiBase}/${s.tab === 'MY' ? 'my' : 'received'}`;
+
+        const params = new URLSearchParams({
+            keyword: s.keyword,
+            status: s.status,
+            offset: s.offset,
+            limit: s.limit
+        });
+
+        const res = await axios.get(`${url}?${params.toString()}`);
+        const { items, total } = normalizeResponse(res.data);
+
+        s.items = items;
+        s.total = total;
+    }
+
+
+    async function refresh() {
+        await fetchSharing();
+        renderCards(state.items);
+        renderPager(goPage);
+    }
+
+
+    function goPage(p) {
+        if (p < 1) return;
+        const max = Math.ceil(state.total / state.limit);
+        if (p > max) return;
+
+        state.offset = (p - 1) * state.limit;
+        refresh();
+    }
+
+
+    function activateTab(tab) {
+        const myBtn = document.getElementById('myPostsLink');
+        const receivedBtn = document.getElementById('receivedPostsLink');
+
+        myBtn.classList.toggle('active', tab === 'MY');
+        receivedBtn.classList.toggle('active', tab === 'RECEIVED');
+    }
+
+
+    function bindEvents() {
+
+        document.getElementById('myPostsLink').addEventListener('click', () => {
+            state.tab = 'MY';
+            activateTab('MY');
+            resetOffset();
+            refresh();
+        });
+
+        document.getElementById('receivedPostsLink').addEventListener('click', () => {
+            state.tab = 'RECEIVED';
+            activateTab('RECEIVED');
+            resetOffset();
+            refresh();
+        });
+
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            state.keyword = document.getElementById("search").value.trim();
+            resetOffset();
+            refresh();
+        });
+
+        document.getElementById('search').addEventListener("keyup", (e) => {
+            if (e.key === "Enter") {
+                state.keyword = e.target.value.trim();
+                resetOffset();
+                refresh();
+            }
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', (e) => {
+            state.status = e.target.value;
+            resetOffset();
+            refresh();
+        });
+
+        document.addEventListener("click", (e) => {
+            const card = e.target.closest(".post-card");
+            if (!card) return;
+
+            if (e.target.closest(".review-badge")) {
+                return;
+            }
+
+            const sharingId = card.dataset.id;
+            window.location.href = `/readSharing/${sharingId}`;
+        });
+
+        document.addEventListener("click", (e) => {
+            const reviewBtn = e.target.closest(".review-badge");
+            if (!reviewBtn) return;
+
+            e.stopPropagation();
+            const sharingId = reviewBtn.dataset.id;
+            window.location.href = `/sharing/${sharingId}/review`;
+        });
+    }
+
+
+    function renderPager(goPage) {
+        const ul = document.getElementById('pager');
+        if (!ul) return;
+
+        const { offset, limit, total } = state;
+        const current = Math.floor(offset / limit) + 1;
+        const totalPages = Math.max(1, Math.ceil(total / limit));
+
+        function item(label, page, disabled, active, aria) {
+            const li = document.createElement('li');
+            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            if (aria) a.setAttribute('aria-label', aria);
+            a.textContent = label;
+
+            if (!disabled && !active) {
+                a.addEventListener('click', e => {
+                    e.preventDefault();
+                    goPage(page);
+                });
+            } else {
+                a.addEventListener('click', e => e.preventDefault());
+            }
+
+            li.appendChild(a);
+            return li;
         }
-    });
 
-    console.res
+        ul.innerHTML = '';
 
-    const totalCount = res.data.totalCount;
-    const pageData = res.data.list;
+        ul.appendChild(item('«', 1, current === 1, false, '처음'));
+        ul.appendChild(item('‹', current - 1, current === 1, false, '이전'));
 
-    renderCards(pageData);
-    renderPagination(totalCount);
-}
+        const windowSize = 5;
+        const start = Math.floor((current - 1) / windowSize) * windowSize + 1;
+        const end = Math.min(start + windowSize - 1, totalPages);
 
+        for (let p = start; p <= end; p++) {
+            ul.appendChild(item(p, p, false, p === current));
+        }
 
-
-document.getElementById("searchBtn").addEventListener("click", () => {
-    currentPage = 1;
-    applyCurrentTabLoad();
-});
-document.getElementById("statusFilter").addEventListener("change", () => {
-    currentPage = 1;
-    applyCurrentTabLoad();
-});
-document.getElementById("search").addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        currentPage = 1;
-        applyCurrentTabLoad();
+        const isLast = current >= totalPages;
+        ul.appendChild(item('›', current + 1, isLast, false, '다음'));
+        ul.appendChild(item('»', totalPages, isLast, false, '마지막'));
     }
-});
 
-function applyCurrentTabLoad() {
-    if (myPostsLink.classList.contains("active")) {
-        loadList("MY");
-    } else {
-        loadList("RECEIVED");
-    }
-}
 
-myPostsLink.addEventListener('click', () => {
-    myPostsLink.classList.add('active');
-    receivedPostsLink.classList.remove('active');
-    currentPage = 1;
-    loadList("MY");
-});
+    function renderCards(posts) {
+        const list = document.getElementById("post-list");
+        if (!list) return;
 
-receivedPostsLink.addEventListener('click', () => {
-    receivedPostsLink.classList.add('active');
-    myPostsLink.classList.remove('active');
-    currentPage = 1;
-    loadList("RECEIVED");
-});
+        // 🔥 항상 초기화 먼저!
+        list.classList.remove("d-flex", "justify-content-center", "align-items-center");
+        list.style.height = "";
 
-function renderCards(posts) {
-    const list = document.getElementById("post-list");
-    list.innerHTML = posts.map(post => `
+        if (posts.length === 0) {
+            list.classList.add("d-flex", "justify-content-center", "align-items-center");
+            list.style.height = "250px";
 
+            list.innerHTML = `
+            <div class="text-center text-muted">
+                <i class="bi bi-box fs-2"></i>
+                <div class="mt-2">표시할 데이터가 없습니다.</div>
+            </div>
+        `;
+            return;
+        }
+
+        // 🔥 정상 렌더링
+        list.innerHTML = posts.map(post => `
         <div class="col-auto">
             <div class="card post-card border-custom shadow-sm" data-id="${post.sharingId}">
-
                 <div class="card-img-section">
-            <img
-            src="${post.thumbnail ? post.thumbnail : '/image/default.png'}"
-            class="card-img-top card-img">
-
-
-                    
+                    <img src="${post.thumbnail || '/image/default.png'}" class="card-img-top card-img">
                     <span class="badge badge-status position-absolute top-0 start-0 m-2">
                         ${post.status === "false" ? "나눔중" : "나눔완료"}
                     </span>
                 </div>
 
-                <div class="card-body text-section">
+                <div class="card-body">
                     <h6 class="fw-bold text-truncate mb-2">${post.title}</h6>
-                    <p class="text-muted small mb-2"><i class="bi bi-clock"></i> ${formatTime(post.createdAt)}</p>
+                    <p class="text-muted small mb-2">
+                        <i class="bi bi-clock"></i> ${formatTime(post.createdAt)}
+                    </p>
 
                     <div class="d-flex justify-content-between small mb-3">
-                        <span class="text-secondary"><i class="bi bi-chat-dots"></i> ${post.commentCount}</span>
-                        <span class="text-danger"><i class="bi bi-heart-fill"></i> ${post.interestNum}</span>
+                        <span class="text-secondary">
+                            <i class="bi bi-chat-dots"></i> ${post.commentCount}
+                        </span>
+                        <span class="text-danger">
+                            <i class="bi bi-heart-fill"></i> ${post.interestNum}
+                        </span>
                     </div>
 
-                    ${post.reviewFlag ? `
-                        <div class="mt-auto text-end">
-                            <button class="btn btn-sm btn-outline-success review-badge" data-id="${post.sharingId}">
+                    ${post.reviewFlag == null ? `
+                        <div class="text-end">
+                            <button class="btn btn-sm btn-outline-success review-badge"
+                                    data-id="${post.sharingId}">
                                 후기 작성
                             </button>
                         </div>
                     ` : ""}
-                </div>
 
+                </div>
             </div>
         </div>
-
     `).join("");
-
-}
-
-document.addEventListener("click", e => {
-    if (e.target.closest(".review-badge")) {
-        e.stopPropagation();
-    }
-});
-
-
-function formatTime(dateString) {
-    return dateString.replace("T", " ").substring(0, 16);
-}
-
-function renderPagination(total) {
-    const pagination = document.getElementById("pagination");
-    const totalPages = Math.ceil(total / limit);
-
-    pagination.innerHTML = `
-        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
-            <a class="page-link" data-page="1">&laquo;</a>
-        </li>
-        <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
-            <a class="page-link" data-page="${currentPage - 1}">&lsaquo;</a>
-        </li>
-    `;
-
-    for (let i = 1; i <= totalPages; i++) {
-        pagination.innerHTML += `
-            <li class="page-item ${currentPage === i ? "active" : ""}">
-                <a class="page-link" data-page="${i}">${i}</a>
-            </li>
-        `;
     }
 
-    pagination.innerHTML += `
-        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
-            <a class="page-link" data-page="${currentPage + 1}">&rsaquo;</a>
-        </li>
-        <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
-            <a class="page-link" data-page="${totalPages}">&raquo;</a>
-        </li>
-    `;
 
-    bindPaginationClick();
-}
+    function formatTime(dateString) {
+        return dateString.replace("T", " ").substring(0, 16);
+    }
 
 
-function bindPaginationClick() {
-    document.querySelectorAll("#pagination .page-link").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            const page = e.currentTarget.dataset.page;
-
-            if (!page || Number(page) === currentPage) return;
-
-            currentPage = Number(page);
-            applyCurrentTabLoad();
-        });
+    document.addEventListener("DOMContentLoaded", () => {
+        activateTab('MY');
+        bindEvents();
+        refresh();
     });
-}
 
-document.addEventListener("click", (e) => {
-    const card = e.target.closest(".post-card");
-
-    if (e.target.closest(".review-badge")) {
-        return;
-    }
-
-    if (card) {
-        const sharingId = card.dataset.id;
-        window.location.href = `/readSharing/${sharingId}`;
-    }
-});
-
-document.addEventListener("click", (e) => {
-    const reviewBtn = e.target.closest(".review-badge");
-    if (reviewBtn) {
-        e.stopPropagation();
-        const sharingId = reviewBtn.dataset.id;
-        window.location.href = `/sharing/${sharingId}/review`;
-        return;
-    }
-});
+})();

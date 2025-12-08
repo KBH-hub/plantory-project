@@ -17,4 +17,5 @@ public class ProfileSharingHistoryListResponse {
     private LocalDateTime reviewFlag;
     private Integer commentCount;
     private String thumbnail;
+    private int totalCount;
 }
