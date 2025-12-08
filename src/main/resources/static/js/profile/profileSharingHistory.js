@@ -181,7 +181,6 @@
         const list = document.getElementById("post-list");
         if (!list) return;
 
-        // 🔥 항상 초기화 먼저!
         list.classList.remove("d-flex", "justify-content-center", "align-items-center");
         list.style.height = "";
 
@@ -198,7 +197,6 @@
             return;
         }
 
-        // 🔥 정상 렌더링
         list.innerHTML = posts.map(post => `
         <div class="col-auto">
             <div class="card post-card border-custom shadow-sm" data-id="${post.sharingId}">

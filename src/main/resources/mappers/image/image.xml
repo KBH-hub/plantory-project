@@ -15,6 +15,16 @@
         del_flag
     </sql>
 
+    <select id="selectSharingThumbnail" resultType="string">
+        SELECT file_url
+        FROM image
+        WHERE target_type = #{targetType}
+          AND target_id = #{targetId}
+          AND del_flag IS NULL
+        ORDER BY image_id ASC
+        LIMIT 1
+    </select>
+
 
     <!-- 단건 조회 -->
     <select id="selectImageById" resultType="com.zero.plantory.global.dto.ImageDTO">
