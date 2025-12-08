@@ -181,21 +181,40 @@
         const list = document.getElementById("post-list");
         if (!list) return;
 
+        // 🔥 항상 초기화 먼저!
+        list.classList.remove("d-flex", "justify-content-center", "align-items-center");
+        list.style.height = "";
+
+        if (posts.length === 0) {
+            list.classList.add("d-flex", "justify-content-center", "align-items-center");
+            list.style.height = "250px";
+
+            list.innerHTML = `
+            <div class="text-center text-muted">
+                <i class="bi bi-box fs-2"></i>
+                <div class="mt-2">표시할 데이터가 없습니다.</div>
+            </div>
+        `;
+            return;
+        }
+
+        // 🔥 정상 렌더링
         list.innerHTML = posts.map(post => `
         <div class="col-auto">
             <div class="card post-card border-custom shadow-sm" data-id="${post.sharingId}">
                 <div class="card-img-section">
-                    <img src="${post.thumbnail || '/image/default.png'}"
-                         class="card-img-top card-img">
+                    <img src="${post.thumbnail || '/image/default.png'}" class="card-img-top card-img">
                     <span class="badge badge-status position-absolute top-0 start-0 m-2">
                         ${post.status === "false" ? "나눔중" : "나눔완료"}
                     </span>
                 </div>
+
                 <div class="card-body">
                     <h6 class="fw-bold text-truncate mb-2">${post.title}</h6>
                     <p class="text-muted small mb-2">
                         <i class="bi bi-clock"></i> ${formatTime(post.createdAt)}
                     </p>
+
                     <div class="d-flex justify-content-between small mb-3">
                         <span class="text-secondary">
                             <i class="bi bi-chat-dots"></i> ${post.commentCount}
@@ -204,19 +223,20 @@
                             <i class="bi bi-heart-fill"></i> ${post.interestNum}
                         </span>
                     </div>
-${post.reviewFlag == null ? `
-    <div class="text-end">
-        <button class="btn btn-sm btn-outline-success review-badge"
-                data-id="${post.sharingId}">
-            후기 작성
-        </button>
-    </div>
-` : ""}
+
+                    ${post.reviewFlag == null ? `
+                        <div class="text-end">
+                            <button class="btn btn-sm btn-outline-success review-badge"
+                                    data-id="${post.sharingId}">
+                                후기 작성
+                            </button>
+                        </div>
+                    ` : ""}
 
                 </div>
             </div>
         </div>
-        `).join("");
+    `).join("");
     }
 
 
