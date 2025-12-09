@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper
 public interface ImageMapper {
 
+    String selectSharingThumbnail(@Param("targetType") ImageTargetType targetType, @Param("targetId") Long targetId);
+
     // 단건 조회
     ImageDTO selectImageById(@Param("imageId") Long imageId);
     // 다건 조회

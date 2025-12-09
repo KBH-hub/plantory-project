@@ -13,7 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/alert.css}">
 </head>
 
-<body class="bg-light" th:data-profile-id="${profileId}">
+<body th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
 <div class="container-xxl py-4">
@@ -46,19 +46,15 @@
                     </div>
 
                     <div id="myButtons" class="d-flex flex-column align-items-start gap-2">
-                        <a th:href="@{/profileSharingHistory(memberId=${memberId})}"
-                           class="btn btn-outline-warning btn-sm w-100">
-                            나눔 내역
-                        </a>
                         <button id="updateMyInfoBtn" class="btn btn-outline-primary btn-sm w-100">내 정보 변경</button>
                         <button id="deleteProfileWrittenBtn" class="btn btn-outline-danger btn-sm w-100">내가 쓴 글 삭제</button>
                     </div>
 
-                    <div class="text-center">
+                    <div id="interestArea" class="text-center" style="cursor:pointer;">
                         <p class="fw-bold m-0">관심 나눔글</p>
                         <span id="interestCount" class="fw-bold">0개</span>
                     </div>
-                    <div class="text-center">
+                    <div id="sharingHistoryArea" class="text-center" style="cursor:pointer;">
                         <p class="fw-bold m-0">나눔 내역</p>
                         <span id="sharingHistoryCount" class="fw-bold">0개</span>
                     </div>
@@ -131,7 +127,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<script th:src="@{/js/profile/profile.js}"></script>
+<script th:src="@{/js/profile/profileInfo.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/common/alert.js}"></script>
 </body>

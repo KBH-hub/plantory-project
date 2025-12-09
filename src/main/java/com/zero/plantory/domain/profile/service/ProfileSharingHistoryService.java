@@ -11,8 +11,6 @@ public interface ProfileSharingHistoryService {
 
     int getCompletedSharingCount(Long memberId);
 
-//    ProfileSharingHistoryPageResponse getProfileSharingHistoryList(ProfileSharingHistoryListRequest req);
-
 List<ProfileSharingHistoryListResponse> getMySharingList(ProfileSharingHistoryListRequest request);
 List<ProfileSharingHistoryListResponse> getReceivedSharingList(ProfileSharingHistoryListRequest request);
 }

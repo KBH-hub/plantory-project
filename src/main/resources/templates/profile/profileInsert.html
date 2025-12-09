@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나눔 내역</title>
+    <title>관심 나눔글</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/profileSharingHistory.css}">
 </head>
 
-<body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
+<body class="bg-light">
 
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
@@ -20,19 +20,9 @@
 
     <!-- Title -->
     <div class="mb-4">
-        <h3 class="fw-bold mb-1">나눔 내역</h3>
-        <p class="text-muted small mb-0">나의 식물 > 내프로필 > 나눔 내역</p>
+        <h3 class="fw-bold mb-1">관심 나눔글</h3>
+        <p class="text-muted small mb-0">나의 식물 > 내프로필 > 관심 나눔글</p>
     </div>
-
-    <!-- Tabs (내가 올린 / 분양 받은) -->
-    <ul class="nav nav-pills mb-0">
-        <li class="nav-item">
-            <button id="myPostsLink" class="nav-link active" style="cursor:pointer;">내가 올린 나눔 글</button>
-        </li>
-        <li class="nav-item ms-2">
-            <button id="receivedPostsLink" class="nav-link" style="cursor:pointer;">분양 받은 나눔 글</button>
-        </li>
-    </ul>
 
     <!-- Search + Filter -->
     <div class="row g-2 mb-2 justify-content-end">
@@ -45,12 +35,6 @@
             </div>
         </div>
 
-        <div class="col-auto">
-            <select id="statusFilter" class="form-select">
-                <option value="false">나눔중</option>
-                <option value="true">나눔완료</option>
-            </select>
-        </div>
     </div>
     <!-- Content -->
     <div class="bg-white p-4 rounded shadow-sm border border-light">
@@ -69,7 +53,7 @@
 
 <script th:src="@{/js/common/alert.js}"></script>
 <script th:src="@{/js/common/header.js}"></script>
-<script th:src="@{/js/profile/profileSharingHistory.js}"></script>
+<script th:src="@{/js/profile/profileInsert.js}"></script>
 
 </body>
 </html>

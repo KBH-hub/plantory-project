@@ -112,6 +112,9 @@ public class CmdController {
     @RequestMapping("/profileSharingHistory")
     public String profileSharingHistory(){return "profile/profileSharingHistory";}
 
+    @RequestMapping("/profileInsert")
+    public String profileInsert(){return "profile/profileInsert";}
+
     @GetMapping("/sharingList")
     public String sharingList(){
         return "sharing/sharingList";

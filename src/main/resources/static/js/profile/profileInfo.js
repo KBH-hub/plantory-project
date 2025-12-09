@@ -1,7 +1,7 @@
 let currentTab = "profilePosts";
 let currentPage = 1;
 const rowsPerPage = 10;
-
+const memberId = document.body.dataset.memberId;
 const IS_ME = ProfileData.isMe;
 const PROFILE_ID = ProfileData.profileId;
 
@@ -67,6 +67,16 @@ document.addEventListener("change", (e) => {
         });
     }
 });
+
+document.getElementById("interestArea")
+    .addEventListener("click", () => {
+        window.location.href = `/profileInsert`;
+    });
+
+document.getElementById("sharingHistoryArea")
+    .addEventListener("click", () => {
+        window.location.href = `/profileSharingHistory?memberId=${memberId}`;
+    });
 
 async function loadProfile() {
     const res = await axios.get("/api/profile/picture", {

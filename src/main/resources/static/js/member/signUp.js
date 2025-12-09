@@ -4,6 +4,14 @@ let isNickNameChecked = false;
 const form = document.getElementById("signUpForm");
 const pw = document.querySelector('input[type="password"]');
 const pwCheck = document.getElementById("pwCheck");
+const phone = document.getElementById("phoneInput");
+
+phone.addEventListener("input", (e) => {
+    e.target.value = e.target.value
+        .replace(/[^0-9-]/g, "")
+        .replace(/-{2,}/g, "-")
+        .replace(/^([0-9]{3})([0-9]{4})([0-9]{4})$/, "$1-$2-$3");
+});
 
 document.getElementById("checkIdBtn")
     .addEventListener("click", () =>
@@ -29,6 +37,14 @@ form.addEventListener("submit", (event) => {
     const sigungu = document.getElementById("sigungu").value;
     document.getElementById("addressInput").value = `${sido} ${sigungu}`;
 
+    const phone = document.getElementById("phoneInput");
+    const valid = /^010-[0-9]{4}-[0-9]{4}$/.test(phone.value);
+
+    if (!valid) {
+        phone.setCustomValidity("전화번호 형식이 올바르지 않습니다.");
+    } else {
+        phone.setCustomValidity("");
+    }
     if (!isIdChecked || !isNickNameChecked) {
         showAlert("아이디와 닉네임 중복을 확인해주세요.");
         event.preventDefault();
