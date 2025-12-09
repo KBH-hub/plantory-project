@@ -175,4 +175,18 @@
         WHERE m.message_id = #{messageId}
     </select>
 
+    <select id="selectReceiveTime">
+        select created_at from message
+        where sender_id = #{receiverId}
+          and target_id = #{targetId}
+        order by created_at
+            LIMIT 1;
+    </select>
+
+    <select id="selectFirstSend">
+        select count(message_id) from message
+        where sender_id = #{senderId}
+          and receiver_id = #{receiverId}
+          and target_id = #{targetId};
+    </select>
 </mapper>

@@ -75,6 +75,31 @@ class MessageServiceTest {
     }
 
     @Test
+    @DisplayName("메시지 전송 처리")
+    void registerMessageTest() {
+        MessageRequest request = MessageRequest.builder()
+                .senderId(3L)
+                .receiverId(8L)
+                .title("test")
+                .content("테스트 쪽지 내용입니다.")
+                .targetType(MessageTargetType.SHARING)
+                .targetId(13L)
+                .build();
+
+        boolean result;
+        try {
+            messageService.registerMessage(request);
+            result = true;
+        } catch (IllegalArgumentException e) {
+            result = false;
+        }
+
+        Assertions.assertFalse(result);
+
+        log.info(String.valueOf(result));
+    }
+
+    @Test
     @DisplayName("메시지 전송 실패 (제목 누락)처리")
     void registerFailByTitleMessageTest() {
         MessageRequest request = MessageRequest.builder()
