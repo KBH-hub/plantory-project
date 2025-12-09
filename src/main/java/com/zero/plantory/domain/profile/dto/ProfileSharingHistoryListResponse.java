@@ -10,11 +10,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProfileSharingHistoryListResponse {
     private Long sharingId;
+    private Long targetMemberId;
     private String title;
     private String status;
     private Integer interestNum;
     private LocalDateTime createdAt;
     private LocalDateTime reviewFlag;
+    private LocalDateTime targetMemberReviewFlag;
     private Integer commentCount;
     private String thumbnail;
     private int totalCount;

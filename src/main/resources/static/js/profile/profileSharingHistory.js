@@ -1,8 +1,13 @@
 (function () {
+
+    const myId = document.body.dataset.memberId;
+
     const state = {
         apiBase: '/api/profileSharing',
         tab: 'MY',
         keyword: '',
+        targetMemberId: '',
+        targetMemberReviewFlag: '',
         status: '',
         offset: 0,
         limit: 10,
@@ -197,12 +202,24 @@
             return;
         }
 
-        list.innerHTML = posts.map(post => `
+        list.innerHTML = posts.map(post => {
+            let showReviewButton = false;
+
+            if (state.tab === 'MY') {
+                showReviewButton =
+                    (post.status === "true" && post.reviewFlag == null && post.targetMemberId != null);
+
+            } else if (state.tab === 'RECEIVED') {
+                showReviewButton =
+                    (post.status === "true" && post.targetMemberReviewFlag == null && String(post.targetMemberId) === String(myId));
+            }
+
+            return `
         <div class="col-auto">
             <div class="card post-card border-custom shadow-sm" data-id="${post.sharingId}">
                 <div class="card-img-section">
                     <img src="${post.thumbnail || '/image/default.png'}" class="card-img-top card-img">
-                    <span class="badge badge-status position-absolute top-0 start-0 m-2">
+                    <span class="bg-dark badge badge-status position-absolute top-0 start-0 m-2">
                         ${post.status === "false" ? "나눔중" : "나눔완료"}
                     </span>
                 </div>
@@ -222,7 +239,7 @@
                         </span>
                     </div>
 
-                    ${post.reviewFlag == null ? `
+                    ${ showReviewButton ? `
                         <div class="text-end">
                             <button class="btn btn-sm btn-outline-success review-badge"
                                     data-id="${post.sharingId}">
@@ -234,7 +251,10 @@
                 </div>
             </div>
         </div>
-    `).join("");
+    `;
+        }).join("");
+
+
     }
 
 

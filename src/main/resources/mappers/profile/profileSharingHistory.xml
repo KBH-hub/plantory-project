@@ -22,11 +22,13 @@
     <select id="selectMySharingList" resultType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse">
         SELECT
         s.sharing_id,
+        s.target_member_id,
         s.title,
         s.status,
         s.interest_num,
         s.created_at,
         s.review_flag,
+        s.target_member_review_flag,
 
         (SELECT COUNT(*)
         FROM comment c
@@ -59,6 +61,7 @@
     <select id="selectReceivedSharingList" resultType="com.zero.plantory.domain.profile.dto.ProfileSharingHistoryListResponse">
         SELECT
         s.sharing_id,
+        s.target_member_id,
         s.title,
         s.status,
         s.interest_num,

@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/profileSharingHistory.css}">
 </head>
 
-<body class="bg-light">
+<body class="bg-light" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
 
 <th:block th:replace="~{fragments/header :: headerBar}"></th:block>
 
