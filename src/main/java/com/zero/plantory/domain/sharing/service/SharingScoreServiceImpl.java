@@ -35,6 +35,18 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         sharingMapper.updateSharingComplete(sharingId, targetMemberId);
 
+        SelectSharingDetailResponse sharingInfo = sharingMapper.selectSharingDetail(sharingId);
+        BigDecimal baseRate = sharingInfo.getSharingRate();
+
+        if (baseRate == null) baseRate = new BigDecimal("7.00");
+
+        BigDecimal next = baseRate.add(new BigDecimal("0.20"));
+        if (next.compareTo(new BigDecimal("14.00")) > 0) {
+            next = new BigDecimal("14.00");
+        }
+
+        sharingMapper.updateSharingRate(memberId, next);
+
         NoticeDTO notice = NoticeDTO.builder()
                 .receiverId(targetMemberId)
                 .targetId(sharingId)
@@ -77,7 +89,8 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         BigDecimal score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
 
-        BigDecimal finalScore = score.add(new BigDecimal("0.20"));
+//        BigDecimal finalScore = score.add(new BigDecimal("0.20"));
+        BigDecimal finalScore = score;
 
 
         // 정규화
