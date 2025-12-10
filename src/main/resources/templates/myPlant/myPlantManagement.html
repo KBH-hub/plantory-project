@@ -38,7 +38,7 @@
     </div>
 
     <nav class="mt-3">
-        <ul class="pagination pagination-sm justify-content-center" id="pagination"></ul>
+        <ul class="pagination pagination-sm justify-content-center" id="myplant-pagination"></ul>
     </nav>
 </div>
 
@@ -66,7 +66,6 @@
                 <label class="fw-bold mt-2">식물 종류</label>
                 <div class="input-group">
                     <input type="text" id="addType" class="form-control" placeholder="예: 산세베리아 '하니'">
-                    <a class="btn btn-dark" href="/plantDictionary">식물 검색</a>
                 </div>
 
                 <label class="fw-bold mt-2">비료 정보</label>
@@ -131,8 +130,6 @@
                 <label class="fw-bold mt-2">식물 종류</label>
                 <div class="input-group">
                     <input type="text" id="detailType" class="form-control" placeholder="예: 산세베리아 '하니'">
-                    <a class="btn btn-dark" href="/plantDictionary">식물 검색
-                    </a>
                 </div>
 
 
@@ -180,7 +177,7 @@
 <script th:src="@{/js/common/header.js}"></script>
 <script th:src="@{/js/common/modal.js}"></script>
 <script th:src="@{/js/common/alert.js}"></script>
-<script src="/js/myPlant/myPlantManagement.js" th:src="@{/js/myPlant/myPlantManagement.js}"></script>
+<script type="module" th:src="@{/js/myPlant/myPlantManagement.js}"></script>
 
 
 </body>

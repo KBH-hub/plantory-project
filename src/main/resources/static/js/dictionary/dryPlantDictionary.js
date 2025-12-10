@@ -1,3 +1,5 @@
+import { createPaginator } from '/js/common/pagination.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     let pageNo = 1;
     const numOfRows = 10;
@@ -9,6 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentController = null;
     const CONCURRENCY = 10;
+
+    const pager = createPaginator({
+        container: document.getElementById('dryPlantDictionary-pagination'),
+        current: pageNo,
+        pageSize: numOfRows,
+        onChange: (nextPage) => {
+            pageNo = nextPage;
+            if (state.mode === 'server') {
+                loadList(pageNo, numOfRows);
+            } else {
+                const q = normalize(state.q);
+                renderClientPage(allCache.filter(byQuery(q)));
+            }
+        },
+    });
 
     loadList(pageNo, numOfRows);
 
@@ -35,15 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const size       = Number(body?.items?.numOfRows || rows);
 
             renderList(asArray(items));
-            renderPager({
-                current,
+
+            pager.update({
+                current: current,
+                pageSize: size,
                 totalPages: Math.max(1, Math.ceil(totalCount / size)),
-                onMove: (next) => { pageNo = next; loadList(pageNo, size); },
             });
         } catch (e) {
             console.error(e);
             renderList([]);
-            renderPager({ current: 1, totalPages: 1, onMove: () => {} });
+            pager.update({ current: 1, pageSize: numOfRows, totalPages: 1 });
         }
     }
 
@@ -61,13 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         state.mode = 'client';
 
+        pager.update({ current: 1, pageSize: numOfRows, totalItems: 0, totalPages: null });
+
         const { totalPages, size, firstItems } = await collectFirstPage({ signal: currentController.signal });
         const q = normalize(state.q);
 
         const base = firstItems.map(withSearchKey);
         allCache = base;
 
-        let filtered = base.filter(byQuery(q));
+        const filtered = base.filter(byQuery(q));
         renderClientPage(filtered);
 
         collectRestPages({
@@ -77,7 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
             signal: currentController.signal,
             onBatch: (batch) => {
                 allCache.push(...batch);
-                if (state.mode === 'client') renderClientPage(allCache.filter(byQuery(q)));
+                if (state.mode === 'client') {
+                    renderClientPage(allCache.filter(byQuery(q)));
+                }
             },
             shouldStop: () => {
                 const need = pageNo * numOfRows;
@@ -89,10 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function withSearchKey(it) {
-        const t = normalize(it?.cntntsSj);
-        const c = normalize(it?.clNm);
-        const s = normalize(stripHtml(it?.scnm));
-        return { ...it, _searchKey: `${t} ${c} ${s}` };
+        const cntntsSj = normalize(it?.cntntsSj);
+        return { ...it, _searchKey: `${cntntsSj}` };
     }
     function byQuery(q) { return (it) => it._searchKey?.includes(q); }
 
@@ -105,10 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const to = Math.min(from + size, totalCount);
 
         renderList(filtered.slice(from, to));
-        renderPager({
+
+        pager.update({
             current,
-            totalPages,
-            onMove: (next) => { pageNo = next; renderClientPage(filtered); },
+            pageSize: size,
+            totalItems: totalCount,
+            totalPages: null,
         });
     }
 
@@ -149,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('resultList');
         if (!container) return;
         if (!items.length) {
-            container.innerHTML = '<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>';
+            container.innerHTML = '<div class="text-center py-5 text-muted"><i class="bi bi-box"></i> 검색 결과가 없습니다.</div>';
             return;
         }
         container.innerHTML = items.map(toCardHtml).join('');
@@ -157,8 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toCardHtml(item) {
         const title    = sanitize(item?.cntntsSj || '');
-        const clNm     = sanitize(item?.clNm || '');
-        const scnmHtml = String(item?.scnm || '');
 
         const thumb = firstTruthy(item?.thumbImgUrl1, item?.thumbImgUrl2, item?.imgUrl1, item?.imgUrl2) || '';
         const full  = firstTruthy(item?.imgUrl1, item?.imgUrl2, item?.thumbImgUrl1, item?.thumbImgUrl2) || '';
@@ -185,37 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-    }
-
-    function renderPager({ current, totalPages, onMove }) {
-        const ul = document.getElementById('paging');
-        if (!ul) return;
-
-        const makeItem = (label, target, { disabled = false, active = false } = {}) => {
-            const li = document.createElement('li');
-            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
-            const a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#';
-            a.textContent = label;
-            a.addEventListener('click', (ev) => { ev.preventDefault(); if (!disabled && !active) onMove(target); });
-            li.appendChild(a);
-            return li;
-        };
-
-        const win = 5;
-        const blockStart = Math.floor((current - 1) / win) * win + 1;
-        const blockEnd   = Math.min(blockStart + win - 1, totalPages);
-
-        ul.innerHTML = '';
-        ul.appendChild(makeItem('«', 1,           { disabled: current === 1 }));
-        ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1 }));
-        for (let p = blockStart; p <= blockEnd; p++) {
-            ul.appendChild(makeItem(String(p), p,   { active: p === current }));
-        }
-        const isLast = current >= totalPages;
-        ul.appendChild(makeItem('›', current + 1, { disabled: isLast }));
-        ul.appendChild(makeItem('»', totalPages,  { disabled: isLast }));
     }
 
     function asArray(maybeArray) {

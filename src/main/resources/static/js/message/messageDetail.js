@@ -26,13 +26,11 @@
             .replace(/\./g, '-').replace(/-\s/g, '-').replace(/\s/g, ' ');
     };
 
-    // XSS 방지
     const esc = (s) => String(s ?? '')
         .replaceAll('&', '&amp;').replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;').replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
 
-    // 관련 글 링크
     const buildTargetUrl = (type, id) => {
         if (!type || !id) return '';
         if (type === 'SHARING') return `/readSharing/${id}`;
@@ -40,11 +38,9 @@
         return '';
     };
 
-    // 상세 캐시(답장 전송시 사용)
     let detail = null;
     let viewerIdNum = null;
 
-    // 상세 조회
     async function loadDetail() {
         const messageId = Number(qs('messageId'));
         const viewerId = Number(qs('viewerId'));
@@ -64,7 +60,6 @@
             const data = res.data;
             detail = data;
 
-            // 제목, 보낸 사람, 내용, 시간
             const titleEl = document.getElementById('detailTitle');
             const senderEl = document.getElementById('detailSender');
             const contentEl = document.getElementById('detailContent');
@@ -113,7 +108,6 @@
         return t.startsWith('Re:') ? t : `Re: ${t}`;
     }
 
-    // 답장 모달 프리셋 + 전송
     function presetReplyModal({to, post, title, original}) {
         const modalEl = document.getElementById('messageModal');
         const form = document.getElementById('messageForm');
@@ -125,7 +119,6 @@
 
         if (!modalEl || !form) return;
 
-        // 모달 열릴 때 프리셋
         modalEl.addEventListener('show.bs.modal', () => {
             if (toEl) toEl.value = to;
             if (postEl) postEl.value = post;
