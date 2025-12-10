@@ -13,9 +13,7 @@ public interface ProfileMapper {
     int updateNoticeEnabled(@Param("memberId") Long memberId, @Param("enabled") int enabled);
     int updateProfileInfo(ProfileUpdateRequest request);
     int deleteMemberById(Long memberId);
-
     PublicProfileResponse selectPublicProfile(Long memberId);
     MemberResponse selectByMemberId(@Param("memberId") Long memberId);
     int updatePassword(@Param("password") String password, @Param("memberId") Long memberId);
 }
-

@@ -12,7 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PublicProfileResponse {
     private Long memberId;
+    private String membername;
     private String nickname;
+    private String phone;
+    private String address;
+    private String role;
+    private Integer noticeEnabled;
     private Integer sharingRate;
+    private String delFlag;
 }
 
