@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MyPlantServiceImpl implements MyPlantService {
-
     private final MyPlantMapper myPlantMapper;
     private final ImageMapper imageMapper;
     private final StorageUploader storageUploader;

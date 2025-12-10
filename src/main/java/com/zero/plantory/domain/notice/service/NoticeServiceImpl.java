@@ -2,16 +2,17 @@ package com.zero.plantory.domain.notice.service;
 
 import com.zero.plantory.domain.notice.mapper.NoticeMapper;
 import com.zero.plantory.global.dto.NoticeDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService {
 
-    @Autowired
-    NoticeMapper noticeMapper;
+    private final NoticeMapper noticeMapper;
 
 
     @Override
