@@ -100,7 +100,7 @@
     </insert>
 
     <delete id="deleteDiary">
-        DELETE FROM DIARY
+        DELETE FROM diary
         WHERE diary_id = #{diaryId}
     </delete>
 
