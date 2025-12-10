@@ -7,6 +7,7 @@ import com.zero.plantory.domain.message.dto.MessageSearchRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -18,5 +19,7 @@ public interface MessageMapper {
     MessageResponse selectMessageWriteInfo(@Param("senderId") Long senderId, @Param("targetType") String targetType, @Param("targetId") Long targetId);
     int insertMessage(MessageRequest message);
     MessageResponse selectMessageDetail(@Param("messageId") Long messageId);
+    LocalDateTime selectReceiveTime(MessageRequest message);
+    int selectFirstSend(MessageRequest message);
 }
 
