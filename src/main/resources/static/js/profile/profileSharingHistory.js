@@ -28,7 +28,7 @@
     }
 
 
-    async function fetchSharing() {
+    async function fetchData() {
         const s = state;
         const url = `${s.apiBase}/${s.tab === 'MY' ? 'my' : 'received'}`;
 
@@ -48,8 +48,8 @@
 
 
     async function refresh() {
-        await fetchSharing();
-        renderCards(state.items);
+        await fetchData();
+        renderList(state.items);
         renderPager(goPage);
     }
 
@@ -182,7 +182,7 @@
     }
 
 
-    function renderCards(posts) {
+    function renderList(posts) {
         const list = document.getElementById("post-list");
         if (!list) return;
 

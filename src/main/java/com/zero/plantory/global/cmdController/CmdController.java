@@ -48,6 +48,11 @@ public class CmdController {
         return "admin/memberManagement";
     }
 
+    @RequestMapping("admin/weightManagement")
+    public String weightManagement(){
+        return "admin/weightManagement";
+    }
+
     @GetMapping("/messageDetail")
     public String messageDetail(){
         return "message/messageDetail";

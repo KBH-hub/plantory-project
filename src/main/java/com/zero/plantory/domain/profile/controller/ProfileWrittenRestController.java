@@ -36,8 +36,8 @@ public class ProfileWrittenRestController {
                 .offset(offset)
                 .build();
 
-        log.info("ProfileWrittenListRequest로그:" + profileContentServiceProfileWrittenList.toString());
-        log.info(category);
+//        log.info("ProfileWrittenListRequest로그:" + profileContentServiceProfileWrittenList.toString());
+//        log.info(category);
 
         return ResponseEntity.ok(
                 profileContentService.getProfileWrittenList(profileContentServiceProfileWrittenList, category)

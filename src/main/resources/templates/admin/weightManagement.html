@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추천 관리 - Plantory 관리자</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}">
+    <link rel="stylesheet" th:href="@{/css/memberManagement.css}">
+</head>
+
+<body>
+<th:block th:replace="~{fragments/adminHeader :: headerBar}"></th:block>
+
+<div class="container mt-4">
+    <h3 class="fw-bold mb-4">추천관리</h3>
+</div>
+
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold">추천 리스트</h5>
+
+        <div class="input-group search-input" style="width: 320px;">
+            <input id="weightSearchInput" type="text" class="form-control px-3" placeholder="아이디로 검색">
+            <button id="weightSearchBtn" class="btn btn-dark px-3">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="filter-box mb-3">
+        <div class="row gy-2 align-items-center small">
+
+            <div class="col-auto fw-bold">숙련도 산정 비중(Total=10)</div>
+
+            <div class="col-auto">
+                <label class="fw-semibold me-2">검색어</label>
+                <input id="searchWeightInput" type="number" min="0" max="10"
+                       class="form-control form-control-sm d-inline-block text-center"
+                       style="width: 70px;">
+            </div>
+
+            <div class="col-auto">
+                <label class="fw-semibold me-2">질문수</label>
+                <input id="questionWeightInput" type="number" min="0" max="10"
+                       class="form-control form-control-sm d-inline-block text-center"
+                       style="width: 70px;">
+            </div>
+
+            <div class="col-auto">
+                <button id="weightSaveBtn" class="btn btn-primary btn-sm">저장</button>
+            </div>
+
+            <div class="col-auto">
+                <select id="dateRangeSelect" class="form-select form-select-sm">
+                    <option value="30D">최근 30일</option>
+                    <option value="60D">최근 60일</option>
+                    <option value="90D">최근 90일</option>
+                    <option value="ALL">전체</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="table-container bg-light">
+        <table class="table table-hover mb-0 text-center align-middle">
+            <thead class="table-secondary small">
+            <tr>
+                <th>아이디</th>
+                <th>닉네임</th>
+                <th>검색어 수</th>
+                <th>질문글 수</th>
+                <th>관심 필요 식물 수(최근 7일)</th>
+            </tr>
+            </thead>
+
+            <tbody id="weightTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <ul id="pager" class="pagination"></ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/common/alert.js}"></script>
+<script th:src="@{/js/admin/weightManagement.js}"></script>
+<script th:src="@{/js/common/header.js}"></script>
+</body>
+</html>

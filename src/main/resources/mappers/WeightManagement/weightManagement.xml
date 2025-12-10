@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zero.plantory.domain.admin.weightManagement.mapper.WeightManagementMapper">
+
+    <select id="selectWeightManagementList" resultType="com.zero.plantory.domain.admin.weightManagement.dto.WeightManagementResponse">
+        SELECT
+        m.member_id,
+        m.membername,
+        m.nickname,
+        COALESCE(sl.search_count, 0) AS searchWeight,
+        COALESCE(q.question_count, 0) AS questionWeight,
+        (SELECT COUNT(*) FROM member) AS totalCount
+        FROM member m
+
+        LEFT JOIN (
+        SELECT member_id, COUNT(*) AS search_count
+        FROM search_logging
+        WHERE 1=1
+        <if test="startDate != null">
+            AND created_at >= #{startDate}
+        </if>
+        GROUP BY member_id
+        ) sl ON sl.member_id = m.member_id
+
+        LEFT JOIN (
+        SELECT member_id, COUNT(*) AS question_count
+        FROM question
+        WHERE 1=1
+        <if test="startDate != null">
+            AND created_at >= #{startDate}
+        </if>
+        GROUP BY member_id
+        ) q ON q.member_id = m.member_id
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND m.membername LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+
+        ORDER BY m.member_id DESC
+        LIMIT #{offset} , #{limit}
+    </select>
+
+    <select id="selectPlantsNeedingAttention"
+            resultType="map">
+        <![CDATA[
+        SELECT m.member_id,
+        COUNT(DISTINCT m.myplant_id) AS care_count
+        FROM watering w
+        JOIN myplant m ON w.myplant_id = m.myplant_id
+        WHERE m.del_flag IS NULL
+        AND DATE(w.date_at) < CURDATE()
+        AND DATE(w.date_at) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        AND w.check_flag IS NULL
+        GROUP BY m.member_id
+        ]]>
+    </select>
+
+    <insert id="insertWeights">
+        INSERT INTO weight_logging
+            (member_id, search_weight, question_weight, created_at)
+        VALUES
+            (#{memberId}, #{searchWeight}, #{questionWeight}, NOW())
+    </insert>
+
+    <select id="selectLatestWeights"
+            resultType="com.zero.plantory.domain.admin.weightManagement.dto.WeightLoggingResponse">
+        SELECT search_weight, question_weight
+        FROM weight_logging
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+</mapper>
