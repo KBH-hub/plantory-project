@@ -33,10 +33,6 @@ public interface ProfileContentMapper {
 
     int countProfileWrittenSharing(ProfileWrittenListRequest req);
 
-    int countProfileWrittenALL(ProfileWrittenListRequest req);
-
-    int countProfileCommentAlLL(ProfileWrittenListRequest req);
-
     int countProfileCommentSharing(ProfileWrittenListRequest req);
 
     int countProfileCommentQuestion(ProfileWrittenListRequest req);

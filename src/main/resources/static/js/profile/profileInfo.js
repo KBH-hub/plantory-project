@@ -182,7 +182,7 @@ function renderMyProfile(data) {
 
 function renderPublicProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname;
-    document.getElementById("profileAddress").textContent = data.address ?? "비공개";
+    document.getElementById("profileAddress").textContent = data.address;
     document.getElementById("sharingRate").textContent = `나눔지수: ${data.sharingRate}%`;
 }
 

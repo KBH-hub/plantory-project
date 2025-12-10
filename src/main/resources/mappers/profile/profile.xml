@@ -5,7 +5,7 @@
 <mapper namespace="com.zero.plantory.domain.profile.mapper.ProfileMapper">
 
     <select id="selectPublicProfile" resultType="com.zero.plantory.domain.profile.dto.PublicProfileResponse">
-        SELECT member_id, nickname, sharing_rate
+        SELECT member_id, nickname, sharing_rate, address, notice_enabled, sharing_rate
         FROM member
         WHERE member_id = #{memberId}
         AND del_flag IS NULL

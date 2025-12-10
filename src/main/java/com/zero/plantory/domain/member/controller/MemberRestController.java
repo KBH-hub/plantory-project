@@ -33,4 +33,3 @@ public class MemberRestController {
         return ResponseEntity.ok(Map.of("exists", isDuplicate));
     }
 }
-
