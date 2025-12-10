@@ -11,7 +11,7 @@ import java.util.List;
 public interface SharingMapper {
     List<SharingCardListResponse> selectSharingListByAddressAndKeyword(SharingSearchRequest request);
     int countInterestByMemberId(Long memberId);
-    List<SharingPopularResponse> selectPopularSharingList();
+    List<SharingPopularResponse> selectPopularSharingList(SharingSearchRequest request);
     int insertSharing(SharingRequest request);
     SelectSharingDetailResponse selectSharingDetail(Long sharingId);
     List<SelectCommentListResponse> selectSharingComments(Long sharingId);

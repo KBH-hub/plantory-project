@@ -1,3 +1,5 @@
+import { renderRecommendedCards } from "/js/sharing/recommends.js";
+
 let offset = 0;
 const limit = 12;
 let isLastPage = false;
@@ -51,8 +53,68 @@ function renderSharingList(list) {
     });
 }
 
-import { loadRecommendedSharings } from "/js/sharing/recommends.js";
 
+
+async function loadPopularForSharingList() {
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
+
+    let userAddress = null;
+    if (sido && sigungu) userAddress = `${sido} ${sigungu}`;
+    else if (sido) userAddress = sido;
+
+    try {
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress }
+        });
+
+        renderRecommendedCards(res.data, "recommendedContainer");
+    } catch (err) {
+        console.error("Popular list load error:", err);
+    }
+}
+
+function renderPopularList(list) {
+    const container = document.getElementById("popularListContainer");
+    container.innerHTML = "";
+
+    list.forEach(item => {
+        const html = `
+        <a href="/readSharing/${item.sharingId}" 
+           class="d-flex justify-content-between align-items-center py-3 border-bottom text-decoration-none"
+           style="color: inherit;">
+           
+            <span class="text-truncate" style="max-width: 160px;">
+                ${item.title}
+            </span>
+
+            <span class="text-muted">
+                <i class="bi bi-heart"></i> ${item.interestNum}
+            </span>
+
+        </a>`;
+
+        container.insertAdjacentHTML("beforeend", html);
+    });
+}
+async function loadPopularList() {
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
+
+    let userAddress = null;
+    if (sido && sigungu) userAddress = `${sido} ${sigungu}`;
+    else if (sido) userAddress = sido;
+
+    try {
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress }
+        });
+
+        renderPopularList(res.data);
+    } catch (err) {
+        console.error("Popular list load error:", err);
+    }
+}
 
 async function loadSharingList(append = false) {
     const keyword = document.getElementById("keyword").value;
@@ -89,41 +151,6 @@ async function loadSharingList(append = false) {
     }
 }
 
-
-function renderPopularList(list) {
-    const container = document.getElementById("popularListContainer");
-    container.innerHTML = "";
-
-    list.forEach(item => {
-        const html = `
-        <a href="/readSharing/${item.sharingId}" 
-           class="d-flex justify-content-between align-items-center py-3 border-bottom text-decoration-none"
-           style="color: inherit;">
-           
-            <span class="text-truncate" style="max-width: 160px;">
-                ${item.title}
-            </span>
-
-            <span class="text-muted">
-                <i class="bi bi-heart"></i> ${item.interestNum}
-            </span>
-
-        </a>`;
-
-        container.insertAdjacentHTML("beforeend", html);
-    });
-}
-
-
-async function loadPopularList() {
-    try {
-        const res = await axios.get("/api/sharing/popular");
-        renderPopularList(res.data);
-    } catch (err) {
-        console.error("Popular list load error:", err);
-    }
-}
-
 async function loadMyInterestCount() {
     const memberId = Number(document.body.dataset.memberId);
 
@@ -140,33 +167,43 @@ async function loadMyInterestCount() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
 
+
+document.addEventListener("DOMContentLoaded", () => {
     loadSharingList(false);
+    loadPopularForSharingList();
     loadPopularList();
     loadMyInterestCount();
-    loadRecommendedSharings("recommendedContainer");
+    // loadRecommendedSharings("recommendedContainer");
 
     document.getElementById("btnSearch").addEventListener("click", () => {
         offset = 0;
         loadSharingList(false);
+        loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("keyword").addEventListener("keypress", e => {
         if (e.key === "Enter") {
             offset = 0;
             loadSharingList(false);
+            loadPopularForSharingList();
+            loadPopularList();
         }
     });
 
     document.getElementById("sido").addEventListener("change", () => {
         offset = 0;
         loadSharingList(false);
+        loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("sigungu").addEventListener("change", () => {
         offset = 0;
         loadSharingList(false);
+        loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("btnLoadMore").addEventListener("click", () => {

@@ -30,8 +30,8 @@ public class SharingReadServiceImpl implements SharingReadService {
     }
 
     @Override
-    public List<SharingPopularResponse> getPopularSharingList() {
-        return sharingMapper.selectPopularSharingList();
+    public List<SharingPopularResponse> getPopularSharingList(SharingSearchRequest request) {
+        return sharingMapper.selectPopularSharingList(request);
     }
 
     @Override

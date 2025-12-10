@@ -9,7 +9,7 @@ public interface SharingReadService {
 
     int countInterest(Long memberId);
 
-    List<SharingPopularResponse> getPopularSharingList();
+    List<SharingPopularResponse> getPopularSharingList(SharingSearchRequest request);
 
     SelectSharingDetailResponse getSharingDetail(Long sharingId);
 

@@ -29,7 +29,10 @@ public class SharingReadServiceTest {
     @Test
     @DisplayName("인기 나눔 조회")
     void getPopularSharingListTest() {
-        log.info("인기 나눔 리스트 = {}", sharingReadService.getPopularSharingList());
+        SharingSearchRequest vo = SharingSearchRequest.builder()
+                .userAddress("서울")
+                .build();
+        log.info("인기 나눔 리스트 = {}", sharingReadService.getPopularSharingList(vo));
     }
 
     @Test

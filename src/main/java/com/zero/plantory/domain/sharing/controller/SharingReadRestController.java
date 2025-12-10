@@ -31,8 +31,8 @@ public class SharingReadRestController {
     }
 
     @GetMapping("/popular")
-    public List<SharingPopularResponse> getPopularSharingList() {
-        return sharingReadService.getPopularSharingList();
+    public List<SharingPopularResponse> getPopularSharingList(SharingSearchRequest request) {
+        return sharingReadService.getPopularSharingList(request);
     }
 
 

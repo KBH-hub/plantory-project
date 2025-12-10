@@ -1,3 +1,5 @@
+import { renderRecommendedCards } from "/js/sharing/recommends.js";
+
 async function loadDashboardCounts() {
     const memberId = Number(document.body.dataset.memberId);
 
@@ -22,7 +24,17 @@ async function loadDashboardCounts() {
     }
 }
 
-import { loadRecommendedSharings } from "/js/sharing/recommends.js";
+async function loadPopularForDashboard() {
+    try {
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress: null }
+        });
+
+        renderRecommendedCards(res.data, "recommendedContainer");
+    } catch (err) {
+        console.error("Dashboard popular load error:", err);
+    }
+}
 
 
 async function loadTodayWatering() {
@@ -114,10 +126,9 @@ async function loadTodayDiary() {
     }
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
     loadDashboardCounts();
-    loadRecommendedSharings("recommendedContainer");
+    loadPopularForDashboard();
     loadTodayWatering();
     loadTodayDiary();
 });

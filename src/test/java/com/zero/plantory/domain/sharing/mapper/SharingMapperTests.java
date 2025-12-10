@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
+import static org.apache.commons.lang3.BooleanUtils.forEach;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
@@ -220,7 +221,10 @@ public class SharingMapperTests {
     @Test
     @DisplayName("인기 나눔글 TOP3 조회")
     void selectPopularSharingListTest() {
-        mapper.selectPopularSharingList()
+        SharingSearchRequest request = new SharingSearchRequest();
+        request.setUserAddress(null);
+
+        mapper.selectPopularSharingList(request)
                 .forEach(vo -> log.info(vo.toString()));
     }
 

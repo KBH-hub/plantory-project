@@ -50,17 +50,44 @@
           AND s.del_flag IS NULL
     </select>
 
-    <select id="selectPopularSharingList" resultType="com.zero.plantory.domain.sharing.dto.SharingPopularResponse">
+    <select id="selectPopularSharingList" parameterType="com.zero.plantory.domain.sharing.dto.SharingSearchRequest"
+            resultType="com.zero.plantory.domain.sharing.dto.SharingPopularResponse">
 
         SELECT
-            sharing_id,
-            title,
-            interest_num
-        FROM sharing
-        WHERE del_flag IS NULL
-          AND interest_num IS NOT NULL
-          AND created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
-        ORDER BY interest_num DESC, created_at DESC
+            s.sharing_id,
+            s.title,
+            s.interest_num,
+            s.status,
+            s.created_at,
+
+            (
+                SELECT COUNT(*)
+                FROM comment c
+                WHERE c.sharing_id = s.sharing_id
+                  AND c.del_flag IS NULL
+            ) AS comment_count,
+
+            (
+                SELECT i.file_url
+                FROM image i
+                WHERE i.target_type = 'SHARING'
+                  AND i.target_id = s.sharing_id
+                  AND i.del_flag IS NULL
+                ORDER BY i.image_id ASC, i.created_at ASC
+                 LIMIT 1
+            ) AS file_url
+
+        FROM sharing s
+            JOIN member m ON s.member_id = m.member_id
+
+        WHERE
+            s.del_flag IS NULL
+          AND m.del_flag IS NULL
+          AND s.interest_num IS NOT NULL
+          AND s.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+          AND (#{userAddress} IS NULL OR m.address LIKE CONCAT(#{userAddress}, '%'))
+
+        ORDER BY s.interest_num DESC, s.created_at DESC
             LIMIT 3
 
     </select>
