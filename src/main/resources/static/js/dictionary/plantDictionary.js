@@ -1,3 +1,5 @@
+import { createPaginator } from '/js/common/pagination.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     let pageNo = 1;
     const numOfRows = 10;
@@ -10,10 +12,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentController = null;
     const CONCURRENCY = 10;
 
-    loadList(pageNo, numOfRows);
-
     const $q = document.getElementById('qName');
     const $btnSearch = document.getElementById('btnSearch');
+
+    const pager = createPaginator({
+        container: document.getElementById('plantDictionary-pagination'),
+        current: pageNo,
+        pageSize: numOfRows,
+        onChange: (nextPage) => {
+            pageNo = nextPage;
+            if (state.mode === 'server') {
+                loadList(pageNo, numOfRows);
+            } else {
+                const q = state.q.toLowerCase();
+                const filtered = allCache.filter(byQuery(q));
+                renderClientPage(filtered);
+            }
+        },
+    });
+
+    loadList(pageNo, numOfRows);
 
     $btnSearch && $btnSearch.addEventListener('click', onSearch);
     $q && $q.addEventListener('keydown', (e) => { if (e.key === 'Enter') onSearch(); });
@@ -36,15 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const size       = Number(body?.items?.numOfRows || rows);
 
             renderList(asArray(items));
-            renderPager({
-                current,
+
+            pager.update({
+                current: current,
+                pageSize: size,
                 totalPages: Math.max(1, Math.ceil(totalCount / size)),
-                onMove: (next) => { pageNo = next; loadList(pageNo, size); },
+                // totalItems로 쓰고 싶다면: totalItems: totalCount, totalPages는 생략 가능
             });
         } catch (e) {
             console.error(e);
             renderList([]);
-            renderPager({ current: 1, totalPages: 1, onMove: () => {} });
+            // 실패 시 1페이지만 보이도록 리셋
+            pager.update({ current: 1, totalPages: 1, pageSize: numOfRows });
         }
     }
 
@@ -61,15 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         state.mode = 'client';
+        pager.update({ current: 1, pageSize: numOfRows, totalItems: 0, totalPages: null });
 
         const { totalPages, size, firstItems } = await collectFirstPage({ signal: currentController.signal });
         const q = state.q.toLowerCase();
 
-        const base = firstItems.map(withSearchKey);
+        const base = asArray(firstItems).map(withSearchKey);
         allCache = base;
 
         let filtered = base.filter(byQuery(q));
-
         renderClientPage(filtered);
 
         collectRestPages({
@@ -94,9 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function withSearchKey(it) {
-        const a = String(it?.cntntsSj || '');
-        const b = String(it?.distbNm || '');
-        return { ...it, _searchKey: (a + ' ' + b).toLowerCase() };
+        const cntntsSj = String(it?.cntntsSj || '');
+        const distbNm = String(it?.distbNm || '');
+        return { ...it, _searchKey: (cntntsSj + ' ' + distbNm).toLowerCase() };
     }
     function byQuery(q) {
         return (it) => it._searchKey?.includes(q);
@@ -111,10 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const to = Math.min(from + size, totalCount);
 
         renderList(filtered.slice(from, to));
-        renderPager({
+
+        pager.update({
             current,
-            totalPages,
-            onMove: (next) => { pageNo = next; renderClientPage(filtered); },
+            pageSize: size,
+            totalItems: totalCount,
+            totalPages: null
         });
     }
 
@@ -193,37 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
     `;
-    }
-
-    function renderPager({ current, totalPages, onMove }) {
-        const ul = document.getElementById('paging');
-        if (!ul) return;
-
-        const makeItem = (label, target, { disabled = false, active = false } = {}) => {
-            const li = document.createElement('li');
-            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
-            const a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#';
-            a.textContent = label;
-            a.addEventListener('click', (ev) => { ev.preventDefault(); if (!disabled && !active) onMove(target); });
-            li.appendChild(a);
-            return li;
-        };
-
-        const win = 5;
-        const blockStart = Math.floor((current - 1) / win) * win + 1;
-        const blockEnd   = Math.min(blockStart + win - 1, totalPages);
-
-        ul.innerHTML = '';
-        ul.appendChild(makeItem('«', 1,           { disabled: current === 1 }));
-        ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1 }));
-        for (let p = blockStart; p <= blockEnd; p++) {
-            ul.appendChild(makeItem(String(p), p,   { active: p === current }));
-        }
-        const isLast = current >= totalPages;
-        ul.appendChild(makeItem('›', current + 1, { disabled: isLast }));
-        ul.appendChild(makeItem('»', totalPages,  { disabled: isLast }));
     }
 
     function splitPipes(s) {
