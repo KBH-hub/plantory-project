@@ -27,7 +27,6 @@ export function renderRecommendedCards(list, containerId) {
 
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <small class="text-muted">${window.timeAgo(item.createdAt)}</small> 
-                            <!-- ★ 수정됨: window.timeAgo -->
                             <small class="text-muted">
                                 <i class="bi bi-chat me-1"></i>${item.commentCount}
                                 <i class="bi bi-heart ms-3 me-1"></i>${item.interestNum}

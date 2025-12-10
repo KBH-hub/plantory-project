@@ -74,6 +74,47 @@ async function loadPopularForSharingList() {
     }
 }
 
+function renderPopularList(list) {
+    const container = document.getElementById("popularListContainer");
+    container.innerHTML = "";
+
+    list.forEach(item => {
+        const html = `
+        <a href="/readSharing/${item.sharingId}" 
+           class="d-flex justify-content-between align-items-center py-3 border-bottom text-decoration-none"
+           style="color: inherit;">
+           
+            <span class="text-truncate" style="max-width: 160px;">
+                ${item.title}
+            </span>
+
+            <span class="text-muted">
+                <i class="bi bi-heart"></i> ${item.interestNum}
+            </span>
+
+        </a>`;
+
+        container.insertAdjacentHTML("beforeend", html);
+    });
+}
+async function loadPopularList() {
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
+
+    let userAddress = null;
+    if (sido && sigungu) userAddress = `${sido} ${sigungu}`;
+    else if (sido) userAddress = sido;
+
+    try {
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress }
+        });
+
+        renderPopularList(res.data);
+    } catch (err) {
+        console.error("Popular list load error:", err);
+    }
+}
 
 async function loadSharingList(append = false) {
     const keyword = document.getElementById("keyword").value;
@@ -126,9 +167,12 @@ async function loadMyInterestCount() {
     }
 }
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
     loadSharingList(false);
     loadPopularForSharingList();
+    loadPopularList();
     loadMyInterestCount();
     // loadRecommendedSharings("recommendedContainer");
 
@@ -136,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         offset = 0;
         loadSharingList(false);
         loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("keyword").addEventListener("keypress", e => {
@@ -143,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             offset = 0;
             loadSharingList(false);
             loadPopularForSharingList();
+            loadPopularList();
         }
     });
 
@@ -150,12 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
         offset = 0;
         loadSharingList(false);
         loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("sigungu").addEventListener("change", () => {
         offset = 0;
         loadSharingList(false);
         loadPopularForSharingList();
+        loadPopularList();
     });
 
     document.getElementById("btnLoadMore").addEventListener("click", () => {
