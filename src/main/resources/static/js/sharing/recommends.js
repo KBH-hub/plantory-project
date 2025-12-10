@@ -1,6 +1,17 @@
 export async function loadRecommendedSharings(containerId) {
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
+
+    let userAddress = null;
+    if (sido && sigungu) userAddress = `${sido} ${sigungu}`;
+    else if (sido) userAddress = sido;
+
     try {
-        const res = await axios.get("/api/dashboard/recommendeds");
+        // const res = await axios.get("/api/dashboard/recommendeds");
+
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress }
+        });
         const list = res.data;
 
         const container = document.getElementById(containerId);
@@ -23,6 +34,11 @@ export async function loadRecommendedSharings(containerId) {
                              style="height:375px; object-fit:cover;">
 
                         <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge ${item.status === 'true' ? 'bg-secondary' : 'bg-success'} small">
+                                    ${item.status === 'true' ? '나눔완료' : '나눔 중'}
+                                </span>
+                            </div>
 
                             <div class="fw-semibold text-truncate">
                                 ${item.title}
@@ -32,7 +48,7 @@ export async function loadRecommendedSharings(containerId) {
                                 <small class="text-muted">${timeAgo(item.createdAt)}</small>
                                 <small class="text-muted">
                                     <i class="bi bi-chat me-1"></i>${item.commentCount}
-                                    <i class="bi bi-heart ms-3 me-1"></i>${item.interestNum}
+                                    <i class="bi bi-heart me-1"></i>${item.interestNum}
                                 </small>
                             </div>
 
@@ -45,6 +61,6 @@ export async function loadRecommendedSharings(containerId) {
         });
 
     } catch (err) {
-        console.error("Recommended sharing load error:", err);
+        console.error("Popular recommended load error:", err);
     }
 }

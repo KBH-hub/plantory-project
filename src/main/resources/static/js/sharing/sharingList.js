@@ -116,8 +116,17 @@ function renderPopularList(list) {
 
 
 async function loadPopularList() {
+    const sido = document.getElementById("sido").value;
+    const sigungu = document.getElementById("sigungu").value;
+
+    let userAddress = null;
+    if (sido && sigungu) userAddress = `${sido} ${sigungu}`;
+    else if (sido) userAddress = sido;
+
     try {
-        const res = await axios.get("/api/sharing/popular");
+        const res = await axios.get("/api/sharing/popular", {
+            params: { userAddress }
+        });
         renderPopularList(res.data);
     } catch (err) {
         console.error("Popular list load error:", err);
@@ -162,11 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("sido").addEventListener("change", () => {
         offset = 0;
         loadSharingList(false);
+        loadRecommendedSharings("recommendedContainer");
     });
 
     document.getElementById("sigungu").addEventListener("change", () => {
         offset = 0;
         loadSharingList(false);
+        loadRecommendedSharings("recommendedContainer");
     });
 
     document.getElementById("btnLoadMore").addEventListener("click", () => {
