@@ -1,6 +1,8 @@
+import {createPaginator} from '/js/common/pagination.js';
+
 (function () {
     const state = {
-        apiBase: window.__API_BASE__ || '/api/message',
+        apiBase: '/api/message',
         memberId: null,
         boxType: 'RECEIVED',
         targetType: '',
@@ -11,40 +13,37 @@
         items: []
     };
 
+    let pager = null;
+
     function resolveMemberId() {
         const memberId = Number(document.body.dataset.memberId);
         if (!Number.isFinite(memberId) || memberId <= 0) {
-            throw new Error('유효한 memberId가 없습니다. <body data-member-id="...">를 주입하세요.');
+            throw new Error('유효한 memberId가 없습니다');
         }
         return memberId;
     }
 
-    function normalizeResponse(data, headers) {
+    function normalizeResponse(data) {
         if (Array.isArray(data)) {
             const items = data;
-            const hdr = headers && (headers['x-total-count'] ?? headers['X-Total-Count']);
-            const headerTotal = Number(hdr);
-            if (Number.isFinite(headerTotal)) return { items, total: headerTotal };
-            const first = items[0];
-            const tc = Number(first?.totalCount ?? first?.total_count);
-            return { items, total: Number.isFinite(tc) ? tc : null };
+            const tc = Number(items[0]?.totalCount);
+            return {items, total: Number.isFinite(tc) ? tc : null};
         }
-        return { items: [], total: null };
+        return {items: [], total: null};
     }
 
     async function fetchMessages() {
         const s = state;
         const url = `${s.apiBase}/${s.memberId}/${s.boxType}`;
-        const params = new URLSearchParams({ offset: String(s.offset), limit: String(s.limit) });
+        const params = new URLSearchParams({offset: String(s.offset), limit: String(s.limit)});
         if (s.targetType) params.set('targetType', s.targetType);
         if (s.title) params.set('title', s.title);
         const res = await axios.get(`${url}?${params.toString()}`);
-        const { items, total } = normalizeResponse(res.data, res.headers);
+        const {items, total} = normalizeResponse(res.data);
         s.items = items;
         s.total = total;
     }
 
-    // ---------- DOM helpers ----------
     function fmtKST(iso) {
         if (!iso) return '';
         return new Intl.DateTimeFormat('ko-KR', {
@@ -56,23 +55,13 @@
     }
 
     function labelTargetType(tt) {
-        return ({ QUESTION: '질문', SHARING: '나눔' }[tt] || '');
+        return ({QUESTION: '질문', SHARING: '나눔'}[tt] || '');
     }
 
     function esc(s) {
         return String(s ?? '')
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
-            .replaceAll("'", '&#39;');
-    }
-
-    function buildTargetUrl(type, id) {
-        if (!type || !id) return '';
-        if (type === 'SHARING') return `/sharing/${id}`;
-        if (type === 'QUESTION') return `/question/${id}`;
-        return '';
+            .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
     }
 
     function renderRows(list) {
@@ -80,9 +69,12 @@
         if (!tbody) return;
 
         if (!Array.isArray(list) || list.length === 0) {
-            tbody.innerHTML = `<tr><td class="text-center" colspan="8" style="height:120px">데이터가 없습니다.</td></tr>`;
+            tbody.innerHTML = `<tr><td class="text-center" colspan="8" style="height:120px"><i class="bi bi-box"></i> 데이터가 없습니다.</td></tr>`;
             const checkAll = document.getElementById('checkAll');
-            if (checkAll) { checkAll.checked = false; checkAll.indeterminate = false; }
+            if (checkAll) {
+                checkAll.checked = false;
+                checkAll.indeterminate = false;
+            }
             return;
         }
 
@@ -91,7 +83,6 @@
             const rowClass = `cursor-pointer${isUnread ? ' fw-semibold' : ''}`;
             const readText = item.readFlag ? '읽음' : '안읽음';
             const category = labelTargetType(item.targetType);
-            const relatedUrl = buildTargetUrl(item.targetType, item.targetId);
             const relatedText = esc(item.targetTitle || '(삭제된 쪽지)');
             return `
         <tr data-id="${item.messageId}" class="${rowClass}">
@@ -112,54 +103,6 @@
         wireCheckEvents();
     }
 
-    function renderPager(goPage) {
-        const ul = document.getElementById('pager');
-        if (!ul) return;
-
-        const { offset, limit, total, items } = state;
-        const current = Math.floor(offset / limit) + 1;
-        const totalPages =
-            (typeof total === 'number' && total >= 0)
-                ? Math.max(1, Math.ceil(total / limit))
-                : null; // total을 모르면 null
-
-        const makeItem = (label, onClick, { disabled = false, active = false, aria = null } = {}) => {
-            const li = document.createElement('li');
-            li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
-            const a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#';
-            if (aria) a.setAttribute('aria-label', aria);
-            a.textContent = label;
-            if (!disabled && !active && typeof onClick === 'function') {
-                a.addEventListener('click', (ev) => { ev.preventDefault(); onClick(); });
-            } else {
-                a.addEventListener('click', (ev) => ev.preventDefault());
-            }
-            li.appendChild(a);
-            return li;
-        };
-
-        ul.innerHTML = '';
-
-        ul.appendChild(makeItem('«', () => goPage(1), { disabled: current === 1, aria: '처음' }));
-        ul.appendChild(makeItem('‹', () => goPage(current - 1), { disabled: current === 1, aria: '이전' }));
-
-        const windowSize = 5;
-        const blockStart = Math.floor((current - 1) / windowSize) * windowSize + 1; // 1,6,11...
-        const blockEnd = Math.min(blockStart + windowSize - 1, totalPages);        // 5,10,15...
-
-        for (let p = blockStart; p <= blockEnd; p++) {
-            ul.appendChild(makeItem(String(p), () => goPage(p), { active: p === current }));
-        }
-
-        const isLast = current >= totalPages;
-        ul.appendChild(makeItem('›', () => goPage(current + 1), { disabled: isLast, aria: '다음' }));
-        ul.appendChild(makeItem('»', () => goPage(totalPages), { disabled: isLast, aria: '마지막' }));
-    }
-
-
-    // ---------- selection & actions ----------
     function wireCheckEvents() {
         const checkAll = document.getElementById('checkAll');
         const rowChecks = Array.from(document.querySelectorAll('.row-check'));
@@ -169,9 +112,10 @@
         checkAll.indeterminate = false;
 
         checkAll.onchange = () => {
-            rowChecks.forEach(chk => { chk.checked = checkAll.checked; });
+            rowChecks.forEach(chk => {
+                chk.checked = checkAll.checked;
+            });
         };
-
         rowChecks.forEach(chk => {
             chk.onchange = () => {
                 const total = rowChecks.length;
@@ -195,22 +139,23 @@
             const currentPage = Math.floor(state.offset / state.limit) + 1;
             if (currentPage > maxPage) state.offset = (maxPage - 1) * state.limit;
         }
-        await fetchMessages();
-        renderRows(state.items);
-        renderPager(goPage);
+        await refresh();
     }
 
     async function deleteSelected() {
         const ids = getSelectedMessageIds();
-        if (ids.length === 0) { showAlert('삭제할 쪽지를 선택하세요.'); return; }
+        if (ids.length === 0) {
+            showAlert('삭제할 쪽지를 선택하세요.');
+            return;
+        }
         const endpoint = (state.boxType === 'SENT') ? '/api/message/deleteSenderMessages' : '/api/message/deleteMessages';
 
         showModal(`선택한 ${ids.length}건을 삭제하시겠습니까?`, async (result) => {
             if (!result) return;
             try {
-                await axios.delete(endpoint, { data: ids });
+                await axios.delete(endpoint, {data: ids});
                 await afterDeleteRefresh(ids.length);
-                showAlert("삭제되었습니다.");
+                showAlert('삭제되었습니다.');
             } catch (e) {
                 console.error(e);
                 showAlert(`삭제 실패: ${e?.response?.status || e.message}`);
@@ -218,21 +163,29 @@
         });
     }
 
-    // ---------- lifecycle & bindings ----------
     async function refresh() {
         await fetchMessages();
         renderRows(state.items);
-        renderPager(goPage);
-    }
 
-    function goPage(p) {
-        if (p < 1) return;
-        if (typeof state.total === 'number' && state.total >= 0) {
-            const maxPage = Math.max(1, Math.ceil(state.total / state.limit));
-            if (p > maxPage) return;
+        const current = Math.floor(state.offset / state.limit) + 1;
+        const totalItems = (typeof state.total === 'number' && state.total >= 0) ? state.total : null;
+
+        if (!pager) {
+            pager = createPaginator({
+                container: document.getElementById('pager'),
+                current,
+                totalItems,
+                pageSize: state.limit,
+                windowSize: 5,
+                modeWhenUnknown: 'next-only',
+                onChange: (page) => {
+                    state.offset = (page - 1) * state.limit;
+                    refresh().catch(console.error);
+                }
+            });
+        } else {
+            pager.update({current, totalItems, pageSize: state.limit});
         }
-        state.offset = (p - 1) * state.limit;
-        refresh().catch(console.error);
     }
 
     function bindEvents() {
@@ -258,12 +211,12 @@
 
         const form = document.getElementById('searchForm');
         const selTarget = document.getElementById('selectTargetType');
-        const inputTitle = document.getElementById('inputTitle');
+        let theInputTitle = document.getElementById('inputTitle');
 
         form?.addEventListener('submit', (ev) => {
             ev.preventDefault();
             state.targetType = selTarget?.value || '';
-            state.title = (inputTitle?.value || '').trim();
+            state.title = (theInputTitle?.value || '').trim();
             state.offset = 0;
             refresh().catch(console.error);
         });
@@ -272,27 +225,20 @@
             e.preventDefault();
             deleteSelected();
         });
-    }
 
-    function bindRowClick() {
         const tbody = document.getElementById('messageTbody');
-        if (!tbody) return;
-
-        function onRowClick(messageId) {
-            const viewerId = state.memberId;
-            window.location.href = `/messageDetail?messageId=${encodeURIComponent(messageId)}&viewerId=${encodeURIComponent(viewerId)}`;
+        if (tbody) {
+            tbody.addEventListener('click', (ev) => {
+                if (ev.target.closest('input[type="checkbox"]')) return;
+                if (ev.target.closest('a')) return;
+                const tr = ev.target.closest('tr[data-id]');
+                if (!tr) return;
+                const messageId = Number(tr.dataset.id);
+                if (!Number.isFinite(messageId)) return;
+                const viewerId = state.memberId;
+                window.location.href = `/messageDetail?messageId=${encodeURIComponent(messageId)}&viewerId=${encodeURIComponent(viewerId)}`;
+            });
         }
-
-
-        tbody.addEventListener('click', (ev) => {
-            if (ev.target.closest('input[type="checkbox"]')) return;
-            if (ev.target.closest('a')) return;
-            const tr = ev.target.closest('tr[data-id]');
-            if (!tr) return;
-            const messageId = Number(tr.dataset.id);
-            if (!Number.isFinite(messageId)) return;
-            onRowClick(messageId);
-        });
     }
 
     function init() {
@@ -304,11 +250,11 @@
             return;
         }
         bindEvents();
-        bindRowClick();
         refresh().catch(e => {
             console.error(e);
             renderRows([]);
-            renderPager(goPage);
+            const container = document.getElementById('pager');
+            if (container) container.innerHTML = '';
             showAlert(`목록 요청 실패: ${e?.response?.status || e.message}`);
         });
     }

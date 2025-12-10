@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const c = document.getElementById('resultList');
         if (!c) return;
         if (!items.length) {
-            c.innerHTML = '<div class="text-center py-5 text-muted">검색 결과가 없습니다.</div>';
+            c.innerHTML = '<div class="text-center py-5 text-muted"> <i class="bi bi-box"></i> 검색 결과가 없습니다.</div>';
             return;
         }
         c.innerHTML = items.map(toCardHtml).join('');
