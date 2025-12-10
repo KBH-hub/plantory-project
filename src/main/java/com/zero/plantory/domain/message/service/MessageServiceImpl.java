@@ -10,6 +10,7 @@ import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
 import com.zero.plantory.global.dto.NoticeDTO;
 import com.zero.plantory.global.dto.NoticeTargetType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +21,11 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
-
-    @Autowired
-    MessageMapper messageMapper;
-
-    @Autowired
-    SharingMapper sharingMapper;
-
-    @Autowired
-    NoticeService noticeService;
+    private final MessageMapper messageMapper;
+    private final SharingMapper sharingMapper;
+    private final NoticeService noticeService;
 
 
     @Override

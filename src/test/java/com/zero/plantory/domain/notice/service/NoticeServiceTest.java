@@ -20,7 +20,7 @@ class NoticeServiceTest {
 
     @Test
     void getNoticeByReceiverTest() {
-        Long receiverId = 12L;
+        Long receiverId = 1L;
 
         List<NoticeDTO> result =noticeService.getNoticeByReceiver(receiverId);
 
