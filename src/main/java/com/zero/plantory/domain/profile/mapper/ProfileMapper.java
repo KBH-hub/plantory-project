@@ -14,7 +14,6 @@ public interface ProfileMapper {
     int updateProfileInfo(ProfileUpdateRequest request);
     int deleteMemberById(Long memberId);
 
-    void deleteMember(Long memberId);
     PublicProfileResponse selectPublicProfile(Long memberId);
     MemberResponse selectByMemberId(@Param("memberId") Long memberId);
     int updatePassword(@Param("password") String password, @Param("memberId") Long memberId);

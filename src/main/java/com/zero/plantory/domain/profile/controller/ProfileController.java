@@ -48,7 +48,7 @@ public class ProfileController {
         Long loginMemberId = memberDetail.getMemberResponse().getMemberId();
         boolean isMe = loginMemberId.equals(memberId);
 
-        log.info("updateProfile loginMemberId={} isMe={}", loginMemberId, isMe);
+//        log.info("updateProfile loginMemberId={} isMe={}", loginMemberId, isMe);
 
         model.addAttribute("profileInfo", Map.of(
                 "isMe", isMe,

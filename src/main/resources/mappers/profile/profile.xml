@@ -41,11 +41,6 @@
           AND del_flag IS NULL
     </update>
 
-    <delete id="deleteMember" parameterType="long">
-        DELETE FROM member
-        WHERE member_id = #{memberId}
-    </delete>
-
     <select id="selectByMemberId" parameterType="long" resultType="com.zero.plantory.domain.profile.dto.MemberResponse">
         SELECT member_id, membername, password, nickname, phone, address,
                sharing_rate, skill_rate, management_rate,

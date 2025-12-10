@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void signUp(MemberSignUpRequest request) {
 
-        log.info(String.valueOf(request));
+//        log.info(String.valueOf(request));
 
         if (memberMapper.countByMembername(request.getMembername()) > 0) {
             throw new IllegalStateException("이미 사용 중인 아이디입니다.");
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
-        log.info(String.valueOf(request));
+//        log.info(String.valueOf(request));
 
         MemberResponse memberResponse = MemberResponse.builder()
                 .membername(request.getMembername())

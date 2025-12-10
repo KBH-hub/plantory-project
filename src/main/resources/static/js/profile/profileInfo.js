@@ -384,15 +384,17 @@ function initPagination() {
 }
 
 function bindPaginationClick() {
-    document.querySelectorAll("#pagination .page-link").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+    document.querySelectorAll("#pagination .page-link").forEach(a => {
+        a.addEventListener("click", (e) => {
             e.preventDefault();
 
             const page = Number(e.target.dataset.page);
-            if (page < 1) return;
+            if (!page) return;
 
             currentPage = page;
-            loadProfileWritten();
+            offset = (page - 1) * limit;
+
+            loadWeightList();
         });
     });
 }
@@ -401,7 +403,7 @@ function renderPagination(totalCount) {
     const pagination = document.getElementById("pagination");
     if (!pagination) return;
 
-    const totalPages = Math.ceil(totalCount / rowsPerPage);
+    const totalPages = Math.ceil(totalCount / limit);
 
     pagination.innerHTML = "";
 
@@ -438,7 +440,6 @@ function renderPagination(totalCount) {
     `;
 
     bindPaginationClick();
-    loadProfile()
 }
 
 async function loadProfileCounts() {
