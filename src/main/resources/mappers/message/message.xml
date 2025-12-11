@@ -189,4 +189,5 @@
           and receiver_id = #{receiverId}
           and target_id = #{targetId};
     </select>
+
 </mapper>
