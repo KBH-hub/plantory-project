@@ -17,6 +17,9 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     private final SharingMapper sharingMapper;
     private final NoticeMapper noticeMapper;
 
+    private static final double RESPONSE_K = 150.0; // scale - 2시간부터 감점
+    private static final double RESPONSE_WEIGHT = 0.03; // EMA weight
+
     @Override
     public void completeSharing(Long sharingId, Long memberId, Long targetMemberId) {
 
@@ -84,7 +87,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         BigDecimal baseRate = sharing.getSharingRate();
         if (baseRate == null) baseRate = new BigDecimal("1.00");
-//        double baseRate = (baseRateInt == null) ? 1.0 : baseRateInt.doubleValue();
 
 
         BigDecimal score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
@@ -100,7 +102,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
                 ? sharing.getTargetMemberId()
                 : sharing.getMemberId();
 
-        // BigDecimal을 그대로 저장
         sharingMapper.updateSharingRate(targetMemberId, finalScore);
 
         // review flag
@@ -109,6 +110,27 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         } else {
             sharingMapper.updateReceiverReviewFlag(sharingId);
         }
+    }
+
+    @Override
+    public void applyResponseSpeedScore(Long sharingId,Long memberId, long minutes){
+        if(minutes < 0) minutes = 0;
+
+        double responseScore = Math.exp(-(double)minutes / RESPONSE_K);
+
+        double scaledScore = 1.0 + 13.0 * responseScore;
+
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
+        BigDecimal baseRate = sharing.getSharingRate();
+        if(baseRate == null) baseRate = new BigDecimal("7.00");
+        double oldRate = baseRate.doubleValue();
+
+        //EMA
+        double newRateDouble = oldRate * (1.0 - RESPONSE_WEIGHT) + scaledScore * RESPONSE_WEIGHT;
+
+        BigDecimal newRate = clamp14(BigDecimal.valueOf(newRateDouble));
+
+        sharingMapper.updateSharingRate(memberId, newRate);
     }
 
     // Normalization
