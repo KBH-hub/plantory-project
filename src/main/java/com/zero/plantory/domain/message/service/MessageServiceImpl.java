@@ -8,6 +8,7 @@ import com.zero.plantory.domain.message.mapper.MessageMapper;
 import com.zero.plantory.domain.notice.service.NoticeService;
 import com.zero.plantory.domain.sharing.dto.SelectSharingDetailResponse;
 import com.zero.plantory.domain.sharing.mapper.SharingMapper;
+import com.zero.plantory.domain.sharing.service.SharingScoreService;
 import com.zero.plantory.global.dto.NoticeDTO;
 import com.zero.plantory.global.dto.NoticeTargetType;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -24,8 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
-    private final SharingMapper sharingMapper;
     private final NoticeService noticeService;
+    private final SharingScoreService sharingScoreService;
 
 
     @Override
@@ -62,24 +64,23 @@ public class MessageServiceImpl implements MessageService {
 
         final LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
-        if (messageMapper.selectFirstSend(request) == 0) {
-            LocalDateTime receiveTime = messageMapper.selectReceiveTime(request);
-            if (receiveTime != null && receiveTime.isAfter(now.minusMinutes(10))) {
-                SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(request.getTargetId());
-                BigDecimal baseRate = sharing.getSharingRate();
+        LocalDateTime firstReceivedTime = messageMapper.selectReceiveTime(request);
 
-                Long memberId = request.getSenderId();
+        if(firstReceivedTime != null) {
+            int myFirstSendCount = messageMapper.selectFirstSend(request);
 
-                if (baseRate == null) baseRate = new BigDecimal("7.00");
+            if (myFirstSendCount == 0) {
+                long minutes = Duration.between(firstReceivedTime, now).toMinutes();
+                if (minutes < 0) minutes = 0;
 
-                BigDecimal next = baseRate.add(new BigDecimal("0.20"));
-                if (next.compareTo(new BigDecimal("14.00")) > 0) {
-                    next = new BigDecimal("14.00");
-                }
-
-                sharingMapper.updateSharingRate(memberId, next);
+                sharingScoreService.applyResponseSpeedScore(
+                        request.getTargetId(),
+                        request.getSenderId(),
+                        minutes
+                );
             }
         }
+
         messageMapper.insertMessage(request);
         NoticeDTO notice = NoticeDTO.builder()
                 .receiverId(request.getReceiverId())

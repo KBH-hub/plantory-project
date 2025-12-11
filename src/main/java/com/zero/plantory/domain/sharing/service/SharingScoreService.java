@@ -9,5 +9,9 @@ public interface SharingScoreService {
                                int reShare,
                                Integer satisfaction);
 
+    void applyResponseSpeedScore(Long sharingId,
+                                 Long memberId,
+                                 long minutes);
+
 
 }
