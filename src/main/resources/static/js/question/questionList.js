@@ -1,6 +1,21 @@
+import { createPaginator } from '/js/common/pagination.js';
+
 const questionId = document.body.dataset.questionId;
 
+let pager = null;
+
 document.addEventListener("DOMContentLoaded", () => {
+
+    const pagerEl = document.getElementById('pager');
+
+    pager = createPaginator({
+        container: pagerEl,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+        labels: { first:'«', prev:'‹', next:'›', last:'»' },
+        onChange: (page) => loadQuestionList(page)
+    });
 
     loadQuestionList(1);
 
@@ -23,9 +38,15 @@ async function loadQuestionList(page) {
         });
 
         const data = res.data;
-
         renderList(data.list);
-        renderPagination(data.page, data.size, data.totalCount);
+
+        if (pager) {
+            pager.update({
+                current: data.page,
+                pageSize: data.size,
+                totalItems: data.totalCount,
+            });
+        }
 
     } catch (err) {
         console.error(err);
@@ -81,59 +102,6 @@ function renderList(list) {
     });
 
 }
-
-function renderPagination(page, size, totalCount) {
-    const ul = document.getElementById('pager');
-    if (!ul) return;
-
-    ul.innerHTML = "";
-
-    const totalPages = Math.max(1, Math.ceil(totalCount / size));
-    const current = page;
-
-    const goPage = (p) => loadQuestionList(p);
-
-    const makeItem = (label, p, { disabled = false, active = false, aria = null } = {}) => {
-        const li = document.createElement('li');
-        li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
-
-        const a = document.createElement('a');
-        a.className = 'page-link';
-        a.href = "#";
-        if (aria) a.setAttribute('aria-label', aria);
-        a.textContent = label;
-
-        if (!disabled && !active) {
-            a.addEventListener('click', (ev) => {
-                ev.preventDefault();
-                goPage(p);
-            });
-        } else {
-            a.addEventListener('click', (ev) => ev.preventDefault());
-        }
-
-        li.appendChild(a);
-        return li;
-    };
-
-    ul.appendChild(makeItem('«', 1, { disabled: current === 1, aria: "처음" }));
-
-    ul.appendChild(makeItem('‹', current - 1, { disabled: current === 1, aria: "이전" }));
-
-    const windowSize = 5;
-    const blockStart = Math.floor((current - 1) / windowSize) * windowSize + 1;
-    const blockEnd = Math.min(blockStart + windowSize - 1, totalPages);
-
-    for (let p = blockStart; p <= blockEnd; p++) {
-        ul.appendChild(makeItem(String(p), p, { active: p === current }));
-    }
-
-    const isLast = current >= totalPages;
-    ul.appendChild(makeItem('›', current + 1, { disabled: isLast, aria: "다음" }));
-
-    ul.appendChild(makeItem('»', totalPages, { disabled: isLast, aria: "마지막" }));
-}
-
 
 async function loadProfileImage(memberId) {
     if (!memberId) return;

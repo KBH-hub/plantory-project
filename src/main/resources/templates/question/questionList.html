@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/alert.css}" />
 </head>
 
 <body class="bg-light" style="overflow-x:auto;" th:data-question-id="${questionId}" th:data-member-id="${#authentication.principal.MemberResponse.memberId}">
@@ -50,7 +51,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script th:src="@{/js/common/header.js}"></script>
-<script th:src="@{/js/question/questionList.js}"></script>
+<script th:src="@{/js/common/alert.js}"></script>
+<script type="module" th:src="@{/js/question/questionList.js}"></script>
 <script th:src="@{/js/common/timeAgo.js}"></script>
 </body>
 </html>
