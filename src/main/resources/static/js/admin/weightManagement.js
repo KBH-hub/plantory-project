@@ -198,6 +198,27 @@ function renderList(weights) {
             console.error("최신 추천 로딩 실패", e)
         }
 
+        try {
+            const res = await fetch(`/api/rate/`);
+            const data = await res.json();
+
+            if (!data) return;
+
+            document.getElementById("initialSkill").value = data.initialSkillRate ?? "";
+            document.getElementById("skill1").value = data.skillRateGrade1 ?? "";
+            document.getElementById("skill2").value = data.skillRateGrade2 ?? "";
+            document.getElementById("skill3").value = data.skillRateGrade3 ?? "";
+            document.getElementById("skill4").value = data.skillRateGrade4 ?? "";
+
+            document.getElementById("initialMng").value = data.initialManagementRate ?? "";
+            document.getElementById("mng1").value = data.managementRateGrade1 ?? "";
+            document.getElementById("mng2").value = data.managementRateGrade2 ?? "";
+            document.getElementById("mng3").value = data.managementRateGrade3 ?? "";
+
+        } catch (e) {
+            console.log("불러오기 실패:", e);
+        }
+
         const rangeSelect = document.getElementById("dateRangeSelect");
         if (rangeSelect) {
             state.range = rangeSelect.value;
