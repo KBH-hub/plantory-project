@@ -52,6 +52,8 @@ public interface SharingMapper {
     void updateReviewFlag(Long sharingId);
     void updateReceiverReviewFlag(Long sharingId);
 
+    int countCompletedSharingByMemberId(Long memberId);
+
 
 
 }
