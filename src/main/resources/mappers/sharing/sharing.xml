@@ -377,5 +377,13 @@
 
     </select>
 
+    <select id="countCompletedSharingByMemberId" resultType="int">
+        SELECT COUNT(*)
+        FROM sharing
+        WHERE member_id = #{memberId}
+          AND status = 'true'
+          AND del_flag IS NULL
+    </select>
+
 
 </mapper>

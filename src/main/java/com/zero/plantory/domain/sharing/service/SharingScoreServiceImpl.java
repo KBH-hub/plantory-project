@@ -20,6 +20,9 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     private static final double RESPONSE_K = 150.0; // scale - 2시간부터 감점
     private static final double RESPONSE_WEIGHT = 0.03; // EMA weight
 
+    private static final int MAX_COMPLETE = 10;
+    private static final double COMPLETE_WEIGHT = 0.015;
+
     @Override
     public void completeSharing(Long sharingId, Long memberId, Long targetMemberId) {
 
@@ -38,17 +41,9 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         sharingMapper.updateSharingComplete(sharingId, targetMemberId);
 
-        SelectSharingDetailResponse sharingInfo = sharingMapper.selectSharingDetail(sharingId);
-        BigDecimal baseRate = sharingInfo.getSharingRate();
+        int completeCount = sharingMapper.countCompletedSharingByMemberId(memberId);
 
-        if (baseRate == null) baseRate = new BigDecimal("7.00");
-
-        BigDecimal next = baseRate.add(new BigDecimal("0.20"));
-        if (next.compareTo(new BigDecimal("14.00")) > 0) {
-            next = new BigDecimal("14.00");
-        }
-
-        sharingMapper.updateSharingRate(memberId, next);
+        applyCompleteScore(sharingId, memberId, completeCount);
 
         NoticeDTO notice = NoticeDTO.builder()
                 .receiverId(targetMemberId)
@@ -62,8 +57,8 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
 
     public enum ReviewerType {
-        GIVER,      // 분양자
-        RECEIVER    // 피분양자
+        GIVER,
+        RECEIVER
     }
 
     @Override
@@ -91,11 +86,8 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         BigDecimal score = calculateRate(baseRate, reviewerType, manner, reShare, satisfaction);
 
-//        BigDecimal finalScore = score.add(new BigDecimal("0.20"));
         BigDecimal finalScore = score;
 
-
-        // 정규화
         finalScore = clamp14(finalScore);
 
         Long targetMemberId = (reviewerType == ReviewerType.GIVER)
@@ -126,11 +118,28 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         double oldRate = baseRate.doubleValue();
 
         //EMA
-        double newRateDouble = oldRate * (1.0 - RESPONSE_WEIGHT) + scaledScore * RESPONSE_WEIGHT;
+        double newRate = oldRate * (1.0 - RESPONSE_WEIGHT) + scaledScore * RESPONSE_WEIGHT;
 
-        BigDecimal newRate = clamp14(BigDecimal.valueOf(newRateDouble));
+        sharingMapper.updateSharingRate(memberId, clamp14(BigDecimal.valueOf(newRate)));
+    }
 
-        sharingMapper.updateSharingRate(memberId, newRate);
+    private void applyCompleteScore(Long sharingId,Long memberId, int completeCount) {
+
+        SelectSharingDetailResponse sharing = sharingMapper.selectSharingDetail(sharingId);
+
+        BigDecimal baseRate = sharing.getSharingRate();
+        if (baseRate == null) baseRate = new BigDecimal("7.00");
+        double oldRate = baseRate.doubleValue();
+
+        double rawScore = Math.log(completeCount + 1) / Math.log(MAX_COMPLETE + 1);
+        rawScore = Math.min(rawScore, 1.0);
+
+        double scaledScore = 1.0 + 13.0 * rawScore;
+
+        double newRate = oldRate * (1.0 - COMPLETE_WEIGHT) + scaledScore * COMPLETE_WEIGHT;
+
+        sharingMapper.updateSharingRate(memberId, clamp14(BigDecimal.valueOf(newRate))
+        );
     }
 
     // Normalization
@@ -183,7 +192,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         };
     }
 
-    // 최종
     private BigDecimal calculateRate(BigDecimal baseRate,
                                      ReviewerType reviewerType,
                                      int manner,
@@ -192,7 +200,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         BigDecimal result = baseRate;
 
-        // BigDecimal × double → multiply(BigDecimal.valueOf())
         result = result.multiply(BigDecimal.valueOf(getMannerWeight(manner)));
         result = result.multiply(BigDecimal.valueOf(getReShareWeight(reShare)));
 
@@ -200,7 +207,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
             result = result.multiply(BigDecimal.valueOf(getSatisfactionWeight(satisfaction)));
         }
 
-        // 정규화 (1.00 ~ 14.00)
         return clamp14(result);
     }
 
