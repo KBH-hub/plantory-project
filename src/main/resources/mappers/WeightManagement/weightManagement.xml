@@ -5,6 +5,43 @@
 
 <mapper namespace="com.zero.plantory.domain.admin.weightManagement.mapper.WeightManagementMapper">
 
+    <insert id="insertSkillRateGrade">
+        INSERT INTO skill_rate_grade
+        (member_id, initial_skill_rate, skill_rate_grade_1, skill_rate_grade_2,
+         skill_rate_grade_3, skill_rate_grade_4)
+        VALUES
+            (#{memberId}, #{initialSkillRate}, #{skillRateGrade1}, #{skillRateGrade2}, #{skillRateGrade3}, #{skillRateGrade4});
+    </insert>
+
+    <insert id="insertManagementRateGrade">
+        INSERT INTO management_rate_grade
+        (member_id, initial_management_rate, management_rate_grade_1,
+         management_rate_grade_2, management_rate_grade_3)
+        VALUES
+            (#{memberId}, #{initialManagementRate}, #{managementRateGrade1}, #{managementRateGrade2}, #{managementRateGrade3});
+    </insert>
+
+    <select id="selectLatestRateGrades" resultType="com.zero.plantory.domain.admin.weightManagement.dto.RateResponse">
+        SELECT
+            s.initial_skill_rate,
+            s.skill_rate_grade_1,
+            s.skill_rate_grade_2,
+            s.skill_rate_grade_3,
+            s.skill_rate_grade_4,
+
+            m.initial_management_rate,
+            m.management_rate_grade_1,
+            m.management_rate_grade_2,
+            m.management_rate_grade_3
+        FROM
+            skill_rate_grade s
+                CROSS JOIN management_rate_grade m
+        WHERE
+            s.skill_rate_grade_id = (SELECT MAX(skill_rate_grade_id) FROM skill_rate_grade)
+          AND
+            m.management_rate_grade_id = (SELECT MAX(management_rate_grade_id) FROM management_rate_grade);
+    </select>
+
     <select id="selectWeightManagementList" resultType="com.zero.plantory.domain.admin.weightManagement.dto.WeightManagementResponse">
         SELECT
         m.member_id,

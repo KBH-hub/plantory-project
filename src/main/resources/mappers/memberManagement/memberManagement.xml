@@ -3,19 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zero.plantory.domain.admin.memberManagement.mapper.MemberManagementMapper">
 
-    <select id="selectMemberTotalCount" resultType="int">
-        SELECT COUNT(*)
-        FROM member
-        <where>
-            del_flag IS NULL
-            <if test="keyword != null and keyword != ''">
-                AND membername LIKE CONCAT('%', #{keyword}, '%')
-            </if>
-        </where>
-    </select>
-
-
-    <select id="selectMemberList" resultType="com.zero.plantory.domain.profile.dto.MemberResponse">
+    <select id="selectMemberList" resultType="com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementResponse">
         SELECT
         member_id,
         membername,
@@ -26,14 +14,13 @@
         management_rate,
         sharing_rate,
         stop_day,
-        created_at
+        created_at,
+        COUNT(*) OVER()      AS totalCount
         FROM member
-        <where>
-            del_flag IS NULL
-            <if test="keyword != null and keyword != ''">
-                AND membername LIKE CONCAT('%', #{keyword}, '%')
-            </if>
-        </where>
+        WHERE del_flag IS NULL
+        <if test="keyword != null and keyword != ''">
+            AND membername LIKE CONCAT('%', #{keyword}, '%')
+        </if>
         ORDER BY member_id DESC
         LIMIT #{limit} OFFSET #{offset}
     </select>
