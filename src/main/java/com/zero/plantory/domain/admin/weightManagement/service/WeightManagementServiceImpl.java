@@ -1,8 +1,10 @@
 package com.zero.plantory.domain.admin.weightManagement.service;
 
 
+import com.zero.plantory.domain.admin.weightManagement.dto.SaveRateRequest;
+import com.zero.plantory.domain.admin.weightManagement.dto.RateResponse;
 import com.zero.plantory.domain.admin.weightManagement.dto.WeightLoggingResponse;
-import com.zero.plantory.domain.admin.weightManagement.dto.WeightSaveRequest;
+import com.zero.plantory.domain.admin.weightManagement.dto.SaveWeightRequest;
 import com.zero.plantory.domain.admin.weightManagement.dto.WeightManagementResponse;
 import com.zero.plantory.domain.admin.weightManagement.mapper.WeightManagementMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +33,12 @@ public class WeightManagementServiceImpl implements WeightManagementService  {
         return weightManagementMapper.selectWeightManagementList(keyword,limit,offset,startDate);
     }
 
-    public void saveWeights(Long memberId,WeightSaveRequest req) {
-        weightManagementMapper.insertWeights(
-                memberId,
-                req.getSearchWeight(),
-                req.getQuestionWeight()
-        );
+    public void saveWeights(Long memberId, SaveWeightRequest saveWeightRequest) {
+        saveWeightRequest.setMemberId(memberId);
+        int result = weightManagementMapper.insertWeights(saveWeightRequest);
+        if (result != 1) {
+            throw new IllegalStateException("저장실패");
+        }
     }
 
     public WeightLoggingResponse getLatestWeights() {
@@ -52,6 +54,23 @@ public class WeightManagementServiceImpl implements WeightManagementService  {
                         row -> ((Number) row.get("member_id")).longValue(),
                         row -> ((Number) row.get("care_count")).intValue()
                 ));
+    }
+
+    @Override
+    public RateResponse getRate() {
+        return weightManagementMapper.selectLatestRateGrades();
+    }
+
+    @Override
+    public void saveRate(Long memberId, SaveRateRequest saveRateRequest) {
+        saveRateRequest.setMemberId(memberId);
+
+        int skillResult = weightManagementMapper.insertSkillRateGrade(saveRateRequest);
+        int managementResult = weightManagementMapper.insertManagementRateGrade(saveRateRequest);
+
+        if (skillResult != 1 || managementResult != 1) {
+            throw new IllegalStateException(" 저장 실패 ");
+        }
     }
 
 

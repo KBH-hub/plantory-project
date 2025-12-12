@@ -1,10 +1,10 @@
 package com.zero.plantory.domain.admin.memberManagement.service;
 
-import com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementPageResponse;
-import com.zero.plantory.global.dto.DeleteTargetType;
+import com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementResponse;
+
+import java.util.List;
 
 
 public interface MemberManagementService {
-    MemberManagementPageResponse getMemberList(String keyword, int limit, int offset);
-    int deleteContent(DeleteTargetType targetType, Long targetId);
+    List<MemberManagementResponse> getMemberList(String keyword, int limit, int offset);
 }

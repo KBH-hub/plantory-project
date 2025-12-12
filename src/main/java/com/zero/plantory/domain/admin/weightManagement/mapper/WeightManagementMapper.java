@@ -1,5 +1,8 @@
 package com.zero.plantory.domain.admin.weightManagement.mapper;
 
+import com.zero.plantory.domain.admin.weightManagement.dto.SaveRateRequest;
+import com.zero.plantory.domain.admin.weightManagement.dto.RateResponse;
+import com.zero.plantory.domain.admin.weightManagement.dto.SaveWeightRequest;
 import com.zero.plantory.domain.admin.weightManagement.dto.WeightLoggingResponse;
 import com.zero.plantory.domain.admin.weightManagement.dto.WeightManagementResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,14 +22,15 @@ public interface WeightManagementMapper {
             @Param("startDate") LocalDateTime startDate
     );
 
-    void insertWeights(
-            @Param("memberId") Long memberId,
-            @Param("searchWeight") Double searchWeight,
-            @Param("questionWeight") Double questionWeight
-    );
+    int insertWeights(SaveWeightRequest  saveWeightRequest);
 
     WeightLoggingResponse selectLatestWeights();
 
     List<Map<String, Object>> selectPlantsNeedingAttention();
+
+    RateResponse selectLatestRateGrades();
+
+    int insertSkillRateGrade(SaveRateRequest saveRateRequest);
+    int insertManagementRateGrade(SaveRateRequest saveRateRequest);
 }
 
