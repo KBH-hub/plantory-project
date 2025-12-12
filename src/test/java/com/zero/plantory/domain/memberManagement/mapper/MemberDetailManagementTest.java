@@ -1,6 +1,6 @@
 package com.zero.plantory.domain.memberManagement.mapper;
 
-import com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementPageResponse;
+import com.zero.plantory.domain.admin.memberManagement.dto.MemberManagementResponse;
 import com.zero.plantory.domain.admin.memberManagement.mapper.MemberManagementMapper;
 import com.zero.plantory.domain.profile.dto.MemberResponse;
 import com.zero.plantory.global.dto.DeleteTargetType;
@@ -25,7 +25,7 @@ class MemberDetailManagementTest {
         int limit = 10;
         int offset = 0;
 
-        List<MemberResponse> result =  memberManagementMapper.selectMemberList(keyword, limit, offset);
+        List<MemberManagementResponse> result =  memberManagementMapper.selectMemberList(keyword, limit, offset);
 
         log.info("result:{}", result);
     }
