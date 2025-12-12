@@ -1,11 +1,28 @@
+import { createPaginator } from '/js/common/pagination.js';
+
 let limit = 8;
 let offset = 0;
 let totalCount = 0;
 
 let currentReportId = null;
 let currentTargetMemberId = null;
+let paginator = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const pagerEl = document.getElementById('pagination'); // <ul id="pagination" class="pagination"></ul>
+    paginator = createPaginator({
+        container: pagerEl,
+        current: 1,
+        pageSize: limit,
+        totalItems: 0,
+        labels: { first:'«', prev:'‹', next:'›', last:'»' },
+        onChange: (page) => {
+            offset = (page - 1) * limit;   // page → offset 변환
+            loadReportList();
+        }
+    });
+
     loadReportList();
     document.getElementById("reportSubmitBtn").addEventListener("click", submitReportProcess);
 
@@ -47,7 +64,22 @@ async function loadReportList() {
 
         totalCount = data.totalCount;
         renderTable(data.list);
-        renderPagination();
+        const currentPage = Math.floor(offset / limit) + 1;
+        const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+        if (currentPage > totalPages) {
+            offset = (totalPages - 1) * limit;
+            // 보정 후 재조회
+            await loadReportList();
+            return;
+        }
+        if (paginator) {
+            paginator.update({
+                current: currentPage,
+                pageSize: limit,
+                totalItems: totalCount
+            });
+        }
+
     } catch (err) {
         console.log(err);
     }
@@ -273,113 +305,5 @@ async function deleteSelectedReports() {
     } catch (error) {
         console.error(error);
     }
-}
-function renderPagination() {
-    const pagination = document.getElementById("pagination");
-    pagination.innerHTML = "";
-
-    const totalPage = Math.ceil(totalCount / limit);
-    const currentPage = Math.floor(offset / limit) + 1;
-
-    if (totalPage <= 1) return;
-
-    const pageGroupSize = 5;
-
-    const currentGroup = Math.ceil(currentPage / pageGroupSize);
-    const groupStart = (currentGroup - 1) * pageGroupSize + 1;
-    const groupEnd = Math.min(currentGroup * pageGroupSize, totalPage);
-
-
-    const firstLi = document.createElement("li");
-    firstLi.className = "page-item " + (currentGroup === 1 ? "disabled" : "");
-
-    firstLi.innerHTML = `
-        <a class="page-link" href="#" aria-label="First">
-            &laquo;&laquo;
-        </a>
-    `;
-
-    firstLi.addEventListener("click",  () => {
-        if (currentGroup > 1) {
-            const newPage = groupStart - pageGroupSize;
-            offset = (newPage - 1) * limit;
-             loadReportList();
-        }
-    });
-
-    pagination.appendChild(firstLi);
-
-
-    const prevLi = document.createElement("li");
-    prevLi.className = "page-item " + (currentPage === 1 ? "disabled" : "");
-
-    prevLi.innerHTML = `
-        <a class="page-link" href="#" aria-label="Previous">
-            &laquo;
-        </a>
-    `;
-
-    prevLi.addEventListener("click",  () => {
-        if (currentPage > 1) {
-            offset = (currentPage - 2) * limit;
-             loadReportList();
-        }
-    });
-
-    pagination.appendChild(prevLi);
-
-
-    for (let p = groupStart; p <= groupEnd; p++) {
-        const li = document.createElement("li");
-        li.className = "page-item " + (p === currentPage ? "active" : "");
-
-        li.innerHTML = `<a class="page-link" href="#">${p}</a>`;
-
-        li.addEventListener("click", () => {
-            offset = (p - 1) * limit;
-            loadReportList();
-        });
-
-        pagination.appendChild(li);
-    }
-
-
-    const nextLi = document.createElement("li");
-    nextLi.className = "page-item " + (currentPage === totalPage ? "disabled" : "");
-
-    nextLi.innerHTML = `
-        <a class="page-link" href="#" aria-label="Next">
-            &raquo;
-        </a>
-    `;
-
-    nextLi.addEventListener("click",  () => {
-        if (currentPage < totalPage) {
-            offset = currentPage * limit;
-             loadReportList();
-        }
-    });
-
-    pagination.appendChild(nextLi);
-
-
-    const lastLi = document.createElement("li");
-    lastLi.className = "page-item " + (groupEnd === totalPage ? "disabled" : "");
-
-    lastLi.innerHTML = `
-        <a class="page-link" href="#" aria-label="Last">
-            &raquo;&raquo;
-        </a>
-    `;
-
-    lastLi.addEventListener("click",  () => {
-        if (groupEnd < totalPage) {
-            const newPage = groupEnd + 1;
-            offset = (newPage - 1) * limit;
-             loadReportList();
-        }
-    });
-
-    pagination.appendChild(lastLi);
 }
 
