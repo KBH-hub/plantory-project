@@ -1,16 +1,14 @@
 package com.zero.plantory.domain.dashboard.controller;
 
-import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponse;
-import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponse;
-import com.zero.plantory.domain.dashboard.dto.TodayWateringResponse;
+import com.zero.plantory.domain.dashboard.dto.DashboardSummaryResponse;
 import com.zero.plantory.domain.dashboard.service.DashboardService;
+import com.zero.plantory.global.security.MemberDetail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("api/dashboard")
@@ -18,33 +16,9 @@ import java.util.List;
 public class DashboardRestController {
     private final DashboardService dashboardService;
 
-    @GetMapping("/countMyplants")
-    public int countMyPlants(@RequestParam Long memberId) {
-        return dashboardService.countMyPlants(memberId);
+    @GetMapping
+    public DashboardSummaryResponse getDashboard(@AuthenticationPrincipal MemberDetail memberDetail) {
+        return dashboardService.getDashboardSummary(memberDetail.getMemberResponse().getMemberId());
     }
 
-    @GetMapping("/countWatering")
-    public int countTodayWatering(@RequestParam Long memberId) {
-        return dashboardService.countTodayWatering(memberId);
-    }
-
-    @GetMapping("/countCareneeded")
-    public int countCareNeeded(@RequestParam Long memberId) {
-        return dashboardService.countCareNeededPlants(memberId);
-    }
-
-    @GetMapping("/recommendeds")
-    public List<RecommendedSharingResponse> getRecommendeds() {
-        return dashboardService.getRecommendedSharingList();
-    }
-
-    @GetMapping("/waterings")
-    public List<TodayWateringResponse> getWaterings(@RequestParam Long memberId) {
-        return dashboardService.getTodayWatering(memberId);
-    }
-
-    @GetMapping("/diaries")
-    public List<TodayDiaryResponse> getDiaries(@RequestParam Long memberId) {
-        return dashboardService.getTodayDiary(memberId);
-    }
 }

@@ -1,5 +1,6 @@
 package com.zero.plantory.domain.dashboard.service;
 
+import com.zero.plantory.domain.dashboard.dto.DashboardSummaryResponse;
 import com.zero.plantory.domain.dashboard.dto.RecommendedSharingResponse;
 import com.zero.plantory.domain.dashboard.dto.TodayDiaryResponse;
 import com.zero.plantory.domain.dashboard.dto.TodayWateringResponse;
@@ -43,4 +44,17 @@ public class DashboardServiceImpl implements DashboardService {
     public List<TodayDiaryResponse> getTodayDiary(Long memberId) {
         return dashboardMapper.selectTodayDiaryByMemberId(memberId);
     }
+
+    @Override
+    public DashboardSummaryResponse getDashboardSummary(Long memberId) {
+        return DashboardSummaryResponse.builder()
+                .myPlantsCount(countMyPlants(memberId))
+                .todayWateringCount(countTodayWatering(memberId))
+                .careNeededCount(countCareNeededPlants(memberId))
+                .recommendeds(getRecommendedSharingList())
+                .waterings(getTodayWatering(memberId))
+                .diaries(getTodayDiary(memberId))
+                .build();
+    }
+
 }
