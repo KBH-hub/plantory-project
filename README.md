@@ -34,8 +34,8 @@ Plantory는 식물을 키우는 데 어려움을 느끼는 자취생·초보 식
  🖼️ 시스템 아키텍처
 
 🌟 Spring Boot 3 기반의 MVC 구조 + Security + 외부 API 연동
+<img width="1743" height="750" alt="image" src="https://github.com/user-attachments/assets/7fd78463-b07a-4b01-a8e4-06d5170e5730" />
 
-![architecture](./docs/architecture.png)
 
 주요 흐름
 
