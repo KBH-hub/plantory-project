@@ -220,7 +220,9 @@ src
  JUnit 5 기반 단위 테스트
  Service / Mapper 레이어 테스트
 
+<img width="776" height="505" alt="image" src="https://github.com/user-attachments/assets/7318a342-8ee2-4e5d-91af-8b84905023c6" />
 
+<img width="1498" height="858" alt="image" src="https://github.com/user-attachments/assets/15b1355c-dc51-4aab-98d4-1fb7dc77a608" />
 
  👥 팀 협업
 
