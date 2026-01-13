@@ -240,6 +240,3 @@ src
  외부 API(SMS, 공공데이터, GCS) 연동 경험
  EC2 배포 및 서버 운영 경험
  PR 기반 협업 프로세스 경험
-
-<img width="1301" height="800" alt="스크린샷 2025-12-15 223615" src="https://github.com/user-attachments/assets/61ac67b8-134b-4ccf-ac30-6680ad1b6c90" />
-향후 리팩토링할 아키텍처
