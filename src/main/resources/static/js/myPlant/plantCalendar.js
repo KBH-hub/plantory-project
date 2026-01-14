@@ -1,4 +1,3 @@
-// /js/myPlant/plantCalendar.js
 document.addEventListener("DOMContentLoaded", function () {
     const calendarGrid = document.querySelector(".calendar-grid");
     const monthLabel = document.getElementById("monthLabel");
@@ -71,9 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return `${hh}:${mm}`;
     }
 
-    // =========================
-    // 등록 모달 관련 유틸/로딩
-    // =========================
     function toLocalIsoSeconds(dtValue) {
         if (!dtValue) return "";
         const d = new Date(dtValue);
@@ -91,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const memoEl = document.getElementById("memoInput");
         if (memoEl) memoEl.value = "";
 
-        // 사진 초기화
         photoFiles = [];
         renderPhotoList();
     }
@@ -138,10 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.show();
     }
 
-    // 원하는 버튼에 연결
     document.getElementById("openDiaryBtn")?.addEventListener("click", openDiaryModal);
 
-    // 날짜 셀 더블클릭 시 등록 모달 오픈
     calendarGrid?.addEventListener("dblclick", (e) => {
         const cell = e.target.closest(".calendar-cell[data-date]");
         if (!cell) return;
@@ -150,9 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
         openDiaryModal();
     });
 
-    // =========================
-    // 캘린더/데이터 렌더링
-    // =========================
     calendarGrid.addEventListener("click", (e) => {
         const cell = e.target.closest(".calendar-cell[data-date]");
         if (!cell || !calendarGrid.contains(cell) || cell.classList.contains("empty")) return;
@@ -409,7 +399,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (imageModalEl) bootstrap.Modal.getInstance(imageModalEl)?.hide();
     });
 
-    // 저장: 서버로 멀티파트 전송
     document.getElementById("diaryForm")?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -538,7 +527,6 @@ document.addEventListener("DOMContentLoaded", function () {
         await safeRender(currentYear, currentMonth);
     })();
 
-    // 삭제 및 상세 보기
     diaryListContainerEl?.addEventListener("click", async (e) => {
         const removeBtn = e.target.closest(".remove-btn");
         if (removeBtn) {
@@ -626,7 +614,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 물주기 체크 변경
     document.getElementById("wateringListContainer")?.addEventListener("change", (e) => {
         const cb = e.target.closest(".watering-check");
         if (!cb) return;
@@ -646,13 +633,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("diaryModal")?.addEventListener("shown.bs.modal", async () => {
         try {
-            // memberId 취득 (Thymeleaf 바인딩 또는 hidden input)
             const memberId =
                 Number(document.body.dataset.memberId || document.getElementById("memberId")?.value || 0);
 
             console.log("[DIARY] shown.bs.modal -> loadMyplants start", { memberId });
 
-            // memberId가 0이어도 호출하여 원인 분리(서버가 400을 주면 로그로 확인)
             await loadMyplants(memberId || 1);
 
             console.log("[DIARY] loadMyplants done");

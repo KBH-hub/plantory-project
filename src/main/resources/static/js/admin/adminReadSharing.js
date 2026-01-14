@@ -1,4 +1,3 @@
-// readSharing.js
 
 import {
     renderComments,
@@ -24,10 +23,6 @@ function renderDetail(detail) {
     document.getElementById("shareTitle").innerText = detail.title;
 
     document.getElementById("plantType").innerText = detail.plantType;
-    // document.getElementById("managementLevel").innerText = detail.managementLevel;
-    // document.getElementById("managementNeeds").innerText = detail.managementNeeds;
-    // console.log(detail.managementLevel);
-    // console.log(detail.managementNeeds);
     document.getElementById("managementLevel").innerText = detail.managementLevelLabel;
     document.getElementById("managementNeeds").innerText = detail.managementNeedsLabel;
 
@@ -45,8 +40,6 @@ function renderDetail(detail) {
 
     document.body.dataset.reviewFlag = detail.reviewFlag;
     document.body.dataset.receiverReviewFlag = detail.receiverReviewFlag;
-    // console.log("detail.reviewFlag =", detail.reviewFlag);
-    // console.log("detail.receiverReviewFlag =", detail.receiverReviewFlag);
 
     let timeText;
 
@@ -88,7 +81,7 @@ function updateActionButtons() {
     const writerId = Number(document.body.dataset.writerId);
     const status = document.body.dataset.sharingStatus;
 
-    const role = document.body.dataset.memberRole; // ★ 추가됨
+    const role = document.body.dataset.memberRole;
 
     const reviewFlag = document.body.dataset.reviewFlag === "null" ? null : document.body.dataset.reviewFlag;
     const receiverReviewFlag = document.body.dataset.receiverReviewFlag === "null" ? null : document.body.dataset.receiverReviewFlag;
@@ -168,7 +161,6 @@ function updateInterestButton(active, count) {
 }
 
 
-// sharing complete
 function bindCompleteButton() {
     const btn = document.getElementById("btnComplete");
     if (!btn) return;
@@ -208,28 +200,22 @@ document.getElementById("btnSelectComplete").addEventListener("click", () => {
     const nickname = selected.nextElementSibling.innerText;
     document.getElementById("confirmName").innerText = nickname;
 
-    // 1) 모달1 닫기
     const modal1 = bootstrap.Modal.getInstance(document.getElementById("modalSelectCounterpart"));
     modal1.hide();
 
-    // 2) 모달2 열기
     new bootstrap.Modal(document.getElementById("modalConfirmComplete")).show();
 
-    // 모달2 - 취소하면 다시 모달1 열기
     document.getElementById("btnCompleteCancel")?.addEventListener("click", () => {
 
-        // 1) 모달2 닫기
         const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
         modal2.hide();
 
-        // 2) 모달1 다시 열기
         const modal1 = new bootstrap.Modal(document.getElementById("modalSelectCounterpart"));
         modal1.show();
     });
 
 });
 
-// modal 3
 document.getElementById("btnCompleteConfirm")?.addEventListener("click", async () => {
     const sharingId = Number(document.body.dataset.sharingId);
     const selected = document.querySelector(".done-target-radio:checked");
@@ -247,12 +233,11 @@ document.getElementById("btnCompleteConfirm")?.addEventListener("click", async (
             params: { targetMemberId }
         });
 
-        // 모달2 닫기
         const modal2 = bootstrap.Modal.getInstance(document.getElementById("modalConfirmComplete"));
         modal2.hide();
 
-        document.getElementById("btnComplete").style.display = "none";        // 나눔완료 버튼 숨기기
-        document.getElementById("btnWriteReview").style.display = "block";    // 후기작성 버튼 보이기
+        document.getElementById("btnComplete").style.display = "none";
+        document.getElementById("btnWriteReview").style.display = "block";
         document.getElementById("btnWriteReview").onclick = () => {
             location.href = `/sharing/${sharingId}/review`;
         };
@@ -260,7 +245,6 @@ document.getElementById("btnCompleteConfirm")?.addEventListener("click", async (
         document.getElementById("resultName").innerText = nickname;
         document.getElementById("goReview").href = `/sharing/${sharingId}/review`;
 
-        // 모달3 열기
         new bootstrap.Modal(document.getElementById("modalCompleteResult")).show();
 
     } catch (err) {
@@ -382,14 +366,14 @@ function init() {
     document.getElementById("btnInterest").addEventListener("click", toggleInterest);
     document.getElementById("btnDelete").addEventListener("click", deleteSharing);
 
-    bindMessageSubmit(); // 공통 submit 바인딩
+    bindMessageSubmit();
 
     document.getElementById("btnMessage").addEventListener("click", () => {
         openMessageModal(
-            Number(document.body.dataset.writerId),              // receiverId
-            document.getElementById("writerNickname").innerText, // nickname
-            document.getElementById("shareTitle").innerText,     // post title
-            "SHARING",                                           // targetType
+            Number(document.body.dataset.writerId),
+            document.getElementById("writerNickname").innerText,
+            document.getElementById("shareTitle").innerText,
+            "SHARING",
             sharingId
         );
     });

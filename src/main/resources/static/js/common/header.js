@@ -171,10 +171,6 @@
         if (dropdown) dropdown.hide();
     }
 
-    /* =========================================================
-       Notice 드롭다운 바인딩 (NoticeDTO 대응)
-       ========================================================= */
-
     const noticeAPI = {
         list: (receiverId) => axios.get("/api/notice", { params: { receiverId } }),
         markRead: (noticeId) => axios.put("/api/notice", null, { params: { noticeId } }),
@@ -194,7 +190,6 @@
         } catch { return ""; }
     }
 
-    // NoticeTargetType + targetId -> 링크 생성
     function noticeBuildLink(n) {
         const id = n?.targetId;
         switch (String(n?.targetType || "")) {
@@ -208,7 +203,7 @@
     }
 
     function noticeUpdateBadge(count) {
-        const badge = document.getElementById("alarmBadge"); // 있으면 갱신
+        const badge = document.getElementById("alarmBadge");
         if (!badge) return;
         if (count > 0) {
             badge.textContent = count;
@@ -232,17 +227,14 @@
         try {
             const res = await noticeAPI.list(receiverId);
             const items = Array.isArray(res?.data) ? res.data : [];
-            // 유효(delFlag == null) + 미읽음(readFlag == null)만 카운트
             const unread = items.filter(n => n?.delFlag == null && n?.readFlag == null).length;
 
-            // 동일 값이면 DOM 업데이트 생략
             if (_noticeBadgeLast !== unread) {
                 noticeUpdateBadge(unread);
                 _noticeBadgeLast = unread;
             }
         } catch (err) {
             console.error("[notice] init badge load error", err);
-            // 실패 시 강제 숨김은 하지 않음
         } finally {
             _noticeBadgeLoading = false;
         }
@@ -259,7 +251,6 @@
         const listEl = document.getElementById("alarmList");
         if (!listEl) return;
 
-        // delFlag가 null인 것만 표시
         const rows = (Array.isArray(notices) ? notices : []).filter(n => n?.delFlag == null);
 
         if (rows.length === 0) {
@@ -317,14 +308,12 @@
             await noticeAPI.markRead(noticeId);
             a.classList.add("opacity-75");
             a.classList.remove("fw-semibold");
-            // 배지 낙관 갱신
             const badge = document.getElementById("alarmBadge");
             const cur = Number(badge?.textContent ?? 0);
             if (badge && cur > 0) noticeUpdateBadge(cur - 1);
         } catch (err) {
             console.error("[notice] markRead error", err);
         }
-        // 링크 이동은 기본 동작
     }
 
     async function noticeOnClearAll() {
@@ -341,7 +330,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        // 전역 노출
         window.openMemberSearchModal = openMemberSearchModal;
         window.closeMemberSearchModal = closeMemberSearchModal;
         window.searchMember = searchMember;
@@ -404,16 +392,12 @@
 
         noticeInitBadge();
 
-        // 드롭다운이 펼쳐질 때 서버에서 알림 로드
         document.getElementById("alarmDropdownBtn")?.addEventListener("shown.bs.dropdown", noticeLoad);
 
-        // 항목 클릭 위임(읽음 처리)
         document.getElementById("alarmList")?.addEventListener("click", noticeOnItemClick);
 
-        // "비우기" 버튼 핸들링
         document.getElementById("removeAllAlarm")?.addEventListener("click", noticeOnClearAll);
 
-        // 알림 드롭다운 닫히고 다시 계산
         document.getElementById("alarmDropdownBtn")
             ?.addEventListener("hidden.bs.dropdown", noticeInitBadge);
     });

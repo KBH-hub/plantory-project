@@ -13,7 +13,7 @@ import java.util.List;
 
 @SpringBootTest
 @Slf4j
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)   // ⭐ 순서 강제
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QuestionWriteServiceTest {
 
     @Autowired

@@ -17,43 +17,36 @@ public class DryGardenApiService {
 
     private static final String BASE_URL = "/service/dryGarden";
 
-    /** 과명 리스트 */
     public JsonNode getClList() {
         String xml = client.get(BASE_URL, "/clList", null);
         return converter.convert(xml);
     }
 
-    /** 형태 분류 */
     public JsonNode getStleSeList() {
         String xml = client.get(BASE_URL, "/stleSeList", null);
         return converter.convert(xml);
     }
 
-    /** 뿌리 형태 */
     public JsonNode getRdxStleList() {
         String xml = client.get(BASE_URL, "/rdxStleList", null);
         return converter.convert(xml);
     }
 
-    /** 생장 속도 */
     public JsonNode getGrwtseVeList() {
         String xml = client.get(BASE_URL, "/grwtseVeList", null);
         return converter.convert(xml);
     }
 
-    /** 난이도 */
     public JsonNode getManageLevelList() {
         String xml = client.get(BASE_URL, "/manageLevelList", null);
         return converter.convert(xml);
     }
 
-    /** 관리 요구도 */
     public JsonNode getManageDemandList() {
         String xml = client.get(BASE_URL, "/manageDemandList", null);
         return converter.convert(xml);
     }
 
-    /** 건조식물 목록 조회 */
     public JsonNode getDryGardenList(String pageNo, String numOfRows, String sClCode) {
 
         String xml = client.get(
@@ -69,7 +62,6 @@ public class DryGardenApiService {
         return converter.convert(xml);
     }
 
-    /** 건조식물 상세 조회 */
     public JsonNode getDryGardenDetail(String cntntsNo) {
 
         String xml = client.get(

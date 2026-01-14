@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             set('winterTemp', item.pswntrTpInfo);
             set('humidity', item.hgtmMhmrInfo);
 
-            // 물주기도 set로 통일
             set('watering', item.waterCycleInfo);
 
             set('growthType', item.stleSeNm);

@@ -16,7 +16,7 @@ export function createPaginator({
         if (Number.isFinite(totalItems) && totalItems >= 0 && Number.isFinite(pageSize) && pageSize > 0) {
             return Math.max(1, Math.ceil(totalItems / pageSize));
         }
-        return null; // unknown
+        return null;
     }
 
     function makeItem(label, page, { disabled=false, active=false, aria=null } = {}) {

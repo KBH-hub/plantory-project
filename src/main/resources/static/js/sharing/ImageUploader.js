@@ -25,7 +25,6 @@ export function createImageUploader({
     function render() {
         previewList.innerHTML = "";
 
-        // 기존 이미지
         existingImages.forEach(img => {
             previewList.insertAdjacentHTML(
                 "beforeend",
@@ -42,7 +41,6 @@ export function createImageUploader({
             );
         });
 
-        // 새 이미지
         newImages.forEach(img => {
             const url = URL.createObjectURL(img.file);
 
@@ -65,7 +63,6 @@ export function createImageUploader({
     }
 
     function bindEvents() {
-        // 파일 선택시
         fileInput.addEventListener("change", (e) => {
             const files = Array.from(e.target.files);
 

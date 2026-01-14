@@ -1,4 +1,3 @@
-// readQuestion.js
 import { openMessageModal, bindMessageSubmit } from "/js/common/message.js";
 import { loadAnswerList, bindAnswerSubmit } from "/js/question/readQuestion.answer.js";
 

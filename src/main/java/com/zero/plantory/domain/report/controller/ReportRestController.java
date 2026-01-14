@@ -26,11 +26,11 @@ public class ReportRestController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String,String>> registerReport(
-            @ModelAttribute ReportRequest request,                 // 폼 필드 → 객체 바인딩
-            @RequestParam("files") List<MultipartFile> files       // key 이름: files
+            @ModelAttribute ReportRequest request,
+            @RequestParam("files") List<MultipartFile> files
     ) throws IOException {
         int saved = reportService.registerReport(request, files);
-        int expected = (files == null ? 0 : files.size()) + 1;     // report 1건 + 이미지 N건 = 총 등록 건수
+        int expected = (files == null ? 0 : files.size()) + 1;
         if (saved == expected) {
             return ResponseEntity.ok(Map.of("message", "registry report success"));
         }

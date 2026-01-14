@@ -11,12 +11,10 @@ import java.io.IOException;
 public class GcsServiceTest {
     private final StorageUploader storageUploader;
 
-    // 업로드
     public String uploadImage(MultipartFile file) throws IOException {
         return storageUploader.uploadFile(file);
     }
 
-    // 삭제
     public boolean deleteImage(String fileName) {
         return storageUploader.deleteFile(fileName);
     }

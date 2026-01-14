@@ -59,12 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 current: current,
                 pageSize: size,
                 totalPages: Math.max(1, Math.ceil(totalCount / size)),
-                // totalItems로 쓰고 싶다면: totalItems: totalCount, totalPages는 생략 가능
             });
         } catch (e) {
             console.error(e);
             renderList([]);
-            // 실패 시 1페이지만 보이도록 리셋
             pager.update({ current: 1, totalPages: 1, pageSize: numOfRows });
         }
     }

@@ -16,7 +16,6 @@ class GardenApiServiceTest {
     @Autowired
     private GardenApiService service;
 
-    /** 공통: 응답 기본 구조 검사 */
     private void assertBasic(JsonNode node) {
         assertThat(node).isNotNull();
         assertThat(node.get("body")).isNotNull();
@@ -109,10 +108,8 @@ class GardenApiServiceTest {
 
         log.info("gardenList = {}", result.toPrettyString());
 
-        // 기본 구조 체크
         assertBasic(result);
 
-        // items는 반드시 있어야 함
         assertThat(result.path("body").path("items")).isNotNull();
     }
 
@@ -120,7 +117,6 @@ class GardenApiServiceTest {
     @DisplayName("정원식물 상세 조회 테스트")
     void getGardenDtlTest() {
 
-        // 1) 목록 조회
         JsonNode list = service.getGardenList("1", "5", "");
         log.info("목록조회 = {}", list.toPrettyString());
 
@@ -130,7 +126,6 @@ class GardenApiServiceTest {
                 .as("정원식물 목록에 item이 없습니다.")
                 .isFalse();
 
-        // 2) cntntsNo 추출 (배열/단일 둘 다 지원)
         String cntntsNo;
         if (itemsNode.isArray()) {
             cntntsNo = itemsNode.get(0).path("cntntsNo").asText();
@@ -140,7 +135,6 @@ class GardenApiServiceTest {
 
         assertThat(cntntsNo).isNotBlank();
 
-        // 3) 상세 조회
         JsonNode detail = service.getGardenDtl(cntntsNo);
 
         log.info("gardenDetail = {}", detail.toPrettyString());

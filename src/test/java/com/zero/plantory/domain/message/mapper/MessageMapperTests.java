@@ -25,12 +25,12 @@ public class MessageMapperTests {
     @DisplayName("쪽지 리스트 화면 - 받은 쪽지함")
     void selectMessagesTest() {
         MessageSearchRequest dto = new MessageSearchRequest().builder()
-                .memberId(21L) // 받은 사람 아이디
-                .boxType(BoxType.RECEIVED) // 받은 쪽지함
-                .targetType(null) // 나눔 or 질문 or 모두
-                .title(null) // 검색어
-                .limit(10) // 한 화면에 보여줄 개수
-                .offset(0) // 조회 시작 번호
+                .memberId(21L)
+                .boxType(BoxType.RECEIVED)
+                .targetType(null)
+                .title(null)
+                .limit(10)
+                .offset(0)
                 .build();
 
         List<MessageListResponse> result = messageMapper.selectMessages(dto);
@@ -105,9 +105,9 @@ public class MessageMapperTests {
     @Test
     @DisplayName("쪽지 등록 - 쪽지 등록 화면 정보 조회")
     void selectMessageWriteInfoTest() {
-        Long senderId = 11L; // 쪽지 보내는 사람
-        String targetType = "QUESTION"; // 나눔 글 기준
-        Long targetId = 3L; // 나눔 글 id
+        Long senderId = 11L;
+        String targetType = "QUESTION";
+        Long targetId = 3L;
 
         MessageResponse result = messageMapper.selectMessageWriteInfo(senderId, targetType, targetId);
 

@@ -10,7 +10,7 @@ let paginator = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const pagerEl = document.getElementById('pagination'); // <ul id="pagination" class="pagination"></ul>
+    const pagerEl = document.getElementById('pagination');
     paginator = createPaginator({
         container: pagerEl,
         current: 1,
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalItems: 0,
         labels: { first:'«', prev:'‹', next:'›', last:'»' },
         onChange: (page) => {
-            offset = (page - 1) * limit;   // page → offset 변환
+            offset = (page - 1) * limit;
             loadReportList();
         }
     });
@@ -68,7 +68,6 @@ async function loadReportList() {
         const totalPages = Math.max(1, Math.ceil(totalCount / limit));
         if (currentPage > totalPages) {
             offset = (totalPages - 1) * limit;
-            // 보정 후 재조회
             await loadReportList();
             return;
         }

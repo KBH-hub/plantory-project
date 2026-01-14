@@ -41,7 +41,6 @@ public class ProfileRestController {
             @AuthenticationPrincipal MemberDetail memberDetail,
             @RequestBody PasswordChangeRequest req) {
 
-//        log.info("비밀번호 변경 객체로그"+req.toString());
 
         boolean success = profileService.changePassword(
                 memberDetail.getMemberResponse().getMemberId(),

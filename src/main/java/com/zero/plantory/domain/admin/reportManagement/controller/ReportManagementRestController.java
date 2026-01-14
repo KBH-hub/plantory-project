@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reportManagement")
 public class ReportManagementRestController {
-//    softDelete
 private final ReportManagementService reportManagementService;
 private final ImageService imageService;
 

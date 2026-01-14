@@ -174,7 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadPopularForSharingList();
     loadPopularList();
     loadMyInterestCount();
-    // loadRecommendedSharings("recommendedContainer");
 
     document.getElementById("btnSearch").addEventListener("click", () => {
         offset = 0;

@@ -17,8 +17,8 @@ public class SharingScoreServiceImpl implements SharingScoreService {
     private final SharingMapper sharingMapper;
     private final NoticeMapper noticeMapper;
 
-    private static final double RESPONSE_K = 150.0; // scale - 2시간부터 감점
-    private static final double RESPONSE_WEIGHT = 0.03; // EMA weight
+    private static final double RESPONSE_K = 150.0;
+    private static final double RESPONSE_WEIGHT = 0.03;
 
     private static final int MAX_COMPLETE = 10;
     private static final double COMPLETE_WEIGHT = 0.015;
@@ -96,7 +96,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
 
         sharingMapper.updateSharingRate(targetMemberId, finalScore);
 
-        // review flag
         if (reviewerType == ReviewerType.GIVER) {
             sharingMapper.updateReviewFlag(sharingId);
         } else {
@@ -117,7 +116,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         if(baseRate == null) baseRate = new BigDecimal("7.00");
         double oldRate = baseRate.doubleValue();
 
-        //EMA
         double newRate = oldRate * (1.0 - RESPONSE_WEIGHT) + scaledScore * RESPONSE_WEIGHT;
 
         sharingMapper.updateSharingRate(memberId, clamp14(BigDecimal.valueOf(newRate)));
@@ -142,7 +140,6 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         );
     }
 
-    // Normalization
     private static final BigDecimal MIN_RATE = new BigDecimal("1.00");
     private static final BigDecimal MAX_RATE = new BigDecimal("14.00");
 
@@ -158,23 +155,11 @@ public class SharingScoreServiceImpl implements SharingScoreService {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    /**
-     * 후기 기반 점수를 계산하는 메서드.
-     *
-     * 분양자(GIVER):
-     *   - manner(1~3)
-     *   - reShare(0 or 1)
-     *
-     * 피분양자(RECEIVER):
-     *   - manner(1~3)
-     *   - reShare(0 or 1)
-     *   - satisfaction(1~3)
-     */
     private double getMannerWeight(int manner) {
         return switch (manner) {
-            case 1 -> 1.05;   // 만족
-            case 2 -> 1.00;   // 보통
-            case 3 -> 0.95;   // 불만족
+            case 1 -> 1.05;
+            case 2 -> 1.00;
+            case 3 -> 0.95;
             default -> 1.00;
         };
     }

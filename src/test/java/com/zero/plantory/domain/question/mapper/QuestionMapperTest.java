@@ -99,7 +99,7 @@ public class QuestionMapperTest {
                 .content("답글 등록 테스트")
                 .build();
 
-        log.info("답글 등록 결과 = {}", mapper.insertAnswer(request));  // 1 → 성공
+        log.info("답글 등록 결과 = {}", mapper.insertAnswer(request));
     }
 
     @Test

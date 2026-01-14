@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 public class DictionaryModalSearchlResponse {
     private String plantName;
 
-    private ManageLevel manageLevel;      // ENUM
-    private String levelLabel;       // 라벨
+    private ManageLevel manageLevel;
+    private String levelLabel;
 
-    private ManageDemand manageDemand;       // ENUM
-    private String demandLabel;      // 라벨
+    private ManageDemand manageDemand;
+    private String demandLabel;
 
     private String fileUrl;
 }

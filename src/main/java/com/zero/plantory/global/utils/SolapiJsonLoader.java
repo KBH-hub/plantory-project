@@ -1,4 +1,3 @@
-// com.zero.plantory.global.utils.SolapiJsonLoader
 package com.zero.plantory.global.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,4 +1,3 @@
-// readSharing.comment.js
 function formatDate(value) {
     if (!value) return "";
     if (typeof timeAgo === "function") {
@@ -60,7 +59,6 @@ export function renderComments(list) {
 }
 
 function bindCommentEvents() {
-    // 수정
     document.querySelectorAll(".comment-edit-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             const li = e.target.closest("li");
@@ -68,7 +66,6 @@ function bindCommentEvents() {
         });
     });
 
-    // 삭제
     document.querySelectorAll(".comment-delete-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
             const li = e.target.closest("li");
@@ -84,7 +81,6 @@ function startInlineEdit(li) {
 
     const originText = contentDiv.textContent.trim();
 
-    // input으로 변환
     contentDiv.innerHTML = `
         <input type="text" class="form-control form-control-sm edit-input" value="${originText}">
     `;

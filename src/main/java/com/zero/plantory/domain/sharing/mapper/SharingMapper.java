@@ -16,12 +16,10 @@ public interface SharingMapper {
     SelectSharingDetailResponse selectSharingDetail(Long sharingId);
     List<SelectCommentListResponse> selectSharingComments(Long sharingId);
 
-    /** click interest */
     int countInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
     int insertInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
     int increaseInterestNum(Long sharingId);
 
-    /** delete interest */
     int deleteInterest(@Param("memberId") Long memberId, @Param("sharingId") Long sharingId);
     int decreaseInterestNum(Long sharingId);
 
@@ -30,7 +28,6 @@ public interface SharingMapper {
     int updateCommentById(CommentRequest request);
     int deleteComment(CommentRequest request);
 
-    /**update sharing*/
     int countProfileSharing(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);
     int updateSharing(SharingRequest request);
 
@@ -43,7 +40,6 @@ public interface SharingMapper {
     List<SharingHistoryResponse> selectProfileSharingGiven(@Param("memberId") Long memberId);
     List<SharingHistoryResponse> selectProfileSharingReceived(@Param("memberId") Long memberId);
 
-    /** Sharing review*/
     int updateSharingRate(@Param("memberId") Long memberId, @Param("score") BigDecimal score);
 
     ReviewInfoResponse selectReviewInfoForGiver(@Param("sharingId") Long sharingId, @Param("memberId") Long memberId);

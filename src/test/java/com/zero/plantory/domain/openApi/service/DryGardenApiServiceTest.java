@@ -16,7 +16,6 @@ class DryGardenApiServiceTest {
     @Autowired
     private DryGardenApiService service;
 
-    /** 공통: 응답 구조 검사 */
     private void assertBasic(JsonNode result) {
         assertThat(result).isNotNull();
         assertThat(result.get("body")).isNotNull();
@@ -85,21 +84,18 @@ class DryGardenApiServiceTest {
     @DisplayName("건조식물 상세 조회 테스트")
     void getDryGardenDetailTest() {
 
-        // 목록 1개 조회
         JsonNode list = service.getDryGardenList("1", "1", "");
 
         JsonNode items = list.get("body").get("items").get("item");
 
         String cntntsNo;
 
-        // item이 배열일 수도 있고 단일 오브젝트일 수도 있음
         if (items.isArray()) {
             cntntsNo = items.get(0).get("cntntsNo").asText();
         } else {
             cntntsNo = items.get("cntntsNo").asText();
         }
 
-        // 상세 조회
         JsonNode detail = service.getDryGardenDetail(cntntsNo);
 
         log.info("dryGardenDetail = {}", detail.toPrettyString());

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewRequest {
-    private int manner;         // 1~3
-    private int reShare;        // 0 or 1
-    private Integer satisfaction; // 분양자 null 가능
+    private int manner;
+    private int reShare;
+    private Integer satisfaction;
 }
 

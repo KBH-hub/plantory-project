@@ -6,7 +6,7 @@ const changeBtn = document.getElementById("changeProfileImgBtn");
 const fileInput = document.getElementById("profileImgInput");
 const previewImg = document.getElementById("profilePreview");
 
-let selectedFile = null; // 서버로 보낼 최종 파일
+let selectedFile = null;
 
 changeBtn.addEventListener("click", () => {
     fileInput.click();
@@ -24,7 +24,6 @@ fileInput.addEventListener("change", (e) => {
 
     const imgURL = URL.createObjectURL(file);
 
-    // 미리보기 설정
     previewImg.src = imgURL;
     previewImg.style.display = "block";
 

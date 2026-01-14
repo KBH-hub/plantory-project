@@ -1,4 +1,3 @@
-// readQuestion.answer.js
 function formatDate(value) {
     if (!value) return "";
     if (typeof timeAgo === "function") return timeAgo(value);
@@ -9,7 +8,6 @@ export async function loadAnswerList(questionId) {
     try {
         const res = await axios.get(`/api/questions/${questionId}/answers`);
         renderAnswerList(res.data);
-        // console.log(res.data)
     } catch (err) {
         console.error(err);
         showAlert("댓글 목록을 불러오지 못했습니다.");
@@ -70,7 +68,6 @@ function renderAnswerList(list) {
 }
 
 function bindAnswerEvents() {
-    // 수정
     document.querySelectorAll(".answer-edit-btn").forEach(btn => {
         btn.addEventListener("click", e => {
             const li = e.target.closest("li");
@@ -78,7 +75,6 @@ function bindAnswerEvents() {
         });
     });
 
-    // 삭제
     document.querySelectorAll(".answer-delete-btn").forEach(btn => {
         btn.addEventListener("click", e => {
             const li = e.target.closest("li");
@@ -103,7 +99,6 @@ function startInlineEdit(li) {
         <button class="btn btn-sm btn-link p-0 text-muted answer-cancel-btn">취소</button>
     `;
 
-    // 저장
     buttonBox.querySelector(".answer-save-btn").addEventListener("click", async () => {
         const newText = li.querySelector(".edit-input").value.trim();
         const answerId = Number(li.dataset.answerId);
@@ -122,7 +117,6 @@ function startInlineEdit(li) {
         document.dispatchEvent(new CustomEvent("answers:changed"));
     });
 
-    // 취소
     buttonBox.querySelector(".answer-cancel-btn").addEventListener("click", () => {
         contentDiv.textContent = originText;
         restoreButtons(buttonBox);

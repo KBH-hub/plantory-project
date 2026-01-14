@@ -35,8 +35,6 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void signUp(MemberSignUpRequest request) {
 
-//        log.info(String.valueOf(request));
-
         if (memberMapper.countByMembername(request.getMembername()) > 0) {
             throw new IllegalStateException("이미 사용 중인 아이디입니다.");
         }
@@ -45,8 +43,6 @@ public class MemberServiceImpl implements MemberService {
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
-
-//        log.info(String.valueOf(request));
 
         MemberResponse memberResponse = MemberResponse.builder()
                 .membername(request.getMembername())
@@ -64,34 +60,6 @@ public class MemberServiceImpl implements MemberService {
                  memberMapper.insertMember(memberResponse);
     }
 
-//    @Override
-//    public MemberResponse login(String membername, String password) {
-//        MemberResponse memberResponse = memberMapper.selectByMembername(membername);
-//
-//        if (memberResponse == null) {
-//            return null;
-//        }
-//
-//        if (memberResponse.getStopDay() != null) {
-//
-//            LocalDateTime now = LocalDateTime.now();
-//            LocalDateTime stopDay = memberResponse.getStopDay();
-//
-//            if (stopDay.isAfter(now)) {
-//                long days = ChronoUnit.DAYS.between(now, stopDay); //Chrono시간 + Unit 단위
-//                throw new IllegalStateException(String.format("정지 해제까지 %d일 남았습니다.", days));
-//            } else {
-//                memberMapper.resetStopDay(memberResponse.getMemberId());
-//                memberResponse.setStopDay(null);
-//            }
-//        }
-//
-//        if (!bCryptPasswordEncoder.matches(password, memberResponse.getPassword())) {
-//            return null;
-//        }
-//
-//        return memberResponse;
-//    }
 
 
 }

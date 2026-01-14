@@ -24,27 +24,25 @@
     border-radius: .5rem;
     overflow: hidden;
 }
-/* 높이 동결(고정) + 본문만 스크롤 */
 .modal-fixed .modal-dialog{
-    max-width: 420px;             /* 폭도 통일(선택) */
+    max-width: 420px;
 }
 .modal-fixed .modal-content{
-    height: 420px;                /* ← 원하는 고정 높이 */
-    display: flex;                /* 헤더/본문/푸터 수직 배치 */
+    height: 420px;
+    display: flex;
     flex-direction: column;
 }
 .modal-fixed .modal-header,
 .modal-fixed .modal-footer{
-    flex: 0 0 auto;               /* 고정 높이 영역 */
+    flex: 0 0 auto;
 }
 .modal-fixed .modal-body{
-    flex: 1 1 auto;               /* 남은 공간 채우기 */
-    overflow: auto;               /* 내용 많아지면 내부 스크롤 */
+    flex: 1 1 auto;
+    overflow: auto;
 }
 
-/* 작은 화면에서는 화면높이 기반으로 안전하게 고정 */
 @media (max-width: 575.98px){
     .modal-fixed .modal-content{
-        height: calc(100dvh - 3rem); /* 상하 마진 감안 */
+        height: calc(100dvh - 3rem);
     }
 }

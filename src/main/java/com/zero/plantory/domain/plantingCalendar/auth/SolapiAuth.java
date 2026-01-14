@@ -16,8 +16,8 @@ public class SolapiAuth {
     }
 
     public static String createAuthHeader(String apiKey, String apiSecret) throws Exception {
-        String dateTime = Instant.now().toString();                    // ISO-8601 형식
-        String salt = UUID.randomUUID().toString().replace("-", "");   // 랜덤 문자열
+        String dateTime = Instant.now().toString();
+        String salt = UUID.randomUUID().toString().replace("-", "");
         String signature = generateSignature(apiSecret, dateTime, salt);
 
         return "HMAC-SHA256 apiKey=%s, date=%s, salt=%s, signature=%s"

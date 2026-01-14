@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     axios.get(`/api/dictionary/garden/${encodeURIComponent(id)}`, {headers: {Accept: 'application/json'}})
         .then(({data}) => {
-            // 합쳐진 응답 구조: { files: {...}, detail: {...} }
             const files = data?.files?.body?.items?.item || [];
             const imgEl = document.getElementById('plantImage');
 

@@ -65,8 +65,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("메시지 전송 시 필요 정보 조회")
     void findMessageWriteInfoTest() {
-        Long senderId = 11L; // 쪽지 보내는 사람
-        String targetType = "QUESTION"; // 나눔 글 기준
+        Long senderId = 11L;
+        String targetType = "QUESTION";
         Long targetId = 3L;
 
         MessageResponse result = messageService.findMessageWriteInfo(senderId, targetType, targetId);

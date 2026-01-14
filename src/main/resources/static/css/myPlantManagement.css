@@ -15,8 +15,8 @@
 .plant-thumb {
     position: relative;
     width: 100%;
-    height: 260px;          /* 목록 카드 고정 높이 */
-    background: #f4f6f8;    /* 기본 배경 */
+    height: 260px;
+    background: #f4f6f8;
     border-top-left-radius: .5rem;
     border-top-right-radius: .5rem;
     overflow: hidden;

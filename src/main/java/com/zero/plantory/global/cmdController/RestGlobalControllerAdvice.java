@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class RestGlobalControllerAdvice {
 
-    // 400: JSON 파싱/바인딩 실패
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handleNotReadable(HttpMessageNotReadableException ex,
                                                                  HttpServletRequest req) {
@@ -30,7 +29,6 @@ public class RestGlobalControllerAdvice {
                 "요청 본문 파싱 실패", safeMsg(ex), req.getRequestURI());
     }
 
-    // 400: @Valid 바인딩 검증 실패(Body DTO)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleInvalid(MethodArgumentNotValidException ex,
                                                              HttpServletRequest req) {
@@ -41,7 +39,6 @@ public class RestGlobalControllerAdvice {
                 "검증 실패", merged, req.getRequestURI());
     }
 
-    // 400: 필수 파라미터 누락
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, String>> handleMissingParam(MissingServletRequestParameterException ex,
                                                                   HttpServletRequest req) {
@@ -49,7 +46,6 @@ public class RestGlobalControllerAdvice {
                 "필수 파라미터 누락", ex.getParameterName() + " 파라미터가 필요합니다.", req.getRequestURI());
     }
 
-    // 400: 타입 미스매치(예: /plants/{id}에 숫자 대신 문자열)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex,
                                                                   HttpServletRequest req) {
@@ -57,7 +53,6 @@ public class RestGlobalControllerAdvice {
         return body(HttpStatus.BAD_REQUEST, "REQ-400-TYPE", "타입 불일치", msg, req.getRequestURI());
     }
 
-    // 403: 인가 실패
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex,
                                                                   HttpServletRequest req) {
@@ -65,7 +60,6 @@ public class RestGlobalControllerAdvice {
                 "접근 거부", "이 리소스에 접근 권한이 없습니다.", req.getRequestURI());
     }
 
-    // 404: 리소스 없음
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(NoSuchElementException ex,
                                                               HttpServletRequest req) {
@@ -73,7 +67,6 @@ public class RestGlobalControllerAdvice {
                 "리소스를 찾을 수 없음", safeMsg(ex), req.getRequestURI());
     }
 
-    // 405: 지원되지 않는 HTTP 메서드
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<Map<String, String>> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex,
                                                                         HttpServletRequest req) {
@@ -81,7 +74,6 @@ public class RestGlobalControllerAdvice {
                 "메서드 허용 안 됨", safeMsg(ex), req.getRequestURI());
     }
 
-    // 415: 지원되지 않는 Content-Type
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<Map<String, String>> handleMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                            HttpServletRequest req) {
@@ -89,7 +81,6 @@ public class RestGlobalControllerAdvice {
                 "미지원 미디어 타입", safeMsg(ex), req.getRequestURI());
     }
 
-    // 409: 무결성 제약 충돌(중복 키 등)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleConflict(DataIntegrityViolationException ex,
                                                               HttpServletRequest req) {
@@ -97,7 +88,6 @@ public class RestGlobalControllerAdvice {
                 "데이터 충돌", "무결성 제약을 위반했습니다.", req.getRequestURI());
     }
 
-    // 500: 런타임 예외
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException ex,
                                                              HttpServletRequest req) {
@@ -105,7 +95,6 @@ public class RestGlobalControllerAdvice {
                 "서버 오류", "예기치 못한 오류가 발생했습니다.", req.getRequestURI());
     }
 
-    // 500: 최종 캐치올(단 1개만)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleAny(Exception ex,
                                                          HttpServletRequest req) {
@@ -124,7 +113,6 @@ public class RestGlobalControllerAdvice {
                                                      String title,
                                                      String message,
                                                      String path) {
-        // 단일 Map<String,String> 형식을 유지
         return ResponseEntity.status(status).body(Map.of(
                 "code", code,
                 "title", title,

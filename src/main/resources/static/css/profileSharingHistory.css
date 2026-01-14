@@ -6,7 +6,6 @@
     position: relative;
 }
 
-/* Pulse animation */
 @keyframes cardPulse {
     0% { transform: translateY(-6px) scale(1.02); }
     50% { transform: translateY(-8px) scale(1.04); }

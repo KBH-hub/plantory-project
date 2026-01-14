@@ -119,7 +119,6 @@ class PlantingCalenderServiceTest {
     @DisplayName("캘린더 관찰일지 수정 모달 수정 처리")
     void updateDiaryTest() throws IOException {
         Long memberId = 17L;
-        //수정할 다이어리 정보
         DiaryRequest request = DiaryRequest.builder()
                 .diaryId(14L)
                 .activity("열매먹기")
@@ -127,7 +126,6 @@ class PlantingCalenderServiceTest {
                 .memo("맛있었음")
                 .build();
 
-        //삭제할 이미지 정보
         List<ImageDTO> delImgList = new ArrayList();
         delImgList.add(ImageDTO.builder()
                         .memberId(17L)
@@ -142,7 +140,6 @@ class PlantingCalenderServiceTest {
                         .imageId(21L)
                 .build());
 
-        // 추가할 이미지 정보
         List<MultipartFile> files = new ArrayList<>();
 
         MockMultipartFile file1 = new MockMultipartFile(
@@ -187,7 +184,6 @@ class PlantingCalenderServiceTest {
                 .memo("맛있었음")
                 .build();
 
-        //등록할 사진 정보
         List<MultipartFile> files = new ArrayList<>();
 
         MockMultipartFile file1 = new MockMultipartFile(

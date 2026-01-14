@@ -416,12 +416,10 @@ import {createPaginator} from '/js/common/pagination.js';
             const hasExisting = Number.isFinite(Number(currentVM?.fileId)) && Number(currentVM.fileId) > 0;
 
             if (hasNew) {
-                // 새로 선택한 파일만 취소
                 fileEl.value = "";
                 imgEl.src = currentVM?.img || FALLBACK;
                 deletePhoto = false;
             } else if (hasExisting) {
-                // 기존 서버 파일 삭제 의도 표시
                 imgEl.src = FALLBACK;
                 deletePhoto = true;
             }

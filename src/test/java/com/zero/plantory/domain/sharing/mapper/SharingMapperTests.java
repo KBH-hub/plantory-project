@@ -239,7 +239,7 @@ public class SharingMapperTests {
     void selectSharingListByAddressAndKeywordTest() {
         SharingSearchRequest vo = SharingSearchRequest.builder()
                 .userAddress("서울특별시 금천구")
-                .keyword("")   // 검색어 없음 → 전체조회
+                .keyword("")
                 .limit(10)
                 .offset(0)
                 .build();

@@ -57,7 +57,6 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public boolean changePassword(Long memberId, String oldPassword, String newPassword) {
         MemberResponse member = profileMapper.selectByMemberId(memberId);
-//        log.info(member.toString());
 
         if (!bCryptPasswordEncoder.matches(oldPassword, member.getPassword())) {
             return false;

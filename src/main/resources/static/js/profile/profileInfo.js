@@ -104,7 +104,6 @@ async function initProfileInfo() {
 function renderProfile(data) {
     document.getElementById("profileNickname").textContent = data.nickname ?? "";
     document.getElementById("profileAddress").textContent = data.address ?? "";
-    // 숫자면 소수점 2자리로
     const rate = (typeof data.sharingRate === "number")
         ? data.sharingRate.toFixed(2)
         : (data.sharingRate ?? "0.00");
@@ -212,7 +211,6 @@ function renderTable() {
 }
 
 function bindRowClick() {
-    // 쓴 글 탭에서만 row click 이동
     if (currentTab !== "profilePosts") return;
 
     document.querySelectorAll("#profileWrittenTbody tr").forEach(row => {

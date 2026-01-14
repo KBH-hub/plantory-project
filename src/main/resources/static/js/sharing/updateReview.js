@@ -3,7 +3,6 @@ const sharingId = document.body.dataset.sharingId;
 
 async function loadReviewInfo() {
     try {
-        // console.log(sharingId);
         const res = await axios.get(`/api/sharing/${sharingId}/reviewInfo`);
 
         const data = res.data;

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SharingHistoryResponse {
     private Long sharingId;
-    private Long partnerId;   // 나눔한 경우: target_member_id / 나눔받은 경우: member_id
+    private Long partnerId;
     private String partnerNickname;
     private String title;
     private LocalDateTime createdAt;

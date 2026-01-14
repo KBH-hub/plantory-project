@@ -15,7 +15,6 @@ function renderImages() {
 
     previewList.innerHTML = "";
 
-    // 기존 이미지
     existingImages.forEach((img) => {
         const box = document.createElement("div");
         box.className = "position-relative";
@@ -33,7 +32,6 @@ function renderImages() {
         previewList.appendChild(box);
     });
 
-    // 새 이미지
     newImages.forEach((img) => {
         const url = URL.createObjectURL(img.file);
 
@@ -66,7 +64,6 @@ function bindImageUploader() {
     fileInput.addEventListener("change", (e) => {
         const files = Array.from(e.target.files);
 
-        // 개수 제한
         if (existingImages.length + newImages.length + files.length > MAX_IMAGES) {
             showAlert("최대 5장까지만 업로드할 수 있습니다.");
             return;
@@ -82,7 +79,6 @@ function bindImageUploader() {
         renderImages();
     });
 
-    // 삭제 처리
     previewList.addEventListener("click", (e) => {
         const btn = e.target.closest("button");
         if (!btn) return;
