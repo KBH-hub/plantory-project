@@ -30,7 +30,7 @@
 # 🗄 DB모델링 (ERD)
 <img width="1400" height="850" alt="image" src="https://github.com/user-attachments/assets/01ce14d9-2ed1-4550-bece-2f7c94b8a133" />
 
-# 🖥 프로젝트 주요 화연
+# 🖥 프로젝트 주요 화면
 <img width="1022" height="528" alt="image" src="https://github.com/user-attachments/assets/990fa4bf-e645-4ee1-b79c-36948f627eec" />
 
 
